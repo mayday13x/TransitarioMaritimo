@@ -4,8 +4,14 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+import java.util.concurrent.ConcurrentMap;
+
+import org.springframework.boot.CommandLineRunner;
+import pt.ipvc.transitariomaritimo.*;
+import pt.ipvc.transitariomaritimo.entity.*;
+import pt.ipvc.transitariomaritimo.repository.ArmazemRepository;
+import pt.ipvc.transitariomaritimo.repository.ClienteRepository;
 
 public class HelloApplication extends Application {
     @Override
@@ -19,6 +25,14 @@ public class HelloApplication extends Application {
     }
 
     public static void main(String[] args) {
+
         launch();
+
+        ArmazemEntity a = new ArmazemEntity();
+        a.setId(3);
+        a.setCapacidadeMax(2000.0);
+
+
+
     }
 }
