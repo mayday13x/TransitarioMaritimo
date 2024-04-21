@@ -1,29 +1,30 @@
 package com.example.transitariomaritimo;
 
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
 
-public class HelloController {
+public class MenuController {
 
     @FXML
-    public void Login(ActionEvent event) {
+    public void Cliente(ActionEvent event) {
 
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("menu.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("Cliente.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);
-            stage.setTitle("Menu");
+            stage.setTitle("com.example.transitariomaritimo.Cliente");
             stage.show();
         }catch (IOException ex){
-            System.out.println("Erro ao acessar menu: " + ex.getMessage());
+            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
         }
     }
 }
