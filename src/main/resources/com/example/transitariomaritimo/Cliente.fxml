@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768" prefWidth="1020" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ClienteController">
+<AnchorPane prefHeight="480" prefWidth="720" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ClienteController">
    <children>
       <TableView fx:id="table" layoutX="134.0" layoutY="105.0" prefHeight="293.0" prefWidth="765.0">
         <columns>
@@ -26,7 +26,12 @@
       <TextField layoutX="134.0" layoutY="469.0" prefHeight="34.0" prefWidth="294.0" promptText="Rua" />
       <TextField layoutX="134.0" layoutY="586.0" prefHeight="34.0" prefWidth="294.0" promptText="Email" />
       <TextField layoutX="551.0" layoutY="586.0" prefHeight="34.0" prefWidth="294.0" promptText="Telefone" />
-      <Button layoutX="651.0" layoutY="737.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="148.0" text="Inserir Cliente" />
-      <Button layoutX="839.0" layoutY="737.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="148.0" text="Desativar Cliente" />
+      <Button layoutX="591.0" layoutY="696.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="148.0" text="Inserir Cliente" />
+      <Button layoutX="800.0" layoutY="696.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="148.0" text="Desativar Cliente" />
+      <Button layoutX="63.0" layoutY="705.0" mnemonicParsing="false" onAction="#VoltarAtras" prefHeight="42.0" prefWidth="46.0" text="&lt;">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
