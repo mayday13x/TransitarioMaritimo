@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.List;
 
 
 import pt.ipvc.transitariomaritimo.entity.*;
@@ -24,11 +25,12 @@ public class HelloApplication extends Application {
 
         launch();
 
-        ArmazemEntity a = new ArmazemEntity();
-        a.setId(3);
-        a.setCapacidadeMax(2000.0);
+        ClienteService cs = new ClienteService();
+        List<ClienteEntity> cls = cs.getAllUsers();
 
-
-
+        for (ClienteEntity cl : cls) {
+            System.out.println(cl.getNome());
+        }
     }
+
 }

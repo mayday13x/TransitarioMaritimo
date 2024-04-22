@@ -11,7 +11,7 @@
             <Font size="24.0" />
          </font>
       </Button>
-      <Button layoutX="394.0" layoutY="234.0" mnemonicParsing="false" prefHeight="118.0" prefWidth="182.0" text="Reservas">
+      <Button layoutX="394.0" layoutY="234.0" mnemonicParsing="false" onAction="#Reserva" prefHeight="118.0" prefWidth="182.0" text="Reservas">
          <font>
             <Font size="24.0" />
          </font>
