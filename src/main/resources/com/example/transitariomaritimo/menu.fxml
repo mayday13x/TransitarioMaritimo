@@ -26,5 +26,10 @@
             <Font size="24.0" />
          </font>
       </Button>
+      <Button layoutX="394.0" layoutY="469.0" mnemonicParsing="false" onAction="#Contentor" prefHeight="118.0" prefWidth="182.0" text="Contentor">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
