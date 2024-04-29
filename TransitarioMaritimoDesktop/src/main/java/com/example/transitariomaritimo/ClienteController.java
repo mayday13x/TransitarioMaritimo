@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.repository.ClienteRepository;
-
+import javafx.scene.control.TextField;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -28,6 +28,15 @@ public class ClienteController implements Initializable {
 
     public AnnotationConfigApplicationContext context;
     private ClienteRepository repo;
+
+    @FXML
+    private TextField Rua;
+
+    @FXML
+    private TextField Telefone;
+
+    @FXML
+    private TextField Email;
 
     @FXML
     private TableColumn<ClienteEntity, String> Cod_postal;
@@ -116,5 +125,17 @@ public class ClienteController implements Initializable {
 
 
         table.setItems(clientes);
+
+        table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                Rua.setText(newValue.getRua());
+                Telefone.setText(newValue.getTelefone());
+                Email.setText(newValue.getEmail());
+            }
+        });
     }
+
+
+
+
 }
