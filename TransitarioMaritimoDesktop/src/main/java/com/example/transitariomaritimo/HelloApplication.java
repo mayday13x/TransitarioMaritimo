@@ -6,7 +6,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ArmazemEntity;
+import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.repository.ArmazemRepository;
+import pt.ipvc.database.repository.ClienteRepository;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,7 +17,6 @@ import java.util.List;
 public class HelloApplication extends Application {
 
     public AnnotationConfigApplicationContext context;
-    private ArmazemRepository repo;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -27,13 +28,6 @@ public class HelloApplication extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
-
-        repo =  context.getBean(ArmazemRepository.class);
-        List<ArmazemEntity> list = repo.findAll();
-
-        for (ArmazemEntity i : list){
-            System.out.println(i.getCapacidadeMax());
-        }
 
     }
 

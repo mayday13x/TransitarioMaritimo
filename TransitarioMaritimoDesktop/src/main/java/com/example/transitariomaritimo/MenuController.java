@@ -14,18 +14,15 @@ import java.io.IOException;
 public class MenuController {
 
     @FXML
-    public void Cliente(ActionEvent event) {
+    public void Cliente(ActionEvent event) throws IOException {
 
-        try{
             Parent root = FXMLLoader.load(getClass().getResource("Cliente.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);
             stage.setTitle("Cliente");
             stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
-        }
+
     }
 
     @FXML

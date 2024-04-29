@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="480" prefWidth="720" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ClienteController">
+<AnchorPane prefHeight="480" prefWidth="720" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ClienteController">
    <children>
       <TableView fx:id="table" layoutX="30.0" layoutY="81.0" prefHeight="166.0" prefWidth="622.0">
         <columns>
-          <TableColumn prefWidth="131.20001220703125" text="Id" />
-          <TableColumn prefWidth="151.20001220703125" text="Nome" />
-            <TableColumn prefWidth="184.79998779296875" text="Nif" />
-            <TableColumn prefWidth="206.39996337890625" text="CodPostal" />
+          <TableColumn fx:id="Id" prefWidth="131.20001220703125" text="Id" />
+          <TableColumn fx:id="Nome" prefWidth="151.20001220703125" text="Nome" />
+            <TableColumn fx:id="Nif" prefWidth="184.79998779296875" text="Nif" />
+            <TableColumn fx:id="Cod_postal" prefWidth="206.39996337890625" text="CodPostal" />
         </columns>
       </TableView>
       <Label layoutX="286.0" layoutY="24.0" text="Clientes">

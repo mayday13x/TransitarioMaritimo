@@ -11,11 +11,13 @@ public class ArmazemEntity {
     private int id;
     private Double capacidadeMax;
     private Collection<CargaEntity> cargasById;
+    private String descricao;
 
     public ArmazemEntity(){}
 
-    public ArmazemEntity(Double capacidadeMax){
+    public ArmazemEntity(Double capacidadeMax, String descricao){
         this.capacidadeMax = capacidadeMax;
+        this.descricao = descricao;
     }
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +41,16 @@ public class ArmazemEntity {
         this.capacidadeMax = capacidadeMax;
     }
 
+    @Basic
+    @Column(name = "descricao", nullable = true, precision = 0)
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,6 +66,7 @@ public class ArmazemEntity {
     public int hashCode() {
         int result = id;
         result = 31 * result + (capacidadeMax != null ? capacidadeMax.hashCode() : 0);
+        result = 31 * result + (descricao != null ? descricao.hashCode() : 0);
         return result;
     }
 

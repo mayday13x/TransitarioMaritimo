@@ -1,16 +1,46 @@
 package com.example.transitariomaritimo;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import pt.ipvc.database.entity.ArmazemEntity;
+import pt.ipvc.database.entity.ClienteEntity;
+import pt.ipvc.database.repository.ArmazemRepository;
+import pt.ipvc.database.repository.ClienteRepository;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class ArmazemController {
+public class ArmazemController implements Initializable {
+
+    public AnnotationConfigApplicationContext context;
+    private ArmazemRepository repo;
+
+
+    @FXML
+    private TableColumn<ArmazemEntity, String> Cap_max;
+
+    @FXML
+    private TableColumn<ArmazemEntity, String> Descricao;
+
+    @FXML
+    private TableColumn<ArmazemEntity, Integer> Id;
+
+    @FXML
+    private TableView<ArmazemEntity> table;
+
 
     @FXML
     public void VoltarAtras(ActionEvent event) {
@@ -71,4 +101,22 @@ public class ArmazemController {
         }
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        repo = context.getBean(ArmazemRepository.class);
+        ObservableList<ArmazemEntity> armazens = FXCollections.observableArrayList(repo.findAll());
+
+
+       // Id.setCellValueFactory(data -> new SimpleStringProperty());
+        Descricao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescricao()));
+        Cap_max.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCapacidadeMax().toString()));
+
+
+        table.setItems(armazens);
+
+
+    }
 }
