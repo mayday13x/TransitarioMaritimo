@@ -1,6 +1,5 @@
 package com.example.transitariomaritimo;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,17 +10,17 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MenuController {
+public class ArmazemController {
 
     @FXML
-    public void Cliente(ActionEvent event) {
+    public void VoltarAtras(ActionEvent event) {
 
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("Cliente.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("menu.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);
-            stage.setTitle("Cliente");
+            stage.setTitle("Menu");
             stage.show();
         }catch (IOException ex){
             System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
@@ -29,14 +28,14 @@ public class MenuController {
     }
 
     @FXML
-    public void Reserva(ActionEvent event) {
+    public void InserirArmazem(ActionEvent event) {
 
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("Reservas.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("InserirArmazem.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);
-            stage.setTitle("Reserva");
+            stage.setTitle("Inserir Armazem");
             stage.show();
         }catch (IOException ex){
             System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
@@ -44,7 +43,7 @@ public class MenuController {
     }
 
     @FXML
-    public void Armazem(ActionEvent event) {
+    public void RegistarArmazem(ActionEvent event) {
 
         try{
             Parent root = FXMLLoader.load(getClass().getResource("Armazem.fxml"));
@@ -57,4 +56,19 @@ public class MenuController {
             System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
         }
     }
+    @FXML
+    public void VisualizarCargas(ActionEvent event) {
+
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("Carga.fxml"));
+            Scene regCena = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(regCena);
+            stage.setTitle("Cargas");
+            stage.show();
+        }catch (IOException ex){
+            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
+        }
+    }
+
 }

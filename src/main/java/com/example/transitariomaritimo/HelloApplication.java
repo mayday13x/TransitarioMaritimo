@@ -25,12 +25,7 @@ public class HelloApplication extends Application {
 
         launch();
 
-        ClienteService cs = new ClienteService();
-        List<ClienteEntity> cls = cs.getAllUsers();
-
-        for (ClienteEntity cl : cls) {
-            System.out.println(cl.getNome());
-        }
     }
+
 
 }

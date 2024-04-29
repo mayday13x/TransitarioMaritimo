@@ -19,7 +19,7 @@
       <TextField layoutX="349.0" layoutY="175.0" prefHeight="26.0" prefWidth="190.0" promptText="CodPostal" />
       <TextField layoutX="57.0" layoutY="251.0" prefHeight="26.0" prefWidth="190.0" promptText="Email" />
       <TextField layoutX="349.0" layoutY="251.0" prefHeight="26.0" prefWidth="190.0" promptText="Telefone" />
-      <Button layoutX="460.0" layoutY="346.0" mnemonicParsing="false" text="Registar Cliente" />
-      <Button layoutX="31.0" layoutY="359.0" mnemonicParsing="false" onAction="#VoltarAtras2" text="&lt;" />
+      <Button layoutX="460.0" layoutY="346.0" mnemonicParsing="false" onAction="#RegistarCliente" text="Registar Cliente" />
+      <Button layoutX="31.0" layoutY="359.0" mnemonicParsing="false" onAction="#VoltarAtrasInserirCliente" text="&lt;" />
    </children>
 </AnchorPane>
