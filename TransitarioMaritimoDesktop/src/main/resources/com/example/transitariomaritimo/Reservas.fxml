@@ -15,17 +15,17 @@
             <Font size="23.0" />
          </font>
       </Label>
-      <TableView layoutX="60.0" layoutY="61.0" prefHeight="202.0" prefWidth="605.0">
+      <TableView fx:id="Table" layoutX="60.0" layoutY="61.0" prefHeight="202.0" prefWidth="605.0">
         <columns>
-          <TableColumn prefWidth="126.4000244140625" text="Id" />
-          <TableColumn prefWidth="134.39996337890625" text="Data" />
-            <TableColumn prefWidth="149.5999755859375" text="Origem" />
-            <TableColumn prefWidth="121.5999755859375" text="Destino" />
+          <TableColumn fx:id="Id" prefWidth="126.4000244140625" text="Id" />
+          <TableColumn fx:id="Data" prefWidth="141.0" text="Data" />
+            <TableColumn fx:id="Origem" prefWidth="183.0" text="Origem" />
+            <TableColumn fx:id="Destino" prefWidth="153.0" text="Destino" />
         </columns>
       </TableView>
-      <TextField layoutX="60.0" layoutY="293.0" prefHeight="26.0" prefWidth="218.0" promptText="IdFuncionario" />
-      <TextField layoutX="373.0" layoutY="293.0" prefHeight="26.0" prefWidth="218.0" promptText="IdCliente" />
-      <TextField layoutX="60.0" layoutY="353.0" prefHeight="26.0" prefWidth="218.0" promptText="IdEstadoReservaa" />
+      <TextField fx:id="IdFuncionario" layoutX="60.0" layoutY="293.0" prefHeight="26.0" prefWidth="218.0" promptText="IdFuncionario" />
+      <TextField fx:id="IdCliente" layoutX="373.0" layoutY="293.0" prefHeight="26.0" prefWidth="218.0" promptText="IdCliente" />
+      <TextField fx:id="IdEstadoReserva" layoutX="60.0" layoutY="353.0" prefHeight="26.0" prefWidth="218.0" promptText="IdEstadoReservaa" />
       <Button layoutX="452.0" layoutY="419.0" mnemonicParsing="false" onAction="#InserirReserva" prefHeight="34.0" prefWidth="106.0" text="Inserir Reserva" />
       <Button layoutX="583.0" layoutY="419.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="106.0" text="Eliminar Reserva" />
       <Button layoutX="60.0" layoutY="419.0" mnemonicParsing="false" onAction="#VoltarAtras" prefHeight="34.0" prefWidth="27.0" text="&lt;" />

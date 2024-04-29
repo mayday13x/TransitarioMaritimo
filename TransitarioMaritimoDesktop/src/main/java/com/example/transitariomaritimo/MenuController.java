@@ -26,18 +26,15 @@ public class MenuController {
     }
 
     @FXML
-    public void Reserva(ActionEvent event) {
+    public void Reserva(ActionEvent event)  throws IOException {
 
-        try{
             Parent root = FXMLLoader.load(getClass().getResource("Reservas.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);
             stage.setTitle("Reserva");
             stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu Reservas: " + ex.getMessage());
-        }
+
     }
 
     @FXML
