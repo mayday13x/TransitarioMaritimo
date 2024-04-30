@@ -143,11 +143,11 @@ public class ClienteController implements Initializable {
         EmailText.clear();
         TelefoneText.clear();
 
-        Parent root = FXMLLoader.load(getClass().getResource("Cliente.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("CriarCotacao.fxml"));
         Scene regCena = new Scene(root);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(regCena);
-        stage.setTitle("Cliente");
+        stage.setTitle("Criar Cotação");
         stage.show();
 
     }

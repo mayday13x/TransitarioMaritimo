@@ -26,7 +26,7 @@
       <TextField fx:id="Rua" layoutX="32.0" layoutY="284.0" prefHeight="34.0" prefWidth="294.0" promptText="Rua" />
       <TextField fx:id="Email" layoutX="32.0" layoutY="354.0" prefHeight="34.0" prefWidth="294.0" promptText="Email" />
       <TextField fx:id="Telefone" layoutX="400.0" layoutY="354.0" prefHeight="34.0" prefWidth="283.0" promptText="Telefone" />
-      <Button layoutX="400.0" layoutY="418.0" mnemonicParsing="false" onAction="#InserirCliente" prefHeight="34.0" prefWidth="110.0" text="Inserir Cliente" />
+      <Button layoutX="400.0" layoutY="424.0" mnemonicParsing="false" onAction="#InserirCliente" prefHeight="34.0" prefWidth="110.0" text="Inserir Cliente" />
       <Button layoutX="552.0" layoutY="418.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="110.0" text="Desativar Cliente" />
       <Button layoutX="32.0" layoutY="418.0" mnemonicParsing="false" onAction="#VoltarAtras" prefHeight="34.0" prefWidth="31.0" text="&lt;" />
    </children>
