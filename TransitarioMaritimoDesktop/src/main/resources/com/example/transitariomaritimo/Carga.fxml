@@ -10,7 +10,7 @@
 <AnchorPane prefHeight="480.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.CargaController">
    <children>
       <Label layoutX="346.0" layoutY="14.0" text="Cargas" />
-      <TableView layoutX="51.0" layoutY="40.0" prefHeight="164.0" prefWidth="618.0">
+      <TableView layoutX="51.0" layoutY="40.0" prefHeight="134.0" prefWidth="617.0">
         <columns>
           <TableColumn prefWidth="131.0" text="Nome" />
           <TableColumn prefWidth="160.0" text="Quantidade" />
@@ -18,20 +18,22 @@
             <TableColumn prefWidth="157.0" text="Peso" />
         </columns>
       </TableView>
-      <TextField layoutX="51.0" layoutY="240.0" prefHeight="25.0" prefWidth="229.0" />
-      <TextField layoutX="409.0" layoutY="240.0" prefHeight="25.0" prefWidth="229.0" />
-      <TextField layoutX="51.0" layoutY="307.0" prefHeight="25.0" prefWidth="229.0" />
-      <TextField layoutX="409.0" layoutY="307.0" prefHeight="25.0" prefWidth="229.0" />
-      <TextField layoutX="51.0" layoutY="369.0" prefHeight="25.0" prefWidth="229.0" />
-      <TextField layoutX="409.0" layoutY="369.0" prefHeight="25.0" prefWidth="229.0" />
-      <Button layoutX="440.0" layoutY="434.0" mnemonicParsing="false" onAction="#InserirCarga" prefHeight="25.0" prefWidth="98.0" text="Inserir Carga" />
-      <Button layoutX="571.0" layoutY="434.0" mnemonicParsing="false" text="Remover Carga" />
-      <Button layoutX="22.0" layoutY="434.0" mnemonicParsing="false" onAction="#VoltarAtras" text="&lt;" />
-      <Label layoutX="51.0" layoutY="223.0" text="Local Atual" />
-      <Label layoutX="411.0" layoutY="223.0" text="Observações" />
-      <Label layoutX="54.0" layoutY="285.0" text="IdReserva" />
-      <Label layoutX="409.0" layoutY="285.0" text="IdContentor" />
-      <Label layoutX="54.0" layoutY="347.0" text="IdContentor" />
-      <Label layoutX="409.0" layoutY="347.0" text="IdTipoCarga" />
+      <TextField layoutX="52.0" layoutY="210.0" prefHeight="25.0" prefWidth="229.0" />
+      <TextField layoutX="432.0" layoutY="208.0" prefHeight="26.0" prefWidth="230.0" />
+      <TextField layoutX="52.0" layoutY="277.0" prefHeight="25.0" prefWidth="229.0" />
+      <TextField layoutX="432.0" layoutY="275.0" prefHeight="25.0" prefWidth="229.0" />
+      <TextField layoutX="52.0" layoutY="339.0" prefHeight="25.0" prefWidth="229.0" />
+      <TextField layoutX="432.0" layoutY="337.0" prefHeight="25.0" prefWidth="229.0" />
+      <Label layoutX="52.0" layoutY="193.0" text="Local Atual" />
+      <Label layoutX="434.0" layoutY="191.0" text="Observações" />
+      <Label layoutX="55.0" layoutY="255.0" text="IdReserva" />
+      <Label layoutX="432.0" layoutY="253.0" text="IdContentor" />
+      <Label layoutX="55.0" layoutY="317.0" text="IdContentor" />
+      <Label layoutX="432.0" layoutY="315.0" text="IdTipoCarga" />
+      <TextField layoutX="52.0" layoutY="392.0" prefHeight="25.0" prefWidth="229.0" />
+      <Label layoutX="55.0" layoutY="374.0" text="IdArmazem" />
+      <Button layoutX="434.0" layoutY="430.0" mnemonicParsing="false" onAction="#InserirCarga" text="Inserir Carga" />
+      <Button layoutX="562.0" layoutY="430.0" mnemonicParsing="false" text="Remover Carga" />
+      <Button layoutX="51.0" layoutY="430.0" mnemonicParsing="false" onAction="#VoltarAtras" text="&lt;" />
    </children>
 </AnchorPane>
