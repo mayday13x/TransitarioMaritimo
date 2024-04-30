@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ClienteController implements Initializable {
+public class ClienteController implements Initializable{
 
 
     public AnnotationConfigApplicationContext context;
@@ -108,13 +108,18 @@ public class ClienteController implements Initializable {
         repo = context.getBean(ClienteRepository.class);
         ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(repo.findAll());
 
-
+    try{
         Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
         Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
         Nif.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNif().toString()));
         Cod_postal.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIdCodPostal().toString()));
-
-
         table.setItems(clientes);
+    } catch (Exception e) {
+        System.out.println(e.getMessage());
+    }
+
+
+
+
     }
 }
