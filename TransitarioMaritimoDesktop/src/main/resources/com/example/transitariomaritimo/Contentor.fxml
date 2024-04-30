@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="480.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ContentorController">
    <children>
-      <Label layoutX="248.0" layoutY="14.0" text="Contentores">
+      <Label layoutX="311.0" layoutY="14.0" text="Contentores">
          <font>
             <Font size="18.0" />
          </font>
@@ -23,9 +23,11 @@
             <TableColumn minWidth="0.0" prefWidth="172.00006103515625" text="Tipo de Contetor" />
         </columns>
       </TableView>
-      <TextField layoutX="37.0" layoutY="234.0" prefHeight="26.0" prefWidth="298.0" promptText="Estado do Contentor" />
-      <Button layoutX="383.0" layoutY="429.0" mnemonicParsing="false" onAction="#InserirContentor" text="Inserir Contentor" />
-      <Button layoutX="541.0" layoutY="429.0" mnemonicParsing="false" text="Remover Contentor" />
+      <TextField layoutX="39.0" layoutY="247.0" prefHeight="26.0" prefWidth="624.0" />
+      <Button layoutX="240.0" layoutY="428.0" mnemonicParsing="false" onAction="#InserirContentor" prefHeight="26.0" prefWidth="120.0" text="Inserir Contentor" />
+      <Button layoutX="543.0" layoutY="429.0" mnemonicParsing="false" text="Visualizar Cargas" />
       <Button layoutX="14.0" layoutY="429.0" mnemonicParsing="false" onAction="#VoltarAtras" text="&lt;" />
+      <Label layoutX="39.0" layoutY="223.0" text="IdEstadoContentor" />
+      <Button layoutX="394.0" layoutY="429.0" mnemonicParsing="false" text="Remover Contentor" />
    </children>
 </AnchorPane>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -13,14 +14,21 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <TextField fx:id="NomeText" layoutX="57.0" layoutY="94.0" prefHeight="26.0" prefWidth="190.0" promptText="Nome" />
-      <TextField fx:id="NifText" layoutX="349.0" layoutY="94.0" prefHeight="26.0" prefWidth="190.0" promptText="Nif" />
-      <TextField fx:id="RuaText" layoutX="57.0" layoutY="162.0" prefHeight="26.0" prefWidth="190.0" promptText="Rua" />
-      <TextField fx:id="CodPostalText" layoutX="56.0" layoutY="238.0" prefHeight="26.0" prefWidth="190.0" promptText="CodPostal" />
-      <TextField fx:id="EmailText" layoutX="349.0" layoutY="238.0" prefHeight="26.0" prefWidth="190.0" promptText="Email" />
-      <TextField fx:id="TelefoneText" layoutX="56.0" layoutY="303.0" prefHeight="26.0" prefWidth="190.0" promptText="Telefone" />
-      <Button layoutX="460.0" layoutY="346.0" mnemonicParsing="false" onAction="#RegistarCliente" text="Registar Cliente" />
-      <Button layoutX="31.0" layoutY="359.0" mnemonicParsing="false" onAction="#VoltarAtrasInserirCliente" text="&lt;" />
-      <TextField fx:id="PortaText" layoutX="349.0" layoutY="162.0" prefHeight="26.0" prefWidth="190.0" promptText="Porta" />
+      <TextField fx:id="NomeText" layoutX="57.0" layoutY="94.0" prefHeight="26.0" prefWidth="190.0" />
+      <TextField fx:id="NifText" layoutX="349.0" layoutY="94.0" prefHeight="26.0" prefWidth="190.0" />
+      <TextField fx:id="RuaText" layoutX="57.0" layoutY="162.0" prefHeight="26.0" prefWidth="190.0" />
+      <TextField fx:id="PortaText" layoutX="349.0" layoutY="162.0" prefHeight="26.0" prefWidth="190.0" />
+      <Label layoutX="57.0" layoutY="77.0" text="Nome" />
+      <Label layoutX="349.0" layoutY="77.0" text="Nif" />
+      <Label layoutX="57.0" layoutY="144.0" text="Rua" />
+      <Label layoutX="347.0" layoutY="144.0" text="Porta" />
+      <Label layoutX="59.0" layoutY="206.0" text="IdCodPostal" />
+      <Label layoutX="349.0" layoutY="206.0" text="Email" />
+      <Label layoutX="59.0" layoutY="268.0" text="Telefone" />
+      <ComboBox layoutX="57.0" layoutY="224.0" prefHeight="26.0" prefWidth="190.0" />
+      <TextField fx:id="EmailText" layoutX="349.0" layoutY="224.0" prefHeight="26.0" prefWidth="190.0" />
+      <TextField fx:id="TelefoneText" layoutX="57.0" layoutY="286.0" prefHeight="26.0" prefWidth="190.0" />
+      <Button layoutX="451.0" layoutY="360.0" mnemonicParsing="false" onAction="#RegistarCliente" text="Inserir Cliente" />
+      <Button layoutX="23.0" layoutY="360.0" mnemonicParsing="false" onAction="#VoltarAtrasInserirCliente" text="&lt;" />
    </children>
 </AnchorPane>

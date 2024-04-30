@@ -18,14 +18,20 @@
             <TableColumn prefWidth="157.0" text="Peso" />
         </columns>
       </TableView>
-      <TextField layoutX="51.0" layoutY="240.0" prefHeight="25.0" prefWidth="229.0" promptText="LocalAtual" />
-      <TextField layoutX="409.0" layoutY="240.0" prefHeight="25.0" prefWidth="229.0" promptText="Observações" />
-      <TextField layoutX="51.0" layoutY="294.0" prefHeight="25.0" prefWidth="229.0" promptText="IdReserva" />
-      <TextField layoutX="409.0" layoutY="294.0" prefHeight="25.0" prefWidth="229.0" promptText="IdContentor" />
-      <TextField layoutX="51.0" layoutY="343.0" prefHeight="25.0" prefWidth="229.0" promptText="IdArmazem" />
-      <TextField layoutX="409.0" layoutY="343.0" prefHeight="25.0" prefWidth="229.0" promptText="IdTipoCarga" />
+      <TextField layoutX="51.0" layoutY="240.0" prefHeight="25.0" prefWidth="229.0" />
+      <TextField layoutX="409.0" layoutY="240.0" prefHeight="25.0" prefWidth="229.0" />
+      <TextField layoutX="51.0" layoutY="307.0" prefHeight="25.0" prefWidth="229.0" />
+      <TextField layoutX="409.0" layoutY="307.0" prefHeight="25.0" prefWidth="229.0" />
+      <TextField layoutX="51.0" layoutY="369.0" prefHeight="25.0" prefWidth="229.0" />
+      <TextField layoutX="409.0" layoutY="369.0" prefHeight="25.0" prefWidth="229.0" />
       <Button layoutX="440.0" layoutY="434.0" mnemonicParsing="false" onAction="#InserirCarga" prefHeight="25.0" prefWidth="98.0" text="Inserir Carga" />
       <Button layoutX="571.0" layoutY="434.0" mnemonicParsing="false" text="Remover Carga" />
       <Button layoutX="22.0" layoutY="434.0" mnemonicParsing="false" onAction="#VoltarAtras" text="&lt;" />
+      <Label layoutX="51.0" layoutY="223.0" text="Local Atual" />
+      <Label layoutX="411.0" layoutY="223.0" text="Observações" />
+      <Label layoutX="54.0" layoutY="285.0" text="IdReserva" />
+      <Label layoutX="409.0" layoutY="285.0" text="IdContentor" />
+      <Label layoutX="54.0" layoutY="347.0" text="IdContentor" />
+      <Label layoutX="409.0" layoutY="347.0" text="IdTipoCarga" />
    </children>
 </AnchorPane>
