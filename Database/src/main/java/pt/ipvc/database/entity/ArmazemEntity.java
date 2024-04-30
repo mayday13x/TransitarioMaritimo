@@ -8,7 +8,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "armazem", schema = "public", catalog = "transitario_maritimo")
 public class ArmazemEntity {
-    private int id;
+    private Integer id;
     private Double capacidadeMax;
     private Collection<CargaEntity> cargasById;
     private String descricao;
@@ -23,7 +23,7 @@ public class ArmazemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

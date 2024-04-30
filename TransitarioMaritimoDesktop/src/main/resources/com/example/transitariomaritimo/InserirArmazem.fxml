@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ArmazemController">
    <children>
       <Label layoutX="235.0" text="Inserir Armazem">
@@ -14,8 +13,10 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField layoutX="47.0" layoutY="64.0" prefHeight="26.0" prefWidth="199.0" promptText="Id" />
-      <TextField layoutX="344.0" layoutY="64.0" prefHeight="26.0" prefWidth="199.0" promptText="Capacidade Maxima" />
+      <TextField layoutX="47.0" layoutY="64.0" prefHeight="26.0" prefWidth="199.0" />
+      <TextField layoutX="344.0" layoutY="64.0" prefHeight="26.0" prefWidth="199.0" />
       <Button layoutX="450.0" layoutY="351.0" mnemonicParsing="false" onAction="#RegistarArmazem" text="Registar Armazem" />
+      <Label layoutX="47.0" layoutY="47.0" text="Id" />
+      <Label layoutX="344.0" layoutY="47.0" text="Capacidade Maxima" />
    </children>
 </AnchorPane>

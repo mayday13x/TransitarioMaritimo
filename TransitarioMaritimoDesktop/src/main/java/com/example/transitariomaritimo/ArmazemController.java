@@ -36,7 +36,7 @@ public class ArmazemController implements Initializable {
     private TableColumn<ArmazemEntity, String> Descricao;
 
     @FXML
-    private TableColumn<ArmazemEntity, Integer> Id;
+    private TableColumn<ArmazemEntity, String> Id;
 
     @FXML
     private TableView<ArmazemEntity> table;
@@ -110,7 +110,7 @@ public class ArmazemController implements Initializable {
         ObservableList<ArmazemEntity> armazens = FXCollections.observableArrayList(repo.findAll());
 
 
-       // Id.setCellValueFactory(data -> new SimpleStringProperty());
+        Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
         Descricao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescricao()));
         Cap_max.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCapacidadeMax().toString()));
 
