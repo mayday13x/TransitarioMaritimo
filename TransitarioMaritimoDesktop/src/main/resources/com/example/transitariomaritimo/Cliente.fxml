@@ -14,8 +14,8 @@
         <columns>
           <TableColumn fx:id="Id" prefWidth="131.20001220703125" text="Id" />
           <TableColumn fx:id="Nome" prefWidth="151.20001220703125" text="Nome" />
-            <TableColumn fx:id="Nif" prefWidth="184.79998779296875" text="Nif" />
-            <TableColumn fx:id="Cod_postal" prefWidth="206.39996337890625" text="CodPostal" />
+            <TableColumn fx:id="Nif" prefWidth="175.0" text="Nif" />
+            <TableColumn fx:id="Cod_postal" prefWidth="162.0" text="CodPostal" />
         </columns>
       </TableView>
       <Label layoutX="286.0" layoutY="24.0" text="Clientes">

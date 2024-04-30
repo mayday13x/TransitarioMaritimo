@@ -38,18 +38,16 @@ public class MenuController {
     }
 
     @FXML
-    public void Armazem(ActionEvent event) {
+    public void Armazem(ActionEvent event)  throws IOException {
 
-        try{
+
             Parent root = FXMLLoader.load(getClass().getResource("Armazem.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);
             stage.setTitle("Armazem");
             stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu Armazem: " + ex.getMessage());
-        }
+
     }
 
     @FXML

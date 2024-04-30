@@ -13,13 +13,14 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <TextField layoutX="57.0" layoutY="94.0" prefHeight="26.0" prefWidth="190.0" promptText="Nome" />
-      <TextField layoutX="349.0" layoutY="94.0" prefHeight="26.0" prefWidth="190.0" promptText="Nif" />
-      <TextField layoutX="57.0" layoutY="175.0" prefHeight="26.0" prefWidth="190.0" promptText="Rua" />
-      <TextField layoutX="349.0" layoutY="175.0" prefHeight="26.0" prefWidth="190.0" promptText="CodPostal" />
-      <TextField layoutX="57.0" layoutY="251.0" prefHeight="26.0" prefWidth="190.0" promptText="Email" />
-      <TextField layoutX="349.0" layoutY="251.0" prefHeight="26.0" prefWidth="190.0" promptText="Telefone" />
+      <TextField fx:id="NomeText" layoutX="57.0" layoutY="94.0" prefHeight="26.0" prefWidth="190.0" promptText="Nome" />
+      <TextField fx:id="NifText" layoutX="349.0" layoutY="94.0" prefHeight="26.0" prefWidth="190.0" promptText="Nif" />
+      <TextField fx:id="RuaText" layoutX="57.0" layoutY="162.0" prefHeight="26.0" prefWidth="190.0" promptText="Rua" />
+      <TextField fx:id="CodPostalText" layoutX="56.0" layoutY="238.0" prefHeight="26.0" prefWidth="190.0" promptText="CodPostal" />
+      <TextField fx:id="EmailText" layoutX="349.0" layoutY="238.0" prefHeight="26.0" prefWidth="190.0" promptText="Email" />
+      <TextField fx:id="TelefoneText" layoutX="56.0" layoutY="303.0" prefHeight="26.0" prefWidth="190.0" promptText="Telefone" />
       <Button layoutX="460.0" layoutY="346.0" mnemonicParsing="false" onAction="#RegistarCliente" text="Registar Cliente" />
       <Button layoutX="31.0" layoutY="359.0" mnemonicParsing="false" onAction="#VoltarAtrasInserirCliente" text="&lt;" />
+      <TextField fx:id="PortaText" layoutX="349.0" layoutY="162.0" prefHeight="26.0" prefWidth="190.0" promptText="Porta" />
    </children>
 </AnchorPane>

@@ -1,6 +1,7 @@
 package com.example.transitariomaritimo;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,7 +14,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.repository.ClienteRepository;
@@ -52,6 +55,27 @@ public class ClienteController implements Initializable {
 
     @FXML
     private TableView<ClienteEntity> table;
+
+    @FXML
+    private TextField CodPostalText;
+
+    @FXML
+    private TextField EmailText;
+
+    @FXML
+    private TextField NifText;
+
+    @FXML
+    private TextField NomeText;
+
+    @FXML
+    private TextField PortaText;
+
+    @FXML
+    private TextField RuaText;
+
+    @FXML
+    private TextField TelefoneText;
 
     @FXML
     public void VoltarAtras(ActionEvent event) {
@@ -96,18 +120,36 @@ public class ClienteController implements Initializable {
 
 
     @FXML
-    public void RegistarCliente(ActionEvent event) {
+    public void RegistarCliente(ActionEvent event) throws IOException {
 
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("Cliente.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Cliente");
-            stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
-        }
+        ClienteEntity novoCliente = new ClienteEntity();
+        novoCliente.setNome(NomeText.getText());
+        novoCliente.setNif(Integer.valueOf(NifText.getText()));
+        novoCliente.setRua(RuaText.getText());
+        novoCliente.setPorta(Integer.valueOf(PortaText.getText()));
+        novoCliente.setIdCodPostal(Integer.valueOf(CodPostalText.getText()));
+        novoCliente.setEmail(EmailText.getText());
+        novoCliente.setTelefone(TelefoneText.getText());
+
+        repo.save(novoCliente);
+
+        table.getItems().add(novoCliente);
+
+        RuaText.clear();
+        NifText.clear();
+        NomeText.clear();
+        PortaText.clear();
+        CodPostalText.clear();
+        EmailText.clear();
+        TelefoneText.clear();
+
+        Parent root = FXMLLoader.load(getClass().getResource("Cliente.fxml"));
+        Scene regCena = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(regCena);
+        stage.setTitle("Cliente");
+        stage.show();
+
     }
 
     @Override
@@ -117,22 +159,28 @@ public class ClienteController implements Initializable {
         repo = context.getBean(ClienteRepository.class);
         ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(repo.findAll());
 
+        try{
 
-        Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
-        Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
-        Nif.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNif().toString()));
-        Cod_postal.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIdCodPostal().toString()));
+            Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+            Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
+            Nif.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNif().toString()));
+            Cod_postal.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIdCodPostal().toString()));
+
+            table.setItems(clientes);
+
+            table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    Rua.setText(newValue.getRua());
+                    Telefone.setText(newValue.getTelefone());
+                    Email.setText(newValue.getEmail());
+                }
+            });
+        } catch (Exception ex){
+            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
+        }
 
 
-        table.setItems(clientes);
 
-        table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                Rua.setText(newValue.getRua());
-                Telefone.setText(newValue.getTelefone());
-                Email.setText(newValue.getEmail());
-            }
-        });
     }
 
 

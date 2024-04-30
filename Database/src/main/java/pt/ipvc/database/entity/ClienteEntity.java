@@ -7,7 +7,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "cliente", schema = "public", catalog = "transitario_maritimo")
 public class ClienteEntity {
-    private int id;
+    private Integer id;
     private String nome;
     private Integer nif;
     private String rua;
@@ -36,11 +36,11 @@ public class ClienteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
