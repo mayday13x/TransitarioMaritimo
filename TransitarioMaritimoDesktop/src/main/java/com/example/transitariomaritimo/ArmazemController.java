@@ -18,6 +18,7 @@ import pt.ipvc.database.entity.ArmazemEntity;
 import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.repository.ArmazemRepository;
 import pt.ipvc.database.repository.ClienteRepository;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,6 +42,9 @@ public class ArmazemController implements Initializable {
     @FXML
     private TableView<ArmazemEntity> table;
 
+    @FXML
+    private Pane Pane;
+
 
     @FXML
     public void VoltarAtras(ActionEvent event) {
@@ -59,17 +63,12 @@ public class ArmazemController implements Initializable {
 
     @FXML
     public void InserirArmazem(ActionEvent event) {
+        Pane.setVisible(true);
+    }
 
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("InserirArmazem.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Inserir Armazem");
-            stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
-        }
+    @FXML
+    public void VoltarAtrasInserirArmazem(ActionEvent event) {
+        Pane.setVisible(false);
     }
 
     @FXML
@@ -90,7 +89,7 @@ public class ArmazemController implements Initializable {
     public void VisualizarCargas(ActionEvent event) {
 
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("Carga.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("CargaArmazem.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);

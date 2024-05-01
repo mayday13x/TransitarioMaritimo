@@ -8,15 +8,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="480.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.CotacaoController">
+<AnchorPane prefHeight="480.0" prefWidth="720.0" stylesheets="@nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.CotacaoController">
    <children>
       <Label layoutX="323.0" layoutY="7.0" text="Cotações">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <TableView layoutX="53.0" layoutY="52.0" prefHeight="167.0" prefWidth="614.0">
+      <TableView layoutX="53.0" layoutY="52.0" prefHeight="184.0" prefWidth="614.0">
         <columns>
           <TableColumn prefWidth="137.60003662109375" text="Id" />
           <TableColumn prefWidth="164.0" text="IdCliente" />
@@ -26,8 +25,8 @@
       </TableView>
       <TextField layoutX="53.0" layoutY="263.0" prefHeight="26.0" prefWidth="614.0" />
       <Label layoutX="53.0" layoutY="246.0" text="Valor Total" />
-      <Button layoutX="410.0" layoutY="440.0" mnemonicParsing="false" text="Editar Cotacão" />
-      <Button layoutX="540.0" layoutY="440.0" mnemonicParsing="false" text="Remover Cotacão" />
-      <Button layoutX="14.0" layoutY="427.0" mnemonicParsing="false" text="&lt;" />
+      <Button layoutX="385.0" layoutY="416.0" mnemonicParsing="false" text="Editar Cotacão" />
+      <Button layoutX="533.0" layoutY="416.0" mnemonicParsing="false" text="Remover Cotacão" />
+      <Button layoutX="53.0" layoutY="416.0" mnemonicParsing="false" text="&lt;" />
    </children>
 </AnchorPane>

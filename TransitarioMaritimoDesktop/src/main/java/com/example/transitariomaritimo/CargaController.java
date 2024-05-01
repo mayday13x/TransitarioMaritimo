@@ -19,6 +19,7 @@ import pt.ipvc.database.entity.CargaEntity;
 import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.repository.CargaRepository;
 import pt.ipvc.database.repository.ClienteRepository;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -64,6 +65,9 @@ public class CargaController implements Initializable {
     @FXML
     private TableColumn<CargaEntity, String> Volume;
 
+    @FXML
+    private Pane Pane;
+
 
     @FXML
     public void VoltarAtras(ActionEvent event) {
@@ -82,23 +86,13 @@ public class CargaController implements Initializable {
 
     @FXML
     public void InserirCarga(ActionEvent event) {
-
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("InserirCarga.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Inserir Carga");
-            stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
-        }
+        Pane.setVisible(true);
     }
     @FXML
     public void RegistarCarga(ActionEvent event) {
 
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("Carga.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("CargaArmazem.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);
@@ -111,17 +105,7 @@ public class CargaController implements Initializable {
 
     @FXML
     public void VoltarAtrasInserirCarga(ActionEvent event) {
-
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("Carga.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Carga");
-            stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
-        }
+        Pane.setVisible(false);
     }
 
     @Override

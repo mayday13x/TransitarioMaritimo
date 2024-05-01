@@ -20,6 +20,7 @@ import pt.ipvc.database.entity.ContentorEntity;
 import pt.ipvc.database.repository.CargaRepository;
 import pt.ipvc.database.repository.ClienteRepository;
 import pt.ipvc.database.repository.ContentorRepository;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -51,18 +52,11 @@ public class ContentorController implements Initializable {
     private TableView<ContentorEntity> table;
 
     @FXML
-    public void InserirContentor(ActionEvent event) {
+    private Pane Pane;
 
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("InserirContentor.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Inserir Contentor");
-            stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar InserirCliente: " + ex.getMessage());
-        }
+    @FXML
+    public void InserirContentor(ActionEvent event) {
+        Pane.setVisible(true);
     }
 
     @FXML
@@ -82,17 +76,7 @@ public class ContentorController implements Initializable {
 
     @FXML
     public void VoltarAtrasInserirContentor(ActionEvent event) {
-
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("Contentor.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Contentores");
-            stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar Contentor: " + ex.getMessage());
-        }
+        Pane.setVisible(false);
     }
 
     @FXML
