@@ -8,7 +8,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "reserva", schema = "public", catalog = "transitario_maritimo")
 public class ReservaEntity {
-    private int id;
+    private Integer id;
     private Integer idFuncionario;
     private Integer idCliente;
     private Integer idEstadoReserva;
@@ -23,11 +23,11 @@ public class ReservaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

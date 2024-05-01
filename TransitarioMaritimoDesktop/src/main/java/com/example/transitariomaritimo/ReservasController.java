@@ -106,7 +106,7 @@ public class ReservasController implements Initializable {
         repo = context.getBean(ReservaRepository.class);
         ObservableList<ReservaEntity> reserva = FXCollections.observableArrayList(repo.findAll());
 
-        Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
+        Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
         Data.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
         Origem.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getOrigem()));
         Destino.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDestino()));
