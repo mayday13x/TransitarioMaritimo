@@ -23,7 +23,7 @@ public class HelloApplication extends Application {
 
         context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("LoginView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1020, 768);
         stage.setTitle("Hello!");
         stage.setScene(scene);

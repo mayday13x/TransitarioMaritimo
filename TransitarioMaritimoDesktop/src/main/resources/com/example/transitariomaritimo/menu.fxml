@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="780" prefWidth="1020" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.MenuController">
+<AnchorPane prefHeight="780" prefWidth="1020" stylesheets="@nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.MenuController">
    <children>
       <Button layoutX="63.0" layoutY="234.0" mnemonicParsing="false" onAction="#Cliente" prefHeight="118.0" prefWidth="182.0" text="Cliente">
          <font>
