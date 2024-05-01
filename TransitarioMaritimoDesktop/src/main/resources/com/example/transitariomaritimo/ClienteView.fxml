@@ -11,35 +11,31 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="780" prefWidth="1020" stylesheets="@nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ClienteController">
+<AnchorPane prefHeight="715.0" prefWidth="873.0" stylesheets="@nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ClienteController">
    <children>
-      <Pane fx:id="mainPanel" layoutX="47.0" layoutY="25.0" prefHeight="780.0" prefWidth="1039.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Pane fx:id="mainPanel" layoutX="47.0" layoutY="25.0" prefHeight="715.0" prefWidth="883.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TableView fx:id="table" layoutX="41.0" layoutY="94.0" prefHeight="662.0" prefWidth="625.0">
+            <TableView fx:id="table" layoutX="14.0" layoutY="81.0" prefHeight="431.0" prefWidth="829.0">
               <columns>
                 <TableColumn fx:id="Id" prefWidth="86.39999389648438" text="Id" />
-                <TableColumn fx:id="Nome" prefWidth="158.40000915527344" text="Nome" />
-                  <TableColumn fx:id="Nif" minWidth="0.0" prefWidth="138.40005493164062" text="Nif" />
-                  <TableColumn fx:id="Localidade" maxWidth="235.19998168945312" prefWidth="229.59994506835938" text="Localidade" />
+                <TableColumn fx:id="Nome" prefWidth="133.5999755859375" text="Nome" />
+                  <TableColumn fx:id="Nif" minWidth="0.0" prefWidth="113.60002136230469" text="Nif" />
+                  <TableColumn fx:id="Localidade" maxWidth="288.0" prefWidth="147.199951171875" text="Localidade" />
+                  <TableColumn fx:id="Telefone" maxWidth="288.0" prefWidth="142.4000244140625" text="Telefone" />
+                  <TableColumn fx:id="Email" maxWidth="288.0" prefWidth="203.20001220703125" text="Email" />
               </columns>
             </TableView>
-            <Label layoutX="445.0" layoutY="18.0" text="Clientes">
+            <Label layoutX="452.0" layoutY="27.0" text="Clientes">
                <font>
                   <Font size="23.0" />
                </font>
             </Label>
-            <TextField fx:id="Rua" layoutX="700.0" layoutY="121.0" prefHeight="36.0" prefWidth="265.0" />
-            <TextField fx:id="Email" layoutX="700.0" layoutY="278.0" prefHeight="36.0" prefWidth="265.0" />
-            <TextField fx:id="Telefone" layoutX="700.0" layoutY="197.0" prefHeight="36.0" prefWidth="265.0" />
-            <Button defaultButton="true" layoutX="700.0" layoutY="377.0" mnemonicParsing="false" onAction="#InserirCliente" prefHeight="50.0" prefWidth="123.0" text="Inserir Cliente" />
-            <Button fx:id="deleteButton" layoutX="842.0" layoutY="376.0" mnemonicParsing="false" onAction="#EcluirCliente" prefHeight="50.0" prefWidth="123.0" text="Excluir Cliente" />
-            <Button defaultButton="true" layoutX="41.0" layoutY="18.0" mnemonicParsing="false" onAction="#VoltarAtras" prefHeight="31.0" prefWidth="88.0" text="Menu" />
-            <Label layoutX="700.0" layoutY="94.0" text="Rua" />
-            <Label layoutX="700.0" layoutY="247.0" text="Email" />
-            <Label layoutX="700.0" layoutY="169.0" text="Telefone" />
+            <Button defaultButton="true" layoutX="21.0" layoutY="532.0" mnemonicParsing="false" onAction="#InserirCliente" prefHeight="42.0" prefWidth="109.0" text="Inserir Cliente" />
+            <Button fx:id="deleteButton" layoutX="150.0" layoutY="532.0" mnemonicParsing="false" onAction="#ExcluirCliente" prefHeight="42.0" prefWidth="117.0" text="Excluir Cliente" />
+            <Button fx:id="editButton" layoutX="287.0" layoutY="532.0" mnemonicParsing="false" onAction="#EditarCliente" prefHeight="42.0" prefWidth="117.0" text="Editar" />
          </children>
       </Pane>
-      <Pane fx:id="Pane" layoutX="252.0" layoutY="131.0" prefHeight="438.0" prefWidth="557.0" style="-fx-background-color: #FFFFFF;" visible="false">
+      <Pane fx:id="Pane" layoutX="99.0" layoutY="95.0" prefHeight="438.0" prefWidth="557.0" style="-fx-background-color: #FFFFFF;">
          <children>
              <Button layoutX="476.0" layoutY="18.0" mnemonicParsing="false" onAction="#VoltarAtrasInserirCliente" text="X">
                <font>

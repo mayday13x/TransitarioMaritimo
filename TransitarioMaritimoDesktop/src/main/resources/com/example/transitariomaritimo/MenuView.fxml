@@ -6,37 +6,45 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="780" prefWidth="1020" stylesheets="@nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.MenuController">
+<AnchorPane prefHeight="729.0" prefWidth="1063.0" stylesheets="@nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.MenuController">
    <children>
-      <Button layoutX="63.0" layoutY="234.0" mnemonicParsing="false" onAction="#Cliente" prefHeight="118.0" prefWidth="182.0" text="Cliente">
+      <Button defaultButton="true" layoutX="14.0" layoutY="83.0" mnemonicParsing="false" onAction="#Cliente" prefHeight="42.0" prefWidth="124.0" text="Clientes">
          <font>
-            <Font size="24.0" />
+            <Font size="17.0" />
          </font>
       </Button>
-      <Button layoutX="394.0" layoutY="234.0" mnemonicParsing="false" onAction="#Reserva" prefHeight="118.0" prefWidth="182.0" text="Reservas">
+      <Button defaultButton="true" layoutX="14.0" layoutY="144.0" mnemonicParsing="false" onAction="#Reserva" prefHeight="42.0" prefWidth="124.0" text="Reservas">
          <font>
-            <Font size="24.0" />
+            <Font size="17.0" />
          </font>
       </Button>
-      <Button layoutX="712.0" layoutY="234.0" mnemonicParsing="false" onAction="#Armazem" prefHeight="118.0" prefWidth="182.0" text="Armazem">
+      <Button defaultButton="true" layoutX="14.0" layoutY="259.0" mnemonicParsing="false" onAction="#Armazem" prefHeight="42.0" prefWidth="124.0" text="Armazens">
          <font>
-            <Font size="24.0" />
+            <Font size="17.0" />
          </font>
       </Button>
-      <Button layoutX="63.0" layoutY="469.0" mnemonicParsing="false" prefHeight="118.0" prefWidth="182.0" text="Serviço">
+      <Button defaultButton="true" layoutX="14.0" layoutY="322.0" mnemonicParsing="false" onAction="#Servicos" prefHeight="42.0" prefWidth="124.0" text="Serviços">
          <font>
-            <Font size="24.0" />
+            <Font size="17.0" />
          </font>
       </Button>
-      <Button layoutX="394.0" layoutY="469.0" mnemonicParsing="false" onAction="#Contentor" prefHeight="118.0" prefWidth="182.0" text="Contentor">
+      <Button defaultButton="true" layoutX="14.0" layoutY="201.0" mnemonicParsing="false" onAction="#Contentor" prefHeight="42.0" prefWidth="124.0" text="Contentores">
          <font>
-            <Font size="24.0" />
+            <Font size="17.0" />
          </font>
       </Button>
-      <ImageView fitHeight="118.0" fitWidth="117.0" layoutX="889.0" layoutY="14.0" onMouseClicked="#Logout">
-         <image>
-            <Image url="@../../../images/exit.png" />
-         </image>
-      </ImageView>
+      <Button defaultButton="true" layoutX="14.0" layoutY="661.0" mnemonicParsing="false" onMouseClicked="#Logout" prefHeight="38.0" prefWidth="124.0" text="Sair">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="22.0" fitWidth="21.0">
+               <image>
+                  <Image url="@../../../images/exit.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <AnchorPane fx:id="menu_panel" layoutX="156.0" layoutY="8.0" prefHeight="715.0" prefWidth="850.0" />
    </children>
 </AnchorPane>

@@ -59,14 +59,6 @@ public class ClienteController implements Initializable{
     private TextField TelefoneText;
 
 
-    @FXML
-    private TextField Rua;
-
-    @FXML
-    private TextField Telefone;
-
-    @FXML
-    private TextField Email;
 
     @FXML
     private TableColumn<ClienteEntity, String> Localidade;
@@ -81,8 +73,13 @@ public class ClienteController implements Initializable{
     private TableColumn<ClienteEntity, String> Nome;
 
     @FXML
-    private TableView<ClienteEntity> table;
+    private TableColumn<ClienteEntity, String> Telefone;
 
+    @FXML
+    private TableColumn<ClienteEntity, String> Email;
+
+    @FXML
+    private TableView<ClienteEntity> table;
 
     @FXML
     private Pane Pane;
@@ -92,6 +89,43 @@ public class ClienteController implements Initializable{
 
     @FXML
     private Button deleteButton;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        context = new AnnotationConfigApplicationContext(AppConfig.class);
+        cli_repo = context.getBean(ClienteRepository.class);
+
+        ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(cli_repo.findAll());
+
+
+        try{
+
+            Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+            Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
+            Nif.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNif().toString()));
+            Localidade.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCodPostalByIdCodPostal().getLocalidade()));
+            Telefone.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTelefone()));
+            Email.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
+            table.setItems(clientes);
+
+
+            context = new AnnotationConfigApplicationContext(AppConfig.class);
+            cp_repo = context.getBean(CodPostalRepository.class);
+            cli_repo = context.getBean(ClienteRepository.class);
+
+            ObservableList<CodPostalEntity> localidades = FXCollections.observableArrayList(cp_repo.findAll());
+            for (CodPostalEntity i : localidades){
+                CodPostalCombo.getItems().addAll(i.getLocalidade());
+            }
+
+
+        } catch (Exception ex){
+            System.out.println("Erro no Cliente: " + ex.getMessage());
+        }
+
+    }
+
 
     @FXML
     public void VoltarAtras(ActionEvent event) {
@@ -145,6 +179,8 @@ public class ClienteController implements Initializable{
                 alert.setHeaderText("Registo efetuado com sucesso!");
                 alert.showAndWait();
 
+
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -187,7 +223,7 @@ public class ClienteController implements Initializable{
     }
 
     @FXML
-    public void EcluirCliente() {
+    public void ExcluirCliente() {
 
         if (table.getSelectionModel().getSelectedItem() == null) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -211,44 +247,11 @@ public class ClienteController implements Initializable{
 
 }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        context = new AnnotationConfigApplicationContext(AppConfig.class);
-        cli_repo = context.getBean(ClienteRepository.class);
-
-        ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(cli_repo.findAll());
+    @FXML
+    public void EditarCliente() {
 
 
-        try{
-
-            Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
-            Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
-            Nif.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNif().toString()));
-            Localidade.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCodPostalByIdCodPostal().getLocalidade()));
-            table.setItems(clientes);
-
-            table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null) {
-                    Rua.setText(newValue.getRua());
-                    Telefone.setText(newValue.getTelefone());
-                    Email.setText(newValue.getEmail());
-                }
-            });
-
-            context = new AnnotationConfigApplicationContext(AppConfig.class);
-            cp_repo = context.getBean(CodPostalRepository.class);
-            cli_repo = context.getBean(ClienteRepository.class);
-
-            ObservableList<CodPostalEntity> localidades = FXCollections.observableArrayList(cp_repo.findAll());
-            for (CodPostalEntity i : localidades){
-                CodPostalCombo.getItems().addAll(i.getLocalidade());
-            }
-
-
-        } catch (Exception ex){
-            System.out.println("Erro no Cliente: " + ex.getMessage());
-        }
 
     }
+
 }
