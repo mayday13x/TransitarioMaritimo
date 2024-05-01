@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="480.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ClienteController">
+<AnchorPane prefHeight="480.0" prefWidth="720.0" stylesheets="@nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ClienteController">
    <children>
-      <Label layoutX="306.0" layoutY="14.0" text="Criar Cotação">
+      <Label layoutX="295.0" layoutY="14.0" text="Criar Cotação">
          <font>
             <Font size="18.0" />
          </font>
@@ -19,7 +19,7 @@
       <Label layoutX="423.0" layoutY="85.0" text="IdEstadoReserva" />
       <Label layoutX="68.0" layoutY="148.0" text="Data" />
       <Label layoutX="423.0" layoutY="148.0" text="Valor Total" />
-      <Button layoutX="562.0" layoutY="440.0" mnemonicParsing="false" text="Criar Cotação" />
+      <Button layoutX="560.0" layoutY="416.0" mnemonicParsing="false" text="Criar Cotação" />
       <ComboBox layoutX="423.0" layoutY="103.0" prefHeight="26.0" prefWidth="227.0" />
       <TextField layoutX="68.0" layoutY="166.0" prefHeight="26.0" prefWidth="227.0" />
       <TextField layoutX="423.0" layoutY="166.0" prefHeight="26.0" prefWidth="227.0" />

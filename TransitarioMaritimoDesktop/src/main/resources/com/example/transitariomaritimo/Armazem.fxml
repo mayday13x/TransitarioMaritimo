@@ -4,26 +4,43 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="480" prefWidth="720" stylesheets="@nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ArmazemController">
    <children>
-      <TableView fx:id="table" layoutX="34.0" layoutY="57.0" prefHeight="150.0" prefWidth="526.0">
+      <TableView fx:id="table" layoutX="46.0" layoutY="54.0" prefHeight="199.0" prefWidth="628.0">
         <columns>
-          <TableColumn fx:id="Id" prefWidth="160.800048828125" text="Id" />
-          <TableColumn fx:id="Descricao" prefWidth="204.79998779296875" text="Descricao" />
-            <TableColumn fx:id="Cap_max" prefWidth="159.99993896484375" text="Cap_Max" />
+          <TableColumn fx:id="Id" prefWidth="183.0" text="Id" />
+          <TableColumn fx:id="Descricao" prefWidth="242.0" text="Descricao" />
+            <TableColumn fx:id="Cap_max" prefWidth="201.0" text="Cap_Max" />
         </columns>
       </TableView>
-      <Label layoutX="283.0" layoutY="14.0" text="Armazem">
+      <Label layoutX="292.0" layoutY="14.0" text="Armazem">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Button layoutX="179.0" layoutY="346.0" mnemonicParsing="false" onAction="#InserirArmazem" prefHeight="26.0" prefWidth="117.0" text="Inserir Armazem" />
-      <Button layoutX="321.0" layoutY="346.0" mnemonicParsing="false" text="Remover Armazem" />
-      <Button layoutX="465.0" layoutY="346.0" mnemonicParsing="false" onAction="#VisualizarCargas" text="Visualizar Cargas" />
-      <Button layoutX="14.0" layoutY="346.0" mnemonicParsing="false" onAction="#VoltarAtras" text="&lt;" />
+      <Button layoutX="175.0" layoutY="408.0" mnemonicParsing="false" onAction="#InserirArmazem" prefHeight="26.0" prefWidth="117.0" text="Inserir Armazem" />
+      <Button layoutX="348.0" layoutY="408.0" mnemonicParsing="false" text="Remover Armazem" />
+      <Button layoutX="543.0" layoutY="408.0" mnemonicParsing="false" onAction="#VisualizarCargas" text="Visualizar Cargas" />
+      <Button layoutX="46.0" layoutY="408.0" mnemonicParsing="false" onAction="#VoltarAtras" text="&lt;" />
+      <Pane fx:id="Pane" layoutX="31.0" layoutY="13.0" prefHeight="442.0" prefWidth="663.0" style="-fx-background-color: #FFFFFF;" visible="false">
+         <children>
+             <Label layoutX="239.0" layoutY="1.0" text="Inserir Armazem">
+             <font>
+                 <Font size="18.0" />
+             </font>
+         </Label>
+             <TextField layoutX="52.0" layoutY="83.0" prefHeight="26.0" prefWidth="199.0" />
+             <TextField layoutX="349.0" layoutY="83.0" prefHeight="26.0" prefWidth="199.0" />
+             <Button layoutX="406.0" layoutY="331.0" mnemonicParsing="false" onAction="#RegistarArmazem" text="Registar Armazem" />
+             <Label layoutX="52.0" layoutY="66.0" text="Id" />
+             <Label layoutX="349.0" layoutY="66.0" text="Capacidade Maxima" />
+            <Button layoutX="52.0" layoutY="331.0" mnemonicParsing="false" onAction="#VoltarAtrasInserirArmazem" text="&lt;" />
+         </children></Pane>
+
    </children>
 </AnchorPane>

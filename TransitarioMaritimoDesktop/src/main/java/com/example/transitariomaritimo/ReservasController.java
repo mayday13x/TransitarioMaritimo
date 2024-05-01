@@ -20,6 +20,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import pt.ipvc.database.repository.ReservaRepository;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -55,6 +56,9 @@ public class ReservasController implements Initializable {
     private TableView<ReservaEntity> Table;
 
     @FXML
+    private Pane Pane;
+
+    @FXML
     public void VoltarAtras(ActionEvent event) {
 
         try{
@@ -71,17 +75,12 @@ public class ReservasController implements Initializable {
 
     @FXML
     public void InserirReserva(ActionEvent event) {
+        Pane.setVisible(true);
+    }
 
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("InserirReserva.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Inserir Reserva");
-            stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
-        }
+    @FXML
+    public void VoltarAtrasInserirReserva(ActionEvent event) {
+        Pane.setVisible(false);
     }
 
     @FXML
