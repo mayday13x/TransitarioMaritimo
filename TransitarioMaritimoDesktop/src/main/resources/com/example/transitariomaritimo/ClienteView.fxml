@@ -15,12 +15,12 @@
    <children>
       <Pane fx:id="mainPanel" layoutX="47.0" layoutY="25.0" prefHeight="780.0" prefWidth="1039.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TableView fx:id="table" layoutX="50.0" layoutY="94.0" prefHeight="578.0" prefWidth="616.0" stylesheets="@test.css">
+            <TableView fx:id="table" layoutX="41.0" layoutY="94.0" prefHeight="662.0" prefWidth="625.0">
               <columns>
                 <TableColumn fx:id="Id" prefWidth="86.39999389648438" text="Id" />
                 <TableColumn fx:id="Nome" prefWidth="158.40000915527344" text="Nome" />
-                  <TableColumn fx:id="Nif" minWidth="0.0" prefWidth="188.79998779296875" text="Nif" />
-                  <TableColumn fx:id="Localidade" prefWidth="464.00006103515625" text="Localidade" />
+                  <TableColumn fx:id="Nif" minWidth="0.0" prefWidth="138.40005493164062" text="Nif" />
+                  <TableColumn fx:id="Localidade" maxWidth="235.19998168945312" prefWidth="229.59994506835938" text="Localidade" />
               </columns>
             </TableView>
             <Label layoutX="445.0" layoutY="18.0" text="Clientes">
@@ -28,20 +28,20 @@
                   <Font size="23.0" />
                </font>
             </Label>
-            <TextField fx:id="Rua" layoutX="714.0" layoutY="166.0" prefHeight="36.0" prefWidth="230.0" />
-            <TextField fx:id="Email" layoutX="714.0" layoutY="336.0" prefHeight="34.0" prefWidth="230.0" />
-            <TextField fx:id="Telefone" layoutX="714.0" layoutY="252.0" prefHeight="36.0" prefWidth="230.0" />
-            <Button defaultButton="true" layoutX="698.0" layoutY="479.0" mnemonicParsing="false" onAction="#InserirCliente" prefHeight="49.0" prefWidth="110.0" text="Inserir Cliente" />
-            <Button layoutX="841.0" layoutY="479.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="135.0" text="Desativar Cliente" />
-            <Button defaultButton="true" layoutX="33.0" layoutY="17.0" mnemonicParsing="false" onAction="#VoltarAtras" prefHeight="34.0" prefWidth="31.0" text="&lt;" />
-            <Label layoutX="714.0" layoutY="138.0" text="Rua" />
-            <Label layoutX="720.0" layoutY="303.0" text="Email" />
-            <Label layoutX="716.0" layoutY="221.0" text="Telefone" />
+            <TextField fx:id="Rua" layoutX="700.0" layoutY="121.0" prefHeight="36.0" prefWidth="265.0" />
+            <TextField fx:id="Email" layoutX="700.0" layoutY="278.0" prefHeight="36.0" prefWidth="265.0" />
+            <TextField fx:id="Telefone" layoutX="700.0" layoutY="197.0" prefHeight="36.0" prefWidth="265.0" />
+            <Button defaultButton="true" layoutX="700.0" layoutY="377.0" mnemonicParsing="false" onAction="#InserirCliente" prefHeight="50.0" prefWidth="123.0" text="Inserir Cliente" />
+            <Button layoutX="842.0" layoutY="376.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="123.0" text="Excluir Cliente" />
+            <Button defaultButton="true" layoutX="41.0" layoutY="18.0" mnemonicParsing="false" onAction="#VoltarAtras" prefHeight="31.0" prefWidth="88.0" text="Menu" />
+            <Label layoutX="700.0" layoutY="94.0" text="Rua" />
+            <Label layoutX="700.0" layoutY="247.0" text="Email" />
+            <Label layoutX="700.0" layoutY="169.0" text="Telefone" />
          </children>
       </Pane>
-      <Pane fx:id="Pane" layoutX="254.0" layoutY="229.0" prefHeight="438.0" prefWidth="557.0" style="-fx-background-color: #FFFFFF;" visible="false">
+      <Pane fx:id="Pane" layoutX="252.0" layoutY="131.0" prefHeight="438.0" prefWidth="557.0" style="-fx-background-color: #FFFFFF;" visible="false">
          <children>
-             <Button defaultButton="true" layoutX="476.0" layoutY="18.0" mnemonicParsing="false" onAction="#VoltarAtrasInserirCliente" text="X">
+             <Button layoutX="476.0" layoutY="18.0" mnemonicParsing="false" onAction="#VoltarAtrasInserirCliente" text="X">
                <font>
                   <Font name="Century Gothic" size="12.0" />
                </font>
@@ -65,7 +65,7 @@
              <ComboBox fx:id="CodPostalCombo" layoutX="57.0" layoutY="236.0" prefHeight="36.0" prefWidth="201.0" />
              <TextField fx:id="EmailText" layoutX="295.0" layoutY="236.0" prefHeight="36.0" prefWidth="213.0" />
              <TextField fx:id="TelefoneText" layoutX="57.0" layoutY="309.0" prefHeight="36.0" prefWidth="201.0" />
-             <Button layoutX="219.0" layoutY="377.0" mnemonicParsing="false" onAction="#RegistarCliente" text="Inserir Cliente" />
+             <Button defaultButton="true" layoutX="224.0" layoutY="376.0" mnemonicParsing="false" onAction="#RegistarCliente" text="Inserir Cliente" />
          </children>
          <effect>
             <DropShadow />
