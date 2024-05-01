@@ -91,6 +91,9 @@ public class ClienteController implements Initializable{
     private Pane mainPanel;
 
     @FXML
+    private Button deleteButton;
+
+    @FXML
     public void VoltarAtras(ActionEvent event) {
 
         try{
@@ -184,22 +187,33 @@ public class ClienteController implements Initializable{
     }
 
     @FXML
-    public void EcluirCliente(ActionEvent event) {
+    public void EcluirCliente() {
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Eliminar Cliente");
-        alert.setHeaderText("Eliminar Cliente");
-        alert.setContentText("Tem a certeza que pretende eliminar este cliente?");
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
-            cli_repo.deleteById(table.getSelectionModel().getSelectedItem().getId());
-            ObservableList<ClienteEntity> clientesAtualizados = FXCollections.observableArrayList(cli_repo.findAll());
-            table.setItems(clientesAtualizados);
+        if (table.getSelectionModel().getSelectedItem() == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erro!");
+            alert.setHeaderText("Nenhum cliente selecionado!");
+            alert.setContentText("Selecione um cliente para eliminar!");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Eliminar Cliente");
+            alert.setHeaderText("Eliminar Cliente");
+            alert.setContentText("Tem a certeza que pretende eliminar este cliente?");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                cli_repo.deleteById(table.getSelectionModel().getSelectedItem().getId());
+                ObservableList<ClienteEntity> clientesAtualizados = FXCollections.observableArrayList(cli_repo.findAll());
+                table.setItems(clientesAtualizados);
+            }
         }
-    }
+
+}
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         context = new AnnotationConfigApplicationContext(AppConfig.class);
         cli_repo = context.getBean(ClienteRepository.class);
 
