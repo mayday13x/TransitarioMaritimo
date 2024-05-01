@@ -183,7 +183,7 @@ public class ClienteController implements Initializable{
 
 
         } catch (Exception ex){
-            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
+            System.out.println("Erro no Cliente: " + ex.getMessage());
         }
 
     }

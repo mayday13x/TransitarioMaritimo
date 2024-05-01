@@ -87,6 +87,7 @@ public class ArmazemController implements Initializable {
 
         repo.save(novoArmazem);
 
+
         CapacidadeMaximaText.clear();
         descricaoText.clear();
 

@@ -42,16 +42,16 @@
              </Label>
              <Button layoutX="14.0" layoutY="389.0" mnemonicParsing="false" onAction="#VoltarAtrasInserirContentor" text="&lt;" />
              <Button layoutX="411.0" layoutY="389.0" mnemonicParsing="false" onAction="#RegistarContentor" text="Inserir Contentor" />
-             <TextField layoutX="43.0" layoutY="74.0" prefHeight="26.0" prefWidth="202.0" />
-             <TextField layoutX="358.0" layoutY="74.0" prefHeight="26.0" prefWidth="202.0" />
-             <TextField layoutX="43.0" layoutY="146.0" prefHeight="26.0" prefWidth="202.0" />
+             <TextField fx:id="CapacidadeText" layoutX="43.0" layoutY="74.0" prefHeight="26.0" prefWidth="202.0" />
+             <TextField fx:id="PesoMaximoText" layoutX="358.0" layoutY="74.0" prefHeight="26.0" prefWidth="202.0" />
+             <TextField fx:id="LocalAtualText" layoutX="43.0" layoutY="146.0" prefHeight="26.0" prefWidth="202.0" />
              <Label layoutX="43.0" layoutY="57.0" text="Capacidade" />
              <Label layoutX="358.0" layoutY="57.0" text="Peso Maxímo" />
              <Label layoutX="43.0" layoutY="128.0" text="Local Atual" />
              <Label layoutX="358.0" layoutY="128.0" text="Tipo de Contentor" />
              <Label layoutX="43.0" layoutY="200.0" text="IdEstadoContentor" />
-             <ComboBox layoutX="358.0" layoutY="147.0" prefHeight="26.0" prefWidth="202.0" />
-             <ComboBox layoutX="42.0" layoutY="218.0" prefHeight="26.0" prefWidth="202.0" />
+             <ComboBox fx:id="TipoContentorCombo" layoutX="358.0" layoutY="147.0" prefHeight="26.0" prefWidth="202.0" />
+             <ComboBox fx:id="EstadoContentorCombo" layoutX="42.0" layoutY="218.0" prefHeight="26.0" prefWidth="202.0" />
          </children></Pane>
 
    </children>
