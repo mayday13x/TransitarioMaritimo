@@ -10,12 +10,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ClienteEntity;
+import pt.ipvc.database.repository.ClienteRepository;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,7 +24,8 @@ import java.util.ResourceBundle;
 
 public class ClienteController implements Initializable{
 
-    ClienteService clienteService = new ClienteService();
+    public AnnotationConfigApplicationContext context;
+    private ClienteRepository cli_repo;
 
     @FXML
     private TextField Rua;
@@ -49,26 +51,6 @@ public class ClienteController implements Initializable{
     @FXML
     private TableView<ClienteEntity> table;
 
-    @FXML
-    private ComboBox<String> CodPostalCombo;
-
-    @FXML
-    private TextField EmailText;
-
-    @FXML
-    private TextField NifText;
-
-    @FXML
-    private TextField NomeText;
-
-    @FXML
-    private TextField PortaText;
-
-    @FXML
-    private TextField RuaText;
-
-    @FXML
-    private TextField TelefoneText;
 
     @FXML
     public void VoltarAtras(ActionEvent event) {
@@ -96,25 +78,13 @@ public class ClienteController implements Initializable{
 
     }
 
-    @FXML
-    public void VoltarAtrasInserirCliente(ActionEvent event) {
-
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("Cliente.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Cliente");
-            stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
-        }
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        context = new AnnotationConfigApplicationContext(AppConfig.class);
+        cli_repo = context.getBean(ClienteRepository.class);
 
-        ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(clienteService.getAllClientes());
+        ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(cli_repo.findAll());
 
 
         try{

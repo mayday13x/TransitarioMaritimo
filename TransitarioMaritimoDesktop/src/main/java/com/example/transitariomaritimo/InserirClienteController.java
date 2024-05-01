@@ -20,14 +20,14 @@ import pt.ipvc.database.repository.CodPostalRepository;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class InserirClienteController implements Initializable{
 
-    ClienteService clienteService = new ClienteService();
-
     public AnnotationConfigApplicationContext context;
     private CodPostalRepository cp_repo;
+    private ClienteRepository cli_repo;
 
     @FXML
     private ComboBox<String> CodPostalCombo;
@@ -73,15 +73,15 @@ public class InserirClienteController implements Initializable{
         novoCliente.setNif(Integer.valueOf(NifText.getText()));
         novoCliente.setRua(RuaText.getText());
         novoCliente.setPorta(Integer.valueOf(PortaText.getText()));
-        //novoCliente.setIdCodPostal(Integer.valueOf(String.valueOf(CodPostalCombo.getValue())));
-
-        //novoCliente.setCodPostalByIdCodPostal();
+        novoCliente.setIdCodPostal(CodPostalCombo.getSelectionModel().getSelectedIndex() + 1);
         novoCliente.setEmail(EmailText.getText());
         novoCliente.setTelefone(TelefoneText.getText());
+        CodPostalEntity cp = new CodPostalEntity();
+        cp.setIdCodPostal(novoCliente.getIdCodPostal());
+        novoCliente.setCodPostalByIdCodPostal(cp);
 
-        clienteService.addCliente(novoCliente);
 
-        //table.getItems().add(novoCliente);
+        cli_repo.save(novoCliente);
 
         RuaText.clear();
         NifText.clear();
@@ -97,6 +97,7 @@ public class InserirClienteController implements Initializable{
 
         context = new AnnotationConfigApplicationContext(AppConfig.class);
         cp_repo = context.getBean(CodPostalRepository.class);
+        cli_repo = context.getBean(ClienteRepository.class);
 
         ObservableList<CodPostalEntity> localidades = FXCollections.observableArrayList(cp_repo.findAll());
         for (CodPostalEntity i : localidades){

@@ -13,17 +13,6 @@ public class ClienteService
     public AnnotationConfigApplicationContext context;
     private ClienteRepository repo;
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    public void addCliente(ClienteEntity cliente) {
-        try{
-            entityManager.persist(cliente);
-        } catch (Exception ex) {
-            System.out.println("Erro ao inserir cliente " + ex.getMessage());
-        }
-    }
-
     public List<ClienteEntity> getAllClientes(){
 
         context = new AnnotationConfigApplicationContext(AppConfig.class);
