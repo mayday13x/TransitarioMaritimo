@@ -34,10 +34,10 @@
                  <Font size="18.0" />
              </font>
          </Label>
-             <TextField layoutX="52.0" layoutY="83.0" prefHeight="26.0" prefWidth="199.0" />
-             <TextField layoutX="349.0" layoutY="83.0" prefHeight="26.0" prefWidth="199.0" />
+             <TextField fx:id="descricaoText" layoutX="52.0" layoutY="83.0" prefHeight="26.0" prefWidth="199.0" />
+             <TextField fx:id="CapacidadeMaximaText" layoutX="349.0" layoutY="83.0" prefHeight="26.0" prefWidth="199.0" />
              <Button layoutX="406.0" layoutY="331.0" mnemonicParsing="false" onAction="#RegistarArmazem" text="Registar Armazem" />
-             <Label layoutX="52.0" layoutY="66.0" text="Id" />
+             <Label layoutX="52.0" layoutY="66.0" text="Descrição" />
              <Label layoutX="349.0" layoutY="66.0" text="Capacidade Maxima" />
             <Button layoutX="52.0" layoutY="331.0" mnemonicParsing="false" onAction="#VoltarAtrasInserirArmazem" text="&lt;" />
          </children></Pane>
