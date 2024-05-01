@@ -110,18 +110,16 @@ public class ClienteController implements Initializable{
         novoCliente.setNif(Integer.valueOf(NifText.getText()));
         novoCliente.setRua(RuaText.getText());
         novoCliente.setPorta(Integer.valueOf(PortaText.getText()));
-        novoCliente.setIdCodPostal(CodPostalCombo.getSelectionModel().getSelectedIndex() + 1);
+
+        CodPostalEntity codPostalEntity = cp_repo.findByNameLike(CodPostalCombo.getSelectionModel().getSelectedItem());
+
+        novoCliente.setIdCodPostal(codPostalEntity.getIdCodPostal());
         novoCliente.setEmail(EmailText.getText());
         novoCliente.setTelefone(TelefoneText.getText());
-        CodPostalEntity cp = new CodPostalEntity();
-        cp.setIdCodPostal(novoCliente.getIdCodPostal());
-        novoCliente.setCodPostalByIdCodPostal(cp);
+        novoCliente.setCodPostalByIdCodPostal(codPostalEntity);
 
 
         cli_repo.save(novoCliente);
-
-        ObservableList<ClienteEntity> clientesAtualizados = FXCollections.observableArrayList(cli_repo.findAll());
-        table.setItems(clientesAtualizados);
 
         RuaText.clear();
         NifText.clear();
@@ -129,6 +127,11 @@ public class ClienteController implements Initializable{
         PortaText.clear();
         EmailText.clear();
         TelefoneText.clear();
+
+
+        ObservableList<ClienteEntity> clientesAtualizados = FXCollections.observableArrayList(cli_repo.findAll());
+        table.setItems(clientesAtualizados);
+        //table.refresh();
 
 
     }
