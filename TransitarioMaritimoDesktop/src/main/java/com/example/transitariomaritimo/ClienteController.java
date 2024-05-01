@@ -120,12 +120,16 @@ public class ClienteController implements Initializable{
 
         cli_repo.save(novoCliente);
 
+        ObservableList<ClienteEntity> clientesAtualizados = FXCollections.observableArrayList(cli_repo.findAll());
+        table.setItems(clientesAtualizados);
+
         RuaText.clear();
         NifText.clear();
         NomeText.clear();
         PortaText.clear();
         EmailText.clear();
         TelefoneText.clear();
+
 
     }
 
