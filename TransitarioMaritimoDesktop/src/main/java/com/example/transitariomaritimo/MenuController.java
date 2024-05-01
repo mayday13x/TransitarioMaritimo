@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -62,6 +63,21 @@ public class MenuController {
             stage.show();
         }catch (IOException ex){
             System.out.println("Erro ao acessar menu contentores: " + ex.getMessage());
+        }
+    }
+
+    @FXML
+    public void Logout(MouseEvent event) {
+
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
+            Scene regCena = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(regCena);
+            stage.setTitle("Login");
+            stage.show();
+        }catch (IOException ex){
+            System.out.println("Erro ao acessar login: " + ex.getMessage());
         }
     }
 }
