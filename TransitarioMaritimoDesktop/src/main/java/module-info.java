@@ -8,6 +8,7 @@ module com.example.transitariomaritimo {
         requires spring.data.jpa;
         requires pt.ipvc.database;
     requires spring.boot.autoconfigure;
+    requires jakarta.persistence;
 
     opens com.example.transitariomaritimo to javafx.fxml, spring.core;
         exports com.example.transitariomaritimo;

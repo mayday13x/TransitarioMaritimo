@@ -1,7 +1,6 @@
 package com.example.transitariomaritimo;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,29 +10,25 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
+
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+
 import javafx.stage.Stage;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ClienteEntity;
-import pt.ipvc.database.entity.CodPostalEntity;
-import pt.ipvc.database.repository.ClienteRepository;
-import pt.ipvc.database.repository.CodPostalRepository;
 import javafx.scene.layout.Pane;
+
+
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class ClienteController implements Initializable{
 
-
-    public AnnotationConfigApplicationContext context;
-    private ClienteRepository repo;
+    ClienteService clienteService = new ClienteService();
 
     @FXML
     private TextField Rua;
@@ -110,53 +105,18 @@ public class ClienteController implements Initializable{
 
     }
 
-
-    @FXML
-    public void RegistarCliente(ActionEvent event) throws IOException {
-
-        ClienteEntity novoCliente = new ClienteEntity();
-        novoCliente.setNome(NomeText.getText());
-        novoCliente.setNif(Integer.valueOf(NifText.getText()));
-        novoCliente.setRua(RuaText.getText());
-        novoCliente.setPorta(Integer.valueOf(PortaText.getText()));
-        novoCliente.setIdCodPostal(Integer.valueOf(String.valueOf(CodPostalCombo.getValue())));
-        novoCliente.setEmail(EmailText.getText());
-        novoCliente.setTelefone(TelefoneText.getText());
-
-        repo.save(novoCliente);
-
-        table.getItems().add(novoCliente);
-
-        RuaText.clear();
-        NifText.clear();
-        NomeText.clear();
-        PortaText.clear();
-        EmailText.clear();
-        TelefoneText.clear();
-
-        Parent root = FXMLLoader.load(getClass().getResource("CriarCotacao.fxml"));
-        Scene regCena = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(regCena);
-        stage.setTitle("Criar Cotação");
-        stage.show();
-
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        repo = context.getBean(ClienteRepository.class);
-        ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(repo.findAll());
+        ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(clienteService.getAllClientes());
+
 
         try{
 
             Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
             Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
             Nif.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNif().toString()));
-            Cod_postal.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIdCodPostal().toString()));
-
+            Cod_postal.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCodPostalByIdCodPostal().getLocalidade()));
             table.setItems(clientes);
 
             table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -171,8 +131,4 @@ public class ClienteController implements Initializable{
         }
 
     }
-
-
-
-
 }
