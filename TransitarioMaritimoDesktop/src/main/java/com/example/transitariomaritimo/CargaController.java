@@ -1,16 +1,69 @@
 package com.example.transitariomaritimo;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import pt.ipvc.database.entity.CargaEntity;
+import pt.ipvc.database.entity.ClienteEntity;
+import pt.ipvc.database.repository.CargaRepository;
+import pt.ipvc.database.repository.ClienteRepository;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class CargaController {
+public class CargaController implements Initializable {
+
+    public AnnotationConfigApplicationContext context;
+    private CargaRepository repo;
+
+    @FXML
+    private TableView<CargaEntity> table;
+    @FXML
+    private TextField IdArmazem;
+
+    @FXML
+    private TextField IdContentor;
+
+    @FXML
+    private TextField IdEstadoCarga;
+
+    @FXML
+    private TextField IdReserva;
+
+    @FXML
+    private TextField IdTipoCarga;
+
+    @FXML
+    private TextField LocalAtual;
+
+    @FXML
+    private TableColumn<CargaEntity, String> Nome;
+
+    @FXML
+    private TextField Observacoes;
+
+    @FXML
+    private TableColumn<CargaEntity, String> Peso;
+
+    @FXML
+    private TableColumn<CargaEntity, String> Quantidade;
+
+    @FXML
+    private TableColumn<CargaEntity, String> Volume;
+
 
     @FXML
     public void VoltarAtras(ActionEvent event) {
@@ -69,5 +122,36 @@ public class CargaController {
         }catch (IOException ex){
             System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
         }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        repo = context.getBean(CargaRepository.class);
+        ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(repo.findAll());
+
+
+
+
+            Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
+            Quantidade.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getQuantidade().toString()));
+            Volume.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getVolume().toString()));
+            Peso.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPeso().toString()));
+
+            table.setItems(cargas);
+
+            table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    LocalAtual.setText(newValue.getLocalAtual().toString());
+                    Observacoes.setText(newValue.getObservacoes().toString());
+                    IdArmazem.setText(newValue.getIdArmazem().toString());
+                    IdContentor.setText(newValue.getIdContentor().toString());
+                    IdEstadoCarga.setText(newValue.getIdEstadoCarga().toString());
+                    IdReserva.setText(newValue.getIdReserva().toString());
+                    IdTipoCarga.setText(newValue.getIdTipoCarga().toString());
+                }
+            });
+
     }
 }

@@ -11,18 +11,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ClienteEntity;
+import pt.ipvc.database.entity.CodPostalEntity;
 import pt.ipvc.database.repository.ClienteRepository;
-import javafx.scene.control.TextField;
+import pt.ipvc.database.repository.CodPostalRepository;
+
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -57,7 +58,7 @@ public class ClienteController implements Initializable{
     private TableView<ClienteEntity> table;
 
     @FXML
-    private TextField CodPostalText;
+    private ComboBox<String> CodPostalCombo;
 
     @FXML
     private TextField EmailText;
@@ -94,7 +95,6 @@ public class ClienteController implements Initializable{
 
     @FXML
     public void InserirCliente(ActionEvent event) throws IOException {
-
             Parent root = FXMLLoader.load(getClass().getResource("InserirCliente.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -102,7 +102,9 @@ public class ClienteController implements Initializable{
             stage.setTitle("Inserir Cliente");
             stage.show();
 
+
     }
+
     @FXML
     public void VoltarAtrasInserirCliente(ActionEvent event) {
 
@@ -127,7 +129,7 @@ public class ClienteController implements Initializable{
         novoCliente.setNif(Integer.valueOf(NifText.getText()));
         novoCliente.setRua(RuaText.getText());
         novoCliente.setPorta(Integer.valueOf(PortaText.getText()));
-        novoCliente.setIdCodPostal(Integer.valueOf(CodPostalText.getText()));
+        novoCliente.setIdCodPostal(Integer.valueOf(String.valueOf(CodPostalCombo.getValue())));
         novoCliente.setEmail(EmailText.getText());
         novoCliente.setTelefone(TelefoneText.getText());
 
@@ -139,7 +141,6 @@ public class ClienteController implements Initializable{
         NifText.clear();
         NomeText.clear();
         PortaText.clear();
-        CodPostalText.clear();
         EmailText.clear();
         TelefoneText.clear();
 
@@ -158,16 +159,6 @@ public class ClienteController implements Initializable{
 
         repo = context.getBean(ClienteRepository.class);
         ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(repo.findAll());
-
-    try{
-        Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
-        Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
-        Nif.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNif().toString()));
-        Cod_postal.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIdCodPostal().toString()));
-        table.setItems(clientes);
-    } catch (Exception e) {
-        System.out.println(e.getMessage());
-    }
 
         try{
 

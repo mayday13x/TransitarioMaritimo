@@ -25,7 +25,7 @@
       <Label layoutX="59.0" layoutY="206.0" text="IdCodPostal" />
       <Label layoutX="349.0" layoutY="206.0" text="Email" />
       <Label layoutX="59.0" layoutY="268.0" text="Telefone" />
-      <ComboBox layoutX="57.0" layoutY="224.0" prefHeight="26.0" prefWidth="190.0" />
+      <ComboBox fx:id="CodPostalCombo" layoutX="57.0" layoutY="224.0" prefHeight="26.0" prefWidth="190.0" />
       <TextField fx:id="EmailText" layoutX="349.0" layoutY="224.0" prefHeight="26.0" prefWidth="190.0" />
       <TextField fx:id="TelefoneText" layoutX="57.0" layoutY="286.0" prefHeight="26.0" prefWidth="190.0" />
       <Button layoutX="451.0" layoutY="360.0" mnemonicParsing="false" onAction="#RegistarCliente" text="Inserir Cliente" />
