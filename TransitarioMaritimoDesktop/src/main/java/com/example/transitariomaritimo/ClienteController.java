@@ -19,9 +19,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ClienteEntity;
+import pt.ipvc.database.entity.CodPostalEntity;
 import pt.ipvc.database.repository.ClienteRepository;
 
 import javafx.scene.layout.Pane;
+import pt.ipvc.database.repository.CodPostalRepository;
 
 
 import java.io.IOException;
@@ -33,6 +35,30 @@ public class ClienteController implements Initializable{
     public AnnotationConfigApplicationContext context;
     private ClienteRepository cli_repo;
 
+    private CodPostalRepository cp_repo;
+
+    @FXML
+    private ComboBox<String> CodPostalCombo;
+
+    @FXML
+    private TextField EmailText;
+
+    @FXML
+    private TextField NifText;
+
+    @FXML
+    private TextField NomeText;
+
+    @FXML
+    private TextField PortaText;
+
+    @FXML
+    private TextField RuaText;
+
+    @FXML
+    private TextField TelefoneText;
+
+
     @FXML
     private TextField Rua;
 
@@ -43,7 +69,7 @@ public class ClienteController implements Initializable{
     private TextField Email;
 
     @FXML
-    private TableColumn<ClienteEntity, String> Cod_postal;
+    private TableColumn<ClienteEntity, String> Localidade;
 
     @FXML
     private TableColumn<ClienteEntity, String> Id;
@@ -78,12 +104,28 @@ public class ClienteController implements Initializable{
 
     @FXML
     public void RegistarCliente(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("inserirCliente.fxml"));
-        Scene regCena = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(regCena);
-        stage.setTitle("Inserir Cliente");
-        stage.show();
+
+        ClienteEntity novoCliente = new ClienteEntity();
+        novoCliente.setNome(NomeText.getText());
+        novoCliente.setNif(Integer.valueOf(NifText.getText()));
+        novoCliente.setRua(RuaText.getText());
+        novoCliente.setPorta(Integer.valueOf(PortaText.getText()));
+        novoCliente.setIdCodPostal(CodPostalCombo.getSelectionModel().getSelectedIndex() + 1);
+        novoCliente.setEmail(EmailText.getText());
+        novoCliente.setTelefone(TelefoneText.getText());
+        CodPostalEntity cp = new CodPostalEntity();
+        cp.setIdCodPostal(novoCliente.getIdCodPostal());
+        novoCliente.setCodPostalByIdCodPostal(cp);
+
+
+        cli_repo.save(novoCliente);
+
+        RuaText.clear();
+        NifText.clear();
+        NomeText.clear();
+        PortaText.clear();
+        EmailText.clear();
+        TelefoneText.clear();
 
     }
 
@@ -112,7 +154,7 @@ public class ClienteController implements Initializable{
             Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
             Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
             Nif.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNif().toString()));
-            Cod_postal.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCodPostalByIdCodPostal().getLocalidade()));
+            Localidade.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCodPostalByIdCodPostal().getLocalidade()));
             table.setItems(clientes);
 
             table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -122,6 +164,15 @@ public class ClienteController implements Initializable{
                     Email.setText(newValue.getEmail());
                 }
             });
+
+            context = new AnnotationConfigApplicationContext(AppConfig.class);
+            cp_repo = context.getBean(CodPostalRepository.class);
+            cli_repo = context.getBean(ClienteRepository.class);
+
+            ObservableList<CodPostalEntity> localidades = FXCollections.observableArrayList(cp_repo.findAll());
+            for (CodPostalEntity i : localidades){
+                CodPostalCombo.getItems().addAll(i.getLocalidade());
+            }
 
 
         } catch (Exception ex){
