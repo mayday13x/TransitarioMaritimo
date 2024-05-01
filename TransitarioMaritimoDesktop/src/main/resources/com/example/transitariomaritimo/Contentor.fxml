@@ -29,7 +29,7 @@
       <Button layoutX="14.0" layoutY="429.0" mnemonicParsing="false" onAction="#VoltarAtras" text="&lt;" />
       <Label layoutX="39.0" layoutY="223.0" text="IdEstadoContentor" />
       <Button layoutX="394.0" layoutY="429.0" mnemonicParsing="false" text="Remover Contentor" />
-      <TextField fx:id="TipoContentor" layoutX="37.0" layoutY="313.0" prefHeight="26.0" prefWidth="624.0" />
+      <TextField fx:id="TipoContentor" layoutX="39.0" layoutY="313.0" prefHeight="26.0" prefWidth="624.0" />
       <Label layoutX="37.0" layoutY="296.0" text="TipoContentor" />
    </children>
 </AnchorPane>
