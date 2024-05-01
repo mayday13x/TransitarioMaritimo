@@ -17,9 +17,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
 import javafx.stage.Stage;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ClienteEntity;
-import javafx.scene.layout.Pane;
+import pt.ipvc.database.entity.CodPostalEntity;
+import pt.ipvc.database.repository.ClienteRepository;
 
+import javafx.scene.layout.Pane;
+import pt.ipvc.database.repository.CodPostalRepository;
 
 
 import java.io.IOException;
@@ -28,31 +32,10 @@ import java.util.ResourceBundle;
 
 public class ClienteController implements Initializable{
 
-    ClienteService clienteService = new ClienteService();
+    public AnnotationConfigApplicationContext context;
+    private ClienteRepository cli_repo;
 
-    @FXML
-    private TextField Rua;
-
-    @FXML
-    private TextField Telefone;
-
-    @FXML
-    private TextField Email;
-
-    @FXML
-    private TableColumn<ClienteEntity, String> Cod_postal;
-
-    @FXML
-    private TableColumn<ClienteEntity, String> Id;
-
-    @FXML
-    private TableColumn<ClienteEntity, String> Nif;
-
-    @FXML
-    private TableColumn<ClienteEntity, String> Nome;
-
-    @FXML
-    private TableView<ClienteEntity> table;
+    private CodPostalRepository cp_repo;
 
     @FXML
     private ComboBox<String> CodPostalCombo;
@@ -75,6 +58,32 @@ public class ClienteController implements Initializable{
     @FXML
     private TextField TelefoneText;
 
+
+    @FXML
+    private TextField Rua;
+
+    @FXML
+    private TextField Telefone;
+
+    @FXML
+    private TextField Email;
+
+    @FXML
+    private TableColumn<ClienteEntity, String> Localidade;
+
+    @FXML
+    private TableColumn<ClienteEntity, String> Id;
+
+    @FXML
+    private TableColumn<ClienteEntity, String> Nif;
+
+    @FXML
+    private TableColumn<ClienteEntity, String> Nome;
+
+    @FXML
+    private TableView<ClienteEntity> table;
+
+
     @FXML
     private Pane Pane;
 
@@ -94,6 +103,33 @@ public class ClienteController implements Initializable{
     }
 
     @FXML
+    public void RegistarCliente(ActionEvent event) throws IOException {
+
+        ClienteEntity novoCliente = new ClienteEntity();
+        novoCliente.setNome(NomeText.getText());
+        novoCliente.setNif(Integer.valueOf(NifText.getText()));
+        novoCliente.setRua(RuaText.getText());
+        novoCliente.setPorta(Integer.valueOf(PortaText.getText()));
+        novoCliente.setIdCodPostal(CodPostalCombo.getSelectionModel().getSelectedIndex() + 1);
+        novoCliente.setEmail(EmailText.getText());
+        novoCliente.setTelefone(TelefoneText.getText());
+        CodPostalEntity cp = new CodPostalEntity();
+        cp.setIdCodPostal(novoCliente.getIdCodPostal());
+        novoCliente.setCodPostalByIdCodPostal(cp);
+
+
+        cli_repo.save(novoCliente);
+
+        RuaText.clear();
+        NifText.clear();
+        NomeText.clear();
+        PortaText.clear();
+        EmailText.clear();
+        TelefoneText.clear();
+
+    }
+
+    @FXML
     public void InserirCliente(ActionEvent event) throws IOException {
         Pane.setVisible(true);
 
@@ -107,8 +143,10 @@ public class ClienteController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        context = new AnnotationConfigApplicationContext(AppConfig.class);
+        cli_repo = context.getBean(ClienteRepository.class);
 
-        ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(clienteService.getAllClientes());
+        ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(cli_repo.findAll());
 
 
         try{
@@ -116,7 +154,7 @@ public class ClienteController implements Initializable{
             Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
             Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
             Nif.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNif().toString()));
-            Cod_postal.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCodPostalByIdCodPostal().getLocalidade()));
+            Localidade.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCodPostalByIdCodPostal().getLocalidade()));
             table.setItems(clientes);
 
             table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -126,6 +164,17 @@ public class ClienteController implements Initializable{
                     Email.setText(newValue.getEmail());
                 }
             });
+
+            context = new AnnotationConfigApplicationContext(AppConfig.class);
+            cp_repo = context.getBean(CodPostalRepository.class);
+            cli_repo = context.getBean(ClienteRepository.class);
+
+            ObservableList<CodPostalEntity> localidades = FXCollections.observableArrayList(cp_repo.findAll());
+            for (CodPostalEntity i : localidades){
+                CodPostalCombo.getItems().addAll(i.getLocalidade());
+            }
+
+
         } catch (Exception ex){
             System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
         }
