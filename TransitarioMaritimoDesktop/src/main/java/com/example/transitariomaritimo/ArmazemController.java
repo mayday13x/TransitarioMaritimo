@@ -19,6 +19,7 @@ import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.repository.ArmazemRepository;
 import pt.ipvc.database.repository.ClienteRepository;
 import javafx.scene.layout.Pane;
+import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,6 +30,12 @@ public class ArmazemController implements Initializable {
     public AnnotationConfigApplicationContext context;
     private ArmazemRepository repo;
 
+    @FXML
+    private TextField CapacidadeMaximaText;
+
+
+    @FXML
+    private TextField descricaoText;
 
     @FXML
     private TableColumn<ArmazemEntity, String> Cap_max;
@@ -74,16 +81,21 @@ public class ArmazemController implements Initializable {
     @FXML
     public void RegistarArmazem(ActionEvent event) {
 
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("Armazem.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Armazem");
-            stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
-        }
+        ArmazemEntity novoArmazem = new ArmazemEntity();
+        novoArmazem.setCapacidadeMax(Double.valueOf(CapacidadeMaximaText.getText()));
+        novoArmazem.setDescricao(descricaoText.getText());
+
+        repo.save(novoArmazem);
+
+
+        CapacidadeMaximaText.clear();
+        descricaoText.clear();
+
+        ObservableList<ArmazemEntity> armazensAtualizados = FXCollections.observableArrayList(repo.findAll());
+        table.setItems(armazensAtualizados);
+
+
+
     }
     @FXML
     public void VisualizarCargas(ActionEvent event) {

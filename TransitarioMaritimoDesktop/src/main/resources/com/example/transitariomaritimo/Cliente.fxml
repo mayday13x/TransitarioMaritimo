@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="480" prefWidth="720" stylesheets="@nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ClienteController">
+   <children>
+      <TableView fx:id="table" layoutX="30.0" layoutY="81.0" prefHeight="166.0" prefWidth="622.0">
+        <columns>
+          <TableColumn fx:id="Id" prefWidth="131.20001220703125" text="Id" />
+          <TableColumn fx:id="Nome" prefWidth="151.20001220703125" text="Nome" />
+            <TableColumn fx:id="Nif" prefWidth="175.0" text="Nif" />
+            <TableColumn fx:id="Localidade" prefWidth="162.0" text="Localidade" />
+        </columns>
+      </TableView>
+      <Label layoutX="286.0" layoutY="24.0" text="Clientes">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+      <TextField fx:id="Rua" layoutX="32.0" layoutY="284.0" prefHeight="34.0" prefWidth="294.0" />
+      <TextField fx:id="Email" layoutX="32.0" layoutY="354.0" prefHeight="34.0" prefWidth="294.0" />
+      <TextField fx:id="Telefone" layoutX="400.0" layoutY="354.0" prefHeight="34.0" prefWidth="283.0" promptText="Telefone" />
+      <Button layoutX="400.0" layoutY="424.0" mnemonicParsing="false" onAction="#InserirCliente" prefHeight="34.0" prefWidth="110.0" text="Inserir Cliente" />
+      <Button layoutX="552.0" layoutY="424.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="110.0" text="Desativar Cliente" />
+      <Button layoutX="32.0" layoutY="418.0" mnemonicParsing="false" onAction="#VoltarAtras" prefHeight="34.0" prefWidth="31.0" text="&lt;" />
+      <Label layoutX="34.0" layoutY="267.0" text="Rua" />
+      <Label layoutX="34.0" layoutY="336.0" text="Email" />
+      <Label layoutX="400.0" layoutY="336.0" text="Telefone" />
+      <Pane fx:id="Pane" layoutX="25.0" layoutY="26.0" prefHeight="437.0" prefWidth="666.0" style="-fx-background-color: #FFFFFF;" visible="false">
+         <children>
+             <Label layoutX="247.0" layoutY="14.0" text="Inserir Clientes">
+                 <font>
+                     <Font size="15.0" />
+                 </font>
+             </Label>
+             <TextField fx:id="NomeText" layoutX="57.0" layoutY="94.0" prefHeight="26.0" prefWidth="190.0" />
+             <TextField fx:id="NifText" layoutX="349.0" layoutY="94.0" prefHeight="26.0" prefWidth="190.0" />
+             <TextField fx:id="RuaText" layoutX="57.0" layoutY="162.0" prefHeight="26.0" prefWidth="190.0" />
+             <TextField fx:id="PortaText" layoutX="349.0" layoutY="162.0" prefHeight="26.0" prefWidth="190.0" />
+             <Label layoutX="57.0" layoutY="77.0" text="Nome" />
+             <Label layoutX="349.0" layoutY="77.0" text="Nif" />
+             <Label layoutX="57.0" layoutY="144.0" text="Rua" />
+             <Label layoutX="347.0" layoutY="144.0" text="Porta" />
+             <Label layoutX="59.0" layoutY="206.0" text="IdCodPostal" />
+             <Label layoutX="349.0" layoutY="206.0" text="Email" />
+             <Label layoutX="59.0" layoutY="268.0" text="Telefone" />
+             <ComboBox fx:id="CodPostalCombo" layoutX="57.0" layoutY="224.0" prefHeight="26.0" prefWidth="190.0" />
+             <TextField fx:id="EmailText" layoutX="349.0" layoutY="224.0" prefHeight="26.0" prefWidth="190.0" />
+             <TextField fx:id="TelefoneText" layoutX="57.0" layoutY="286.0" prefHeight="26.0" prefWidth="190.0" />
+             <Button layoutX="454.0" layoutY="342.0" mnemonicParsing="false" onAction="#RegistarCliente" text="Inserir Cliente" />
+             <Button layoutX="42.0" layoutY="342.0" mnemonicParsing="false" onAction="#VoltarAtrasInserirCliente" text="&lt;" />
+         </children></Pane>
+
+
+   </children>
+</AnchorPane>
