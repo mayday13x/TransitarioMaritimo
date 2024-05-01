@@ -5,16 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import pt.ipvc.database.entity.ArmazemEntity;
-import pt.ipvc.database.entity.ClienteEntity;
-import pt.ipvc.database.repository.ArmazemRepository;
-import pt.ipvc.database.repository.ClienteRepository;
 
 import java.io.IOException;
-import java.util.List;
 
 
-public class HelloApplication extends Application {
+public class Main extends Application {
 
     public AnnotationConfigApplicationContext context;
 
@@ -23,7 +18,7 @@ public class HelloApplication extends Application {
 
         context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("LoginView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("LoginView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 820, 768);
         stage.setTitle("Hello!");
         stage.setScene(scene);

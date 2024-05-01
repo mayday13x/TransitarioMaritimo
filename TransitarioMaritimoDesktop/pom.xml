@@ -104,7 +104,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.example.transitariomaritimo/com.example.transitariomaritimo.HelloApplication
+                                com.example.transitariomaritimo/com.example.transitariomaritimo.Main
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

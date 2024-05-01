@@ -17,7 +17,7 @@ public class MenuController {
     @FXML
     public void Cliente(ActionEvent event) throws IOException {
 
-            Parent root = FXMLLoader.load(getClass().getResource("Cliente.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("ClienteView.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);

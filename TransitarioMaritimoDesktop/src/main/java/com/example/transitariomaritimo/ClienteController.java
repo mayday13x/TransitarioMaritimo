@@ -16,6 +16,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
+import javafx.scene.effect.Effect;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ClienteEntity;
@@ -88,10 +89,13 @@ public class ClienteController implements Initializable{
     private Pane Pane;
 
     @FXML
+    private Pane mainPanel;
+
+    @FXML
     public void VoltarAtras(ActionEvent event) {
 
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("menu.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("MenuView.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);
@@ -118,8 +122,11 @@ public class ClienteController implements Initializable{
         novoCliente.setTelefone(TelefoneText.getText());
         novoCliente.setCodPostalByIdCodPostal(codPostalEntity);
 
-
-        cli_repo.save(novoCliente);
+        try {
+            cli_repo.save(novoCliente);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
         RuaText.clear();
         NifText.clear();
@@ -130,19 +137,29 @@ public class ClienteController implements Initializable{
 
         ObservableList<ClienteEntity> clientesAtualizados = FXCollections.observableArrayList(cli_repo.findAll());
         table.setItems(clientesAtualizados);
-        //table.refresh();
+
 
     }
 
     @FXML
     public void InserirCliente(ActionEvent event) throws IOException {
         Pane.setVisible(true);
+        mainPanel.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        mainPanel.setDisable(true);
 
     }
 
     @FXML
     public void VoltarAtrasInserirCliente(ActionEvent event) {
         Pane.setVisible(false);
+        RuaText.clear();
+        NifText.clear();
+        NomeText.clear();
+        PortaText.clear();
+        EmailText.clear();
+        TelefoneText.clear();
+        mainPanel.setEffect(null);
+        mainPanel.setDisable(false);
 
     }
 
