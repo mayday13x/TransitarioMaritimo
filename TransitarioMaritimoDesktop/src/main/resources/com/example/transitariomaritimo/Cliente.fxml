@@ -55,7 +55,7 @@
              <ComboBox fx:id="CodPostalCombo" layoutX="57.0" layoutY="224.0" prefHeight="26.0" prefWidth="190.0" />
              <TextField fx:id="EmailText" layoutX="349.0" layoutY="224.0" prefHeight="26.0" prefWidth="190.0" />
              <TextField fx:id="TelefoneText" layoutX="57.0" layoutY="286.0" prefHeight="26.0" prefWidth="190.0" />
-             <Button layoutX="454.0" layoutY="342.0" mnemonicParsing="false" onAction="#RegistarCliente" text="Inserir Cliente" />
+             <Button layoutX="454.0" layoutY="342.0" mnemonicParsing="false" text="Inserir Cliente" />
              <Button layoutX="42.0" layoutY="342.0" mnemonicParsing="false" onAction="#VoltarAtrasInserirCliente" text="&lt;" />
          </children></Pane>
 
