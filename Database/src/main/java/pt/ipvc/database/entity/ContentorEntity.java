@@ -7,7 +7,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "contentor", schema = "public", catalog = "transitario_maritimo")
 public class ContentorEntity {
-    private int cin;
+    private Integer cin;
     private Integer idEstadoContentor;
     private Double capacidade;
     private Double pesoMax;
@@ -20,11 +20,11 @@ public class ContentorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "cin", nullable = false)
-    public int getCin() {
+    public Integer getCin() {
         return cin;
     }
 
-    public void setCin(int cin) {
+    public void setCin(Integer cin) {
         this.cin = cin;
     }
 

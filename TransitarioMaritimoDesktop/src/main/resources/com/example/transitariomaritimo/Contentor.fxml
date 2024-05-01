@@ -15,19 +15,21 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <TableView layoutX="37.0" layoutY="56.0" prefHeight="143.0" prefWidth="624.0">
+      <TableView fx:id="table" layoutX="37.0" layoutY="56.0" prefHeight="143.0" prefWidth="624.0">
         <columns>
-          <TableColumn prefWidth="148.0" text="Capacidade" />
-          <TableColumn minWidth="0.0" prefWidth="168.79998779296875" text="Peso Maximo" />
-            <TableColumn minWidth="0.0" prefWidth="135.99993896484375" text="Peso Maximo" />
-            <TableColumn minWidth="0.0" prefWidth="172.00006103515625" text="Tipo de Contetor" />
+          <TableColumn fx:id="Cin" prefWidth="148.0" text="Cin" />
+          <TableColumn fx:id="Capacidade" minWidth="0.0" prefWidth="168.79998779296875" text="Capacidade" />
+            <TableColumn fx:id="PesoMaximo" minWidth="0.0" prefWidth="135.99993896484375" text="Peso Maximo" />
+            <TableColumn fx:id="LocalAtual" minWidth="0.0" prefWidth="172.00006103515625" text="Local Atual" />
         </columns>
       </TableView>
-      <TextField layoutX="39.0" layoutY="247.0" prefHeight="26.0" prefWidth="624.0" />
+      <TextField fx:id="IdEstadoContentor" layoutX="39.0" layoutY="247.0" prefHeight="26.0" prefWidth="624.0" />
       <Button layoutX="240.0" layoutY="428.0" mnemonicParsing="false" onAction="#InserirContentor" prefHeight="26.0" prefWidth="120.0" text="Inserir Contentor" />
       <Button layoutX="543.0" layoutY="429.0" mnemonicParsing="false" text="Visualizar Cargas" />
       <Button layoutX="14.0" layoutY="429.0" mnemonicParsing="false" onAction="#VoltarAtras" text="&lt;" />
       <Label layoutX="39.0" layoutY="223.0" text="IdEstadoContentor" />
       <Button layoutX="394.0" layoutY="429.0" mnemonicParsing="false" text="Remover Contentor" />
+      <TextField fx:id="TipoContentor" layoutX="37.0" layoutY="313.0" prefHeight="26.0" prefWidth="624.0" />
+      <Label layoutX="37.0" layoutY="296.0" text="TipoContentor" />
    </children>
 </AnchorPane>

@@ -131,27 +131,24 @@ public class CargaController implements Initializable {
         repo = context.getBean(CargaRepository.class);
         ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(repo.findAll());
 
+        Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
+        Quantidade.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getQuantidade().toString()));
+        Volume.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getVolume().toString()));
+        Peso.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPeso().toString()));
 
+        table.setItems(cargas);
 
-
-            Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
-            Quantidade.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getQuantidade().toString()));
-            Volume.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getVolume().toString()));
-            Peso.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPeso().toString()));
-
-            table.setItems(cargas);
-
-            table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null) {
-                    LocalAtual.setText(newValue.getLocalAtual().toString());
-                    Observacoes.setText(newValue.getObservacoes().toString());
-                    IdArmazem.setText(newValue.getIdArmazem().toString());
-                    IdContentor.setText(newValue.getIdContentor().toString());
-                    IdEstadoCarga.setText(newValue.getIdEstadoCarga().toString());
-                    IdReserva.setText(newValue.getIdReserva().toString());
-                    IdTipoCarga.setText(newValue.getIdTipoCarga().toString());
-                }
-            });
+        table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                LocalAtual.setText(newValue.getLocalAtual().toString());
+                Observacoes.setText(newValue.getObservacoes().toString());
+                IdArmazem.setText(newValue.getIdArmazem().toString());
+                IdContentor.setText(newValue.getIdContentor().toString());
+                IdEstadoCarga.setText(newValue.getIdEstadoCarga().toString());
+                IdReserva.setText(newValue.getIdReserva().toString());
+                IdTipoCarga.setText(newValue.getIdTipoCarga().toString());
+            }
+        });
 
     }
 }
