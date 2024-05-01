@@ -29,9 +29,7 @@ import java.util.ResourceBundle;
 
 public class ClienteController implements Initializable{
 
-
-    public AnnotationConfigApplicationContext context;
-    private ClienteRepository repo;
+    ClienteService clienteService = new ClienteService();
 
     @FXML
     private TextField Rua;
@@ -133,7 +131,7 @@ public class ClienteController implements Initializable{
         novoCliente.setEmail(EmailText.getText());
         novoCliente.setTelefone(TelefoneText.getText());
 
-        repo.save(novoCliente);
+      //  clienteService.addCliente(novoCliente);
 
         table.getItems().add(novoCliente);
 
@@ -155,17 +153,16 @@ public class ClienteController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        repo = context.getBean(ClienteRepository.class);
-        ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(repo.findAll());
+        ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(clienteService.getAllClientes());
+
 
         try{
 
             Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
             Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
             Nif.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNif().toString()));
-            Cod_postal.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIdCodPostal().toString()));
+            Cod_postal.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCodPostalByIdCodPostal().getLocalidade()));
 
             table.setItems(clientes);
 
