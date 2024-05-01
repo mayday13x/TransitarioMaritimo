@@ -127,7 +127,7 @@ public class ContentorController implements Initializable {
         table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 IdEstadoContentor.setText(newValue.getCapacidade().toString());
-                TipoContentor.setText(newValue.getPesoMax().toString());
+                TipoContentor.setText(newValue.getTipoContentor().toString());
             }
         });
 
