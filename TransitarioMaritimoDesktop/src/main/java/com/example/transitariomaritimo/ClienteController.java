@@ -11,10 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import javafx.scene.effect.Effect;
 import javafx.stage.Stage;
@@ -29,6 +26,8 @@ import pt.ipvc.database.repository.CodPostalRepository;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ClienteController implements Initializable{
@@ -109,38 +108,56 @@ public class ClienteController implements Initializable{
     @FXML
     public void RegistarCliente(ActionEvent event) throws IOException {
 
-        ClienteEntity novoCliente = new ClienteEntity();
-        novoCliente.setNome(NomeText.getText());
-        novoCliente.setNif(Integer.valueOf(NifText.getText()));
-        novoCliente.setRua(RuaText.getText());
-        novoCliente.setPorta(Integer.valueOf(PortaText.getText()));
+        if(Objects.equals(RuaText.getText(), "") || Objects.equals(NifText.getText(), "") || Objects.equals(NomeText.getText(), "")
+                && Objects.equals(PortaText.getText(), "") || Objects.equals(EmailText.getText(), "") ||  Objects.equals(TelefoneText.getText(), "")) {
 
-        CodPostalEntity codPostalEntity = cp_repo.findByNameLike(CodPostalCombo.getSelectionModel().getSelectedItem());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Campos Inválidos!");
+            alert.setHeaderText("Campos por preencher");
+            alert.setContentText("Preencha todos os campos e tente novamente!");
 
-        novoCliente.setIdCodPostal(codPostalEntity.getIdCodPostal());
-        novoCliente.setEmail(EmailText.getText());
-        novoCliente.setTelefone(TelefoneText.getText());
-        novoCliente.setCodPostalByIdCodPostal(codPostalEntity);
+            alert.showAndWait();
 
-        try {
-            cli_repo.save(novoCliente);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } else {
+
+
+            ClienteEntity novoCliente = new ClienteEntity();
+            novoCliente.setNome(NomeText.getText());
+            novoCliente.setNif(Integer.valueOf(NifText.getText()));
+            novoCliente.setRua(RuaText.getText());
+            novoCliente.setPorta(Integer.valueOf(PortaText.getText()));
+
+            CodPostalEntity codPostalEntity = cp_repo.findByNameLike(CodPostalCombo.getSelectionModel().getSelectedItem());
+
+            novoCliente.setIdCodPostal(codPostalEntity.getIdCodPostal());
+            novoCliente.setEmail(EmailText.getText());
+            novoCliente.setTelefone(TelefoneText.getText());
+            novoCliente.setCodPostalByIdCodPostal(codPostalEntity);
+
+            try {
+                cli_repo.save(novoCliente);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sucesso!");
+                alert.setHeaderText("Registo efetuado com sucesso!");
+                alert.showAndWait();
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+            RuaText.clear();
+            NifText.clear();
+            NomeText.clear();
+            PortaText.clear();
+            EmailText.clear();
+            TelefoneText.clear();
+            CodPostalCombo.getSelectionModel().clearSelection();
+
+            ObservableList<ClienteEntity> clientesAtualizados = FXCollections.observableArrayList(cli_repo.findAll());
+            table.setItems(clientesAtualizados);
+
         }
-
-        RuaText.clear();
-        NifText.clear();
-        NomeText.clear();
-        PortaText.clear();
-        EmailText.clear();
-        TelefoneText.clear();
-
-
-        ObservableList<ClienteEntity> clientesAtualizados = FXCollections.observableArrayList(cli_repo.findAll());
-        table.setItems(clientesAtualizados);
-
-
-
     }
 
     @FXML
@@ -160,9 +177,25 @@ public class ClienteController implements Initializable{
         PortaText.clear();
         EmailText.clear();
         TelefoneText.clear();
+        CodPostalCombo.getSelectionModel().clearSelection();
         mainPanel.setEffect(null);
         mainPanel.setDisable(false);
 
+    }
+
+    @FXML
+    public void EcluirCliente(ActionEvent event) {
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Eliminar Cliente");
+        alert.setHeaderText("Eliminar Cliente");
+        alert.setContentText("Tem a certeza que pretende eliminar este cliente?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            cli_repo.deleteById(table.getSelectionModel().getSelectedItem().getId());
+            ObservableList<ClienteEntity> clientesAtualizados = FXCollections.observableArrayList(cli_repo.findAll());
+            table.setItems(clientesAtualizados);
+        }
     }
 
     @Override

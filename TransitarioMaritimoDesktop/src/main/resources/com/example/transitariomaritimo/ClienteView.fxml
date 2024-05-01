@@ -32,7 +32,7 @@
             <TextField fx:id="Email" layoutX="700.0" layoutY="278.0" prefHeight="36.0" prefWidth="265.0" />
             <TextField fx:id="Telefone" layoutX="700.0" layoutY="197.0" prefHeight="36.0" prefWidth="265.0" />
             <Button defaultButton="true" layoutX="700.0" layoutY="377.0" mnemonicParsing="false" onAction="#InserirCliente" prefHeight="50.0" prefWidth="123.0" text="Inserir Cliente" />
-            <Button layoutX="842.0" layoutY="376.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="123.0" text="Excluir Cliente" />
+            <Button layoutX="842.0" layoutY="376.0" mnemonicParsing="false" onAction="#EcluirCliente" prefHeight="50.0" prefWidth="123.0" text="Excluir Cliente" />
             <Button defaultButton="true" layoutX="41.0" layoutY="18.0" mnemonicParsing="false" onAction="#VoltarAtras" prefHeight="31.0" prefWidth="88.0" text="Menu" />
             <Label layoutX="700.0" layoutY="94.0" text="Rua" />
             <Label layoutX="700.0" layoutY="247.0" text="Email" />
