@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 import javafx.scene.effect.Effect;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ClienteEntity;
@@ -116,6 +118,9 @@ public class ClienteController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        DoubleClickHandler handler = new DoubleClickHandler();
+        table.setOnMouseClicked(handler);
 
         context = new AnnotationConfigApplicationContext(AppConfig.class);
         cli_repo = context.getBean(ClienteRepository.class);
@@ -289,6 +294,7 @@ public class ClienteController implements Initializable{
 
         EditPane.setVisible(true);
         mainPanel.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        EditPane.setEffect(new javafx.scene.effect.DropShadow());
         mainPanel.setDisable(true);
 
         EditNomeText.setText(table.getSelectionModel().getSelectedItem().getNome());
@@ -353,5 +359,17 @@ public class ClienteController implements Initializable{
         table.setItems(clientesAtualizados);
         table.refresh();
     }
+
+    public class DoubleClickHandler implements EventHandler<MouseEvent> {
+
+        @Override
+        public void handle(MouseEvent event) {
+            if (event.getClickCount() == 2) {
+                ShowEditarCliente();
+
+            }
+        }
+    }
+
 
 }
