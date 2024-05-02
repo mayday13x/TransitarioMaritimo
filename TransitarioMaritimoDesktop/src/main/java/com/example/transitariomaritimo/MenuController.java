@@ -22,7 +22,6 @@ public class MenuController implements Initializable {
     @FXML
     private AnchorPane menu_panel;
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("StatisticsView.fxml"));

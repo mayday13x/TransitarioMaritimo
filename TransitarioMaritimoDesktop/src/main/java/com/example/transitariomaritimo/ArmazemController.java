@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ArmazemEntity;
@@ -50,8 +51,29 @@ public class ArmazemController implements Initializable {
     private TableView<ArmazemEntity> table;
 
     @FXML
-    private Pane Pane;
+    private Pane PaneInserir;
 
+    @FXML
+    private Pane mainPanel;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        repo = context.getBean(ArmazemRepository.class);
+        ObservableList<ArmazemEntity> armazens = FXCollections.observableArrayList(repo.findAll());
+
+
+        Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+        Descricao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescricao()));
+        Cap_max.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCapacidadeMax().toString()));
+
+
+        table.setItems(armazens);
+
+
+    }
 
 
     @FXML
@@ -71,12 +93,22 @@ public class ArmazemController implements Initializable {
 
     @FXML
     public void InserirArmazem(ActionEvent event) {
-        Pane.setVisible(true);
+        PaneInserir.setVisible(true);
+        mainPanel.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        mainPanel.setDisable(true);
+        mainPanel.setVisible(false);
     }
 
     @FXML
     public void VoltarAtrasInserirArmazem(ActionEvent event) {
-        Pane.setVisible(false);
+        PaneInserir.setVisible(false);
+
+        descricaoText.clear();
+        CapacidadeMaximaText.clear();
+
+        mainPanel.setEffect(null);
+        mainPanel.setDisable(false);
+        mainPanel.setVisible(true);
     }
 
     @FXML
@@ -124,22 +156,5 @@ public class ArmazemController implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        context = new AnnotationConfigApplicationContext(AppConfig.class);
-
-        repo = context.getBean(ArmazemRepository.class);
-        ObservableList<ArmazemEntity> armazens = FXCollections.observableArrayList(repo.findAll());
-
-
-        Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
-        Descricao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescricao()));
-        Cap_max.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCapacidadeMax().toString()));
-
-
-        table.setItems(armazens);
-
-
-    }
 }

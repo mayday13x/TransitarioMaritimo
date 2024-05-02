@@ -132,6 +132,7 @@ public class CargaController{
     }
 
     public void cargaArmazem(){
+        context = new AnnotationConfigApplicationContext(AppConfig.class);
         repo = context.getBean(CargaRepository.class);
 
         ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(repo.findByArmazemID(armazemId));
@@ -157,6 +158,7 @@ public class CargaController{
     }
 
     public void cargaContentor(){
+        context = new AnnotationConfigApplicationContext(AppConfig.class);
         repo = context.getBean(CargaRepository.class);
 
         ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(repo.findByContentorCin(contentorCin));
