@@ -102,8 +102,6 @@ public class ArmazemController implements Initializable {
     public void VisualizarCargas(ActionEvent event)  throws IOException{
         ArmazemEntity armazemSelecionado = table.getSelectionModel().getSelectedItem();
 
-
-
         if (armazemSelecionado != null) {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CargaArmazem.fxml"));
@@ -112,17 +110,13 @@ public class ArmazemController implements Initializable {
 
             CargaController cargaController = loader.getController();
             cargaController.setArmazemId(armazemSelecionado.getId());
-            cargaController.init();
+            cargaController.cargaArmazem();
 
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);
             stage.setTitle("Cargas");
             stage.show();
-
-
-
-            System.out.println("Depois " + armazemSelecionado.getId());
 
         } else {
             // Exibe uma mensagem de erro se nenhum armazém estiver selecionado

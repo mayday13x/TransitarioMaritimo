@@ -97,6 +97,32 @@ public class ContentorController implements Initializable {
         table.setItems(contentoresAtualizados);
     }
 
+    public void VisualizarCargas(ActionEvent event) throws IOException {
+        ContentorEntity contentorSelecionado = table.getSelectionModel().getSelectedItem();
+
+        if(contentorSelecionado != null) {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("CargaContentor.fxml"));
+
+            Parent root = loader.load();
+
+            CargaController cargaController = loader.getController();
+            cargaController.setContentorCin(contentorSelecionado.getCin());
+            cargaController.cargaContentor();
+
+            Scene regCena = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(regCena);
+            stage.setTitle("Cargas");
+            stage.show();
+
+        } else {
+            // Exibe uma mensagem de erro se nenhum armazém estiver selecionado
+            System.out.println("Selecione um contentor para visualizar as cargas.");
+        }
+    }
+
+
     @FXML
     public void VoltarAtrasInserirContentor(ActionEvent event) {
         Pane.setVisible(false);

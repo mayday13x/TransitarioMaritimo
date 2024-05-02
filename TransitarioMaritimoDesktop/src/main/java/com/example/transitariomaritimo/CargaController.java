@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CargaController implements Initializable{
+public class CargaController{
 
     public AnnotationConfigApplicationContext context;
     private CargaRepository repo;
@@ -73,20 +73,38 @@ public class CargaController implements Initializable{
     private Pane Pane;
     private int armazemId;
 
+    private int contentorCin;
+
+    public void setArmazemId(int armazemId) {
+        this.armazemId = armazemId;
+    }
+
+    public void setContentorCin(int contentorCin) {
+        this.contentorCin = contentorCin;
+    }
 
     @FXML
-    public void VoltarAtras(ActionEvent event) {
+    public void VoltarAtrasArmazem(ActionEvent event) throws IOException {
 
-        try{
             Parent root = FXMLLoader.load(getClass().getResource("Armazem.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);
             stage.setTitle("Armazem");
             stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
-        }
+
+    }
+
+    @FXML
+    public void VoltarAtrasContentor(ActionEvent event) throws IOException {
+
+            Parent root = FXMLLoader.load(getClass().getResource("Contentor.fxml"));
+            Scene regCena = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(regCena);
+            stage.setTitle("Contentor");
+            stage.show();
+
     }
 
     @FXML
@@ -113,13 +131,8 @@ public class CargaController implements Initializable{
         Pane.setVisible(false);
     }
 
-    public void setArmazemId(int armazemId) {
-        this.armazemId = armazemId;
-    }
-
-    public void init(){
+    public void cargaArmazem(){
         repo = context.getBean(CargaRepository.class);
-        System.out.println(armazemId);
 
         ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(repo.findByArmazemID(armazemId));
 
@@ -132,8 +145,8 @@ public class CargaController implements Initializable{
 
         table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                LocalAtual.setText(newValue.getLocalAtual().toString());
-                Observacoes.setText(newValue.getObservacoes().toString());
+                LocalAtual.setText(newValue.getLocalAtual());
+                Observacoes.setText(newValue.getObservacoes());
                 IdArmazem.setText(newValue.getIdArmazem().toString());
                 IdContentor.setText(newValue.getIdContentor().toString());
                 IdEstadoCarga.setText(newValue.getIdEstadoCarga().toString());
@@ -143,14 +156,10 @@ public class CargaController implements Initializable{
         });
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        context = new AnnotationConfigApplicationContext(AppConfig.class);
-
+    public void cargaContentor(){
         repo = context.getBean(CargaRepository.class);
-        System.out.println(armazemId);
 
-        ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(repo.findByArmazemID(armazemId));
+        ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(repo.findByContentorCin(contentorCin));
 
         Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
         Quantidade.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getQuantidade().toString()));
@@ -161,8 +170,8 @@ public class CargaController implements Initializable{
 
         table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                LocalAtual.setText(newValue.getLocalAtual().toString());
-                Observacoes.setText(newValue.getObservacoes().toString());
+                LocalAtual.setText(newValue.getLocalAtual());
+                Observacoes.setText(newValue.getObservacoes());
                 IdArmazem.setText(newValue.getIdArmazem().toString());
                 IdContentor.setText(newValue.getIdContentor().toString());
                 IdEstadoCarga.setText(newValue.getIdEstadoCarga().toString());
@@ -170,9 +179,6 @@ public class CargaController implements Initializable{
                 IdTipoCarga.setText(newValue.getIdTipoCarga().toString());
             }
         });
-
     }
-
-
 
 }
