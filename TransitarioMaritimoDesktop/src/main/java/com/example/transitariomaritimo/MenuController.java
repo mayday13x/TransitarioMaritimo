@@ -129,7 +129,7 @@ public class MenuController implements Initializable {
     @FXML
     public void Servicos(ActionEvent event) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Cotacao.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ServicosView.fxml"));
         try {
             Pane cmdPane = fxmlLoader.load();
             menu_panel.getChildren().clear();
@@ -138,6 +138,7 @@ public class MenuController implements Initializable {
             ex.printStackTrace();
         }
     }
+
     @FXML
     public void Logout(MouseEvent event) {
 

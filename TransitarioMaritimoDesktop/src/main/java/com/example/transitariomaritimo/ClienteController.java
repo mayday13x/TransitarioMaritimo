@@ -58,6 +58,30 @@ public class ClienteController implements Initializable{
     @FXML
     private TextField TelefoneText;
 
+    //edit
+    @FXML
+    private ComboBox<String> EditCodPostalCombo;
+
+    @FXML
+    private TextField EditEmailText;
+
+    @FXML
+    private TextField EditNifText;
+
+    @FXML
+    private TextField EditNomeText;
+
+    @FXML
+    private Pane EditPane;
+
+    @FXML
+    private TextField EditPortaText;
+
+    @FXML
+    private TextField EditRuaText;
+
+    @FXML
+    private TextField EditTelefoneText;
 
 
     @FXML
@@ -117,6 +141,7 @@ public class ClienteController implements Initializable{
             ObservableList<CodPostalEntity> localidades = FXCollections.observableArrayList(cp_repo.findAll());
             for (CodPostalEntity i : localidades){
                 CodPostalCombo.getItems().addAll(i.getLocalidade());
+                EditCodPostalCombo.getItems().addAll(i.getLocalidade());
             }
 
 
@@ -217,8 +242,20 @@ public class ClienteController implements Initializable{
         EmailText.clear();
         TelefoneText.clear();
         CodPostalCombo.getSelectionModel().clearSelection();
+
+        EditPane.setVisible(false);
+        EditRuaText.clear();
+        EditNifText.clear();
+        EditNomeText.clear();
+        EditPortaText.clear();
+        EditEmailText.clear();
+        EditTelefoneText.clear();
+
         mainPanel.setEffect(null);
         mainPanel.setDisable(false);
+
+        EditPane.setEffect(null);
+        EditPane.setDisable(false);
 
     }
 
@@ -248,10 +285,73 @@ public class ClienteController implements Initializable{
 }
 
     @FXML
+    public void ShowEditarCliente() {
+
+        EditPane.setVisible(true);
+        mainPanel.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        mainPanel.setDisable(true);
+
+        EditNomeText.setText(table.getSelectionModel().getSelectedItem().getNome());
+        EditNifText.setText(table.getSelectionModel().getSelectedItem().getNif().toString());
+        EditRuaText.setText(table.getSelectionModel().getSelectedItem().getRua());
+        EditPortaText.setText(table.getSelectionModel().getSelectedItem().getPorta().toString());
+        EditEmailText.setText(table.getSelectionModel().getSelectedItem().getEmail());
+        EditTelefoneText.setText(table.getSelectionModel().getSelectedItem().getTelefone());
+        EditCodPostalCombo.getSelectionModel().select(table.getSelectionModel().getSelectedItem().getCodPostalByIdCodPostal().getLocalidade());
+
+    }
+
+    @FXML
     public void EditarCliente() {
+        if(Objects.equals(EditRuaText.getText(), "") || Objects.equals(EditNifText.getText(), "") || Objects.equals(EditNomeText.getText(), "")
+                && Objects.equals(EditPortaText.getText(), "") || Objects.equals(EditEmailText.getText(), "") ||  Objects.equals(EditTelefoneText.getText(), "")) {
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Campos Inválidos!");
+            alert.setHeaderText("Campos por preencher");
+            alert.setContentText("Preencha todos os campos e tente novamente!");
+
+            alert.showAndWait();
 
 
 
+        } else {
+
+            ClienteEntity editCliente = table.getSelectionModel().getSelectedItem();
+            editCliente.setNome(EditNomeText.getText());
+            editCliente.setNif(Integer.valueOf(EditNifText.getText()));
+            editCliente.setRua(EditRuaText.getText());
+            editCliente.setPorta(Integer.valueOf(EditPortaText.getText()));
+
+            CodPostalEntity codPostalEntity = cp_repo.findByNameLike(EditCodPostalCombo.getSelectionModel().getSelectedItem());
+
+            editCliente.setIdCodPostal(codPostalEntity.getIdCodPostal());
+            editCliente.setEmail(EditEmailText.getText());
+            editCliente.setTelefone(EditTelefoneText.getText());
+            editCliente.setCodPostalByIdCodPostal(codPostalEntity);
+
+            try {
+                cli_repo.save(editCliente);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sucesso!");
+                alert.setHeaderText("Registo editado com sucesso!");
+                alert.showAndWait();
+
+                EditPane.setVisible(false);
+                mainPanel.setEffect(null);
+                mainPanel.setDisable(false);
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+
+        }
+
+        ObservableList<ClienteEntity> clientesAtualizados = FXCollections.observableArrayList(cli_repo.findAll());
+        table.setItems(clientesAtualizados);
+        table.refresh();
     }
 
 }
