@@ -52,6 +52,12 @@ public class ArmazemController implements Initializable {
     @FXML
     private Pane Pane;
 
+    private int armazemId;
+
+    public void setArmazemId(int armazemId) {
+        this.armazemId = armazemId;
+    }
+
 
     @FXML
     public void VoltarAtras(ActionEvent event) {
@@ -99,16 +105,35 @@ public class ArmazemController implements Initializable {
     }
     @FXML
     public void VisualizarCargas(ActionEvent event) {
+        ArmazemEntity armazemSelecionado = table.getSelectionModel().getSelectedItem();
 
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("CargaArmazem.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Cargas");
-            stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
+        if (armazemSelecionado != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("CargaArmazem.fxml"));
+                Parent root = loader.load();
+                loader.load();
+
+
+
+                CargaController cargaArmazemController = loader.getController();
+                cargaArmazemController.setArmazemId(armazemSelecionado.getId());
+
+
+                Scene regCena = new Scene(root);
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(regCena);
+                stage.setTitle("Cargas");
+                stage.show();
+
+
+
+                System.out.println("Depois " + armazemSelecionado.getId());
+            } catch (IOException ex) {
+                System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
+            }
+        } else {
+            // Exibe uma mensagem de erro se nenhum armazém estiver selecionado
+            System.out.println("Selecione um armazém para visualizar as cargas.");
         }
     }
 

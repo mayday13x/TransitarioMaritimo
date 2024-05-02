@@ -1,5 +1,6 @@
 package com.example.transitariomaritimo;
 
+import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,9 +15,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.CargaEntity;
 import pt.ipvc.database.entity.ClienteEntity;
+import pt.ipvc.database.repository.ArmazemRepository;
 import pt.ipvc.database.repository.CargaRepository;
 import pt.ipvc.database.repository.ClienteRepository;
 import javafx.scene.layout.Pane;
@@ -25,10 +28,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CargaController implements Initializable {
+public class CargaController implements Initializable{
 
     public AnnotationConfigApplicationContext context;
     private CargaRepository repo;
+
 
     @FXML
     private TableView<CargaEntity> table;
@@ -67,6 +71,7 @@ public class CargaController implements Initializable {
 
     @FXML
     private Pane Pane;
+    private int armazemId;
 
 
     @FXML
@@ -108,12 +113,18 @@ public class CargaController implements Initializable {
         Pane.setVisible(false);
     }
 
+    public void setArmazemId(int armazemId) {
+        this.armazemId = armazemId;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         repo = context.getBean(CargaRepository.class);
-        ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(repo.findAll());
+        System.out.println(armazemId);
+
+        ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(repo.findByArmazemID(armazemId));
 
         Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
         Quantidade.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getQuantidade().toString()));
@@ -135,4 +146,5 @@ public class CargaController implements Initializable {
         });
 
     }
+
 }
