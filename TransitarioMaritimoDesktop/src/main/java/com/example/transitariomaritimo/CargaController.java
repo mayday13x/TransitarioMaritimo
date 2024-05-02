@@ -117,6 +117,32 @@ public class CargaController implements Initializable{
         this.armazemId = armazemId;
     }
 
+    public void init(){
+        repo = context.getBean(CargaRepository.class);
+        System.out.println(armazemId);
+
+        ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(repo.findByArmazemID(armazemId));
+
+        Nome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
+        Quantidade.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getQuantidade().toString()));
+        Volume.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getVolume().toString()));
+        Peso.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPeso().toString()));
+
+        table.setItems(cargas);
+
+        table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                LocalAtual.setText(newValue.getLocalAtual().toString());
+                Observacoes.setText(newValue.getObservacoes().toString());
+                IdArmazem.setText(newValue.getIdArmazem().toString());
+                IdContentor.setText(newValue.getIdContentor().toString());
+                IdEstadoCarga.setText(newValue.getIdEstadoCarga().toString());
+                IdReserva.setText(newValue.getIdReserva().toString());
+                IdTipoCarga.setText(newValue.getIdTipoCarga().toString());
+            }
+        });
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         context = new AnnotationConfigApplicationContext(AppConfig.class);
@@ -146,5 +172,7 @@ public class CargaController implements Initializable{
         });
 
     }
+
+
 
 }
