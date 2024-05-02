@@ -29,6 +29,7 @@ import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ReservasController implements Initializable {
@@ -210,8 +211,31 @@ public class ReservasController implements Initializable {
             IdEstadoReservaCombo.getSelectionModel().clearSelection();
         }
 
-        ObservableList<ReservaEntity> ReservasAtualizadas = FXCollections.observableArrayList(reserva_repo.findAll());
-        Table.setItems(ReservasAtualizadas);
+        ObservableList<ReservaEntity> reservasAtualizadas = FXCollections.observableArrayList(reserva_repo.findAll());
+        Table.setItems(reservasAtualizadas);
+    }
+
+    public  void ExcluirReserva(ActionEvent event) {
+
+        if(Table.getSelectionModel().getSelectedItem() == null){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erro!");
+            alert.setHeaderText("Nenhuma reserva selecionada!");
+            alert.setContentText("Selecione uma reserva para eliminar!");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Eliminar Reserva");
+            alert.setHeaderText("Eliminar Reserva");
+            alert.setContentText("Tem a certeza que pretende eliminar este Reserva?");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                reserva_repo.deleteById(Table.getSelectionModel().getSelectedItem().getId());
+                ObservableList<ReservaEntity> reservaAtualizados = FXCollections.observableArrayList(reserva_repo.findAll());
+                Table.setItems(reservaAtualizados);
+            }
+        }
     }
 
 
