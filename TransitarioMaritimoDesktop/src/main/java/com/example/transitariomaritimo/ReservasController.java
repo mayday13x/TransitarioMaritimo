@@ -82,8 +82,12 @@ public class ReservasController implements Initializable {
     @FXML
     private TableView<ReservaEntity> Table;
 
+
     @FXML
-    private Pane Pane;
+    private Pane PaneInserir;
+
+    @FXML
+    private Pane mainPanel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -144,12 +148,26 @@ public class ReservasController implements Initializable {
 
     @FXML
     public void InserirReserva(ActionEvent event) {
-        Pane.setVisible(true);
+        PaneInserir.setVisible(true);
+        mainPanel.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        mainPanel.setDisable(true);
+        mainPanel.setVisible(false);
     }
 
     @FXML
     public void VoltarAtrasInserirReserva(ActionEvent event) {
-        Pane.setVisible(false);
+        PaneInserir.setVisible(false);
+
+        OrigemText.clear();
+        DestinoText.clear();
+        DataText.setValue(null);
+        IdFuncionarioCombo.getSelectionModel().clearSelection();
+        IdClienteCombo.getSelectionModel().clearSelection();
+        IdEstadoReservaCombo.getSelectionModel().clearSelection();
+
+        mainPanel.setEffect(null);
+        mainPanel.setDisable(false);
+        mainPanel.setVisible(true);
     }
 
     @FXML
