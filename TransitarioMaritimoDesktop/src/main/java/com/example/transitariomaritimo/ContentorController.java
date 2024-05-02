@@ -53,9 +53,6 @@ public class ContentorController implements Initializable {
     private TableView<ContentorEntity> table;
 
     @FXML
-    private Pane Pane;
-
-    @FXML
     private ComboBox<String> EstadoContentorCombo;
 
     @FXML
@@ -69,6 +66,12 @@ public class ContentorController implements Initializable {
 
     @FXML
     private TextField CapacidadeText;
+
+    @FXML
+    private Pane PaneInserir;
+
+    @FXML
+    private Pane mainPanel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -111,11 +114,6 @@ public class ContentorController implements Initializable {
         }catch (Exception ex){
             System.out.println("Erro no Contentor: " + ex.getMessage());
         }
-    }
-
-    @FXML
-    public void InserirContentor(ActionEvent event) {
-        Pane.setVisible(true);
     }
 
     @FXML
@@ -187,10 +185,28 @@ public class ContentorController implements Initializable {
         }
     }
 
+    @FXML
+    public void InserirContentor(ActionEvent event) {
+
+        PaneInserir.setVisible(true);
+        mainPanel.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        mainPanel.setDisable(true);
+        mainPanel.setVisible(false);
+    }
 
     @FXML
     public void VoltarAtrasInserirContentor(ActionEvent event) {
-        Pane.setVisible(false);
+        PaneInserir.setVisible(false);
+
+        CapacidadeText.clear();
+        PesoMaximoText.clear();
+        LocalAtualText.clear();
+        TipoContentorCombo.getSelectionModel().clearSelection();
+        EstadoContentorCombo.getSelectionModel().clearSelection();
+
+        mainPanel.setEffect(null);
+        mainPanel.setDisable(false);
+        mainPanel.setVisible(true);
     }
 
     @FXML
