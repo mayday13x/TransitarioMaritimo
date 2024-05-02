@@ -1,13 +1,14 @@
 package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.util.Collection;
 
 @Entity
 @Table(name = "funcionario", schema = "public", catalog = "transitario_maritimo")
 public class FuncionarioEntity {
-    private int id;
+    private Integer id;
     private String nome;
     private Integer nif;
     private String rua;
@@ -23,11 +24,11 @@ public class FuncionarioEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
