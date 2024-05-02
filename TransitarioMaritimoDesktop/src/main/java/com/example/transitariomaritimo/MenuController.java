@@ -1,60 +1,110 @@
 package com.example.transitariomaritimo;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MenuController {
+public class MenuController implements Initializable {
+
+
+    @FXML
+    private AnchorPane menu_panel;
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("StatisticsView.fxml"));
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            menu_panel.getChildren().clear();
+            menu_panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     @FXML
     public void Cliente(ActionEvent event) throws IOException {
 
-            Parent root = FXMLLoader.load(getClass().getResource("Cliente.fxml"));
+         /*   Parent root = FXMLLoader.load(getClass().getResource("ClienteView.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);
             stage.setTitle("Cliente");
-            stage.show();
+            stage.show();*/
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ClienteView.fxml"));
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            menu_panel.getChildren().clear();
+            menu_panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
 
     }
 
     @FXML
     public void Reserva(ActionEvent event)  throws IOException {
-
+/*
             Parent root = FXMLLoader.load(getClass().getResource("Reservas.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);
             stage.setTitle("Reserva");
-            stage.show();
+            stage.show(); */
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Reservas.fxml"));
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            menu_panel.getChildren().clear();
+            menu_panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
 
     }
 
     @FXML
     public void Armazem(ActionEvent event)  throws IOException {
 
-
-            Parent root = FXMLLoader.load(getClass().getResource("Armazem.fxml"));
+       /*     Parent root = FXMLLoader.load(getClass().getResource("Armazem.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);
             stage.setTitle("Armazem");
-            stage.show();
+            stage.show(); */
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Armazem.fxml"));
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            menu_panel.getChildren().clear();
+            menu_panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
 
     }
 
     @FXML
     public void Contentor(ActionEvent event) {
 
-        try{
+    /*    try{
             Parent root = FXMLLoader.load(getClass().getResource("Contentor.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -63,6 +113,29 @@ public class MenuController {
             stage.show();
         }catch (IOException ex){
             System.out.println("Erro ao acessar menu contentores: " + ex.getMessage());
+        } */
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Contentor.fxml"));
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            menu_panel.getChildren().clear();
+            menu_panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    @FXML
+    public void Servicos(ActionEvent event) throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ServicosView.fxml"));
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            menu_panel.getChildren().clear();
+            menu_panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
