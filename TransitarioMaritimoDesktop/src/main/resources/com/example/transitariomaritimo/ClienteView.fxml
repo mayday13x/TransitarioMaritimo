@@ -25,7 +25,7 @@
                   <TableColumn fx:id="Email" maxWidth="288.0" prefWidth="203.20001220703125" text="Email" />
               </columns>
             </TableView>
-            <Label layoutX="452.0" layoutY="27.0" text="Clientes">
+            <Label layoutX="370.0" layoutY="25.0" text="Clientes">
                <font>
                   <Font size="23.0" />
                </font>
