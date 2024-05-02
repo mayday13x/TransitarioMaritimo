@@ -20,6 +20,8 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ContentorController implements Initializable {
@@ -68,6 +70,49 @@ public class ContentorController implements Initializable {
     @FXML
     private TextField CapacidadeText;
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        contentor_repo = context.getBean(ContentorRepository.class);
+        ObservableList<ContentorEntity> contentores = FXCollections.observableArrayList(contentor_repo.findAll());
+
+        try {
+            Cin.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCin().toString()));
+            Capacidade.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCapacidade().toString()));
+            PesoMaximo.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPesoMax().toString()));
+            LocalAtual.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLocalAtual()));
+
+            table.setItems(contentores);
+
+            table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    IdEstadoContentor.setText(newValue.getIdEstadoContentor().toString());
+                    TipoContentor.setText(newValue.getTipoContentor().toString());
+                }
+            });
+
+
+            context = new AnnotationConfigApplicationContext(AppConfig.class);
+            contentor_repo = context.getBean(ContentorRepository.class);
+            tipo_contentor_repo = context.getBean(TipoContentorRepository.class);
+            estado_contentor_repo = context.getBean(EstadoContentorRepository.class);
+
+
+            ObservableList<TipoContentorEntity> tiposConstentor = FXCollections.observableArrayList(tipo_contentor_repo.findAll());
+            for(TipoContentorEntity tipo : tiposConstentor){
+                TipoContentorCombo.getItems().addAll(tipo.getDescricao());
+            }
+
+            ObservableList<EstadoContentorEntity> estadoContentor = FXCollections.observableArrayList(estado_contentor_repo.findAll());
+            for(EstadoContentorEntity estado : estadoContentor){
+                EstadoContentorCombo.getItems().addAll(estado.getDescricao());
+            }
+        }catch (Exception ex){
+            System.out.println("Erro no Contentor: " + ex.getMessage());
+        }
+    }
+
     @FXML
     public void InserirContentor(ActionEvent event) {
         Pane.setVisible(true);
@@ -76,25 +121,45 @@ public class ContentorController implements Initializable {
     @FXML
     public void RegistarContentor(ActionEvent event) {
 
-       ContentorEntity novoContentor = new ContentorEntity();
-       novoContentor.setCapacidade(Double.valueOf(CapacidadeText.getText()));
-       novoContentor.setLocalAtual(LocalAtualText.getText());
-       novoContentor.setPesoMax(Double.valueOf(PesoMaximoText.getText()));
+        if(Objects.equals(CapacidadeText.getText(), "") || Objects.equals(LocalAtual.getText(), "") ||
+                Objects.equals(PesoMaximoText.getText(), "") || Objects.equals(TipoContentorCombo.getValue(), "") ||
+                Objects.equals(EstadoContentorCombo.getValue(), "")) {
 
-        TipoContentorEntity tipoContentor = tipo_contentor_repo.findByNameLike(TipoContentorCombo.getSelectionModel().getSelectedItem());
-        EstadoContentorEntity estadoContentor = estado_contentor_repo.findByNameLike(EstadoContentorCombo.getSelectionModel().getSelectedItem());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Campos Inválidos!");
+            alert.setHeaderText("Campos por preencher");
+            alert.setContentText("Preencha todos os campos e tente novamente!");
 
-        novoContentor.setTipoContentor(tipoContentor.getId());
-        novoContentor.setIdEstadoContentor(estadoContentor.getId());
+            alert.showAndWait();
 
-        contentor_repo.save(novoContentor);
+        } else {
+            ContentorEntity novoContentor = new ContentorEntity();
+            novoContentor.setCapacidade(Double.valueOf(CapacidadeText.getText()));
+            novoContentor.setLocalAtual(LocalAtualText.getText());
+            novoContentor.setPesoMax(Double.valueOf(PesoMaximoText.getText()));
 
-        CapacidadeText.clear();
-        PesoMaximoText.clear();
-        LocalAtualText.clear();
+            TipoContentorEntity tipoContentor = tipo_contentor_repo.findByNameLike(TipoContentorCombo.getSelectionModel().getSelectedItem());
+            EstadoContentorEntity estadoContentor = estado_contentor_repo.findByNameLike(EstadoContentorCombo.getSelectionModel().getSelectedItem());
 
-        ObservableList<ContentorEntity> contentoresAtualizados = FXCollections.observableArrayList(contentor_repo.findAll());
-        table.setItems(contentoresAtualizados);
+            novoContentor.setTipoContentor(tipoContentor.getId());
+            novoContentor.setIdEstadoContentor(estadoContentor.getId());
+            novoContentor.setEstadoContentorByIdEstadoContentor(estadoContentor);
+            novoContentor.setTipoContentorByTipoContentor(tipoContentor);
+
+
+            contentor_repo.save(novoContentor);
+
+            CapacidadeText.clear();
+            PesoMaximoText.clear();
+            LocalAtualText.clear();
+            TipoContentorCombo.getSelectionModel().clearSelection();
+            EstadoContentorCombo.getSelectionModel().clearSelection();
+
+            ObservableList<ContentorEntity> contentoresAtualizados = FXCollections.observableArrayList(contentor_repo.findAll());
+            table.setItems(contentoresAtualizados);
+        }
+
+
     }
 
     public void VisualizarCargas(ActionEvent event) throws IOException {
@@ -143,48 +208,5 @@ public class ContentorController implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        contentor_repo = context.getBean(ContentorRepository.class);
-        ObservableList<ContentorEntity> contentores = FXCollections.observableArrayList(contentor_repo.findAll());
-
-        try {
-            Cin.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCin().toString()));
-            Capacidade.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCapacidade().toString()));
-            PesoMaximo.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPesoMax().toString()));
-            LocalAtual.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLocalAtual()));
-
-            table.setItems(contentores);
-
-            table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null) {
-                    IdEstadoContentor.setText(newValue.getIdEstadoContentor().toString());
-                    TipoContentor.setText(newValue.getTipoContentor().toString());
-                }
-            });
-
-
-            context = new AnnotationConfigApplicationContext(AppConfig.class);
-            contentor_repo = context.getBean(ContentorRepository.class);
-            tipo_contentor_repo = context.getBean(TipoContentorRepository.class);
-            estado_contentor_repo = context.getBean(EstadoContentorRepository.class);
-
-
-            ObservableList<TipoContentorEntity> tiposConstentor = FXCollections.observableArrayList(tipo_contentor_repo.findAll());
-            for(TipoContentorEntity tipo : tiposConstentor){
-                TipoContentorCombo.getItems().addAll(tipo.getDescricao());
-            }
-
-            ObservableList<EstadoContentorEntity> estadoContentor = FXCollections.observableArrayList(estado_contentor_repo.findAll());
-            for(EstadoContentorEntity estado : estadoContentor){
-                EstadoContentorCombo.getItems().addAll(estado.getDescricao());
-            }
-        }catch (Exception ex){
-            System.out.println("Erro no Contentor: " + ex.getMessage());
-        }
-
-
-    }
 }
