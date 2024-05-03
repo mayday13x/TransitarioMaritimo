@@ -4,9 +4,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.entity.CodPostalEntity;
@@ -78,6 +80,9 @@ public class FuncionarioController implements Initializable {
     private TextField EditTelefoneText;
 
     @FXML
+    private ComboBox<String> EditTipoFuncionarioCombo;
+
+    @FXML
     private TableColumn<FuncionarioEntity, String> Localidade;
 
     @FXML
@@ -113,6 +118,9 @@ public class FuncionarioController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+      DoubleClickHandler handler = new DoubleClickHandler();
+        table.setOnMouseClicked(handler);
+
         context = new AnnotationConfigApplicationContext(AppConfig.class);
         funcionario_repo = context.getBean(FuncionarioRepository.class);
 
@@ -137,11 +145,13 @@ public class FuncionarioController implements Initializable {
             ObservableList<CodPostalEntity> localidades = FXCollections.observableArrayList(cod_postal_repo.findAll());
             for (CodPostalEntity l : localidades){
                 CodPostalCombo.getItems().addAll(l.getLocalidade());
+                EditCodPostalCombo.getItems().addAll(l.getLocalidade());
             }
 
             ObservableList<TipoFuncionarioEntity> tiposFuncionarios = FXCollections.observableArrayList(tipo_funcionario_repo.findAll());
             for (TipoFuncionarioEntity t : tiposFuncionarios){
                 TipoFuncionarioCombo.getItems().addAll(t.getDescricao());
+                EditTipoFuncionarioCombo.getItems().addAll(t.getDescricao());
             }
 
             table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -278,6 +288,92 @@ public class FuncionarioController implements Initializable {
                 funcionario_repo.deleteById(table.getSelectionModel().getSelectedItem().getId());
                 ObservableList<FuncionarioEntity> funcionariosAtualizados = FXCollections.observableArrayList(funcionario_repo.findAll());
                 table.setItems(funcionariosAtualizados);
+            }
+        }
+    }
+
+    @FXML
+    public void ShowEditarFuncionario() {
+
+        EditPane.setVisible(true);
+        mainPanel.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        EditPane.setEffect(new javafx.scene.effect.DropShadow());
+        mainPanel.setDisable(true);
+
+        EditNomeText.setText(table.getSelectionModel().getSelectedItem().getNome());
+        EditNifText.setText(table.getSelectionModel().getSelectedItem().getNif().toString());
+        EditRuaText.setText(table.getSelectionModel().getSelectedItem().getRua());
+        EditPortaText.setText(table.getSelectionModel().getSelectedItem().getPorta().toString());
+        EditEmailText.setText(table.getSelectionModel().getSelectedItem().getEmail());
+        EditTelefoneText.setText(table.getSelectionModel().getSelectedItem().getTelefone());
+        EditCodPostalCombo.getSelectionModel().select(table.getSelectionModel().getSelectedItem().getCodPostalByIdCodPostal().getLocalidade());
+        EditTipoFuncionarioCombo.getSelectionModel().select(TipoFuncionario.getText());
+
+    }
+
+    @FXML
+    public void EditarFuncionario() {
+        if(Objects.equals(EditRuaText.getText(), "") || Objects.equals(EditNifText.getText(), "") || Objects.equals(EditNomeText.getText(), "")
+                && Objects.equals(EditPortaText.getText(), "") || Objects.equals(EditEmailText.getText(), "") ||  Objects.equals(EditTelefoneText.getText(), "")) {
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Campos Inválidos!");
+            alert.setHeaderText("Campos por preencher");
+            alert.setContentText("Preencha todos os campos e tente novamente!");
+
+            alert.showAndWait();
+
+
+
+        } else {
+
+            FuncionarioEntity editFuncionario = table.getSelectionModel().getSelectedItem();
+            editFuncionario.setNome(EditNomeText.getText());
+            editFuncionario.setNif(Integer.valueOf(EditNifText.getText()));
+            editFuncionario.setRua(EditRuaText.getText());
+            editFuncionario.setPorta(Integer.valueOf(EditPortaText.getText()));
+
+            CodPostalEntity codPostalEntity = cod_postal_repo.findByNameLike(EditCodPostalCombo.getSelectionModel().getSelectedItem());
+            TipoFuncionarioEntity tipoFuncionarioEntity = tipo_funcionario_repo.findByDescLike(EditTipoFuncionarioCombo.getSelectionModel().getSelectedItem());
+
+            editFuncionario.setIdCodPostal(codPostalEntity.getIdCodPostal());
+            editFuncionario.setIdTipoFuncionario(tipoFuncionarioEntity.getId());
+            editFuncionario.setEmail(EditEmailText.getText());
+            editFuncionario.setTelefone(EditTelefoneText.getText());
+            editFuncionario.setCodPostalByIdCodPostal(codPostalEntity);
+            editFuncionario.setTipoFuncionarioByIdTipoFuncionario(tipoFuncionarioEntity);
+
+            try {
+                funcionario_repo.save(editFuncionario);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sucesso!");
+                alert.setHeaderText("Registo editado com sucesso!");
+                alert.showAndWait();
+
+                EditPane.setVisible(false);
+                mainPanel.setEffect(null);
+                mainPanel.setDisable(false);
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+
+        }
+
+        ObservableList<FuncionarioEntity> funcionariosAtualizados = FXCollections.observableArrayList(funcionario_repo.findAll());
+        table.setItems(funcionariosAtualizados);
+        table.refresh();
+    }
+
+    public class DoubleClickHandler implements EventHandler<MouseEvent> {
+
+        @Override
+        public void handle(MouseEvent event) {
+            if (event.getClickCount() == 2) {
+                ShowEditarFuncionario();
+
             }
         }
     }

@@ -84,7 +84,6 @@ public class ClienteController implements Initializable{
     @FXML
     private TextField EditTelefoneText;
 
-
     @FXML
     private TableColumn<ClienteEntity, String> Localidade;
 
