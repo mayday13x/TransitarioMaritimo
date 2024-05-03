@@ -157,25 +157,10 @@ public class ClienteController implements Initializable{
 
 
     @FXML
-    public void VoltarAtras(ActionEvent event) {
-
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("MenuView.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Menu");
-            stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
-        }
-    }
-
-    @FXML
     public void RegistarCliente(ActionEvent event) throws IOException {
 
         if(Objects.equals(RuaText.getText(), "") || Objects.equals(NifText.getText(), "") || Objects.equals(NomeText.getText(), "")
-                && Objects.equals(PortaText.getText(), "") || Objects.equals(EmailText.getText(), "") ||  Objects.equals(TelefoneText.getText(), "")) {
+                || Objects.equals(PortaText.getText(), "") || Objects.equals(EmailText.getText(), "") ||  Objects.equals(TelefoneText.getText(), "")) {
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Campos Inválidos!");
@@ -369,6 +354,5 @@ public class ClienteController implements Initializable{
             }
         }
     }
-
 
 }
