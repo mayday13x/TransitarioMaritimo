@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.entity.CodPostalEntity;
 import pt.ipvc.database.entity.FuncionarioEntity;
 import pt.ipvc.database.entity.TipoFuncionarioEntity;
@@ -20,6 +21,7 @@ import pt.ipvc.database.repository.TipoFuncionarioRepository;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class FuncionarioController implements Initializable {
@@ -94,6 +96,9 @@ public class FuncionarioController implements Initializable {
     private TableColumn<FuncionarioEntity, String> Email;
 
     @FXML
+    private TextField TipoFuncionario;
+
+    @FXML
     private TableView<FuncionarioEntity> table;
 
     @FXML
@@ -138,6 +143,14 @@ public class FuncionarioController implements Initializable {
             for (TipoFuncionarioEntity t : tiposFuncionarios){
                 TipoFuncionarioCombo.getItems().addAll(t.getDescricao());
             }
+
+            table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+
+                    Optional<TipoFuncionarioEntity> tipoFuncionarioEntity = tipo_funcionario_repo.findById(newValue.getIdTipoFuncionario());
+                    TipoFuncionario.setText(String.valueOf(tipoFuncionarioEntity.get().getDescricao()));
+                }
+            });
 
 
         } catch (Exception ex){
@@ -242,6 +255,30 @@ public class FuncionarioController implements Initializable {
             ObservableList<FuncionarioEntity> funcionarioAtualizados = FXCollections.observableArrayList(funcionario_repo.findAll());
             table.setItems(funcionarioAtualizados);
 
+        }
+    }
+
+    @FXML
+    public void ExcluirFuncionario(ActionEvent event) {
+
+        if (table.getSelectionModel().getSelectedItem() == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erro!");
+            alert.setHeaderText("Nenhum cliente selecionado!");
+            alert.setContentText("Selecione um funcionario para eliminar!");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Eliminar Funcionario");
+            alert.setHeaderText("Eliminar Funcionario");
+            alert.setContentText("Tem a certeza que pretende eliminar este funcionario?");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                funcionario_repo.deleteById(table.getSelectionModel().getSelectedItem().getId());
+                ObservableList<FuncionarioEntity> funcionariosAtualizados = FXCollections.observableArrayList(funcionario_repo.findAll());
+                table.setItems(funcionariosAtualizados);
+            }
         }
     }
 }
