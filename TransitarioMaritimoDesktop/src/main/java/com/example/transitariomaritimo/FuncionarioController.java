@@ -3,20 +3,23 @@ package com.example.transitariomaritimo;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.entity.CodPostalEntity;
 import pt.ipvc.database.entity.FuncionarioEntity;
-import pt.ipvc.database.repository.ClienteRepository;
+import pt.ipvc.database.entity.TipoFuncionarioEntity;
 import pt.ipvc.database.repository.CodPostalRepository;
 import pt.ipvc.database.repository.FuncionarioRepository;
+import javafx.scene.layout.Pane;
+import pt.ipvc.database.repository.TipoFuncionarioRepository;
 
-import java.io.Serializable;
+
+import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class FuncionarioController implements Initializable {
@@ -24,6 +27,53 @@ public class FuncionarioController implements Initializable {
     public AnnotationConfigApplicationContext context;
     private FuncionarioRepository funcionario_repo;
     private CodPostalRepository cod_postal_repo;
+    private TipoFuncionarioRepository tipo_funcionario_repo;
+
+    @FXML
+    private ComboBox<String> CodPostalCombo;
+
+    @FXML
+    private ComboBox<String> TipoFuncionarioCombo;
+
+    @FXML
+    private TextField EmailText;
+
+    @FXML
+    private TextField NifText;
+
+    @FXML
+    private TextField NomeText;
+
+    @FXML
+    private TextField PortaText;
+
+    @FXML
+    private TextField RuaText;
+
+    @FXML
+    private TextField TelefoneText;
+
+    //edit
+    @FXML
+    private ComboBox<String> EditCodPostalCombo;
+
+    @FXML
+    private TextField EditEmailText;
+
+    @FXML
+    private TextField EditNifText;
+
+    @FXML
+    private TextField EditNomeText;
+
+    @FXML
+    private TextField EditPortaText;
+
+    @FXML
+    private TextField EditRuaText;
+
+    @FXML
+    private TextField EditTelefoneText;
 
     @FXML
     private TableColumn<FuncionarioEntity, String> Localidade;
@@ -45,6 +95,15 @@ public class FuncionarioController implements Initializable {
 
     @FXML
     private TableView<FuncionarioEntity> table;
+
+    @FXML
+    private Pane Pane;
+
+    @FXML
+    private Pane mainPanel;
+
+    @FXML
+    private Pane EditPane;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -68,10 +127,121 @@ public class FuncionarioController implements Initializable {
 
             context = new AnnotationConfigApplicationContext(AppConfig.class);
             cod_postal_repo = context.getBean(CodPostalRepository.class);
+            tipo_funcionario_repo = context.getBean(TipoFuncionarioRepository.class);
+
+            ObservableList<CodPostalEntity> localidades = FXCollections.observableArrayList(cod_postal_repo.findAll());
+            for (CodPostalEntity l : localidades){
+                CodPostalCombo.getItems().addAll(l.getLocalidade());
+            }
+
+            ObservableList<TipoFuncionarioEntity> tiposFuncionarios = FXCollections.observableArrayList(tipo_funcionario_repo.findAll());
+            for (TipoFuncionarioEntity t : tiposFuncionarios){
+                TipoFuncionarioCombo.getItems().addAll(t.getDescricao());
+            }
 
 
         } catch (Exception ex){
             System.out.println("Erro no Cliente: " + ex.getMessage());
+        }
+    }
+
+    @FXML
+    public void InserirFuncionario(ActionEvent event) throws IOException {
+        Pane.setVisible(true);
+        mainPanel.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        mainPanel.setDisable(true);
+
+    }
+
+    @FXML
+    public void VoltarAtrasInserirFuncionario(ActionEvent event) {
+        Pane.setVisible(false);
+        RuaText.clear();
+        NifText.clear();
+        NomeText.clear();
+        PortaText.clear();
+        EmailText.clear();
+        TelefoneText.clear();
+        CodPostalCombo.getSelectionModel().clearSelection();
+        TipoFuncionarioCombo.getSelectionModel().clearSelection();
+
+        EditPane.setVisible(false);
+        EditRuaText.clear();
+        EditNifText.clear();
+        EditNomeText.clear();
+        EditPortaText.clear();
+        EditEmailText.clear();
+        EditTelefoneText.clear();
+
+        mainPanel.setEffect(null);
+        mainPanel.setDisable(false);
+
+        EditPane.setEffect(null);
+        EditPane.setDisable(false);
+
+    }
+
+
+    @FXML
+    public void RegistarFucncionario(ActionEvent event) throws IOException {
+
+        if(Objects.equals(RuaText.getText(), "") || Objects.equals(NifText.getText(), "") || Objects.equals(NomeText.getText(), "")
+                && Objects.equals(PortaText.getText(), "") || Objects.equals(EmailText.getText(), "") ||  Objects.equals(TelefoneText.getText(), "")) {
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Campos Inválidos!");
+            alert.setHeaderText("Campos por preencher");
+            alert.setContentText("Preencha todos os campos e tente novamente!");
+
+            alert.showAndWait();
+
+        } else {
+
+
+            FuncionarioEntity novoFuncionario = new FuncionarioEntity();
+            novoFuncionario.setNome(NomeText.getText());
+            novoFuncionario.setNif(Integer.valueOf(NifText.getText()));
+            novoFuncionario.setRua(RuaText.getText());
+            novoFuncionario.setPorta(Integer.valueOf(PortaText.getText()));
+
+            CodPostalEntity codPostalEntity = cod_postal_repo.findByNameLike(CodPostalCombo.getSelectionModel().getSelectedItem());
+            TipoFuncionarioEntity tipoFuncionarioEntity = tipo_funcionario_repo.findByDescLike(TipoFuncionarioCombo.getSelectionModel().getSelectedItem());
+
+            novoFuncionario.setIdCodPostal(codPostalEntity.getIdCodPostal());
+            novoFuncionario.setCodPostalByIdCodPostal(codPostalEntity);
+            novoFuncionario.setIdTipoFuncionario(tipoFuncionarioEntity.getId());
+            novoFuncionario.setTipoFuncionarioByIdTipoFuncionario(tipoFuncionarioEntity);
+            novoFuncionario.setEmail(EmailText.getText());
+            novoFuncionario.setTelefone(TelefoneText.getText());
+            novoFuncionario.setUtilizador(EmailText.getText().substring(0,EmailText.getText().indexOf('@')));
+            novoFuncionario.setPassword("default");
+
+            try {
+                funcionario_repo.save(novoFuncionario);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sucesso!");
+                alert.setHeaderText("Registo efetuado com sucesso!");
+                alert.showAndWait();
+
+
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+            RuaText.clear();
+            NifText.clear();
+            NomeText.clear();
+            PortaText.clear();
+            EmailText.clear();
+            TelefoneText.clear();
+            CodPostalCombo.getSelectionModel().clearSelection();
+            TipoFuncionarioCombo.getSelectionModel().clearSelection();
+
+            ObservableList<FuncionarioEntity> funcionarioAtualizados = FXCollections.observableArrayList(funcionario_repo.findAll());
+            table.setItems(funcionarioAtualizados);
+
         }
     }
 }
