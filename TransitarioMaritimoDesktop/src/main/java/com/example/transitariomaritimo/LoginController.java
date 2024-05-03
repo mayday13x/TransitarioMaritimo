@@ -90,6 +90,7 @@ public class LoginController implements Initializable {
                     } catch (IOException ex) {
                         System.out.println("Erro ao acessar menu: " + ex.getMessage());
                     }
+                    break; // sem o break ele continua o cliclo for
                 } else {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Campos Inválidos!");
