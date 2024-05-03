@@ -39,6 +39,10 @@ public class LoginController implements Initializable {
     @FXML
     private PasswordField passwordText;
 
+    private boolean mensagem = true;
+
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tipoUtilizadorCombo.getItems().addAll("Cliente", "Funcionario");
@@ -59,6 +63,7 @@ public class LoginController implements Initializable {
         } catch (IOException ex) {
             System.out.println("Erro ao acessar " + pagina  + ex.getMessage());
         }
+
     }
 
 
@@ -76,7 +81,7 @@ public class LoginController implements Initializable {
             alert.showAndWait();
 
         } else if(tipoUtilizadorCombo.getValue().equals("Cliente") ){
-
+                mensagem = false;
 
             for(ClienteEntity cliente : cliente_repo.findAll()){
                 if(Objects.equals(utilizadorText.getText(), cliente.getUtilizador()) && Objects.equals(passwordText.getText(), cliente.getPassword())){
@@ -91,18 +96,10 @@ public class LoginController implements Initializable {
                         System.out.println("Erro ao acessar menu: " + ex.getMessage());
                     }
                     break; // sem o break ele continua o cliclo for
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Campos Inválidos!");
-                    alert.setHeaderText("Campos do utilizador ou password incorretos!");
-                    alert.setContentText("Preencha todos os campos e tente novamente!");
-
-                    alert.showAndWait();
-                    break;
                 }
             }
         } else if (tipoUtilizadorCombo.getValue().equals("Funcionario")){
-
+            mensagem = false;
             for(FuncionarioEntity funcionario : funcionario_repo.findAll()){
                 if(Objects.equals(utilizadorText.getText(), funcionario.getUtilizador()) && Objects.equals(passwordText.getText(), funcionario.getPassword())){
                     switch (funcionario.getIdTipoFuncionario()){
@@ -128,11 +125,11 @@ public class LoginController implements Initializable {
                             mudarPagina(event, "MenuView.fxml");
                             break;
                         default:
-                            System.out.println("Tipo de funcinario incorreto!");
+                            System.out.println("Tipo de funcionario incorreto!");
                             break;
                     }
 
-                }else {
+                }else if(mensagem) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Campos Inválidos!");
                     alert.setHeaderText("Campos do utilizador ou password incorretos!");
