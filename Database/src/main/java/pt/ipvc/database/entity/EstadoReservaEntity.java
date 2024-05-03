@@ -7,18 +7,18 @@ import java.util.Collection;
 @Entity
 @Table(name = "estado_reserva", schema = "public", catalog = "transitario_maritimo")
 public class EstadoReservaEntity {
-    private Integer id;
+    private int id;
     private String descricao;
     private Collection<ReservaEntity> reservasById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

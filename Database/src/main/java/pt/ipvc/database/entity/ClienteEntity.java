@@ -15,23 +15,11 @@ public class ClienteEntity {
     private Integer idCodPostal;
     private String telefone;
     private String email;
+    private String utilizador;
+    private String password;
     private CodPostalEntity codPostalByIdCodPostal;
     private Collection<CotacaoEntity> cotacaosById;
     private Collection<ReservaEntity> reservasById;
-
-    public ClienteEntity() {
-    }
-
-    public ClienteEntity(String nome, Integer nif, String rua, Integer porta, Integer idCodPostal, String telefone, String email, CodPostalEntity codPostalByIdCodPostal, Collection<CotacaoEntity> cotacaosById, Collection<ReservaEntity> reservasById) {
-        this.nome = nome;
-        this.nif = nif;
-        this.rua = rua;
-        this.porta = porta;
-        this.idCodPostal = idCodPostal;
-        this.telefone = telefone;
-        this.email = email;
-        this.codPostalByIdCodPostal = codPostalByIdCodPostal;
-    }
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -40,12 +28,12 @@ public class ClienteEntity {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "nome", nullable = true, length = 255)
+    @Column(name = "nome", nullable = false, length = 255)
     public String getNome() {
         return nome;
     }
@@ -55,17 +43,17 @@ public class ClienteEntity {
     }
 
     @Basic
-    @Column(name = "nif", nullable = true)
+    @Column(name = "nif", nullable = false)
     public Integer getNif() {
         return nif;
     }
 
-    public void setNif(Integer nif) {
+    public void setNif(int nif) {
         this.nif = nif;
     }
 
     @Basic
-    @Column(name = "rua", nullable = true, length = 255)
+    @Column(name = "rua", nullable = false, length = 255)
     public String getRua() {
         return rua;
     }
@@ -75,27 +63,27 @@ public class ClienteEntity {
     }
 
     @Basic
-    @Column(name = "porta", nullable = true)
+    @Column(name = "porta", nullable = false)
     public Integer getPorta() {
         return porta;
     }
 
-    public void setPorta(Integer porta) {
+    public void setPorta(int porta) {
         this.porta = porta;
     }
 
     @Basic
-    @Column(name = "id_cod_postal", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_cod_postal", nullable = false, insertable=false, updatable=false)
     public Integer getIdCodPostal() {
         return idCodPostal;
     }
 
-    public void setIdCodPostal(Integer idCodPostal) {
+    public void setIdCodPostal(int idCodPostal) {
         this.idCodPostal = idCodPostal;
     }
 
     @Basic
-    @Column(name = "telefone", nullable = true, length = 20)
+    @Column(name = "telefone", nullable = false, length = 20)
     public String getTelefone() {
         return telefone;
     }
@@ -114,6 +102,26 @@ public class ClienteEntity {
         this.email = email;
     }
 
+    @Basic
+    @Column(name = "utilizador", nullable = false, length = 50)
+    public String getUtilizador() {
+        return utilizador;
+    }
+
+    public void setUtilizador(String utilizador) {
+        this.utilizador = utilizador;
+    }
+
+    @Basic
+    @Column(name = "password", nullable = false, length = 50)
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -122,13 +130,15 @@ public class ClienteEntity {
         ClienteEntity that = (ClienteEntity) o;
 
         if (id != that.id) return false;
+        if (nif != that.nif) return false;
+        if (porta != that.porta) return false;
+        if (idCodPostal != that.idCodPostal) return false;
         if (nome != null ? !nome.equals(that.nome) : that.nome != null) return false;
-        if (nif != null ? !nif.equals(that.nif) : that.nif != null) return false;
         if (rua != null ? !rua.equals(that.rua) : that.rua != null) return false;
-        if (porta != null ? !porta.equals(that.porta) : that.porta != null) return false;
-        if (idCodPostal != null ? !idCodPostal.equals(that.idCodPostal) : that.idCodPostal != null) return false;
         if (telefone != null ? !telefone.equals(that.telefone) : that.telefone != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        if (utilizador != null ? !utilizador.equals(that.utilizador) : that.utilizador != null) return false;
+        if (password != null ? !password.equals(that.password) : that.password != null) return false;
 
         return true;
     }
@@ -137,17 +147,19 @@ public class ClienteEntity {
     public int hashCode() {
         int result = id;
         result = 31 * result + (nome != null ? nome.hashCode() : 0);
-        result = 31 * result + (nif != null ? nif.hashCode() : 0);
+        result = 31 * result + nif;
         result = 31 * result + (rua != null ? rua.hashCode() : 0);
-        result = 31 * result + (porta != null ? porta.hashCode() : 0);
-        result = 31 * result + (idCodPostal != null ? idCodPostal.hashCode() : 0);
+        result = 31 * result + porta;
+        result = 31 * result + idCodPostal;
         result = 31 * result + (telefone != null ? telefone.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (utilizador != null ? utilizador.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
         return result;
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_cod_postal", referencedColumnName = "id_cod_postal")
+    @JoinColumn(name = "id_cod_postal", referencedColumnName = "id_cod_postal", nullable = false)
     public CodPostalEntity getCodPostalByIdCodPostal() {
         return codPostalByIdCodPostal;
     }

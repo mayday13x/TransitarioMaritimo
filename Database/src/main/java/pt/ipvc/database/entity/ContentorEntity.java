@@ -24,12 +24,12 @@ public class ContentorEntity {
         return cin;
     }
 
-    public void setCin(Integer cin) {
+    public void setCin(int cin) {
         this.cin = cin;
     }
 
     @Basic
-    @Column(name = "id_estado_contentor", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_estado_contentor", nullable = true, insertable=false, updatable=false)
     public Integer getIdEstadoContentor() {
         return idEstadoContentor;
     }
@@ -69,7 +69,7 @@ public class ContentorEntity {
     }
 
     @Basic
-    @Column(name = "tipo_contentor", nullable = true, insertable = false, updatable = false)
+    @Column(name = "tipo_contentor", nullable = true, insertable=false, updatable=false)
     public Integer getTipoContentor() {
         return tipoContentor;
     }
