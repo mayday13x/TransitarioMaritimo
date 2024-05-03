@@ -51,12 +51,12 @@
             <Font size="17.0" />
          </font>
       </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="441.0" mnemonicParsing="false" onAction="#Transportes" prefHeight="42.0" prefWidth="124.0" text="Transportes">
+      <Button defaultButton="true" layoutX="14.0" layoutY="441.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="124.0" text="Transportes">
          <font>
             <Font size="17.0" />
          </font>
       </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="262.0" mnemonicParsing="false" onAction="#Transportes" prefHeight="42.0" prefWidth="124.0" text="Fornecedores">
+      <Button defaultButton="true" layoutX="14.0" layoutY="262.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="124.0" text="Fornecedores">
          <font>
             <Font size="16.0" />
          </font>
