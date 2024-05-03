@@ -16,8 +16,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ArmazemEntity;
+import pt.ipvc.database.entity.CargaEntity;
 import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.repository.ArmazemRepository;
+import pt.ipvc.database.repository.CargaRepository;
 import pt.ipvc.database.repository.ClienteRepository;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.TextField;
@@ -29,7 +31,9 @@ import java.util.ResourceBundle;
 public class ArmazemController implements Initializable {
 
     public AnnotationConfigApplicationContext context;
-    private ArmazemRepository repo;
+    private ArmazemRepository armazem_repo;
+
+    private CargaRepository carga_repo;
 
     @FXML
     private TextField CapacidadeMaximaText;
@@ -61,8 +65,8 @@ public class ArmazemController implements Initializable {
 
         context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        repo = context.getBean(ArmazemRepository.class);
-        ObservableList<ArmazemEntity> armazens = FXCollections.observableArrayList(repo.findAll());
+        armazem_repo = context.getBean(ArmazemRepository.class);
+        ObservableList<ArmazemEntity> armazens = FXCollections.observableArrayList(armazem_repo.findAll());
 
 
         Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
@@ -118,13 +122,13 @@ public class ArmazemController implements Initializable {
         novoArmazem.setCapacidadeMax(Double.valueOf(CapacidadeMaximaText.getText()));
         novoArmazem.setDescricao(descricaoText.getText());
 
-        repo.save(novoArmazem);
+        armazem_repo.save(novoArmazem);
 
 
         CapacidadeMaximaText.clear();
         descricaoText.clear();
 
-        ObservableList<ArmazemEntity> armazensAtualizados = FXCollections.observableArrayList(repo.findAll());
+        ObservableList<ArmazemEntity> armazensAtualizados = FXCollections.observableArrayList(armazem_repo.findAll());
         table.setItems(armazensAtualizados);
 
 
