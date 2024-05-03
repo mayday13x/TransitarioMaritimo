@@ -35,6 +35,21 @@ public class MenuController implements Initializable {
     }
 
     @FXML
+    public void Funcionario(ActionEvent event) throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Funcionario.fxml"));
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            menu_panel.getChildren().clear();
+            menu_panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+
+    }
+
+    @FXML
     public void Cliente(ActionEvent event) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ClienteView.fxml"));

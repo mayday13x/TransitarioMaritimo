@@ -81,10 +81,11 @@ public class LoginController implements Initializable {
             alert.showAndWait();
 
         } else if(tipoUtilizadorCombo.getValue().equals("Cliente") ){
-                mensagem = false;
 
             for(ClienteEntity cliente : cliente_repo.findAll()){
                 if(Objects.equals(utilizadorText.getText(), cliente.getUtilizador()) && Objects.equals(passwordText.getText(), cliente.getPassword())){
+                    mensagem = false;
+
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("MenuView.fxml"));
                         Scene regCena = new Scene(root);
@@ -99,12 +100,15 @@ public class LoginController implements Initializable {
                 }
             }
         } else if (tipoUtilizadorCombo.getValue().equals("Funcionario")){
-            mensagem = false;
-            for(FuncionarioEntity funcionario : funcionario_repo.findAll()){
-                if(Objects.equals(utilizadorText.getText(), funcionario.getUtilizador()) && Objects.equals(passwordText.getText(), funcionario.getPassword())){
-                    switch (funcionario.getIdTipoFuncionario()){
+
+
+            for(FuncionarioEntity funcionario : funcionario_repo.findAll()) {
+                if (Objects.equals(utilizadorText.getText(), funcionario.getUtilizador()) && Objects.equals(passwordText.getText(), funcionario.getPassword())) {
+                    mensagem = false;
+
+                    switch (funcionario.getIdTipoFuncionario()) {
                         case 1:
-                            mudarPagina(event, "MenuView.fxml");
+                            mudarPagina(event, "MenuAdminView.fxml");
                             break;
                         case 2:
                             mudarPagina(event, "MenuView.fxml");
@@ -128,17 +132,15 @@ public class LoginController implements Initializable {
                             System.out.println("Tipo de funcionario incorreto!");
                             break;
                     }
-
-                }else if(mensagem) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Campos Inválidos!");
-                    alert.setHeaderText("Campos do utilizador ou password incorretos!");
-                    alert.setContentText("Preencha todos os campos e tente novamente!");
-
-                    alert.showAndWait();
-                    break;
                 }
             }
+        }else if(mensagem) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Campos Inválidos!");
+        alert.setHeaderText("Campos do utilizador ou password incorretos!");
+        alert.setContentText("Preencha todos os campos e tente novamente!");
+
+        alert.showAndWait();
         }
     }
 
