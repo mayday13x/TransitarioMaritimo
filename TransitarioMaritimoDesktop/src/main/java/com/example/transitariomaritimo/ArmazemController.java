@@ -15,15 +15,15 @@ import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ArmazemEntity;
-<<<<<<< HEAD
+
 import pt.ipvc.database.entity.CargaEntity;
 import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.repository.ArmazemRepository;
 import pt.ipvc.database.repository.CargaRepository;
 import pt.ipvc.database.repository.ClienteRepository;
-=======
+
 import pt.ipvc.database.repository.ArmazemRepository;
->>>>>>> c0e78372946bfac68cbde5550651684a7bd1b324
+
 import javafx.scene.layout.Pane;
 import javafx.scene.control.TextField;
 
@@ -78,6 +78,7 @@ public class ArmazemController implements Initializable {
         Cap_max.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCapacidadeMax().toString()));
 
 
+
         table.setItems(armazens);
 
 
@@ -125,6 +126,9 @@ public class ArmazemController implements Initializable {
         ArmazemEntity novoArmazem = new ArmazemEntity();
         novoArmazem.setCapacidadeMax(Double.valueOf(CapacidadeMaximaText.getText()));
         novoArmazem.setDescricao(descricaoText.getText());
+
+        List<CargaEntity> cargas = carga_repo.findByArmazemID(novoArmazem.getId());
+        novoArmazem.setCargasById(cargas);
 
         armazem_repo.save(novoArmazem);
 
