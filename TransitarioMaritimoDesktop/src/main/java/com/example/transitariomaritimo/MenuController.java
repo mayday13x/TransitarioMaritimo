@@ -37,13 +37,6 @@ public class MenuController implements Initializable {
     @FXML
     public void Cliente(ActionEvent event) throws IOException {
 
-         /*   Parent root = FXMLLoader.load(getClass().getResource("ClienteView.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Cliente");
-            stage.show();*/
-
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ClienteView.fxml"));
         try {
             Pane cmdPane = fxmlLoader.load();
@@ -58,13 +51,6 @@ public class MenuController implements Initializable {
 
     @FXML
     public void Reserva(ActionEvent event)  throws IOException {
-/*
-            Parent root = FXMLLoader.load(getClass().getResource("Reservas.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Reserva");
-            stage.show(); */
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Reservas.fxml"));
         try {
@@ -81,13 +67,6 @@ public class MenuController implements Initializable {
     @FXML
     public void Armazem(ActionEvent event)  throws IOException {
 
-       /*     Parent root = FXMLLoader.load(getClass().getResource("Armazem.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Armazem");
-            stage.show(); */
-
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Armazem.fxml"));
         try {
             Pane cmdPane = fxmlLoader.load();
@@ -102,17 +81,6 @@ public class MenuController implements Initializable {
 
     @FXML
     public void Contentor(ActionEvent event) {
-
-    /*    try{
-            Parent root = FXMLLoader.load(getClass().getResource("Contentor.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Contentores");
-            stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu contentores: " + ex.getMessage());
-        } */
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Contentor.fxml"));
         try {
@@ -129,6 +97,18 @@ public class MenuController implements Initializable {
     public void Servicos(ActionEvent event) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ServicosView.fxml"));
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            menu_panel.getChildren().clear();
+            menu_panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void Cotacao(ActionEvent event) throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CotacaoView.fxml"));
         try {
             Pane cmdPane = fxmlLoader.load();
             menu_panel.getChildren().clear();

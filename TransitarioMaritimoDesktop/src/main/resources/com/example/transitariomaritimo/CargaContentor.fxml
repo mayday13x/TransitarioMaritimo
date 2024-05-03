@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="480.0" prefWidth="720.0" stylesheets="@nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.CargaController">
+<AnchorPane prefHeight="480.0" prefWidth="720.0" stylesheets="@css/nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.CargaController">
    <children>
       <Label layoutX="346.0" layoutY="14.0" text="Cargas" />
       <TableView fx:id="table" layoutX="51.0" layoutY="40.0" prefHeight="134.0" prefWidth="617.0">
