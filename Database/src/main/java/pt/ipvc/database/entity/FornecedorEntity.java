@@ -7,7 +7,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "fornecedor", schema = "public", catalog = "transitario_maritimo")
 public class FornecedorEntity {
-    private int id;
+    private Integer id;
     private String nome;
     private String rua;
     private Integer porta;
@@ -20,7 +20,7 @@ public class FornecedorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
