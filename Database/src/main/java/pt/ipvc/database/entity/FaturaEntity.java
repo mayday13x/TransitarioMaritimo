@@ -29,7 +29,7 @@ public class FaturaEntity {
     }
 
     @Basic
-    @Column(name = "id_estado_fatura", nullable = true)
+    @Column(name = "id_estado_fatura", nullable = true, insertable=false, updatable=false)
     public Integer getIdEstadoFatura() {
         return idEstadoFatura;
     }
@@ -59,7 +59,7 @@ public class FaturaEntity {
     }
 
     @Basic
-    @Column(name = "id_cotacao", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_cotacao", nullable = true, insertable=false, updatable=false)
     public Integer getIdCotacao() {
         return idCotacao;
     }
@@ -96,7 +96,7 @@ public class FaturaEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_estado_fatura", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "id_estado_fatura", referencedColumnName = "id")
     public EstadoFaturaEntity getEstadoFaturaByIdEstadoFatura() {
         return estadoFaturaByIdEstadoFatura;
     }

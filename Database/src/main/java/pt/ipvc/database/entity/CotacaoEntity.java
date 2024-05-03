@@ -17,6 +17,7 @@ public class CotacaoEntity {
     private EstadoCotacaoEntity estadoCotacaoByIdEstadoCotacao;
     private Collection<FaturaEntity> faturasById;
     private Collection<LinhaCotacaoEntity> linhaCotacaosById;
+    private Collection<ReservaEntity> reservasById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -30,7 +31,7 @@ public class CotacaoEntity {
     }
 
     @Basic
-    @Column(name = "id_cliente", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_cliente", nullable = true, insertable=false, updatable=false)
     public Integer getIdCliente() {
         return idCliente;
     }
@@ -40,7 +41,7 @@ public class CotacaoEntity {
     }
 
     @Basic
-    @Column(name = "id_estado_cotacao", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_estado_cotacao", nullable = true, insertable=false, updatable=false)
     public Integer getIdEstadoCotacao() {
         return idEstadoCotacao;
     }
@@ -132,5 +133,14 @@ public class CotacaoEntity {
 
     public void setLinhaCotacaosById(Collection<LinhaCotacaoEntity> linhaCotacaosById) {
         this.linhaCotacaosById = linhaCotacaosById;
+    }
+
+    @OneToMany(mappedBy = "cotacaoByIdCotacao")
+    public Collection<ReservaEntity> getReservasById() {
+        return reservasById;
+    }
+
+    public void setReservasById(Collection<ReservaEntity> reservasById) {
+        this.reservasById = reservasById;
     }
 }

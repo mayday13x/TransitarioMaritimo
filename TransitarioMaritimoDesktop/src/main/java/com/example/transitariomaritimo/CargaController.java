@@ -1,13 +1,11 @@
 package com.example.transitariomaritimo;
 
-import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,18 +13,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.CargaEntity;
-import pt.ipvc.database.entity.ClienteEntity;
-import pt.ipvc.database.repository.ArmazemRepository;
 import pt.ipvc.database.repository.CargaRepository;
-import pt.ipvc.database.repository.ClienteRepository;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class CargaController{
 

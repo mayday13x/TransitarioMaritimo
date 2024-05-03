@@ -59,7 +59,7 @@ public class FornecedorEntity {
     }
 
     @Basic
-    @Column(name = "id_cod_postal", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_cod_postal", nullable = true, insertable=false, updatable=false)
     public Integer getIdCodPostal() {
         return idCodPostal;
     }

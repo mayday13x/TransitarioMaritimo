@@ -1,6 +1,7 @@
 package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.sql.Date;
 import java.util.Collection;
@@ -15,10 +16,12 @@ public class ReservaEntity {
     private Date data;
     private String origem;
     private String destino;
+    private Integer idCotacao;
     private Collection<CargaEntity> cargasById;
     private FuncionarioEntity funcionarioByIdFuncionario;
     private ClienteEntity clienteByIdCliente;
     private EstadoReservaEntity estadoReservaByIdEstadoReserva;
+    private CotacaoEntity cotacaoByIdCotacao;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -27,12 +30,12 @@ public class ReservaEntity {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "id_funcionario", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_funcionario", nullable = true, insertable=false, updatable=false)
     public Integer getIdFuncionario() {
         return idFuncionario;
     }
@@ -42,7 +45,7 @@ public class ReservaEntity {
     }
 
     @Basic
-    @Column(name = "id_cliente", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_cliente", nullable = true, insertable=false, updatable=false)
     public Integer getIdCliente() {
         return idCliente;
     }
@@ -52,7 +55,7 @@ public class ReservaEntity {
     }
 
     @Basic
-    @Column(name = "id_estado_reserva", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_estado_reserva", nullable = true, insertable=false, updatable=false)
     public Integer getIdEstadoReserva() {
         return idEstadoReserva;
     }
@@ -91,6 +94,16 @@ public class ReservaEntity {
         this.destino = destino;
     }
 
+    @Basic
+    @Column(name = "id_cotacao", nullable = true, insertable=false, updatable=false)
+    public Integer getIdCotacao() {
+        return idCotacao;
+    }
+
+    public void setIdCotacao(Integer idCotacao) {
+        this.idCotacao = idCotacao;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -107,6 +120,7 @@ public class ReservaEntity {
         if (data != null ? !data.equals(that.data) : that.data != null) return false;
         if (origem != null ? !origem.equals(that.origem) : that.origem != null) return false;
         if (destino != null ? !destino.equals(that.destino) : that.destino != null) return false;
+        if (idCotacao != null ? !idCotacao.equals(that.idCotacao) : that.idCotacao != null) return false;
 
         return true;
     }
@@ -120,6 +134,7 @@ public class ReservaEntity {
         result = 31 * result + (data != null ? data.hashCode() : 0);
         result = 31 * result + (origem != null ? origem.hashCode() : 0);
         result = 31 * result + (destino != null ? destino.hashCode() : 0);
+        result = 31 * result + (idCotacao != null ? idCotacao.hashCode() : 0);
         return result;
     }
 
@@ -160,5 +175,15 @@ public class ReservaEntity {
 
     public void setEstadoReservaByIdEstadoReserva(EstadoReservaEntity estadoReservaByIdEstadoReserva) {
         this.estadoReservaByIdEstadoReserva = estadoReservaByIdEstadoReserva;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_cotacao", referencedColumnName = "id")
+    public CotacaoEntity getCotacaoByIdCotacao() {
+        return cotacaoByIdCotacao;
+    }
+
+    public void setCotacaoByIdCotacao(CotacaoEntity cotacaoByIdCotacao) {
+        this.cotacaoByIdCotacao = cotacaoByIdCotacao;
     }
 }

@@ -22,7 +22,7 @@ public class ServicoTransporteTEntity {
     }
 
     @Basic
-    @Column(name = "id_transporte_t", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_transporte_t", nullable = true, insertable=false, updatable=false)
     public Integer getIdTransporteT() {
         return idTransporteT;
     }

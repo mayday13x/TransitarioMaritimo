@@ -2,8 +2,6 @@ package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "carga", schema = "public", catalog = "transitario_maritimo")
 public class CargaEntity {
@@ -37,7 +35,7 @@ public class CargaEntity {
     }
 
     @Basic
-    @Column(name = "id_reserva", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_reserva", nullable = true, insertable=false, updatable=false)
     public Integer getIdReserva() {
         return idReserva;
     }
@@ -47,7 +45,7 @@ public class CargaEntity {
     }
 
     @Basic
-    @Column(name = "id_contentor", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_contentor", nullable = true, insertable=false, updatable=false)
     public Integer getIdContentor() {
         return idContentor;
     }
@@ -57,7 +55,7 @@ public class CargaEntity {
     }
 
     @Basic
-    @Column(name = "id_armazem", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_armazem", nullable = true, insertable=false, updatable=false)
     public Integer getIdArmazem() {
         return idArmazem;
     }
@@ -67,7 +65,7 @@ public class CargaEntity {
     }
 
     @Basic
-    @Column(name = "id_estado_carga", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_estado_carga", nullable = true, insertable=false, updatable=false)
     public Integer getIdEstadoCarga() {
         return idEstadoCarga;
     }
@@ -117,7 +115,7 @@ public class CargaEntity {
     }
 
     @Basic
-    @Column(name = "id_tipo_carga", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_tipo_carga", nullable = true, insertable=false, updatable=false)
     public Integer getIdTipoCarga() {
         return idTipoCarga;
     }
@@ -154,18 +152,18 @@ public class CargaEntity {
         CargaEntity that = (CargaEntity) o;
 
         if (id != that.id) return false;
-        if (!Objects.equals(idReserva, that.idReserva)) return false;
-        if (!Objects.equals(idContentor, that.idContentor)) return false;
-        if (!Objects.equals(idArmazem, that.idArmazem)) return false;
-        if (!Objects.equals(idEstadoCarga, that.idEstadoCarga))
+        if (idReserva != null ? !idReserva.equals(that.idReserva) : that.idReserva != null) return false;
+        if (idContentor != null ? !idContentor.equals(that.idContentor) : that.idContentor != null) return false;
+        if (idArmazem != null ? !idArmazem.equals(that.idArmazem) : that.idArmazem != null) return false;
+        if (idEstadoCarga != null ? !idEstadoCarga.equals(that.idEstadoCarga) : that.idEstadoCarga != null)
             return false;
-        if (!Objects.equals(nome, that.nome)) return false;
-        if (!Objects.equals(quantidade, that.quantidade)) return false;
-        if (!Objects.equals(volume, that.volume)) return false;
-        if (!Objects.equals(peso, that.peso)) return false;
-        if (!Objects.equals(idTipoCarga, that.idTipoCarga)) return false;
-        if (!Objects.equals(localAtual, that.localAtual)) return false;
-        if (!Objects.equals(observacoes, that.observacoes)) return false;
+        if (nome != null ? !nome.equals(that.nome) : that.nome != null) return false;
+        if (quantidade != null ? !quantidade.equals(that.quantidade) : that.quantidade != null) return false;
+        if (volume != null ? !volume.equals(that.volume) : that.volume != null) return false;
+        if (peso != null ? !peso.equals(that.peso) : that.peso != null) return false;
+        if (idTipoCarga != null ? !idTipoCarga.equals(that.idTipoCarga) : that.idTipoCarga != null) return false;
+        if (localAtual != null ? !localAtual.equals(that.localAtual) : that.localAtual != null) return false;
+        if (observacoes != null ? !observacoes.equals(that.observacoes) : that.observacoes != null) return false;
 
         return true;
     }

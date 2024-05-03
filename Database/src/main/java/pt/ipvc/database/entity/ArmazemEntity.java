@@ -3,22 +3,14 @@ package pt.ipvc.database.entity;
 import jakarta.persistence.*;
 
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 @Table(name = "armazem", schema = "public", catalog = "transitario_maritimo")
 public class ArmazemEntity {
     private Integer id;
     private Double capacidadeMax;
-    private Collection<CargaEntity> cargasById;
     private String descricao;
-
-    public ArmazemEntity(){}
-
-    public ArmazemEntity(Double capacidadeMax, String descricao){
-        this.capacidadeMax = capacidadeMax;
-        this.descricao = descricao;
-    }
+    private Collection<CargaEntity> cargasById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -32,17 +24,17 @@ public class ArmazemEntity {
     }
 
     @Basic
-    @Column(name = "capacidade_max", nullable = true, precision = 0)
+    @Column(name = "capacidade_max", nullable = false, precision = 0)
     public Double getCapacidadeMax() {
         return capacidadeMax;
     }
 
-    public void setCapacidadeMax(Double capacidadeMax) {
+    public void setCapacidadeMax(double capacidadeMax) {
         this.capacidadeMax = capacidadeMax;
     }
 
     @Basic
-    @Column(name = "descricao", nullable = true, precision = 0)
+    @Column(name = "descricao", nullable = true, length = -1)
     public String getDescricao() {
         return descricao;
     }
@@ -59,13 +51,19 @@ public class ArmazemEntity {
         ArmazemEntity that = (ArmazemEntity) o;
 
         if (id != that.id) return false;
-        return Objects.equals(capacidadeMax, that.capacidadeMax);
+        if (Double.compare(capacidadeMax, that.capacidadeMax) != 0) return false;
+        if (descricao != null ? !descricao.equals(that.descricao) : that.descricao != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (capacidadeMax != null ? capacidadeMax.hashCode() : 0);
+        int result;
+        long temp;
+        result = id;
+        temp = Double.doubleToLongBits(capacidadeMax);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (descricao != null ? descricao.hashCode() : 0);
         return result;
     }

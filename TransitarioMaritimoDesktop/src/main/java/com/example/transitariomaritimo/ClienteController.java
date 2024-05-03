@@ -14,7 +14,6 @@ import javafx.scene.Scene;
 
 import javafx.scene.control.*;
 
-import javafx.scene.effect.Effect;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

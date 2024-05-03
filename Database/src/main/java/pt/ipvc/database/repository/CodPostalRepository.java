@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.repository.query.Param;
 import pt.ipvc.database.entity.CodPostalEntity;
 
-import java.util.List;
-
 @Repository
 public interface CodPostalRepository extends JpaRepository<CodPostalEntity,Integer> {
 

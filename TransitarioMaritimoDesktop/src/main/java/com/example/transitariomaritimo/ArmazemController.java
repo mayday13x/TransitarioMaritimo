@@ -12,13 +12,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ArmazemEntity;
-import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.repository.ArmazemRepository;
-import pt.ipvc.database.repository.ClienteRepository;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.TextField;
 

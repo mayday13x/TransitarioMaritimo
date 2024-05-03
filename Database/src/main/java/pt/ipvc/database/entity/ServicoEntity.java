@@ -32,7 +32,7 @@ public class ServicoEntity {
     }
 
     @Basic
-    @Column(name = "id_fornecedor", nullable = true, insertable = false, updatable = false)
+    @Column(name = "id_fornecedor", nullable = true, insertable=false, updatable=false)
     public Integer getIdFornecedor() {
         return idFornecedor;
     }
