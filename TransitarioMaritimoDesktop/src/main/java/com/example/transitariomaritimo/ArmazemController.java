@@ -26,6 +26,7 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ArmazemController implements Initializable {
@@ -121,6 +122,10 @@ public class ArmazemController implements Initializable {
         ArmazemEntity novoArmazem = new ArmazemEntity();
         novoArmazem.setCapacidadeMax(Double.valueOf(CapacidadeMaximaText.getText()));
         novoArmazem.setDescricao(descricaoText.getText());
+
+        List<CargaEntity> cargaEntity = carga_repo.findByArmazemID(novoArmazem.getId());
+
+        novoArmazem.setCargasById(cargaEntity);
 
         armazem_repo.save(novoArmazem);
 
