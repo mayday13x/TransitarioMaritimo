@@ -48,6 +48,19 @@ public class LoginController implements Initializable {
         funcionario_repo = context.getBean(FuncionarioRepository.class);
     }
 
+    public void mudarPagina(ActionEvent event, String pagina) {
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(pagina)));
+            Scene regCena = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(regCena);
+            stage.setTitle("Menu");
+            stage.show();
+        } catch (IOException ex) {
+            System.out.println("Erro ao acessar " + pagina  + ex.getMessage());
+        }
+    }
+
 
     @FXML
     public void Login(ActionEvent event) {
@@ -91,16 +104,33 @@ public class LoginController implements Initializable {
 
             for(FuncionarioEntity funcionario : funcionario_repo.findAll()){
                 if(Objects.equals(utilizadorText.getText(), funcionario.getUtilizador()) && Objects.equals(passwordText.getText(), funcionario.getPassword())){
-                    try {
-                        Parent root = FXMLLoader.load(getClass().getResource("MenuView.fxml"));
-                        Scene regCena = new Scene(root);
-                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                        stage.setScene(regCena);
-                        stage.setTitle("Menu");
-                        stage.show();
-                    } catch (IOException ex) {
-                        System.out.println("Erro ao acessar menu: " + ex.getMessage());
+                    switch (funcionario.getIdTipoFuncionario()){
+                        case 1:
+                            mudarPagina(event, "MenuView.fxml");
+                            break;
+                        case 2:
+                            mudarPagina(event, "MenuView.fxml");
+                            break;
+                        case 3:
+                            mudarPagina(event, "MenuView.fxml");
+                            break;
+                        case 4:
+                            mudarPagina(event, "MenuView.fxml");
+                            break;
+                        case 5:
+                            mudarPagina(event, "MenuView.fxml");
+                            break;
+                        case 6:
+                            mudarPagina(event, "MenuView.fxml");
+                            break;
+                        case 7:
+                            mudarPagina(event, "MenuView.fxml");
+                            break;
+                        default:
+                            System.out.println("Tipo de funcinario incorreto!");
+                            break;
                     }
+
                 }else {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Campos Inválidos!");
