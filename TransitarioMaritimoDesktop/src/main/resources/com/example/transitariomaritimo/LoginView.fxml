@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -10,8 +11,9 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="639.0" prefWidth="820.0" stylesheets="@css/nord-dark.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.LoginController">
     <children>
-        <TextField layoutX="192.0" layoutY="339.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="258.0" promptText="Utilizador" />
-        <PasswordField layoutX="192.0" layoutY="411.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="34.0" prefWidth="258.0" promptText="Password" />
+      <ComboBox fx:id="tipoUtilizadorCombo" layoutX="190.0" layoutY="265.0" prefHeight="36.0" prefWidth="258.0" promptText="Tipo de Utilizador" />
+        <TextField fx:id="utilizadorText" layoutX="192.0" layoutY="339.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="258.0" promptText="Utilizador" />
+        <PasswordField fx:id="passwordText" layoutX="192.0" layoutY="411.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="34.0" prefWidth="258.0" promptText="Password" />
         <Button layoutX="234.0" layoutY="473.0" onAction="#Login" prefHeight="43.0" prefWidth="154.0" text="Login" />
       <Label layoutX="191.0" layoutY="310.0" text="Utilizador" />
       <Label layoutX="192.0" layoutY="391.0" text="Password" />
@@ -21,6 +23,7 @@
             <Image url="@../../../images/logo-color_1_-removebg-preview.png" />
          </image>
       </ImageView>
+      <Label layoutX="192.0" layoutY="245.0" text="Tipo de Utilizador" />
     </children>
 
 </AnchorPane>

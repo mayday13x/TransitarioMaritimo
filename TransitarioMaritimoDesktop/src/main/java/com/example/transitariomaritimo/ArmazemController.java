@@ -15,18 +15,29 @@ import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.ArmazemEntity;
+
+import pt.ipvc.database.entity.CargaEntity;
+import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.repository.ArmazemRepository;
+import pt.ipvc.database.repository.CargaRepository;
+import pt.ipvc.database.repository.ClienteRepository;
+
+import pt.ipvc.database.repository.ArmazemRepository;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ArmazemController implements Initializable {
 
     public AnnotationConfigApplicationContext context;
-    private ArmazemRepository repo;
+    private ArmazemRepository armazem_repo;
+
+    private CargaRepository carga_repo;
 
     @FXML
     private TextField CapacidadeMaximaText;
@@ -58,13 +69,14 @@ public class ArmazemController implements Initializable {
 
         context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        repo = context.getBean(ArmazemRepository.class);
-        ObservableList<ArmazemEntity> armazens = FXCollections.observableArrayList(repo.findAll());
+        armazem_repo = context.getBean(ArmazemRepository.class);
+        ObservableList<ArmazemEntity> armazens = FXCollections.observableArrayList(armazem_repo.findAll());
 
 
         Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
         Descricao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescricao()));
         Cap_max.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCapacidadeMax().toString()));
+
 
 
         table.setItems(armazens);
@@ -115,13 +127,16 @@ public class ArmazemController implements Initializable {
         novoArmazem.setCapacidadeMax(Double.valueOf(CapacidadeMaximaText.getText()));
         novoArmazem.setDescricao(descricaoText.getText());
 
-        repo.save(novoArmazem);
+        List<CargaEntity> cargas = carga_repo.findByArmazemID(novoArmazem.getId());
+        novoArmazem.setCargasById(cargas);
+
+        armazem_repo.save(novoArmazem);
 
 
         CapacidadeMaximaText.clear();
         descricaoText.clear();
 
-        ObservableList<ArmazemEntity> armazensAtualizados = FXCollections.observableArrayList(repo.findAll());
+        ObservableList<ArmazemEntity> armazensAtualizados = FXCollections.observableArrayList(armazem_repo.findAll());
         table.setItems(armazensAtualizados);
 
 
