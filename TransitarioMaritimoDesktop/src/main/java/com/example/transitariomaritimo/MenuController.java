@@ -22,6 +22,16 @@ public class MenuController implements Initializable {
     @FXML
     private AnchorPane menu_panel;
 
+    private int idCliente;
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
+    }
+
+    public int getIdCliente() {
+        return idCliente;
+    }
+
     public AnchorPane getMenu_panel() {
         return menu_panel;
     }
@@ -84,6 +94,24 @@ public class MenuController implements Initializable {
     }
 
     @FXML
+    public void ReservaCliente(ActionEvent event)  throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ReservaCliente.fxml"));
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            ReservasController reservasController = fxmlLoader.getController();
+            reservasController.setIdCliente(idCliente);
+            reservasController.ReservaCliente();
+            menu_panel.getChildren().clear();
+            menu_panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+
+    }
+
+    @FXML
     public void Armazem(ActionEvent event)  throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Armazem.fxml"));
@@ -126,6 +154,18 @@ public class MenuController implements Initializable {
     }
 
     public void Cotacao(ActionEvent event) throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CotacaoView.fxml"));
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            menu_panel.getChildren().clear();
+            menu_panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void CotacaoCliente(ActionEvent event) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CotacaoView.fxml"));
         try {

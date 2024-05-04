@@ -99,7 +99,10 @@ public class LoginController implements Initializable {
                     mensagem = false;
 
                     try {
-                        Parent root = FXMLLoader.load(getClass().getResource("MenuAdminView.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("MenuClienteView.fxml"));
+                        Parent root = loader.load();
+                        MenuController controller = loader.getController();
+                        controller.setIdCliente(cliente.getId());
                         Scene regCena = new Scene(root);
                         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                         stage.setScene(regCena);

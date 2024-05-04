@@ -81,25 +81,43 @@ public class ReservasController implements Initializable {
     @FXML
     private TableView<ReservaEntity> Table;
 
-
     @FXML
     private Pane PaneInserir;
 
     @FXML
     private Pane mainPanel;
 
+    private int idCliente = 0;
+
+    public void setIdCliente(int idCliente) {
+       this.idCliente = idCliente;
+    }
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         reserva_repo = context.getBean(ReservaRepository.class);
-        ObservableList<ReservaEntity> reserva = FXCollections.observableArrayList(reserva_repo.findAll());
+        System.out.println(idCliente);
 
-        Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
-        Data.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
-        Origem.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getOrigem()));
-        Destino.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDestino()));
-        Table.setItems(reserva);
+        if(idCliente != 0){
+            ObservableList<ReservaEntity> reserva = FXCollections.observableArrayList(reserva_repo.findByIdClienteLike(idCliente));
+            Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+            Data.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
+            Origem.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getOrigem()));
+            Destino.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDestino()));
+            Table.setItems(reserva);
+        }else {
+            ObservableList<ReservaEntity> reserva = FXCollections.observableArrayList(reserva_repo.findAll());
+            Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+            Data.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
+            Origem.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getOrigem()));
+            Destino.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDestino()));
+            Table.setItems(reserva);
+        }
+
+
 
         Table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -114,20 +132,88 @@ public class ReservasController implements Initializable {
             cliente_repo = context.getBean(ClienteRepository.class);
             funcionario_repo = context.getBean(FuncionarioRepository.class);
 
+
+            if(IdEstadoReservaCombo != null){
+                ObservableList<EstadoReservaEntity> estadosReserva = FXCollections.observableArrayList(reserva_estado_repo.findAll());
+                for(EstadoReservaEntity e : estadosReserva){
+                    IdEstadoReservaCombo.getItems().addAll(e.getDescricao());
+                }
+            }
+
+            if(IdClienteCombo != null){
+                ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(cliente_repo.findAll());
+                for(ClienteEntity c : clientes){
+                    IdClienteCombo.getItems().addAll(c.getId().toString());
+                }
+            }
+
+            if(IdFuncionarioCombo != null){
+                ObservableList<FuncionarioEntity> funcionarios = FXCollections.observableArrayList(funcionario_repo.findAll());
+                for(FuncionarioEntity f : funcionarios){
+                    IdFuncionarioCombo.getItems().addAll(f.getId().toString());
+                }
+            }
+
+    }
+
+    public void ReservaCliente() {
+        context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        reserva_repo = context.getBean(ReservaRepository.class);
+        System.out.println(idCliente);
+
+        if(idCliente != 0){
+            ObservableList<ReservaEntity> reserva = FXCollections.observableArrayList(reserva_repo.findByIdClienteLike(idCliente));
+
+            Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+            Data.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
+            Origem.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getOrigem()));
+            Destino.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDestino()));
+            Table.setItems(reserva);
+        }else {
+            ObservableList<ReservaEntity> reserva = FXCollections.observableArrayList(reserva_repo.findAll());
+
+            Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+            Data.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
+            Origem.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getOrigem()));
+            Destino.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDestino()));
+            Table.setItems(reserva);
+        }
+
+        Table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                IdCliente.setText(newValue.getIdCliente().toString());
+                IdEstadoReserva.setText(newValue.getEstadoReservaByIdEstadoReserva().getDescricao());
+                IdFuncionario.setText(newValue.getIdFuncionario().toString());
+            }
+        });
+
+        context = new AnnotationConfigApplicationContext(AppConfig.class);
+        reserva_estado_repo = context.getBean(EstadoReservaRepository.class);
+        cliente_repo = context.getBean(ClienteRepository.class);
+        funcionario_repo = context.getBean(FuncionarioRepository.class);
+
+
+        if(IdEstadoReservaCombo != null){
             ObservableList<EstadoReservaEntity> estadosReserva = FXCollections.observableArrayList(reserva_estado_repo.findAll());
             for(EstadoReservaEntity e : estadosReserva){
                 IdEstadoReservaCombo.getItems().addAll(e.getDescricao());
             }
+        }
 
+        if(IdClienteCombo != null){
             ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(cliente_repo.findAll());
             for(ClienteEntity c : clientes){
                 IdClienteCombo.getItems().addAll(c.getId().toString());
             }
+        }
 
+        if(IdFuncionarioCombo != null){
             ObservableList<FuncionarioEntity> funcionarios = FXCollections.observableArrayList(funcionario_repo.findAll());
             for(FuncionarioEntity f : funcionarios){
                 IdFuncionarioCombo.getItems().addAll(f.getId().toString());
             }
+        }
     }
 
     @FXML
