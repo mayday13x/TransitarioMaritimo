@@ -182,22 +182,28 @@ public class ContentorController implements Initializable {
                 System.out.println("Erro ao acessar meu" + ex.getMessage());
             }
 
-        }
-
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CargaContentor.fxml"));
 
-        try {
-            Pane cmdPane = fxmlLoader.load();
-            menu_Panel.getChildren().clear();
-            menu_Panel.getChildren().add(cmdPane);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+            try {
+                Pane cmdPane = fxmlLoader.load();
+                menu_Panel.getChildren().clear();
+                menu_Panel.getChildren().add(cmdPane);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
 
             CargaController cargaController = fxmlLoader.getController();
             cargaController.setContentorCin(contentorSelecionado.getCin());
             cargaController.cargaContentor();
 
+        }else {
+            // Exibe uma mensagem de erro se nenhum armazém estiver selecionado
+            //System.out.println("Selecione um armazém para visualizar as cargas.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setContentText("Selecione um armazém para visualizar as cargas.");
+            alert.showAndWait();
+        }
 
     }
 

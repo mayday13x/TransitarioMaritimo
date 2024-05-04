@@ -187,12 +187,28 @@ public class CargaController{
     @FXML
     public void VoltarAtrasArmazem(ActionEvent event) throws IOException {
 
-            Parent root = FXMLLoader.load(getClass().getResource("Armazem.fxml"));
-            Scene regCena = new Scene(root);
+        try {
+            FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuView.fxml")));
+            Parent rootMenu = loaderMenu.load();
+            MenuController menuController = loaderMenu.getController();
+            menu_panel = menuController.getMenu_panel();
+            Scene regCena = new Scene(rootMenu);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);
-            stage.setTitle("Armazem");
+            stage.setTitle("Menu");
             stage.show();
+        } catch (IOException ex) {
+            System.out.println("Erro ao acessar meu" + ex.getMessage());
+        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Armazem.fxml"));
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            menu_panel.getChildren().clear();
+            menu_panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
     }
 
@@ -290,6 +306,10 @@ public class CargaController{
             table.setItems(cargasAtualizadas);
         }
 
+        if(armazemId == novaCarga.getIdArmazem()) {
+            ObservableList<CargaEntity> cargasAtualizadas = FXCollections.observableArrayList(carga_repo.findAll());
+            table.setItems(cargasAtualizadas);
+        }
 
     }
 

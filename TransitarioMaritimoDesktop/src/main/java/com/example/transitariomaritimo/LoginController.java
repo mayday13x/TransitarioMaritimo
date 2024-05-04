@@ -135,22 +135,19 @@ public class LoginController implements Initializable {
                             mudarPagina(event, "MenuAdminView.fxml");
                             break;
                         case 2:
-                            mudarPagina(event, "MenuAdminView.fxml");
+                            mudarPagina(event, "MenuGestorComercialView.fxml");
                             break;
                         case 3:
-                            mudarPagina(event, "MenuAdminView.fxml");
+                            mudarPagina(event, "MenuGestorOperacionalView.fxml");
                             break;
                         case 4:
-                            mudarPagina(event, "MenuAdminView.fxml");
+                            mudarPagina(event, "MenuGestorLogisticoArmazemView.fxml");
                             break;
                         case 5:
-                            mudarPagina(event, "MenuAdminView.fxml");
+                            mudarPagina(event, "MenuFuncionarioArmazemView.fxml");
                             break;
                         case 6:
-                            mudarPagina(event, "MenuAdminView.fxml");
-                            break;
-                        case 7:
-                            mudarPagina(event, "MenuAdminView.fxml");
+                            mudarPagina(event, "MenuFuncionarioTransporteView.fxml");
                             break;
                         default:
                             System.out.println("Tipo de funcionario incorreto!");
@@ -189,22 +186,19 @@ public class LoginController implements Initializable {
                     mudarPagina(event, "MenuAdminView.fxml");
                     break;
                 case 2:
-                    mudarPagina(event, "MenuView.fxml");
+                    mudarPagina(event, "MenuGestorComercialView.fxml");
                     break;
                 case 3:
-                    mudarPagina(event, "MenuView.fxml");
+                    mudarPagina(event, "MenuGestorOperacionalView.fxml");
                     break;
                 case 4:
-                    mudarPagina(event, "MenuView.fxml");
+                    mudarPagina(event, "MenuGestorLogisticoArmazemView.fxml");
                     break;
                 case 5:
-                    mudarPagina(event, "MenuView.fxml");
+                    mudarPagina(event, "MenuFuncionarioArmazemView.fxml");
                     break;
                 case 6:
-                    mudarPagina(event, "MenuView.fxml");
-                    break;
-                case 7:
-                    mudarPagina(event, "MenuView.fxml");
+                    mudarPagina(event, "MenuFuncionarioTransporteView.fxml");
                     break;
                 default:
                     System.out.println("Tipo de funcionario incorreto!");
