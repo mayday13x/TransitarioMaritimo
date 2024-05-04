@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
@@ -31,6 +32,12 @@ public class LoginController implements Initializable {
     private FuncionarioRepository funcionario_repo;
 
     @FXML
+    private Pane PasswordPane;
+
+    @FXML
+    private Pane mainPane;
+
+    @FXML
     private ComboBox<String> tipoUtilizadorCombo;
 
     @FXML
@@ -39,7 +46,12 @@ public class LoginController implements Initializable {
     @FXML
     private PasswordField passwordText;
 
+    @FXML
+    private TextField NewPassword;
+
     private boolean mensagem = true;
+
+    FuncionarioEntity funcionarioAtual = new FuncionarioEntity();
 
 
 
@@ -103,7 +115,19 @@ public class LoginController implements Initializable {
 
 
             for(FuncionarioEntity funcionario : funcionario_repo.findAll()) {
-                if (Objects.equals(utilizadorText.getText(), funcionario.getUtilizador()) && Objects.equals(passwordText.getText(), funcionario.getPassword())) {
+
+                if (Objects.equals(utilizadorText.getText(), funcionario.getUtilizador()) && Objects.equals(passwordText.getText(), funcionario.getPassword())
+                        && Objects.equals(passwordText.getText(), "default")) {
+
+                    PasswordPane.setVisible(true);
+                    mainPane.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+                    mainPane.setDisable(true);
+                    mainPane.setVisible(false);
+
+                    funcionarioAtual = funcionario;
+
+
+                } else if (Objects.equals(utilizadorText.getText(), funcionario.getUtilizador()) && Objects.equals(passwordText.getText(), funcionario.getPassword())) {
                     mensagem = false;
 
                     switch (funcionario.getIdTipoFuncionario()) {
@@ -142,7 +166,64 @@ public class LoginController implements Initializable {
 
         alert.showAndWait();
         }
+
     }
 
+    @FXML
+    public void AlterarPassword(ActionEvent event) {
+
+        funcionarioAtual.setPassword(NewPassword.getText());
+
+        funcionario_repo.save(funcionarioAtual);
+
+        try {
+            funcionario_repo.save(funcionarioAtual);
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Sucesso!");
+            alert.setHeaderText("Registo editado com sucesso!");
+            alert.showAndWait();
+
+            switch (funcionarioAtual.getIdTipoFuncionario()) {
+                case 1:
+                    mudarPagina(event, "MenuAdminView.fxml");
+                    break;
+                case 2:
+                    mudarPagina(event, "MenuView.fxml");
+                    break;
+                case 3:
+                    mudarPagina(event, "MenuView.fxml");
+                    break;
+                case 4:
+                    mudarPagina(event, "MenuView.fxml");
+                    break;
+                case 5:
+                    mudarPagina(event, "MenuView.fxml");
+                    break;
+                case 6:
+                    mudarPagina(event, "MenuView.fxml");
+                    break;
+                case 7:
+                    mudarPagina(event, "MenuView.fxml");
+                    break;
+                default:
+                    System.out.println("Tipo de funcionario incorreto!");
+                    break;
+            }
+
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+
+        }
+    }
+
+    @FXML
+    public void  VoltarAtras(ActionEvent event) {
+        PasswordPane.setVisible(false);
+        mainPane.setEffect(null);
+        mainPane.setDisable(false);
+        mainPane.setVisible(true);
+    }
 
 }
