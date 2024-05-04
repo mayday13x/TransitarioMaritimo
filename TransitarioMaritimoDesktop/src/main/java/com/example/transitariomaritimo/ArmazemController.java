@@ -27,6 +27,7 @@ import javafx.scene.control.TextField;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ArmazemController implements Initializable {
@@ -60,6 +61,9 @@ public class ArmazemController implements Initializable {
 
     @FXML
     private Pane mainPanel;
+
+    @FXML
+    private Pane menu_Panel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -145,21 +149,37 @@ public class ArmazemController implements Initializable {
 
         if (armazemSelecionado != null) {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("CargaArmazem.fxml"));
+            try {
+                FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuView.fxml")));
+                Parent rootMenu = loaderMenu.load();
+                MenuController menuController = loaderMenu.getController();
+                menu_Panel = menuController.getMenu_panel();
+                Scene regCena = new Scene(rootMenu);
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(regCena);
+                stage.setTitle("Menu");
+                stage.show();
+            } catch (IOException ex) {
+                System.out.println("Erro ao acessar meu" + ex.getMessage());
+            }
 
-            Parent root = loader.load();
 
-            CargaController cargaController = loader.getController();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CargaArmazem.fxml"));
+
+            try {
+                Pane cmdPane = fxmlLoader.load();
+                menu_Panel.getChildren().clear();
+                menu_Panel.getChildren().add(cmdPane);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            CargaController cargaController = fxmlLoader.getController();
             cargaController.setArmazemId(armazemSelecionado.getId());
             cargaController.cargaArmazem();
 
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Cargas");
-            stage.show();
 
-        } else {
+        }else {
             // Exibe uma mensagem de erro se nenhum armazém estiver selecionado
             //System.out.println("Selecione um armazém para visualizar as cargas.");
             Alert alert = new Alert(Alert.AlertType.ERROR);
