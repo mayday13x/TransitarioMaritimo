@@ -11,6 +11,7 @@ public class ArmazemEntity {
     private Double capacidadeMax;
     private String descricao;
     private Collection<CargaEntity> cargasById;
+    private Collection<FuncionarioEntity> funcionariosById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -75,5 +76,14 @@ public class ArmazemEntity {
 
     public void setCargasById(Collection<CargaEntity> cargasById) {
         this.cargasById = cargasById;
+    }
+
+    @OneToMany(mappedBy = "armazemByIdArmazem")
+    public Collection<FuncionarioEntity> getFuncionariosById() {
+        return funcionariosById;
+    }
+
+    public void setFuncionariosById(Collection<FuncionarioEntity> funcionariosById) {
+        this.funcionariosById = funcionariosById;
     }
 }

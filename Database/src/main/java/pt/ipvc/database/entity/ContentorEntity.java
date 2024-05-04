@@ -13,9 +13,11 @@ public class ContentorEntity {
     private Double pesoMax;
     private String localAtual;
     private Integer tipoContentor;
+    private Integer idTransporteMaritimo;
     private Collection<CargaEntity> cargasByCin;
     private EstadoContentorEntity estadoContentorByIdEstadoContentor;
     private TipoContentorEntity tipoContentorByTipoContentor;
+    private TransportemaritimoEntity transportemaritimoByIdTransporteMaritimo;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -78,6 +80,16 @@ public class ContentorEntity {
         this.tipoContentor = tipoContentor;
     }
 
+    @Basic
+    @Column(name = "id_transporte_maritimo", nullable = true, insertable=false, updatable=false)
+    public Integer getIdTransporteMaritimo() {
+        return idTransporteMaritimo;
+    }
+
+    public void setIdTransporteMaritimo(Integer idTransporteMaritimo) {
+        this.idTransporteMaritimo = idTransporteMaritimo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -93,6 +105,8 @@ public class ContentorEntity {
         if (localAtual != null ? !localAtual.equals(that.localAtual) : that.localAtual != null) return false;
         if (tipoContentor != null ? !tipoContentor.equals(that.tipoContentor) : that.tipoContentor != null)
             return false;
+        if (idTransporteMaritimo != null ? !idTransporteMaritimo.equals(that.idTransporteMaritimo) : that.idTransporteMaritimo != null)
+            return false;
 
         return true;
     }
@@ -105,6 +119,7 @@ public class ContentorEntity {
         result = 31 * result + (pesoMax != null ? pesoMax.hashCode() : 0);
         result = 31 * result + (localAtual != null ? localAtual.hashCode() : 0);
         result = 31 * result + (tipoContentor != null ? tipoContentor.hashCode() : 0);
+        result = 31 * result + (idTransporteMaritimo != null ? idTransporteMaritimo.hashCode() : 0);
         return result;
     }
 
@@ -135,5 +150,15 @@ public class ContentorEntity {
 
     public void setTipoContentorByTipoContentor(TipoContentorEntity tipoContentorByTipoContentor) {
         this.tipoContentorByTipoContentor = tipoContentorByTipoContentor;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_transporte_maritimo", referencedColumnName = "id")
+    public TransportemaritimoEntity getTransportemaritimoByIdTransporteMaritimo() {
+        return transportemaritimoByIdTransporteMaritimo;
+    }
+
+    public void setTransportemaritimoByIdTransporteMaritimo(TransportemaritimoEntity transportemaritimoByIdTransporteMaritimo) {
+        this.transportemaritimoByIdTransporteMaritimo = transportemaritimoByIdTransporteMaritimo;
     }
 }

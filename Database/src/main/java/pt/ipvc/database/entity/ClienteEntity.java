@@ -1,6 +1,7 @@
 package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.util.Collection;
 
@@ -17,7 +18,9 @@ public class ClienteEntity {
     private String email;
     private String utilizador;
     private String password;
+    private Integer idFuncionario;
     private CodPostalEntity codPostalByIdCodPostal;
+    private FuncionarioEntity funcionarioByIdFuncionario;
     private Collection<CotacaoEntity> cotacaosById;
     private Collection<ReservaEntity> reservasById;
 
@@ -122,6 +125,16 @@ public class ClienteEntity {
         this.password = password;
     }
 
+    @Basic
+    @Column(name = "id_funcionario", nullable = true, insertable=false, updatable=false)
+    public Integer getIdFuncionario() {
+        return idFuncionario;
+    }
+
+    public void setIdFuncionario(Integer idFuncionario) {
+        this.idFuncionario = idFuncionario;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -139,6 +152,8 @@ public class ClienteEntity {
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (utilizador != null ? !utilizador.equals(that.utilizador) : that.utilizador != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (idFuncionario != null ? !idFuncionario.equals(that.idFuncionario) : that.idFuncionario != null)
+            return false;
 
         return true;
     }
@@ -155,6 +170,7 @@ public class ClienteEntity {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (utilizador != null ? utilizador.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (idFuncionario != null ? idFuncionario.hashCode() : 0);
         return result;
     }
 
@@ -166,6 +182,16 @@ public class ClienteEntity {
 
     public void setCodPostalByIdCodPostal(CodPostalEntity codPostalByIdCodPostal) {
         this.codPostalByIdCodPostal = codPostalByIdCodPostal;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_funcionario", referencedColumnName = "id")
+    public FuncionarioEntity getFuncionarioByIdFuncionario() {
+        return funcionarioByIdFuncionario;
+    }
+
+    public void setFuncionarioByIdFuncionario(FuncionarioEntity funcionarioByIdFuncionario) {
+        this.funcionarioByIdFuncionario = funcionarioByIdFuncionario;
     }
 
     @OneToMany(mappedBy = "clienteByIdCliente")

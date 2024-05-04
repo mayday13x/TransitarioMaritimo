@@ -7,7 +7,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "funcionario", schema = "public", catalog = "transitario_maritimo")
 public class FuncionarioEntity {
-    private int id;
+    private Integer id;
     private String nome;
     private Integer nif;
     private String rua;
@@ -18,9 +18,13 @@ public class FuncionarioEntity {
     private Integer idTipoFuncionario;
     private String utilizador;
     private String password;
+    private Integer idArmazem;
+    private Collection<ClienteEntity> clientesById;
     private CodPostalEntity codPostalByIdCodPostal;
     private TipoFuncionarioEntity tipoFuncionarioByIdTipoFuncionario;
+    private ArmazemEntity armazemByIdArmazem;
     private Collection<ReservaEntity> reservasById;
+    private Collection<TransportemaritimoEntity> transportemaritimosById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -133,6 +137,16 @@ public class FuncionarioEntity {
         this.password = password;
     }
 
+    @Basic
+    @Column(name = "id_armazem", nullable = true, insertable=false, updatable=false)
+    public Integer getIdArmazem() {
+        return idArmazem;
+    }
+
+    public void setIdArmazem(Integer idArmazem) {
+        this.idArmazem = idArmazem;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -152,6 +166,7 @@ public class FuncionarioEntity {
             return false;
         if (utilizador != null ? !utilizador.equals(that.utilizador) : that.utilizador != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (idArmazem != null ? !idArmazem.equals(that.idArmazem) : that.idArmazem != null) return false;
 
         return true;
     }
@@ -169,7 +184,17 @@ public class FuncionarioEntity {
         result = 31 * result + (idTipoFuncionario != null ? idTipoFuncionario.hashCode() : 0);
         result = 31 * result + (utilizador != null ? utilizador.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (idArmazem != null ? idArmazem.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "funcionarioByIdFuncionario")
+    public Collection<ClienteEntity> getClientesById() {
+        return clientesById;
+    }
+
+    public void setClientesById(Collection<ClienteEntity> clientesById) {
+        this.clientesById = clientesById;
     }
 
     @ManyToOne
@@ -192,6 +217,16 @@ public class FuncionarioEntity {
         this.tipoFuncionarioByIdTipoFuncionario = tipoFuncionarioByIdTipoFuncionario;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "id_armazem", referencedColumnName = "id")
+    public ArmazemEntity getArmazemByIdArmazem() {
+        return armazemByIdArmazem;
+    }
+
+    public void setArmazemByIdArmazem(ArmazemEntity armazemByIdArmazem) {
+        this.armazemByIdArmazem = armazemByIdArmazem;
+    }
+
     @OneToMany(mappedBy = "funcionarioByIdFuncionario")
     public Collection<ReservaEntity> getReservasById() {
         return reservasById;
@@ -199,5 +234,14 @@ public class FuncionarioEntity {
 
     public void setReservasById(Collection<ReservaEntity> reservasById) {
         this.reservasById = reservasById;
+    }
+
+    @OneToMany(mappedBy = "funcionarioByIdFuncionario")
+    public Collection<TransportemaritimoEntity> getTransportemaritimosById() {
+        return transportemaritimosById;
+    }
+
+    public void setTransportemaritimosById(Collection<TransportemaritimoEntity> transportemaritimosById) {
+        this.transportemaritimosById = transportemaritimosById;
     }
 }

@@ -11,8 +11,6 @@ public class ServicoEntity {
     private Double preco;
     private String descricao;
     private FornecedorEntity fornecedorByIdFornecedor;
-    private ServicoTranporteMEntity servicoTranporteMById;
-    private ServicoTransporteTEntity servicoTransporteTById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -99,23 +97,5 @@ public class ServicoEntity {
 
     public void setFornecedorByIdFornecedor(FornecedorEntity fornecedorByIdFornecedor) {
         this.fornecedorByIdFornecedor = fornecedorByIdFornecedor;
-    }
-
-    @OneToOne(mappedBy = "servicoByIdServico")
-    public ServicoTranporteMEntity getServicoTranporteMById() {
-        return servicoTranporteMById;
-    }
-
-    public void setServicoTranporteMById(ServicoTranporteMEntity servicoTranporteMById) {
-        this.servicoTranporteMById = servicoTranporteMById;
-    }
-
-    @OneToOne(mappedBy = "servicoByIdServico")
-    public ServicoTransporteTEntity getServicoTransporteTById() {
-        return servicoTransporteTById;
-    }
-
-    public void setServicoTransporteTById(ServicoTransporteTEntity servicoTransporteTById) {
-        this.servicoTransporteTById = servicoTransporteTById;
     }
 }

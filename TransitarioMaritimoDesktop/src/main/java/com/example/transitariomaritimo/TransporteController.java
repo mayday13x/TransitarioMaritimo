@@ -1,4 +1,4 @@
-package com.example.transitariomaritimo;
+/*package com.example.transitariomaritimo;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -8,13 +8,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.TransportemaritimoEntity;
-import pt.ipvc.database.entity.TransporteterrestreEntity;
 import pt.ipvc.database.repository.TransportemaritimoRepository;
-import pt.ipvc.database.repository.TransporteterrestreRepository;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -113,4 +110,4 @@ public class TransporteController implements Initializable {
         });
 
     }
-}
+}*/

@@ -16,11 +16,13 @@ public class ReservaEntity {
     private String origem;
     private String destino;
     private Integer idCotacao;
+    private Integer idTransporteMaritimo;
     private Collection<CargaEntity> cargasById;
     private FuncionarioEntity funcionarioByIdFuncionario;
     private ClienteEntity clienteByIdCliente;
     private EstadoReservaEntity estadoReservaByIdEstadoReserva;
     private CotacaoEntity cotacaoByIdCotacao;
+    private TransportemaritimoEntity transportemaritimoByIdTransporteMaritimo;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -103,6 +105,16 @@ public class ReservaEntity {
         this.idCotacao = idCotacao;
     }
 
+    @Basic
+    @Column(name = "id_transporte_maritimo", nullable = true, insertable=false, updatable=false)
+    public Integer getIdTransporteMaritimo() {
+        return idTransporteMaritimo;
+    }
+
+    public void setIdTransporteMaritimo(Integer idTransporteMaritimo) {
+        this.idTransporteMaritimo = idTransporteMaritimo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -120,6 +132,8 @@ public class ReservaEntity {
         if (origem != null ? !origem.equals(that.origem) : that.origem != null) return false;
         if (destino != null ? !destino.equals(that.destino) : that.destino != null) return false;
         if (idCotacao != null ? !idCotacao.equals(that.idCotacao) : that.idCotacao != null) return false;
+        if (idTransporteMaritimo != null ? !idTransporteMaritimo.equals(that.idTransporteMaritimo) : that.idTransporteMaritimo != null)
+            return false;
 
         return true;
     }
@@ -134,6 +148,7 @@ public class ReservaEntity {
         result = 31 * result + (origem != null ? origem.hashCode() : 0);
         result = 31 * result + (destino != null ? destino.hashCode() : 0);
         result = 31 * result + (idCotacao != null ? idCotacao.hashCode() : 0);
+        result = 31 * result + (idTransporteMaritimo != null ? idTransporteMaritimo.hashCode() : 0);
         return result;
     }
 
@@ -184,5 +199,15 @@ public class ReservaEntity {
 
     public void setCotacaoByIdCotacao(CotacaoEntity cotacaoByIdCotacao) {
         this.cotacaoByIdCotacao = cotacaoByIdCotacao;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_transporte_maritimo", referencedColumnName = "id")
+    public TransportemaritimoEntity getTransportemaritimoByIdTransporteMaritimo() {
+        return transportemaritimoByIdTransporteMaritimo;
+    }
+
+    public void setTransportemaritimoByIdTransporteMaritimo(TransportemaritimoEntity transportemaritimoByIdTransporteMaritimo) {
+        this.transportemaritimoByIdTransporteMaritimo = transportemaritimoByIdTransporteMaritimo;
     }
 }
