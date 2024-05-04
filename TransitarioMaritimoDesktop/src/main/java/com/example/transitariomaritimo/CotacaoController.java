@@ -41,7 +41,7 @@ public class CotacaoController {
     private Button guardarButton;
 
     @FXML
-    private Pane mainPanel;
+    private Pane mainPane;
 
     @FXML
     private TableView<CotacaoEntity> table_cotacoes;
@@ -54,8 +54,8 @@ public class CotacaoController {
     @FXML
     void InserirCotacao(ActionEvent event) {
         CriarPane.setVisible(true);
-        mainPanel.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
-        mainPanel.setDisable(true);
+        mainPane.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        mainPane.setDisable(true);
     }
 
     @FXML
@@ -66,8 +66,8 @@ public class CotacaoController {
     @FXML
     void VoltarAtrasInserirCliente(ActionEvent event) {
         CriarPane.setVisible(false);
-        mainPanel.setEffect(null);
-        mainPanel.setDisable(false);
+        mainPane.setEffect(null);
+        mainPane.setDisable(false);
     }
 
 }

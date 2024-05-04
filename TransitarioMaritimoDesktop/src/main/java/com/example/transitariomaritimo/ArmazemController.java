@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
@@ -160,7 +161,11 @@ public class ArmazemController implements Initializable {
 
         } else {
             // Exibe uma mensagem de erro se nenhum armazém estiver selecionado
-            System.out.println("Selecione um armazém para visualizar as cargas.");
+            //System.out.println("Selecione um armazém para visualizar as cargas.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setContentText("Selecione um armazém para visualizar as cargas.");
+            alert.showAndWait();
         }
     }
 
