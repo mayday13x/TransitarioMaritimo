@@ -19,7 +19,7 @@ public class TransportemaritimoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -58,7 +58,7 @@ public class TransportemaritimoEntity {
     }
 
     @Basic
-    @Column(name = "id_funcionario", nullable = true)
+    @Column(name = "id_funcionario", nullable = true, insertable=false, updatable=false)
     public Integer getIdFuncionario() {
         return idFuncionario;
     }

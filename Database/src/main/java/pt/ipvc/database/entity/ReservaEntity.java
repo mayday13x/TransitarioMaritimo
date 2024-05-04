@@ -8,7 +8,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "reserva", schema = "public", catalog = "transitario_maritimo")
 public class ReservaEntity {
-    private int id;
+    private Integer id;
     private Integer idFuncionario;
     private Integer idCliente;
     private Integer idEstadoReserva;
@@ -27,7 +27,7 @@ public class ReservaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -36,7 +36,7 @@ public class ReservaEntity {
     }
 
     @Basic
-    @Column(name = "id_funcionario", nullable = true)
+    @Column(name = "id_funcionario", nullable = true, insertable=false, updatable=false)
     public Integer getIdFuncionario() {
         return idFuncionario;
     }
@@ -46,7 +46,7 @@ public class ReservaEntity {
     }
 
     @Basic
-    @Column(name = "id_cliente", nullable = true)
+    @Column(name = "id_cliente", nullable = true, insertable=false, updatable=false)
     public Integer getIdCliente() {
         return idCliente;
     }
@@ -56,7 +56,7 @@ public class ReservaEntity {
     }
 
     @Basic
-    @Column(name = "id_estado_reserva", nullable = true)
+    @Column(name = "id_estado_reserva", nullable = true, insertable=false, updatable=false)
     public Integer getIdEstadoReserva() {
         return idEstadoReserva;
     }
@@ -96,7 +96,7 @@ public class ReservaEntity {
     }
 
     @Basic
-    @Column(name = "id_cotacao", nullable = true)
+    @Column(name = "id_cotacao", nullable = true, insertable=false, updatable=false)
     public Integer getIdCotacao() {
         return idCotacao;
     }
@@ -106,7 +106,7 @@ public class ReservaEntity {
     }
 
     @Basic
-    @Column(name = "id_transporte_maritimo", nullable = true)
+    @Column(name = "id_transporte_maritimo", nullable = true, insertable=false, updatable=false)
     public Integer getIdTransporteMaritimo() {
         return idTransporteMaritimo;
     }

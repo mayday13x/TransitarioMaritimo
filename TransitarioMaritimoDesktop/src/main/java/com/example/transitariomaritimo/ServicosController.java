@@ -9,11 +9,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import pt.ipvc.database.entity.ClienteEntity;
-import pt.ipvc.database.entity.CodPostalEntity;
 import pt.ipvc.database.entity.FornecedorEntity;
 import pt.ipvc.database.entity.ServicoEntity;
-import pt.ipvc.database.repository.ClienteRepository;
 import pt.ipvc.database.repository.FornecedorRepository;
 import pt.ipvc.database.repository.ServicoRepository;
 

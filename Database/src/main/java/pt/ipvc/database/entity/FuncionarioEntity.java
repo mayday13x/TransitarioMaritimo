@@ -2,23 +2,40 @@ package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Collection;
+
 @Entity
-@jakarta.persistence.Table(name = "funcionario", schema = "public", catalog = "transitario_maritimo")
+@Table(name = "funcionario", schema = "public", catalog = "transitario_maritimo")
 public class FuncionarioEntity {
-    private int id;
+    private Integer id;
+    private String nome;
+    private Integer nif;
+    private String rua;
+    private Integer porta;
+    private Integer idCodPostal;
+    private String telefone;
+    private String email;
+    private Integer idTipoFuncionario;
+    private String utilizador;
+    private String password;
+    private Integer idArmazem;
+    private Collection<ClienteEntity> clientesById;
+    private CodPostalEntity codPostalByIdCodPostal;
+    private TipoFuncionarioEntity tipoFuncionarioByIdTipoFuncionario;
+    private ArmazemEntity armazemByIdArmazem;
+    private Collection<ReservaEntity> reservasById;
+    private Collection<TransportemaritimoEntity> transportemaritimosById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "id", nullable = false)
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
     }
-
-    private String nome;
 
     @Basic
     @Column(name = "nome", nullable = true, length = 255)
@@ -30,8 +47,6 @@ public class FuncionarioEntity {
         this.nome = nome;
     }
 
-    private Integer nif;
-
     @Basic
     @Column(name = "nif", nullable = true)
     public Integer getNif() {
@@ -41,8 +56,6 @@ public class FuncionarioEntity {
     public void setNif(Integer nif) {
         this.nif = nif;
     }
-
-    private String rua;
 
     @Basic
     @Column(name = "rua", nullable = true, length = 255)
@@ -54,8 +67,6 @@ public class FuncionarioEntity {
         this.rua = rua;
     }
 
-    private Integer porta;
-
     @Basic
     @Column(name = "porta", nullable = true)
     public Integer getPorta() {
@@ -66,10 +77,8 @@ public class FuncionarioEntity {
         this.porta = porta;
     }
 
-    private Integer idCodPostal;
-
     @Basic
-    @Column(name = "id_cod_postal", nullable = true)
+    @Column(name = "id_cod_postal", nullable = true, insertable=false, updatable=false)
     public Integer getIdCodPostal() {
         return idCodPostal;
     }
@@ -77,8 +86,6 @@ public class FuncionarioEntity {
     public void setIdCodPostal(Integer idCodPostal) {
         this.idCodPostal = idCodPostal;
     }
-
-    private String telefone;
 
     @Basic
     @Column(name = "telefone", nullable = true, length = 20)
@@ -90,8 +97,6 @@ public class FuncionarioEntity {
         this.telefone = telefone;
     }
 
-    private String email;
-
     @Basic
     @Column(name = "email", nullable = true, length = 255)
     public String getEmail() {
@@ -102,10 +107,8 @@ public class FuncionarioEntity {
         this.email = email;
     }
 
-    private Integer idTipoFuncionario;
-
     @Basic
-    @Column(name = "id_tipo_funcionario", nullable = true)
+    @Column(name = "id_tipo_funcionario", nullable = true, insertable=false, updatable=false)
     public Integer getIdTipoFuncionario() {
         return idTipoFuncionario;
     }
@@ -113,8 +116,6 @@ public class FuncionarioEntity {
     public void setIdTipoFuncionario(Integer idTipoFuncionario) {
         this.idTipoFuncionario = idTipoFuncionario;
     }
-
-    private String utilizador;
 
     @Basic
     @Column(name = "utilizador", nullable = false, length = 50)
@@ -126,8 +127,6 @@ public class FuncionarioEntity {
         this.utilizador = utilizador;
     }
 
-    private String password;
-
     @Basic
     @Column(name = "password", nullable = false, length = 50)
     public String getPassword() {
@@ -138,10 +137,8 @@ public class FuncionarioEntity {
         this.password = password;
     }
 
-    private Integer idArmazem;
-
     @Basic
-    @Column(name = "id_armazem", nullable = true)
+    @Column(name = "id_armazem", nullable = true, insertable=false, updatable=false)
     public Integer getIdArmazem() {
         return idArmazem;
     }
@@ -189,5 +186,62 @@ public class FuncionarioEntity {
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (idArmazem != null ? idArmazem.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "funcionarioByIdFuncionario")
+    public Collection<ClienteEntity> getClientesById() {
+        return clientesById;
+    }
+
+    public void setClientesById(Collection<ClienteEntity> clientesById) {
+        this.clientesById = clientesById;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_cod_postal", referencedColumnName = "id_cod_postal")
+    public CodPostalEntity getCodPostalByIdCodPostal() {
+        return codPostalByIdCodPostal;
+    }
+
+    public void setCodPostalByIdCodPostal(CodPostalEntity codPostalByIdCodPostal) {
+        this.codPostalByIdCodPostal = codPostalByIdCodPostal;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_tipo_funcionario", referencedColumnName = "id")
+    public TipoFuncionarioEntity getTipoFuncionarioByIdTipoFuncionario() {
+        return tipoFuncionarioByIdTipoFuncionario;
+    }
+
+    public void setTipoFuncionarioByIdTipoFuncionario(TipoFuncionarioEntity tipoFuncionarioByIdTipoFuncionario) {
+        this.tipoFuncionarioByIdTipoFuncionario = tipoFuncionarioByIdTipoFuncionario;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_armazem", referencedColumnName = "id")
+    public ArmazemEntity getArmazemByIdArmazem() {
+        return armazemByIdArmazem;
+    }
+
+    public void setArmazemByIdArmazem(ArmazemEntity armazemByIdArmazem) {
+        this.armazemByIdArmazem = armazemByIdArmazem;
+    }
+
+    @OneToMany(mappedBy = "funcionarioByIdFuncionario")
+    public Collection<ReservaEntity> getReservasById() {
+        return reservasById;
+    }
+
+    public void setReservasById(Collection<ReservaEntity> reservasById) {
+        this.reservasById = reservasById;
+    }
+
+    @OneToMany(mappedBy = "funcionarioByIdFuncionario")
+    public Collection<TransportemaritimoEntity> getTransportemaritimosById() {
+        return transportemaritimosById;
+    }
+
+    public void setTransportemaritimosById(Collection<TransportemaritimoEntity> transportemaritimosById) {
+        this.transportemaritimosById = transportemaritimosById;
     }
 }

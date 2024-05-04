@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pt.ipvc.database.entity.ArmazemEntity;
-import pt.ipvc.database.entity.TipoCargaEntity;
 
 @Repository
 public interface ArmazemRepository extends JpaRepository<ArmazemEntity,Integer> {

@@ -5,14 +5,20 @@ import jakarta.persistence.*;
 import java.sql.Date;
 
 @Entity
-@jakarta.persistence.Table(name = "linha_cotacao", schema = "public", catalog = "transitario_maritimo")
-@IdClass(pt.ipvc.database.entity.LinhaCotacaoEntityPK.class)
+@Table(name = "linha_cotacao", schema = "public", catalog = "transitario_maritimo")
+@IdClass(LinhaCotacaoEntityPK.class)
 public class LinhaCotacaoEntity {
     private int idCotacao;
+    private int idServico;
+    private Date dataPrevInicio;
+    private Date dataPrevFim;
+    private Date dataInicio;
+    private Date dataFim;
+    private CotacaoEntity cotacaoByIdCotacao;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "id_cotacao", nullable = false)
+    @Column(name = "id_cotacao", nullable = false)
     public int getIdCotacao() {
         return idCotacao;
     }
@@ -21,11 +27,9 @@ public class LinhaCotacaoEntity {
         this.idCotacao = idCotacao;
     }
 
-    private int idServico;
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "id_servico", nullable = false)
+    @Column(name = "id_servico", nullable = false)
     public int getIdServico() {
         return idServico;
     }
@@ -33,8 +37,6 @@ public class LinhaCotacaoEntity {
     public void setIdServico(int idServico) {
         this.idServico = idServico;
     }
-
-    private Date dataPrevInicio;
 
     @Basic
     @Column(name = "data_prev_inicio", nullable = true)
@@ -46,8 +48,6 @@ public class LinhaCotacaoEntity {
         this.dataPrevInicio = dataPrevInicio;
     }
 
-    private Date dataPrevFim;
-
     @Basic
     @Column(name = "data_prev_fim", nullable = true)
     public Date getDataPrevFim() {
@@ -58,8 +58,6 @@ public class LinhaCotacaoEntity {
         this.dataPrevFim = dataPrevFim;
     }
 
-    private Date dataInicio;
-
     @Basic
     @Column(name = "data_inicio", nullable = true)
     public Date getDataInicio() {
@@ -69,8 +67,6 @@ public class LinhaCotacaoEntity {
     public void setDataInicio(Date dataInicio) {
         this.dataInicio = dataInicio;
     }
-
-    private Date dataFim;
 
     @Basic
     @Column(name = "data_fim", nullable = true)
@@ -109,5 +105,15 @@ public class LinhaCotacaoEntity {
         result = 31 * result + (dataInicio != null ? dataInicio.hashCode() : 0);
         result = 31 * result + (dataFim != null ? dataFim.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_cotacao", referencedColumnName = "id", nullable = false)
+    public CotacaoEntity getCotacaoByIdCotacao() {
+        return cotacaoByIdCotacao;
+    }
+
+    public void setCotacaoByIdCotacao(CotacaoEntity cotacaoByIdCotacao) {
+        this.cotacaoByIdCotacao = cotacaoByIdCotacao;
     }
 }

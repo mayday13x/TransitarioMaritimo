@@ -2,14 +2,20 @@ package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Collection;
+
 @Entity
-@jakarta.persistence.Table(name = "cod_postal", schema = "public", catalog = "transitario_maritimo")
+@Table(name = "cod_postal", schema = "public", catalog = "transitario_maritimo")
 public class CodPostalEntity {
     private int idCodPostal;
+    private String localidade;
+    private Collection<ClienteEntity> clientesByIdCodPostal;
+    private Collection<FornecedorEntity> fornecedorsByIdCodPostal;
+    private Collection<FuncionarioEntity> funcionariosByIdCodPostal;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "id_cod_postal", nullable = false)
+    @Column(name = "id_cod_postal", nullable = false)
     public int getIdCodPostal() {
         return idCodPostal;
     }
@@ -17,8 +23,6 @@ public class CodPostalEntity {
     public void setIdCodPostal(int idCodPostal) {
         this.idCodPostal = idCodPostal;
     }
-
-    private String localidade;
 
     @Basic
     @Column(name = "localidade", nullable = true, length = 255)
@@ -48,5 +52,32 @@ public class CodPostalEntity {
         int result = idCodPostal;
         result = 31 * result + (localidade != null ? localidade.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "codPostalByIdCodPostal")
+    public Collection<ClienteEntity> getClientesByIdCodPostal() {
+        return clientesByIdCodPostal;
+    }
+
+    public void setClientesByIdCodPostal(Collection<ClienteEntity> clientesByIdCodPostal) {
+        this.clientesByIdCodPostal = clientesByIdCodPostal;
+    }
+
+    @OneToMany(mappedBy = "codPostalByIdCodPostal")
+    public Collection<FornecedorEntity> getFornecedorsByIdCodPostal() {
+        return fornecedorsByIdCodPostal;
+    }
+
+    public void setFornecedorsByIdCodPostal(Collection<FornecedorEntity> fornecedorsByIdCodPostal) {
+        this.fornecedorsByIdCodPostal = fornecedorsByIdCodPostal;
+    }
+
+    @OneToMany(mappedBy = "codPostalByIdCodPostal")
+    public Collection<FuncionarioEntity> getFuncionariosByIdCodPostal() {
+        return funcionariosByIdCodPostal;
+    }
+
+    public void setFuncionariosByIdCodPostal(Collection<FuncionarioEntity> funcionariosByIdCodPostal) {
+        this.funcionariosByIdCodPostal = funcionariosByIdCodPostal;
     }
 }

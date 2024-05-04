@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "servico", schema = "public", catalog = "transitario_maritimo")
 public class ServicoEntity {
-    private int id;
+    private Integer id;
     private Integer idFornecedor;
     private Double comissao;
     private Double preco;
@@ -15,7 +15,7 @@ public class ServicoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -24,7 +24,7 @@ public class ServicoEntity {
     }
 
     @Basic
-    @Column(name = "id_fornecedor", nullable = true)
+    @Column(name = "id_fornecedor", nullable = true, insertable=false, updatable=false)
     public Integer getIdFornecedor() {
         return idFornecedor;
     }

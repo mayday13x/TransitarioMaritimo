@@ -2,15 +2,21 @@ package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Collection;
+
 @Entity
-@jakarta.persistence.Table(name = "armazem", schema = "public", catalog = "transitario_maritimo")
+@Table(name = "armazem", schema = "public", catalog = "transitario_maritimo")
 public class ArmazemEntity {
-    private int id;
+    private Integer id;
+    private Double capacidadeMax;
+    private String descricao;
+    private Collection<CargaEntity> cargasById;
+    private Collection<FuncionarioEntity> funcionariosById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "id", nullable = false)
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
@@ -18,19 +24,15 @@ public class ArmazemEntity {
         this.id = id;
     }
 
-    private double capacidadeMax;
-
     @Basic
     @Column(name = "capacidade_max", nullable = false, precision = 0)
-    public double getCapacidadeMax() {
+    public Double getCapacidadeMax() {
         return capacidadeMax;
     }
 
     public void setCapacidadeMax(double capacidadeMax) {
         this.capacidadeMax = capacidadeMax;
     }
-
-    private String descricao;
 
     @Basic
     @Column(name = "descricao", nullable = true, length = -1)
@@ -65,5 +67,23 @@ public class ArmazemEntity {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (descricao != null ? descricao.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "armazemByIdArmazem")
+    public Collection<CargaEntity> getCargasById() {
+        return cargasById;
+    }
+
+    public void setCargasById(Collection<CargaEntity> cargasById) {
+        this.cargasById = cargasById;
+    }
+
+    @OneToMany(mappedBy = "armazemByIdArmazem")
+    public Collection<FuncionarioEntity> getFuncionariosById() {
+        return funcionariosById;
+    }
+
+    public void setFuncionariosById(Collection<FuncionarioEntity> funcionariosById) {
+        this.funcionariosById = funcionariosById;
     }
 }

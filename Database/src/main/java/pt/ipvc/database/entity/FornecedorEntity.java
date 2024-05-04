@@ -2,23 +2,31 @@ package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Collection;
+
 @Entity
-@jakarta.persistence.Table(name = "fornecedor", schema = "public", catalog = "transitario_maritimo")
+@Table(name = "fornecedor", schema = "public", catalog = "transitario_maritimo")
 public class FornecedorEntity {
-    private int id;
+    private Integer id;
+    private String nome;
+    private String rua;
+    private Integer porta;
+    private Integer idCodPostal;
+    private Integer nif;
+    private String telefone;
+    private CodPostalEntity codPostalByIdCodPostal;
+    private Collection<ServicoEntity> servicosById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "id", nullable = false)
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
     }
-
-    private String nome;
 
     @Basic
     @Column(name = "nome", nullable = true, length = 255)
@@ -30,8 +38,6 @@ public class FornecedorEntity {
         this.nome = nome;
     }
 
-    private String rua;
-
     @Basic
     @Column(name = "rua", nullable = true, length = 255)
     public String getRua() {
@@ -41,8 +47,6 @@ public class FornecedorEntity {
     public void setRua(String rua) {
         this.rua = rua;
     }
-
-    private Integer porta;
 
     @Basic
     @Column(name = "porta", nullable = true)
@@ -54,10 +58,8 @@ public class FornecedorEntity {
         this.porta = porta;
     }
 
-    private Integer idCodPostal;
-
     @Basic
-    @Column(name = "id_cod_postal", nullable = true)
+    @Column(name = "id_cod_postal", nullable = true, insertable=false, updatable=false)
     public Integer getIdCodPostal() {
         return idCodPostal;
     }
@@ -65,8 +67,6 @@ public class FornecedorEntity {
     public void setIdCodPostal(Integer idCodPostal) {
         this.idCodPostal = idCodPostal;
     }
-
-    private Integer nif;
 
     @Basic
     @Column(name = "nif", nullable = true)
@@ -77,8 +77,6 @@ public class FornecedorEntity {
     public void setNif(Integer nif) {
         this.nif = nif;
     }
-
-    private String telefone;
 
     @Basic
     @Column(name = "telefone", nullable = true, length = 20)
@@ -118,5 +116,24 @@ public class FornecedorEntity {
         result = 31 * result + (nif != null ? nif.hashCode() : 0);
         result = 31 * result + (telefone != null ? telefone.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_cod_postal", referencedColumnName = "id_cod_postal")
+    public CodPostalEntity getCodPostalByIdCodPostal() {
+        return codPostalByIdCodPostal;
+    }
+
+    public void setCodPostalByIdCodPostal(CodPostalEntity codPostalByIdCodPostal) {
+        this.codPostalByIdCodPostal = codPostalByIdCodPostal;
+    }
+
+    @OneToMany(mappedBy = "fornecedorByIdFornecedor")
+    public Collection<ServicoEntity> getServicosById() {
+        return servicosById;
+    }
+
+    public void setServicosById(Collection<ServicoEntity> servicosById) {
+        this.servicosById = servicosById;
     }
 }

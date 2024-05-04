@@ -3,13 +3,31 @@ package pt.ipvc.database.entity;
 import jakarta.persistence.*;
 
 @Entity
-@jakarta.persistence.Table(name = "carga", schema = "public", catalog = "transitario_maritimo")
+@Table(name = "carga", schema = "public", catalog = "transitario_maritimo")
 public class CargaEntity {
     private int id;
+    private Integer idReserva;
+    private Integer idContentor;
+    private Integer idArmazem;
+    private Integer idEstadoCarga;
+    private String nome;
+    private Integer quantidade;
+    private Double volume;
+    private Double peso;
+    private Integer idTipoCarga;
+    private String localAtual;
+    private String observacoes;
+    private Integer idCotacao;
+    private ReservaEntity reservaByIdReserva;
+    private ContentorEntity contentorByIdContentor;
+    private ArmazemEntity armazemByIdArmazem;
+    private EstadoCargaEntity estadoCargaByIdEstadoCarga;
+    private TipoCargaEntity tipoCargaByIdTipoCarga;
+    private CotacaoEntity cotacaoByIdCotacao;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false)
     public int getId() {
         return id;
     }
@@ -18,10 +36,8 @@ public class CargaEntity {
         this.id = id;
     }
 
-    private Integer idReserva;
-
     @Basic
-    @Column(name = "id_reserva", nullable = true)
+    @Column(name = "id_reserva", nullable = true, insertable=false, updatable=false)
     public Integer getIdReserva() {
         return idReserva;
     }
@@ -30,10 +46,8 @@ public class CargaEntity {
         this.idReserva = idReserva;
     }
 
-    private Integer idContentor;
-
     @Basic
-    @Column(name = "id_contentor", nullable = true)
+    @Column(name = "id_contentor", nullable = true, insertable=false, updatable=false)
     public Integer getIdContentor() {
         return idContentor;
     }
@@ -42,10 +56,8 @@ public class CargaEntity {
         this.idContentor = idContentor;
     }
 
-    private Integer idArmazem;
-
     @Basic
-    @Column(name = "id_armazem", nullable = true)
+    @Column(name = "id_armazem", nullable = true, insertable=false, updatable=false)
     public Integer getIdArmazem() {
         return idArmazem;
     }
@@ -54,10 +66,8 @@ public class CargaEntity {
         this.idArmazem = idArmazem;
     }
 
-    private Integer idEstadoCarga;
-
     @Basic
-    @Column(name = "id_estado_carga", nullable = true)
+    @Column(name = "id_estado_carga", nullable = true, insertable=false, updatable=false)
     public Integer getIdEstadoCarga() {
         return idEstadoCarga;
     }
@@ -65,8 +75,6 @@ public class CargaEntity {
     public void setIdEstadoCarga(Integer idEstadoCarga) {
         this.idEstadoCarga = idEstadoCarga;
     }
-
-    private String nome;
 
     @Basic
     @Column(name = "nome", nullable = true, length = 255)
@@ -78,8 +86,6 @@ public class CargaEntity {
         this.nome = nome;
     }
 
-    private Integer quantidade;
-
     @Basic
     @Column(name = "quantidade", nullable = true)
     public Integer getQuantidade() {
@@ -89,8 +95,6 @@ public class CargaEntity {
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
-
-    private Double volume;
 
     @Basic
     @Column(name = "volume", nullable = true, precision = 0)
@@ -102,8 +106,6 @@ public class CargaEntity {
         this.volume = volume;
     }
 
-    private Double peso;
-
     @Basic
     @Column(name = "peso", nullable = true, precision = 0)
     public Double getPeso() {
@@ -114,10 +116,8 @@ public class CargaEntity {
         this.peso = peso;
     }
 
-    private Integer idTipoCarga;
-
     @Basic
-    @Column(name = "id_tipo_carga", nullable = true)
+    @Column(name = "id_tipo_carga", nullable = true, insertable=false, updatable=false)
     public Integer getIdTipoCarga() {
         return idTipoCarga;
     }
@@ -125,8 +125,6 @@ public class CargaEntity {
     public void setIdTipoCarga(Integer idTipoCarga) {
         this.idTipoCarga = idTipoCarga;
     }
-
-    private String localAtual;
 
     @Basic
     @Column(name = "local_atual", nullable = true, length = 255)
@@ -138,8 +136,6 @@ public class CargaEntity {
         this.localAtual = localAtual;
     }
 
-    private String observacoes;
-
     @Basic
     @Column(name = "observacoes", nullable = true, length = -1)
     public String getObservacoes() {
@@ -150,10 +146,8 @@ public class CargaEntity {
         this.observacoes = observacoes;
     }
 
-    private Integer idCotacao;
-
     @Basic
-    @Column(name = "id_cotacao", nullable = true)
+    @Column(name = "id_cotacao", nullable = true, insertable=false, updatable=false)
     public Integer getIdCotacao() {
         return idCotacao;
     }
@@ -203,5 +197,65 @@ public class CargaEntity {
         result = 31 * result + (observacoes != null ? observacoes.hashCode() : 0);
         result = 31 * result + (idCotacao != null ? idCotacao.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_reserva", referencedColumnName = "id")
+    public ReservaEntity getReservaByIdReserva() {
+        return reservaByIdReserva;
+    }
+
+    public void setReservaByIdReserva(ReservaEntity reservaByIdReserva) {
+        this.reservaByIdReserva = reservaByIdReserva;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_contentor", referencedColumnName = "cin")
+    public ContentorEntity getContentorByIdContentor() {
+        return contentorByIdContentor;
+    }
+
+    public void setContentorByIdContentor(ContentorEntity contentorByIdContentor) {
+        this.contentorByIdContentor = contentorByIdContentor;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_armazem", referencedColumnName = "id")
+    public ArmazemEntity getArmazemByIdArmazem() {
+        return armazemByIdArmazem;
+    }
+
+    public void setArmazemByIdArmazem(ArmazemEntity armazemByIdArmazem) {
+        this.armazemByIdArmazem = armazemByIdArmazem;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_estado_carga", referencedColumnName = "id")
+    public EstadoCargaEntity getEstadoCargaByIdEstadoCarga() {
+        return estadoCargaByIdEstadoCarga;
+    }
+
+    public void setEstadoCargaByIdEstadoCarga(EstadoCargaEntity estadoCargaByIdEstadoCarga) {
+        this.estadoCargaByIdEstadoCarga = estadoCargaByIdEstadoCarga;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_tipo_carga", referencedColumnName = "id")
+    public TipoCargaEntity getTipoCargaByIdTipoCarga() {
+        return tipoCargaByIdTipoCarga;
+    }
+
+    public void setTipoCargaByIdTipoCarga(TipoCargaEntity tipoCargaByIdTipoCarga) {
+        this.tipoCargaByIdTipoCarga = tipoCargaByIdTipoCarga;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_cotacao", referencedColumnName = "id")
+    public CotacaoEntity getCotacaoByIdCotacao() {
+        return cotacaoByIdCotacao;
+    }
+
+    public void setCotacaoByIdCotacao(CotacaoEntity cotacaoByIdCotacao) {
+        this.cotacaoByIdCotacao = cotacaoByIdCotacao;
     }
 }

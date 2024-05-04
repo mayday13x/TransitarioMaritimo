@@ -1,24 +1,39 @@
 package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+
+import java.util.Collection;
 
 @Entity
-@jakarta.persistence.Table(name = "cliente", schema = "public", catalog = "transitario_maritimo")
+@Table(name = "cliente", schema = "public", catalog = "transitario_maritimo")
 public class ClienteEntity {
-    private int id;
+    private Integer id;
+    private String nome;
+    private Integer nif;
+    private String rua;
+    private Integer porta;
+    private Integer idCodPostal;
+    private String telefone;
+    private String email;
+    private String utilizador;
+    private String password;
+    private Integer idFuncionario;
+    private CodPostalEntity codPostalByIdCodPostal;
+    private FuncionarioEntity funcionarioByIdFuncionario;
+    private Collection<CotacaoEntity> cotacaosById;
+    private Collection<ReservaEntity> reservasById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "id", nullable = false)
-    public int getId() {
+    @Column(name = "id", nullable = false)
+    public Integer getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
     }
-
-    private String nome;
 
     @Basic
     @Column(name = "nome", nullable = false, length = 255)
@@ -30,19 +45,15 @@ public class ClienteEntity {
         this.nome = nome;
     }
 
-    private int nif;
-
     @Basic
     @Column(name = "nif", nullable = false)
-    public int getNif() {
+    public Integer getNif() {
         return nif;
     }
 
     public void setNif(int nif) {
         this.nif = nif;
     }
-
-    private String rua;
 
     @Basic
     @Column(name = "rua", nullable = false, length = 255)
@@ -54,11 +65,9 @@ public class ClienteEntity {
         this.rua = rua;
     }
 
-    private int porta;
-
     @Basic
     @Column(name = "porta", nullable = false)
-    public int getPorta() {
+    public Integer getPorta() {
         return porta;
     }
 
@@ -66,19 +75,15 @@ public class ClienteEntity {
         this.porta = porta;
     }
 
-    private int idCodPostal;
-
     @Basic
-    @Column(name = "id_cod_postal", nullable = false)
-    public int getIdCodPostal() {
+    @Column(name = "id_cod_postal", nullable = false, insertable=false, updatable=false)
+    public Integer getIdCodPostal() {
         return idCodPostal;
     }
 
     public void setIdCodPostal(int idCodPostal) {
         this.idCodPostal = idCodPostal;
     }
-
-    private String telefone;
 
     @Basic
     @Column(name = "telefone", nullable = false, length = 20)
@@ -90,8 +95,6 @@ public class ClienteEntity {
         this.telefone = telefone;
     }
 
-    private String email;
-
     @Basic
     @Column(name = "email", nullable = true, length = 255)
     public String getEmail() {
@@ -101,8 +104,6 @@ public class ClienteEntity {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    private String utilizador;
 
     @Basic
     @Column(name = "utilizador", nullable = false, length = 50)
@@ -114,8 +115,6 @@ public class ClienteEntity {
         this.utilizador = utilizador;
     }
 
-    private String password;
-
     @Basic
     @Column(name = "password", nullable = false, length = 50)
     public String getPassword() {
@@ -126,10 +125,8 @@ public class ClienteEntity {
         this.password = password;
     }
 
-    private Integer idFuncionario;
-
     @Basic
-    @Column(name = "id_funcionario", nullable = true)
+    @Column(name = "id_funcionario", nullable = true, insertable=false, updatable=false)
     public Integer getIdFuncionario() {
         return idFuncionario;
     }
@@ -175,5 +172,43 @@ public class ClienteEntity {
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (idFuncionario != null ? idFuncionario.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_cod_postal", referencedColumnName = "id_cod_postal", nullable = false)
+    public CodPostalEntity getCodPostalByIdCodPostal() {
+        return codPostalByIdCodPostal;
+    }
+
+    public void setCodPostalByIdCodPostal(CodPostalEntity codPostalByIdCodPostal) {
+        this.codPostalByIdCodPostal = codPostalByIdCodPostal;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_funcionario", referencedColumnName = "id")
+    public FuncionarioEntity getFuncionarioByIdFuncionario() {
+        return funcionarioByIdFuncionario;
+    }
+
+    public void setFuncionarioByIdFuncionario(FuncionarioEntity funcionarioByIdFuncionario) {
+        this.funcionarioByIdFuncionario = funcionarioByIdFuncionario;
+    }
+
+    @OneToMany(mappedBy = "clienteByIdCliente")
+    public Collection<CotacaoEntity> getCotacaosById() {
+        return cotacaosById;
+    }
+
+    public void setCotacaosById(Collection<CotacaoEntity> cotacaosById) {
+        this.cotacaosById = cotacaosById;
+    }
+
+    @OneToMany(mappedBy = "clienteByIdCliente")
+    public Collection<ReservaEntity> getReservasById() {
+        return reservasById;
+    }
+
+    public void setReservasById(Collection<ReservaEntity> reservasById) {
+        this.reservasById = reservasById;
     }
 }
