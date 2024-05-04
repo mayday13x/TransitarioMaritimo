@@ -17,12 +17,11 @@
          <children>
             <TableView fx:id="table" layoutX="6.0" layoutY="56.0" prefHeight="431.0" prefWidth="808.0">
                <columns>
-                  <TableColumn fx:id="Id" prefWidth="63.20001220703125" text="Id" />
-                  <TableColumn fx:id="Nome" prefWidth="131.19998168945312" text="Descricao" />
-                  <TableColumn fx:id="Nif" minWidth="0.0" prefWidth="126.4000244140625" text="Fornecedor" />
-                  <TableColumn fx:id="Localidade" maxWidth="288.0" prefWidth="139.20001220703125" text="Comissão" />
-                  <TableColumn fx:id="Telefone" maxWidth="288.0" prefWidth="169.5999755859375" text="Preço" />
-                  <TableColumn fx:id="Email" maxWidth="288.0" prefWidth="203.20001220703125" text="Email" />
+                  <TableColumn fx:id="Id" prefWidth="82.39999389648438" text="Id" />
+                  <TableColumn fx:id="Descricao" prefWidth="236.0" text="Descricao" />
+                  <TableColumn fx:id="Fornecedor" minWidth="0.0" prefWidth="185.5999755859375" text="Fornecedor" />
+                  <TableColumn fx:id="Comissao" maxWidth="320.0" prefWidth="139.20001220703125" text="Comissão" />
+                  <TableColumn fx:id="Preco" maxWidth="343.20001220703125" prefWidth="164.00006103515625" text="Preço" />
                </columns>
             </TableView>
             <Label layoutX="377.0" layoutY="6.0" text="Serviços">
@@ -30,38 +29,37 @@
                   <Font size="23.0" />
                </font>
             </Label>
-            <Button defaultButton="true" layoutX="21.0" layoutY="532.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="109.0" text="Criar Serviço" />
+            <Button defaultButton="true" layoutX="21.0" layoutY="532.0" mnemonicParsing="false" onAction="#showInserirServico" prefHeight="42.0" prefWidth="109.0" text="Criar Serviço" />
             <Button fx:id="deleteButton" layoutX="150.0" layoutY="532.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="117.0" text="Excluir Serviço" />
             <Button fx:id="editButton" layoutX="287.0" layoutY="532.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="117.0" text="Editar Serviço" />
          </children>
       </Pane>
-      <Pane fx:id="Pane" layoutX="109.0" layoutY="105.0" prefHeight="438.0" prefWidth="557.0" style="-fx-background-color: #FFFFFF;" visible="false">
+      <Pane fx:id="Pane" layoutX="109.0" layoutY="105.0" prefHeight="317.0" prefWidth="558.0" style="-fx-background-color: #FFFFFF;" visible="false">
          <children>
-            <Button layoutX="476.0" layoutY="18.0" mnemonicParsing="false" onAction="#VoltarAtrasInserirCliente" text="X">
+            <Button layoutX="476.0" layoutY="18.0" mnemonicParsing="false" onAction="#Voltar" text="X">
                <font>
                   <Font name="Century Gothic" size="12.0" />
                </font>
             </Button>
-            <Label layoutX="194.0" layoutY="14.0" text="Inserir Cliente">
+            <Label layoutX="194.0" layoutY="14.0" text="Inserir Serviço">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <TextField fx:id="NomeText" layoutX="57.0" layoutY="94.0" prefHeight="36.0" prefWidth="201.0" />
-            <TextField fx:id="NifText" layoutX="295.0" layoutY="94.0" prefHeight="36.0" prefWidth="213.0" />
-            <TextField fx:id="RuaText" layoutX="57.0" layoutY="170.0" prefHeight="36.0" prefWidth="201.0" />
-            <TextField fx:id="PortaText" layoutX="295.0" layoutY="170.0" prefHeight="36.0" prefWidth="213.0" />
-            <Label layoutX="57.0" layoutY="69.0" text="Nome" />
-            <Label layoutX="295.0" layoutY="69.0" text="NIF" />
-            <Label layoutX="57.0" layoutY="145.0" text="Rua" />
-            <Label layoutX="295.0" layoutY="146.0" text="Porta" />
-            <Label layoutX="58.0" layoutY="216.0" text="Localidade" />
-            <Label layoutX="295.0" layoutY="216.0" text="Email" />
-            <Label layoutX="58.0" layoutY="289.0" text="Telefone" />
-            <ComboBox fx:id="CodPostalCombo" layoutX="57.0" layoutY="236.0" prefHeight="36.0" prefWidth="201.0" />
-            <TextField fx:id="EmailText" layoutX="295.0" layoutY="236.0" prefHeight="36.0" prefWidth="213.0" />
-            <TextField fx:id="TelefoneText" layoutX="57.0" layoutY="309.0" prefHeight="36.0" prefWidth="201.0" />
-            <Button defaultButton="true" layoutX="224.0" layoutY="376.0" mnemonicParsing="false" onAction="#RegistarCliente" text="Inserir Cliente" />
+            <TextField fx:id="DescServico" layoutX="57.0" layoutY="94.0" prefHeight="36.0" prefWidth="201.0" />
+            <TextField fx:id="ComissServic" layoutX="57.0" layoutY="170.0" prefHeight="36.0" prefWidth="201.0" />
+            <TextField fx:id="PrecoServico" layoutX="306.0" layoutY="94.0" prefHeight="36.0" prefWidth="179.0" />
+            <Label layoutX="57.0" layoutY="69.0" text="Descrição" />
+            <Label layoutX="306.0" layoutY="69.0" text="Preço" />
+            <Label layoutX="57.0" layoutY="145.0" text="Comissão" />
+            <Label layoutX="306.0" layoutY="145.0" text="Fornecedor" />
+            <ComboBox fx:id="FornecedorCombo" layoutX="306.0" layoutY="170.0" prefHeight="36.0" prefWidth="201.0" />
+            <Button defaultButton="true" layoutX="224.0" layoutY="258.0" mnemonicParsing="false" onAction="#RegistarServico" text="Inserir Serviço" />
+            <Label layoutX="489.0" layoutY="99.0" text="€">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
          </children>
          <effect>
             <DropShadow />
