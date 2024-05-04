@@ -17,11 +17,13 @@ public class CargaEntity {
     private Integer idTipoCarga;
     private String localAtual;
     private String observacoes;
+    private Integer idCotacao;
     private ReservaEntity reservaByIdReserva;
     private ContentorEntity contentorByIdContentor;
     private ArmazemEntity armazemByIdArmazem;
     private EstadoCargaEntity estadoCargaByIdEstadoCarga;
     private TipoCargaEntity tipoCargaByIdTipoCarga;
+    private CotacaoEntity cotacaoByIdCotacao;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -144,6 +146,16 @@ public class CargaEntity {
         this.observacoes = observacoes;
     }
 
+    @Basic
+    @Column(name = "id_cotacao", nullable = true, insertable=false, updatable=false)
+    public Integer getIdCotacao() {
+        return idCotacao;
+    }
+
+    public void setIdCotacao(Integer idCotacao) {
+        this.idCotacao = idCotacao;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -164,6 +176,7 @@ public class CargaEntity {
         if (idTipoCarga != null ? !idTipoCarga.equals(that.idTipoCarga) : that.idTipoCarga != null) return false;
         if (localAtual != null ? !localAtual.equals(that.localAtual) : that.localAtual != null) return false;
         if (observacoes != null ? !observacoes.equals(that.observacoes) : that.observacoes != null) return false;
+        if (idCotacao != null ? !idCotacao.equals(that.idCotacao) : that.idCotacao != null) return false;
 
         return true;
     }
@@ -182,6 +195,7 @@ public class CargaEntity {
         result = 31 * result + (idTipoCarga != null ? idTipoCarga.hashCode() : 0);
         result = 31 * result + (localAtual != null ? localAtual.hashCode() : 0);
         result = 31 * result + (observacoes != null ? observacoes.hashCode() : 0);
+        result = 31 * result + (idCotacao != null ? idCotacao.hashCode() : 0);
         return result;
     }
 
@@ -233,5 +247,15 @@ public class CargaEntity {
 
     public void setTipoCargaByIdTipoCarga(TipoCargaEntity tipoCargaByIdTipoCarga) {
         this.tipoCargaByIdTipoCarga = tipoCargaByIdTipoCarga;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_cotacao", referencedColumnName = "id")
+    public CotacaoEntity getCotacaoByIdCotacao() {
+        return cotacaoByIdCotacao;
+    }
+
+    public void setCotacaoByIdCotacao(CotacaoEntity cotacaoByIdCotacao) {
+        this.cotacaoByIdCotacao = cotacaoByIdCotacao;
     }
 }

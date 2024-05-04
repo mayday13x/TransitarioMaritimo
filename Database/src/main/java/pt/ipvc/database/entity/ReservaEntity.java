@@ -1,7 +1,6 @@
 package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.sql.Date;
 import java.util.Collection;

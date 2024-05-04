@@ -2,8 +2,6 @@ package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
 
-import java.sql.Date;
-
 @Entity
 @Table(name = "servico", schema = "public", catalog = "transitario_maritimo")
 public class ServicoEntity {
@@ -12,10 +10,6 @@ public class ServicoEntity {
     private Double comissao;
     private Double preco;
     private String descricao;
-    private Date dataPrevInicio;
-    private Date dataPrevFim;
-    private Date dataInicio;
-    private Date dataFim;
     private FornecedorEntity fornecedorByIdFornecedor;
     private ServicoTranporteMEntity servicoTranporteMById;
     private ServicoTransporteTEntity servicoTransporteTById;
@@ -71,46 +65,6 @@ public class ServicoEntity {
         this.descricao = descricao;
     }
 
-    @Basic
-    @Column(name = "data_prev_inicio", nullable = true)
-    public Date getDataPrevInicio() {
-        return dataPrevInicio;
-    }
-
-    public void setDataPrevInicio(Date dataPrevInicio) {
-        this.dataPrevInicio = dataPrevInicio;
-    }
-
-    @Basic
-    @Column(name = "data_prev_fim", nullable = true)
-    public Date getDataPrevFim() {
-        return dataPrevFim;
-    }
-
-    public void setDataPrevFim(Date dataPrevFim) {
-        this.dataPrevFim = dataPrevFim;
-    }
-
-    @Basic
-    @Column(name = "data_inicio", nullable = true)
-    public Date getDataInicio() {
-        return dataInicio;
-    }
-
-    public void setDataInicio(Date dataInicio) {
-        this.dataInicio = dataInicio;
-    }
-
-    @Basic
-    @Column(name = "data_fim", nullable = true)
-    public Date getDataFim() {
-        return dataFim;
-    }
-
-    public void setDataFim(Date dataFim) {
-        this.dataFim = dataFim;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -123,11 +77,6 @@ public class ServicoEntity {
         if (comissao != null ? !comissao.equals(that.comissao) : that.comissao != null) return false;
         if (preco != null ? !preco.equals(that.preco) : that.preco != null) return false;
         if (descricao != null ? !descricao.equals(that.descricao) : that.descricao != null) return false;
-        if (dataPrevInicio != null ? !dataPrevInicio.equals(that.dataPrevInicio) : that.dataPrevInicio != null)
-            return false;
-        if (dataPrevFim != null ? !dataPrevFim.equals(that.dataPrevFim) : that.dataPrevFim != null) return false;
-        if (dataInicio != null ? !dataInicio.equals(that.dataInicio) : that.dataInicio != null) return false;
-        if (dataFim != null ? !dataFim.equals(that.dataFim) : that.dataFim != null) return false;
 
         return true;
     }
@@ -139,10 +88,6 @@ public class ServicoEntity {
         result = 31 * result + (comissao != null ? comissao.hashCode() : 0);
         result = 31 * result + (preco != null ? preco.hashCode() : 0);
         result = 31 * result + (descricao != null ? descricao.hashCode() : 0);
-        result = 31 * result + (dataPrevInicio != null ? dataPrevInicio.hashCode() : 0);
-        result = 31 * result + (dataPrevFim != null ? dataPrevFim.hashCode() : 0);
-        result = 31 * result + (dataInicio != null ? dataInicio.hashCode() : 0);
-        result = 31 * result + (dataFim != null ? dataFim.hashCode() : 0);
         return result;
     }
 

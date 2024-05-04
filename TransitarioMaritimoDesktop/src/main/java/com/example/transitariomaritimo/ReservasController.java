@@ -134,7 +134,7 @@ public class ReservasController implements Initializable {
     public void VoltarAtras(ActionEvent event) {
 
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("MenuView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("MenuAdminView.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);

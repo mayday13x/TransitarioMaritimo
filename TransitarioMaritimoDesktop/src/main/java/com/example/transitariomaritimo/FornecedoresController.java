@@ -11,14 +11,11 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.entity.CodPostalEntity;
 import pt.ipvc.database.entity.FornecedorEntity;
-import pt.ipvc.database.repository.ClienteRepository;
 import pt.ipvc.database.repository.CodPostalRepository;
 import pt.ipvc.database.repository.FornecedorRepository;
 
-import java.lang.invoke.VolatileCallSite;
 import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;

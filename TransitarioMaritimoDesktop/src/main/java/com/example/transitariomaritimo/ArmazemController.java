@@ -14,15 +14,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import pt.ipvc.database.entity.ArmazemEntity;
 
+import pt.ipvc.database.entity.ArmazemEntity;
 import pt.ipvc.database.entity.CargaEntity;
-import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.repository.ArmazemRepository;
 import pt.ipvc.database.repository.CargaRepository;
-import pt.ipvc.database.repository.ClienteRepository;
-
-import pt.ipvc.database.repository.ArmazemRepository;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.control.TextField;
@@ -89,7 +85,7 @@ public class ArmazemController implements Initializable {
     public void VoltarAtras(ActionEvent event) {
 
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("MenuView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("MenuAdminView.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);

@@ -8,32 +8,33 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import pt.ipvc.database.entity.ServicoEntity;
 
 public class ServicosController {
 
     @FXML
-    private ComboBox<?> CodPostalCombo;
+    private ComboBox<String> CodPostalCombo;
 
     @FXML
-    private TableColumn<?, ?> Email;
+    private TableColumn<ServicoEntity, String> Email;
 
     @FXML
     private TextField EmailText;
 
     @FXML
-    private TableColumn<?, ?> Id;
+    private TableColumn<ServicoEntity, String> Id;
 
     @FXML
-    private TableColumn<?, ?> Localidade;
+    private TableColumn<ServicoEntity, String> Localidade;
 
     @FXML
-    private TableColumn<?, ?> Nif;
+    private TableColumn<ServicoEntity, String> Nif;
 
     @FXML
     private TextField NifText;
 
     @FXML
-    private TableColumn<?, ?> Nome;
+    private TableColumn<ServicoEntity, String> Nome;
 
     @FXML
     private TextField NomeText;
@@ -48,7 +49,7 @@ public class ServicosController {
     private TextField RuaText;
 
     @FXML
-    private TableColumn<?, ?> Telefone;
+    private TableColumn<ServicoEntity, String> Telefone;
 
     @FXML
     private TextField TelefoneText;
@@ -63,30 +64,30 @@ public class ServicosController {
     private Pane mainPanel;
 
     @FXML
-    private TableView<?> table;
+    private TableView<ServicoEntity> table;
 
     @FXML
-    void EditarCliente(ActionEvent event) {
+    void EditarServico(ActionEvent event) {
 
     }
 
     @FXML
-    void ExcluirCliente(ActionEvent event) {
+    void ExcluirServico(ActionEvent event) {
 
     }
 
     @FXML
-    void InserirCliente(ActionEvent event) {
+    void ShowInserirServico(ActionEvent event) {
 
     }
 
     @FXML
-    void RegistarCliente(ActionEvent event) {
+    void InserirServico(ActionEvent event) {
 
     }
 
     @FXML
-    void VoltarAtrasInserirCliente(ActionEvent event) {
+    void Voltar(ActionEvent event) {
 
     }
 

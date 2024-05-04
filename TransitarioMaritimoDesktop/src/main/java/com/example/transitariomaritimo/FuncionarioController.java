@@ -10,7 +10,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import pt.ipvc.database.entity.ClienteEntity;
 import pt.ipvc.database.entity.CodPostalEntity;
 import pt.ipvc.database.entity.FuncionarioEntity;
 import pt.ipvc.database.entity.TipoFuncionarioEntity;

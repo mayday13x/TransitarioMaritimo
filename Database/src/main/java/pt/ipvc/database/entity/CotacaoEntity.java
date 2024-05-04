@@ -13,6 +13,7 @@ public class CotacaoEntity {
     private Integer idEstadoCotacao;
     private Date data;
     private Double valorTotal;
+    private Collection<CargaEntity> cargasById;
     private ClienteEntity clienteByIdCliente;
     private EstadoCotacaoEntity estadoCotacaoByIdEstadoCotacao;
     private Collection<FaturaEntity> faturasById;
@@ -95,6 +96,15 @@ public class CotacaoEntity {
         result = 31 * result + (data != null ? data.hashCode() : 0);
         result = 31 * result + (valorTotal != null ? valorTotal.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "cotacaoByIdCotacao")
+    public Collection<CargaEntity> getCargasById() {
+        return cargasById;
+    }
+
+    public void setCargasById(Collection<CargaEntity> cargasById) {
+        this.cargasById = cargasById;
     }
 
     @ManyToOne
