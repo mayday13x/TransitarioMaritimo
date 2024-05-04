@@ -13,12 +13,12 @@
             <Font size="17.0" />
          </font>
       </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="377.0" mnemonicParsing="false" onAction="#Reserva" prefHeight="42.0" prefWidth="124.0" text="Reservas">
+      <Button defaultButton="true" layoutX="14.0" layoutY="323.0" mnemonicParsing="false" onAction="#Reserva" prefHeight="42.0" prefWidth="124.0" text="Reservas">
          <font>
             <Font size="17.0" />
          </font>
       </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="553.0" mnemonicParsing="false" onAction="#Armazem" prefHeight="42.0" prefWidth="124.0" text="Armazens">
+      <Button defaultButton="true" layoutX="14.0" layoutY="499.0" mnemonicParsing="false" onAction="#Armazem" prefHeight="42.0" prefWidth="124.0" text="Armazens">
          <font>
             <Font size="17.0" />
          </font>
@@ -46,24 +46,17 @@
             <Font size="17.0" />
          </font>
       </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="438.0" mnemonicParsing="false" onAction="#Contentor" prefHeight="42.0" prefWidth="124.0" text="Contentores">
+      <Button defaultButton="true" layoutX="14.0" layoutY="384.0" mnemonicParsing="false" onAction="#Contentor" prefHeight="42.0" prefWidth="124.0" text="Contentores">
          <font>
             <Font size="17.0" />
          </font>
       </Button>
-      
-      <Button defaultButton="true" layoutX="14.0" layoutY="487.0" mnemonicParsing="false" onAction="#Transporte" prefHeight="42.0" prefWidth="124.0" text="Transportes">
-
+      <Button defaultButton="true" layoutX="14.0" layoutY="441.0" mnemonicParsing="false" onAction="#Transporte" prefHeight="42.0" prefWidth="124.0" text="Transportes">
          <font>
             <Font size="17.0" />
          </font>
       </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="316.0" mnemonicParsing="false" onAction="#Fornecedores" prefHeight="42.0" prefWidth="124.0" text="Fornecedores">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="260.0" mnemonicParsing="false" onAction="#Funcionario" prefHeight="42.0" prefWidth="124.0" text="Funcionários">
+      <Button defaultButton="true" layoutX="14.0" layoutY="262.0" mnemonicParsing="false" onAction="#Fornecedores" prefHeight="42.0" prefWidth="124.0" text="Fornecedores">
          <font>
             <Font size="16.0" />
          </font>
