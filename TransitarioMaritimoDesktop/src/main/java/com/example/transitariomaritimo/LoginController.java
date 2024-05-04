@@ -87,7 +87,7 @@ public class LoginController implements Initializable {
                     mensagem = false;
 
                     try {
-                        Parent root = FXMLLoader.load(getClass().getResource("MenuView.fxml"));
+                        Parent root = FXMLLoader.load(getClass().getResource("MenuAdminView.fxml"));
                         Scene regCena = new Scene(root);
                         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                         stage.setScene(regCena);
@@ -107,26 +107,26 @@ public class LoginController implements Initializable {
                     mensagem = false;
 
                     switch (funcionario.getIdTipoFuncionario()) {
-                        case 1:
+                        case 1: //Admin
                             mudarPagina(event, "MenuAdminView.fxml");
                             break;
                         case 2:
-                            mudarPagina(event, "MenuView.fxml");
+                            mudarPagina(event, "MenuAdminView.fxml");
                             break;
                         case 3:
-                            mudarPagina(event, "MenuView.fxml");
+                            mudarPagina(event, "MenuAdminView.fxml");
                             break;
                         case 4:
-                            mudarPagina(event, "MenuView.fxml");
+                            mudarPagina(event, "MenuAdminView.fxml");
                             break;
                         case 5:
-                            mudarPagina(event, "MenuView.fxml");
+                            mudarPagina(event, "MenuAdminView.fxml");
                             break;
                         case 6:
-                            mudarPagina(event, "MenuView.fxml");
+                            mudarPagina(event, "MenuAdminView.fxml");
                             break;
                         case 7:
-                            mudarPagina(event, "MenuView.fxml");
+                            mudarPagina(event, "MenuAdminView.fxml");
                             break;
                         default:
                             System.out.println("Tipo de funcionario incorreto!");

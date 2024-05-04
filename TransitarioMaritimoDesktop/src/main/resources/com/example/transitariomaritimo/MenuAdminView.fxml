@@ -8,27 +8,22 @@
 
 <AnchorPane prefHeight="729.0" prefWidth="1063.0" stylesheets="@css/nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.MenuController">
    <children>
-      <Button defaultButton="true" layoutX="14.0" layoutY="68.0" mnemonicParsing="false" onAction="#Funcionario" prefHeight="42.0" prefWidth="124.0" text="Funcionarios">
+      <Button defaultButton="true" layoutX="14.0" layoutY="83.0" mnemonicParsing="false" onAction="#Cliente" prefHeight="42.0" prefWidth="124.0" text="Clientes">
          <font>
             <Font size="17.0" />
          </font>
       </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="129.0" mnemonicParsing="false" onAction="#Cliente" prefHeight="42.0" prefWidth="124.0" text="Clientes">
+      <Button defaultButton="true" layoutX="14.0" layoutY="377.0" mnemonicParsing="false" onAction="#Reserva" prefHeight="42.0" prefWidth="124.0" text="Reservas">
          <font>
             <Font size="17.0" />
          </font>
       </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="369.0" mnemonicParsing="false" onAction="#Reserva" prefHeight="42.0" prefWidth="124.0" text="Reservas">
+      <Button defaultButton="true" layoutX="14.0" layoutY="553.0" mnemonicParsing="false" onAction="#Armazem" prefHeight="42.0" prefWidth="124.0" text="Armazens">
          <font>
             <Font size="17.0" />
          </font>
       </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="545.0" mnemonicParsing="false" onAction="#Armazem" prefHeight="42.0" prefWidth="124.0" text="Armazens">
-         <font>
-            <Font size="17.0" />
-         </font>
-      </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="246.0" mnemonicParsing="false" onAction="#Servicos" prefHeight="42.0" prefWidth="124.0" text="Serviços">
+      <Button defaultButton="true" layoutX="14.0" layoutY="200.0" mnemonicParsing="false" onAction="#Servicos" prefHeight="42.0" prefWidth="124.0" text="Serviços">
          <font>
             <Font size="17.0" />
          </font>
@@ -46,22 +41,27 @@
          </graphic>
       </Button>
       <AnchorPane fx:id="menu_panel" layoutX="156.0" layoutY="8.0" prefHeight="715.0" prefWidth="850.0" />
-      <Button defaultButton="true" layoutX="14.0" layoutY="188.0" mnemonicParsing="false" onAction="#Cotacao" prefHeight="42.0" prefWidth="124.0" text="Cotações">
+      <Button defaultButton="true" layoutX="14.0" layoutY="142.0" mnemonicParsing="false" onAction="#Cotacao" prefHeight="42.0" prefWidth="124.0" text="Cotações">
          <font>
             <Font size="17.0" />
          </font>
       </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="430.0" mnemonicParsing="false" onAction="#Contentor" prefHeight="42.0" prefWidth="124.0" text="Contentores">
+      <Button defaultButton="true" layoutX="14.0" layoutY="438.0" mnemonicParsing="false" onAction="#Contentor" prefHeight="42.0" prefWidth="124.0" text="Contentores">
          <font>
             <Font size="17.0" />
          </font>
       </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="487.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="124.0" text="Transportes">
+      <Button defaultButton="true" layoutX="14.0" layoutY="495.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="124.0" text="Transportes">
          <font>
             <Font size="17.0" />
          </font>
       </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="308.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="124.0" text="Fornecedores">
+      <Button defaultButton="true" layoutX="14.0" layoutY="316.0" mnemonicParsing="false" onAction="#Fornecedores" prefHeight="42.0" prefWidth="124.0" text="Fornecedores">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button defaultButton="true" layoutX="14.0" layoutY="260.0" mnemonicParsing="false" onAction="#Funcionario" prefHeight="42.0" prefWidth="124.0" text="Funcionários">
          <font>
             <Font size="16.0" />
          </font>

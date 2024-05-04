@@ -17,11 +17,11 @@
          <children>
             <TableView fx:id="table" layoutX="6.0" layoutY="56.0" prefHeight="431.0" prefWidth="808.0">
                <columns>
-                  <TableColumn fx:id="Id" prefWidth="86.39999389648438" text="Id" />
-                  <TableColumn fx:id="Nome" prefWidth="133.5999755859375" text="Nome" />
-                  <TableColumn fx:id="Nif" minWidth="0.0" prefWidth="113.60002136230469" text="Nif" />
-                  <TableColumn fx:id="Localidade" maxWidth="288.0" prefWidth="147.199951171875" text="Localidade" />
-                  <TableColumn fx:id="Telefone" maxWidth="288.0" prefWidth="142.4000244140625" text="Telefone" />
+                  <TableColumn fx:id="Id" prefWidth="63.20001220703125" text="Id" />
+                  <TableColumn fx:id="Nome" prefWidth="131.19998168945312" text="Descricao" />
+                  <TableColumn fx:id="Nif" minWidth="0.0" prefWidth="126.4000244140625" text="Fornecedor" />
+                  <TableColumn fx:id="Localidade" maxWidth="288.0" prefWidth="139.20001220703125" text="Comissão" />
+                  <TableColumn fx:id="Telefone" maxWidth="288.0" prefWidth="169.5999755859375" text="Preço" />
                   <TableColumn fx:id="Email" maxWidth="288.0" prefWidth="203.20001220703125" text="Email" />
                </columns>
             </TableView>
