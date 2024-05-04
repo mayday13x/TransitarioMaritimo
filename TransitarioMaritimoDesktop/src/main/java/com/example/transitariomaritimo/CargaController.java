@@ -285,8 +285,37 @@ public class CargaController{
         IdCotacaoCombo.getSelectionModel().clearSelection();
         TipoCargaCombo.getSelectionModel().clearSelection();
 
-        ObservableList<CargaEntity> cargasAtualizadas = FXCollections.observableArrayList(carga_repo.findAll());
-        table.setItems(cargasAtualizadas);
+        if(contentorCin == novaCarga.getIdTipoCarga()) {
+            ObservableList<CargaEntity> cargasAtualizadas = FXCollections.observableArrayList(carga_repo.findAll());
+            table.setItems(cargasAtualizadas);
+        }
+
+
+    }
+
+    @FXML
+    public void ExcluirCarga(ActionEvent event) {
+
+        if (table.getSelectionModel().getSelectedItem() == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erro!");
+            alert.setHeaderText("Nenhum carga selecionado!");
+            alert.setContentText("Selecione uma carga para eliminar!");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Eliminar Carga");
+            alert.setHeaderText("Eliminar Carga");
+            alert.setContentText("Tem a certeza que pretende eliminar este carga?");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                carga_repo.deleteById(table.getSelectionModel().getSelectedItem().getId());
+                ObservableList<CargaEntity> cargassAtualizados = FXCollections.observableArrayList(carga_repo.findAll());
+                table.setItems(cargassAtualizados);
+            }
+        }
+
     }
 
     @FXML
