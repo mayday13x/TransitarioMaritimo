@@ -22,16 +22,20 @@ public class MenuController implements Initializable {
     @FXML
     private AnchorPane menu_panel;
 
+    public AnchorPane getMenu_panel() {
+        return menu_panel;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("StatisticsView.fxml"));
-        try {
-            Pane cmdPane = fxmlLoader.load();
-            menu_panel.getChildren().clear();
-            menu_panel.getChildren().add(cmdPane);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+            try {
+                Pane cmdPane = fxmlLoader.load();
+                menu_panel.getChildren().clear();
+                menu_panel.getChildren().add(cmdPane);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
     }
 
     @FXML
