@@ -7,7 +7,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "transportemaritimo", schema = "public", catalog = "transitario_maritimo")
 public class TransportemaritimoEntity {
-    private int id;
+    private Integer id;
     private String imo;
     private String portoOrigem;
     private String portoDestino;
@@ -16,11 +16,11 @@ public class TransportemaritimoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
