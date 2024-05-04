@@ -2,25 +2,15 @@ package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Collection;
-
 @Entity
-@Table(name = "contentor", schema = "public", catalog = "transitario_maritimo")
+@jakarta.persistence.Table(name = "contentor", schema = "public", catalog = "transitario_maritimo")
 public class ContentorEntity {
-    private Integer cin;
-    private Integer idEstadoContentor;
-    private Double capacidade;
-    private Double pesoMax;
-    private String localAtual;
-    private Integer tipoContentor;
-    private Collection<CargaEntity> cargasByCin;
-    private EstadoContentorEntity estadoContentorByIdEstadoContentor;
-    private TipoContentorEntity tipoContentorByTipoContentor;
+    private int cin;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "cin", nullable = false)
-    public Integer getCin() {
+    @jakarta.persistence.Column(name = "cin", nullable = false)
+    public int getCin() {
         return cin;
     }
 
@@ -28,8 +18,10 @@ public class ContentorEntity {
         this.cin = cin;
     }
 
+    private Integer idEstadoContentor;
+
     @Basic
-    @Column(name = "id_estado_contentor", nullable = true, insertable=false, updatable=false)
+    @Column(name = "id_estado_contentor", nullable = true)
     public Integer getIdEstadoContentor() {
         return idEstadoContentor;
     }
@@ -37,6 +29,8 @@ public class ContentorEntity {
     public void setIdEstadoContentor(Integer idEstadoContentor) {
         this.idEstadoContentor = idEstadoContentor;
     }
+
+    private Double capacidade;
 
     @Basic
     @Column(name = "capacidade", nullable = true, precision = 0)
@@ -48,6 +42,8 @@ public class ContentorEntity {
         this.capacidade = capacidade;
     }
 
+    private Double pesoMax;
+
     @Basic
     @Column(name = "peso_max", nullable = true, precision = 0)
     public Double getPesoMax() {
@@ -57,6 +53,8 @@ public class ContentorEntity {
     public void setPesoMax(Double pesoMax) {
         this.pesoMax = pesoMax;
     }
+
+    private String localAtual;
 
     @Basic
     @Column(name = "local_atual", nullable = true, length = 255)
@@ -68,14 +66,28 @@ public class ContentorEntity {
         this.localAtual = localAtual;
     }
 
+    private Integer tipoContentor;
+
     @Basic
-    @Column(name = "tipo_contentor", nullable = true, insertable=false, updatable=false)
+    @Column(name = "tipo_contentor", nullable = true)
     public Integer getTipoContentor() {
         return tipoContentor;
     }
 
     public void setTipoContentor(Integer tipoContentor) {
         this.tipoContentor = tipoContentor;
+    }
+
+    private Integer idTransporteMaritimo;
+
+    @Basic
+    @Column(name = "id_transporte_maritimo", nullable = true)
+    public Integer getIdTransporteMaritimo() {
+        return idTransporteMaritimo;
+    }
+
+    public void setIdTransporteMaritimo(Integer idTransporteMaritimo) {
+        this.idTransporteMaritimo = idTransporteMaritimo;
     }
 
     @Override
@@ -93,6 +105,8 @@ public class ContentorEntity {
         if (localAtual != null ? !localAtual.equals(that.localAtual) : that.localAtual != null) return false;
         if (tipoContentor != null ? !tipoContentor.equals(that.tipoContentor) : that.tipoContentor != null)
             return false;
+        if (idTransporteMaritimo != null ? !idTransporteMaritimo.equals(that.idTransporteMaritimo) : that.idTransporteMaritimo != null)
+            return false;
 
         return true;
     }
@@ -105,35 +119,7 @@ public class ContentorEntity {
         result = 31 * result + (pesoMax != null ? pesoMax.hashCode() : 0);
         result = 31 * result + (localAtual != null ? localAtual.hashCode() : 0);
         result = 31 * result + (tipoContentor != null ? tipoContentor.hashCode() : 0);
+        result = 31 * result + (idTransporteMaritimo != null ? idTransporteMaritimo.hashCode() : 0);
         return result;
-    }
-
-    @OneToMany(mappedBy = "contentorByIdContentor")
-    public Collection<CargaEntity> getCargasByCin() {
-        return cargasByCin;
-    }
-
-    public void setCargasByCin(Collection<CargaEntity> cargasByCin) {
-        this.cargasByCin = cargasByCin;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "id_estado_contentor", referencedColumnName = "id")
-    public EstadoContentorEntity getEstadoContentorByIdEstadoContentor() {
-        return estadoContentorByIdEstadoContentor;
-    }
-
-    public void setEstadoContentorByIdEstadoContentor(EstadoContentorEntity estadoContentorByIdEstadoContentor) {
-        this.estadoContentorByIdEstadoContentor = estadoContentorByIdEstadoContentor;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "tipo_contentor", referencedColumnName = "id")
-    public TipoContentorEntity getTipoContentorByTipoContentor() {
-        return tipoContentorByTipoContentor;
-    }
-
-    public void setTipoContentorByTipoContentor(TipoContentorEntity tipoContentorByTipoContentor) {
-        this.tipoContentorByTipoContentor = tipoContentorByTipoContentor;
     }
 }

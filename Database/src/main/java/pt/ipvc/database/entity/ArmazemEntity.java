@@ -2,20 +2,15 @@ package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Collection;
-
 @Entity
-@Table(name = "armazem", schema = "public", catalog = "transitario_maritimo")
+@jakarta.persistence.Table(name = "armazem", schema = "public", catalog = "transitario_maritimo")
 public class ArmazemEntity {
-    private Integer id;
-    private Double capacidadeMax;
-    private String descricao;
-    private Collection<CargaEntity> cargasById;
+    private int id;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
-    public Integer getId() {
+    @jakarta.persistence.Column(name = "id", nullable = false)
+    public int getId() {
         return id;
     }
 
@@ -23,15 +18,19 @@ public class ArmazemEntity {
         this.id = id;
     }
 
+    private double capacidadeMax;
+
     @Basic
     @Column(name = "capacidade_max", nullable = false, precision = 0)
-    public Double getCapacidadeMax() {
+    public double getCapacidadeMax() {
         return capacidadeMax;
     }
 
     public void setCapacidadeMax(double capacidadeMax) {
         this.capacidadeMax = capacidadeMax;
     }
+
+    private String descricao;
 
     @Basic
     @Column(name = "descricao", nullable = true, length = -1)
@@ -66,14 +65,5 @@ public class ArmazemEntity {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (descricao != null ? descricao.hashCode() : 0);
         return result;
-    }
-
-    @OneToMany(mappedBy = "armazemByIdArmazem")
-    public Collection<CargaEntity> getCargasById() {
-        return cargasById;
-    }
-
-    public void setCargasById(Collection<CargaEntity> cargasById) {
-        this.cargasById = cargasById;
     }
 }

@@ -3,26 +3,15 @@ package pt.ipvc.database.entity;
 import jakarta.persistence.*;
 
 import java.sql.Date;
-import java.util.Collection;
 
 @Entity
-@Table(name = "cotacao", schema = "public", catalog = "transitario_maritimo")
+@jakarta.persistence.Table(name = "cotacao", schema = "public", catalog = "transitario_maritimo")
 public class CotacaoEntity {
     private int id;
-    private Integer idCliente;
-    private Integer idEstadoCotacao;
-    private Date data;
-    private Double valorTotal;
-    private Collection<CargaEntity> cargasById;
-    private ClienteEntity clienteByIdCliente;
-    private EstadoCotacaoEntity estadoCotacaoByIdEstadoCotacao;
-    private Collection<FaturaEntity> faturasById;
-    private Collection<LinhaCotacaoEntity> linhaCotacaosById;
-    private Collection<ReservaEntity> reservasById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
+    @jakarta.persistence.Column(name = "id", nullable = false)
     public int getId() {
         return id;
     }
@@ -31,8 +20,10 @@ public class CotacaoEntity {
         this.id = id;
     }
 
+    private Integer idCliente;
+
     @Basic
-    @Column(name = "id_cliente", nullable = true, insertable=false, updatable=false)
+    @Column(name = "id_cliente", nullable = true)
     public Integer getIdCliente() {
         return idCliente;
     }
@@ -41,8 +32,10 @@ public class CotacaoEntity {
         this.idCliente = idCliente;
     }
 
+    private Integer idEstadoCotacao;
+
     @Basic
-    @Column(name = "id_estado_cotacao", nullable = true, insertable=false, updatable=false)
+    @Column(name = "id_estado_cotacao", nullable = true)
     public Integer getIdEstadoCotacao() {
         return idEstadoCotacao;
     }
@@ -50,6 +43,8 @@ public class CotacaoEntity {
     public void setIdEstadoCotacao(Integer idEstadoCotacao) {
         this.idEstadoCotacao = idEstadoCotacao;
     }
+
+    private Date data;
 
     @Basic
     @Column(name = "data", nullable = true)
@@ -60,6 +55,8 @@ public class CotacaoEntity {
     public void setData(Date data) {
         this.data = data;
     }
+
+    private Double valorTotal;
 
     @Basic
     @Column(name = "valor_total", nullable = true, precision = 0)
@@ -96,61 +93,5 @@ public class CotacaoEntity {
         result = 31 * result + (data != null ? data.hashCode() : 0);
         result = 31 * result + (valorTotal != null ? valorTotal.hashCode() : 0);
         return result;
-    }
-
-    @OneToMany(mappedBy = "cotacaoByIdCotacao")
-    public Collection<CargaEntity> getCargasById() {
-        return cargasById;
-    }
-
-    public void setCargasById(Collection<CargaEntity> cargasById) {
-        this.cargasById = cargasById;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "id_cliente", referencedColumnName = "id")
-    public ClienteEntity getClienteByIdCliente() {
-        return clienteByIdCliente;
-    }
-
-    public void setClienteByIdCliente(ClienteEntity clienteByIdCliente) {
-        this.clienteByIdCliente = clienteByIdCliente;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "id_estado_cotacao", referencedColumnName = "id")
-    public EstadoCotacaoEntity getEstadoCotacaoByIdEstadoCotacao() {
-        return estadoCotacaoByIdEstadoCotacao;
-    }
-
-    public void setEstadoCotacaoByIdEstadoCotacao(EstadoCotacaoEntity estadoCotacaoByIdEstadoCotacao) {
-        this.estadoCotacaoByIdEstadoCotacao = estadoCotacaoByIdEstadoCotacao;
-    }
-
-    @OneToMany(mappedBy = "cotacaoByIdCotacao")
-    public Collection<FaturaEntity> getFaturasById() {
-        return faturasById;
-    }
-
-    public void setFaturasById(Collection<FaturaEntity> faturasById) {
-        this.faturasById = faturasById;
-    }
-
-    @OneToMany(mappedBy = "cotacaoByIdCotacao")
-    public Collection<LinhaCotacaoEntity> getLinhaCotacaosById() {
-        return linhaCotacaosById;
-    }
-
-    public void setLinhaCotacaosById(Collection<LinhaCotacaoEntity> linhaCotacaosById) {
-        this.linhaCotacaosById = linhaCotacaosById;
-    }
-
-    @OneToMany(mappedBy = "cotacaoByIdCotacao")
-    public Collection<ReservaEntity> getReservasById() {
-        return reservasById;
-    }
-
-    public void setReservasById(Collection<ReservaEntity> reservasById) {
-        this.reservasById = reservasById;
     }
 }

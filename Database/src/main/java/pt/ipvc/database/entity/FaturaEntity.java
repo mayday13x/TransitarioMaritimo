@@ -3,23 +3,15 @@ package pt.ipvc.database.entity;
 import jakarta.persistence.*;
 
 import java.sql.Date;
-import java.util.Collection;
 
 @Entity
-@Table(name = "fatura", schema = "public", catalog = "transitario_maritimo")
+@jakarta.persistence.Table(name = "fatura", schema = "public", catalog = "transitario_maritimo")
 public class FaturaEntity {
     private int id;
-    private Integer idEstadoFatura;
-    private Date dataLimite;
-    private Date dataEmissao;
-    private Integer idCotacao;
-    private EstadoFaturaEntity estadoFaturaByIdEstadoFatura;
-    private CotacaoEntity cotacaoByIdCotacao;
-    private Collection<ReciboEntity> recibosById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
+    @jakarta.persistence.Column(name = "id", nullable = false)
     public int getId() {
         return id;
     }
@@ -28,8 +20,10 @@ public class FaturaEntity {
         this.id = id;
     }
 
+    private Integer idEstadoFatura;
+
     @Basic
-    @Column(name = "id_estado_fatura", nullable = true, insertable=false, updatable=false)
+    @Column(name = "id_estado_fatura", nullable = true)
     public Integer getIdEstadoFatura() {
         return idEstadoFatura;
     }
@@ -37,6 +31,8 @@ public class FaturaEntity {
     public void setIdEstadoFatura(Integer idEstadoFatura) {
         this.idEstadoFatura = idEstadoFatura;
     }
+
+    private Date dataLimite;
 
     @Basic
     @Column(name = "data_limite", nullable = true)
@@ -48,6 +44,8 @@ public class FaturaEntity {
         this.dataLimite = dataLimite;
     }
 
+    private Date dataEmissao;
+
     @Basic
     @Column(name = "data_emissao", nullable = true)
     public Date getDataEmissao() {
@@ -58,8 +56,10 @@ public class FaturaEntity {
         this.dataEmissao = dataEmissao;
     }
 
+    private Integer idCotacao;
+
     @Basic
-    @Column(name = "id_cotacao", nullable = true, insertable=false, updatable=false)
+    @Column(name = "id_cotacao", nullable = true)
     public Integer getIdCotacao() {
         return idCotacao;
     }
@@ -93,34 +93,5 @@ public class FaturaEntity {
         result = 31 * result + (dataEmissao != null ? dataEmissao.hashCode() : 0);
         result = 31 * result + (idCotacao != null ? idCotacao.hashCode() : 0);
         return result;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "id_estado_fatura", referencedColumnName = "id")
-    public EstadoFaturaEntity getEstadoFaturaByIdEstadoFatura() {
-        return estadoFaturaByIdEstadoFatura;
-    }
-
-    public void setEstadoFaturaByIdEstadoFatura(EstadoFaturaEntity estadoFaturaByIdEstadoFatura) {
-        this.estadoFaturaByIdEstadoFatura = estadoFaturaByIdEstadoFatura;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "id_cotacao", referencedColumnName = "id")
-    public CotacaoEntity getCotacaoByIdCotacao() {
-        return cotacaoByIdCotacao;
-    }
-
-    public void setCotacaoByIdCotacao(CotacaoEntity cotacaoByIdCotacao) {
-        this.cotacaoByIdCotacao = cotacaoByIdCotacao;
-    }
-
-    @OneToMany(mappedBy = "faturaByIdFatura")
-    public Collection<ReciboEntity> getRecibosById() {
-        return recibosById;
-    }
-
-    public void setRecibosById(Collection<ReciboEntity> recibosById) {
-        this.recibosById = recibosById;
     }
 }

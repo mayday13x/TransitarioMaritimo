@@ -5,19 +5,17 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "servico", schema = "public", catalog = "transitario_maritimo")
 public class ServicoEntity {
-    private Integer id;
+    private int id;
     private Integer idFornecedor;
     private Double comissao;
     private Double preco;
     private String descricao;
     private FornecedorEntity fornecedorByIdFornecedor;
-    private ServicoTranporteMEntity servicoTranporteMById;
-    private ServicoTransporteTEntity servicoTransporteTById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -26,7 +24,7 @@ public class ServicoEntity {
     }
 
     @Basic
-    @Column(name = "id_fornecedor", nullable = true, insertable=false, updatable=false)
+    @Column(name = "id_fornecedor", nullable = true)
     public Integer getIdFornecedor() {
         return idFornecedor;
     }
@@ -99,23 +97,5 @@ public class ServicoEntity {
 
     public void setFornecedorByIdFornecedor(FornecedorEntity fornecedorByIdFornecedor) {
         this.fornecedorByIdFornecedor = fornecedorByIdFornecedor;
-    }
-
-    @OneToOne(mappedBy = "servicoByIdServico")
-    public ServicoTranporteMEntity getServicoTranporteMById() {
-        return servicoTranporteMById;
-    }
-
-    public void setServicoTranporteMById(ServicoTranporteMEntity servicoTranporteMById) {
-        this.servicoTranporteMById = servicoTranporteMById;
-    }
-
-    @OneToOne(mappedBy = "servicoByIdServico")
-    public ServicoTransporteTEntity getServicoTransporteTById() {
-        return servicoTransporteTById;
-    }
-
-    public void setServicoTransporteTById(ServicoTransporteTEntity servicoTransporteTById) {
-        this.servicoTransporteTById = servicoTransporteTById;
     }
 }

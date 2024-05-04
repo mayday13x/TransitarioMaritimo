@@ -2,18 +2,14 @@ package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Collection;
-
 @Entity
-@Table(name = "estado_fatura", schema = "public", catalog = "transitario_maritimo")
+@jakarta.persistence.Table(name = "estado_fatura", schema = "public", catalog = "transitario_maritimo")
 public class EstadoFaturaEntity {
     private int id;
-    private String descricao;
-    private Collection<FaturaEntity> faturasById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
+    @jakarta.persistence.Column(name = "id", nullable = false)
     public int getId() {
         return id;
     }
@@ -21,6 +17,8 @@ public class EstadoFaturaEntity {
     public void setId(int id) {
         this.id = id;
     }
+
+    private String descricao;
 
     @Basic
     @Column(name = "descricao", nullable = true, length = 255)
@@ -50,14 +48,5 @@ public class EstadoFaturaEntity {
         int result = id;
         result = 31 * result + (descricao != null ? descricao.hashCode() : 0);
         return result;
-    }
-
-    @OneToMany(mappedBy = "estadoFaturaByIdEstadoFatura")
-    public Collection<FaturaEntity> getFaturasById() {
-        return faturasById;
-    }
-
-    public void setFaturasById(Collection<FaturaEntity> faturasById) {
-        this.faturasById = faturasById;
     }
 }

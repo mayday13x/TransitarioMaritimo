@@ -8,7 +8,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "reserva", schema = "public", catalog = "transitario_maritimo")
 public class ReservaEntity {
-    private Integer id;
+    private int id;
     private Integer idFuncionario;
     private Integer idCliente;
     private Integer idEstadoReserva;
@@ -16,16 +16,18 @@ public class ReservaEntity {
     private String origem;
     private String destino;
     private Integer idCotacao;
+    private Integer idTransporteMaritimo;
     private Collection<CargaEntity> cargasById;
     private FuncionarioEntity funcionarioByIdFuncionario;
     private ClienteEntity clienteByIdCliente;
     private EstadoReservaEntity estadoReservaByIdEstadoReserva;
     private CotacaoEntity cotacaoByIdCotacao;
+    private TransportemaritimoEntity transportemaritimoByIdTransporteMaritimo;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -34,7 +36,7 @@ public class ReservaEntity {
     }
 
     @Basic
-    @Column(name = "id_funcionario", nullable = true, insertable=false, updatable=false)
+    @Column(name = "id_funcionario", nullable = true)
     public Integer getIdFuncionario() {
         return idFuncionario;
     }
@@ -44,7 +46,7 @@ public class ReservaEntity {
     }
 
     @Basic
-    @Column(name = "id_cliente", nullable = true, insertable=false, updatable=false)
+    @Column(name = "id_cliente", nullable = true)
     public Integer getIdCliente() {
         return idCliente;
     }
@@ -54,7 +56,7 @@ public class ReservaEntity {
     }
 
     @Basic
-    @Column(name = "id_estado_reserva", nullable = true, insertable=false, updatable=false)
+    @Column(name = "id_estado_reserva", nullable = true)
     public Integer getIdEstadoReserva() {
         return idEstadoReserva;
     }
@@ -94,13 +96,23 @@ public class ReservaEntity {
     }
 
     @Basic
-    @Column(name = "id_cotacao", nullable = true, insertable=false, updatable=false)
+    @Column(name = "id_cotacao", nullable = true)
     public Integer getIdCotacao() {
         return idCotacao;
     }
 
     public void setIdCotacao(Integer idCotacao) {
         this.idCotacao = idCotacao;
+    }
+
+    @Basic
+    @Column(name = "id_transporte_maritimo", nullable = true)
+    public Integer getIdTransporteMaritimo() {
+        return idTransporteMaritimo;
+    }
+
+    public void setIdTransporteMaritimo(Integer idTransporteMaritimo) {
+        this.idTransporteMaritimo = idTransporteMaritimo;
     }
 
     @Override
@@ -120,6 +132,8 @@ public class ReservaEntity {
         if (origem != null ? !origem.equals(that.origem) : that.origem != null) return false;
         if (destino != null ? !destino.equals(that.destino) : that.destino != null) return false;
         if (idCotacao != null ? !idCotacao.equals(that.idCotacao) : that.idCotacao != null) return false;
+        if (idTransporteMaritimo != null ? !idTransporteMaritimo.equals(that.idTransporteMaritimo) : that.idTransporteMaritimo != null)
+            return false;
 
         return true;
     }
@@ -134,6 +148,7 @@ public class ReservaEntity {
         result = 31 * result + (origem != null ? origem.hashCode() : 0);
         result = 31 * result + (destino != null ? destino.hashCode() : 0);
         result = 31 * result + (idCotacao != null ? idCotacao.hashCode() : 0);
+        result = 31 * result + (idTransporteMaritimo != null ? idTransporteMaritimo.hashCode() : 0);
         return result;
     }
 
@@ -184,5 +199,15 @@ public class ReservaEntity {
 
     public void setCotacaoByIdCotacao(CotacaoEntity cotacaoByIdCotacao) {
         this.cotacaoByIdCotacao = cotacaoByIdCotacao;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_transporte_maritimo", referencedColumnName = "id")
+    public TransportemaritimoEntity getTransportemaritimoByIdTransporteMaritimo() {
+        return transportemaritimoByIdTransporteMaritimo;
+    }
+
+    public void setTransportemaritimoByIdTransporteMaritimo(TransportemaritimoEntity transportemaritimoByIdTransporteMaritimo) {
+        this.transportemaritimoByIdTransporteMaritimo = transportemaritimoByIdTransporteMaritimo;
     }
 }

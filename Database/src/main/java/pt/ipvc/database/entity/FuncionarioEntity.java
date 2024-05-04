@@ -2,36 +2,23 @@ package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Collection;
-
 @Entity
-@Table(name = "funcionario", schema = "public", catalog = "transitario_maritimo")
+@jakarta.persistence.Table(name = "funcionario", schema = "public", catalog = "transitario_maritimo")
 public class FuncionarioEntity {
     private int id;
-    private String nome;
-    private Integer nif;
-    private String rua;
-    private Integer porta;
-    private Integer idCodPostal;
-    private String telefone;
-    private String email;
-    private Integer idTipoFuncionario;
-    private String utilizador;
-    private String password;
-    private CodPostalEntity codPostalByIdCodPostal;
-    private TipoFuncionarioEntity tipoFuncionarioByIdTipoFuncionario;
-    private Collection<ReservaEntity> reservasById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
-    public Integer getId() {
+    @jakarta.persistence.Column(name = "id", nullable = false)
+    public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
     }
+
+    private String nome;
 
     @Basic
     @Column(name = "nome", nullable = true, length = 255)
@@ -43,6 +30,8 @@ public class FuncionarioEntity {
         this.nome = nome;
     }
 
+    private Integer nif;
+
     @Basic
     @Column(name = "nif", nullable = true)
     public Integer getNif() {
@@ -52,6 +41,8 @@ public class FuncionarioEntity {
     public void setNif(Integer nif) {
         this.nif = nif;
     }
+
+    private String rua;
 
     @Basic
     @Column(name = "rua", nullable = true, length = 255)
@@ -63,6 +54,8 @@ public class FuncionarioEntity {
         this.rua = rua;
     }
 
+    private Integer porta;
+
     @Basic
     @Column(name = "porta", nullable = true)
     public Integer getPorta() {
@@ -73,8 +66,10 @@ public class FuncionarioEntity {
         this.porta = porta;
     }
 
+    private Integer idCodPostal;
+
     @Basic
-    @Column(name = "id_cod_postal", nullable = true, insertable=false, updatable=false)
+    @Column(name = "id_cod_postal", nullable = true)
     public Integer getIdCodPostal() {
         return idCodPostal;
     }
@@ -82,6 +77,8 @@ public class FuncionarioEntity {
     public void setIdCodPostal(Integer idCodPostal) {
         this.idCodPostal = idCodPostal;
     }
+
+    private String telefone;
 
     @Basic
     @Column(name = "telefone", nullable = true, length = 20)
@@ -93,6 +90,8 @@ public class FuncionarioEntity {
         this.telefone = telefone;
     }
 
+    private String email;
+
     @Basic
     @Column(name = "email", nullable = true, length = 255)
     public String getEmail() {
@@ -103,8 +102,10 @@ public class FuncionarioEntity {
         this.email = email;
     }
 
+    private Integer idTipoFuncionario;
+
     @Basic
-    @Column(name = "id_tipo_funcionario", nullable = true, insertable=false, updatable=false)
+    @Column(name = "id_tipo_funcionario", nullable = true)
     public Integer getIdTipoFuncionario() {
         return idTipoFuncionario;
     }
@@ -112,6 +113,8 @@ public class FuncionarioEntity {
     public void setIdTipoFuncionario(Integer idTipoFuncionario) {
         this.idTipoFuncionario = idTipoFuncionario;
     }
+
+    private String utilizador;
 
     @Basic
     @Column(name = "utilizador", nullable = false, length = 50)
@@ -123,6 +126,8 @@ public class FuncionarioEntity {
         this.utilizador = utilizador;
     }
 
+    private String password;
+
     @Basic
     @Column(name = "password", nullable = false, length = 50)
     public String getPassword() {
@@ -131,6 +136,18 @@ public class FuncionarioEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    private Integer idArmazem;
+
+    @Basic
+    @Column(name = "id_armazem", nullable = true)
+    public Integer getIdArmazem() {
+        return idArmazem;
+    }
+
+    public void setIdArmazem(Integer idArmazem) {
+        this.idArmazem = idArmazem;
     }
 
     @Override
@@ -152,6 +169,7 @@ public class FuncionarioEntity {
             return false;
         if (utilizador != null ? !utilizador.equals(that.utilizador) : that.utilizador != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (idArmazem != null ? !idArmazem.equals(that.idArmazem) : that.idArmazem != null) return false;
 
         return true;
     }
@@ -169,35 +187,7 @@ public class FuncionarioEntity {
         result = 31 * result + (idTipoFuncionario != null ? idTipoFuncionario.hashCode() : 0);
         result = 31 * result + (utilizador != null ? utilizador.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (idArmazem != null ? idArmazem.hashCode() : 0);
         return result;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "id_cod_postal", referencedColumnName = "id_cod_postal")
-    public CodPostalEntity getCodPostalByIdCodPostal() {
-        return codPostalByIdCodPostal;
-    }
-
-    public void setCodPostalByIdCodPostal(CodPostalEntity codPostalByIdCodPostal) {
-        this.codPostalByIdCodPostal = codPostalByIdCodPostal;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "id_tipo_funcionario", referencedColumnName = "id")
-    public TipoFuncionarioEntity getTipoFuncionarioByIdTipoFuncionario() {
-        return tipoFuncionarioByIdTipoFuncionario;
-    }
-
-    public void setTipoFuncionarioByIdTipoFuncionario(TipoFuncionarioEntity tipoFuncionarioByIdTipoFuncionario) {
-        this.tipoFuncionarioByIdTipoFuncionario = tipoFuncionarioByIdTipoFuncionario;
-    }
-
-    @OneToMany(mappedBy = "funcionarioByIdFuncionario")
-    public Collection<ReservaEntity> getReservasById() {
-        return reservasById;
-    }
-
-    public void setReservasById(Collection<ReservaEntity> reservasById) {
-        this.reservasById = reservasById;
     }
 }

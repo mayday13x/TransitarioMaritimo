@@ -34,7 +34,7 @@ public class ReciboEntity {
     }
 
     @Basic
-    @Column(name = "id_fatura", nullable = true, insertable=false, updatable=false)
+    @Column(name = "id_fatura", nullable = true)
     public Integer getIdFatura() {
         return idFatura;
     }
