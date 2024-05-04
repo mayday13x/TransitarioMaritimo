@@ -132,9 +132,9 @@ public class ClienteController implements Initializable{
             table.setItems(clientes);
 
 
-            context = new AnnotationConfigApplicationContext(AppConfig.class);
+           // context = new AnnotationConfigApplicationContext(AppConfig.class);
             cp_repo = context.getBean(CodPostalRepository.class);
-            cli_repo = context.getBean(ClienteRepository.class);
+           // cli_repo = context.getBean(ClienteRepository.class);
 
             ObservableList<CodPostalEntity> localidades = FXCollections.observableArrayList(cp_repo.findAll());
             for (CodPostalEntity i : localidades){
