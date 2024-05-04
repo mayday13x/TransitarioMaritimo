@@ -9,6 +9,7 @@ module com.example.transitariomaritimo {
         requires pt.ipvc.database;
     requires spring.boot.autoconfigure;
     requires jakarta.persistence;
+    requires micrometer.observation;
 
     opens com.example.transitariomaritimo to javafx.fxml, spring.core;
         exports com.example.transitariomaritimo;
