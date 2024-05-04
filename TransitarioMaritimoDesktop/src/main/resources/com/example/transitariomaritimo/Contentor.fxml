@@ -30,7 +30,7 @@
              <Label layoutX="358.0" layoutY="57.0" text="Peso Maxímo" />
              <Label layoutX="43.0" layoutY="128.0" text="Local Atual" />
              <Label layoutX="358.0" layoutY="128.0" text="Tipo de Contentor" />
-             <Label layoutX="43.0" layoutY="200.0" text="IdEstadoContentor" />
+             <Label layoutX="43.0" layoutY="200.0" text="EstadoContentor" />
              <ComboBox fx:id="TipoContentorCombo" layoutX="358.0" layoutY="147.0" prefHeight="26.0" prefWidth="202.0" />
              <ComboBox fx:id="EstadoContentorCombo" layoutX="42.0" layoutY="218.0" prefHeight="26.0" prefWidth="202.0" />
          </children>
@@ -57,7 +57,7 @@
        <Button layoutX="199.0" layoutY="429.0" mnemonicParsing="false" onAction="#InserirContentor" prefHeight="36.0" prefWidth="135.0" text="Inserir Contentor" />
        <Button layoutX="533.0" layoutY="429.0" mnemonicParsing="false" onAction="#VisualizarCargas" text="Visualizar Cargas" />
        <Button layoutX="36.0" layoutY="429.0" mnemonicParsing="false" onAction="#VoltarAtras" text="&lt;" />
-       <Label layoutX="38.0" layoutY="260.0" text="IdEstadoContentor" />
+       <Label layoutX="38.0" layoutY="260.0" text="EstadoContentor" />
        <Button layoutX="360.0" layoutY="429.0" mnemonicParsing="false" text="Remover Contentor" />
        <TextField fx:id="TipoContentor" layoutX="38.0" layoutY="350.0" prefHeight="26.0" prefWidth="624.0" />
        <Label layoutX="36.0" layoutY="333.0" text="TipoContentor" />

@@ -73,6 +73,9 @@ public class ContentorController implements Initializable {
     @FXML
     private Pane mainPanel;
 
+    @FXML
+    private Pane menu_Panel;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         context = new AnnotationConfigApplicationContext(AppConfig.class);
@@ -90,8 +93,8 @@ public class ContentorController implements Initializable {
 
             table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue != null) {
-                    IdEstadoContentor.setText(newValue.getIdEstadoContentor().toString());
-                    TipoContentor.setText(newValue.getTipoContentor().toString());
+                    IdEstadoContentor.setText(newValue.getEstadoContentorByIdEstadoContentor().getDescricao());
+                    TipoContentor.setText(newValue.getTipoContentorByTipoContentor().getDescricao());
                 }
             });
 
@@ -165,24 +168,37 @@ public class ContentorController implements Initializable {
 
         if(contentorSelecionado != null) {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("CargaContentor.fxml"));
+            try {
+                FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuView.fxml")));
+                Parent rootMenu = loaderMenu.load();
+                MenuController menuController = loaderMenu.getController();
+                menu_Panel = menuController.getMenu_panel();
+                Scene regCena = new Scene(rootMenu);
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(regCena);
+                stage.setTitle("Menu");
+                stage.show();
+            } catch (IOException ex) {
+                System.out.println("Erro ao acessar meu" + ex.getMessage());
+            }
 
-            Parent root = loader.load();
+        }
 
-            CargaController cargaController = loader.getController();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CargaContentor.fxml"));
+
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            menu_Panel.getChildren().clear();
+            menu_Panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+            CargaController cargaController = fxmlLoader.getController();
             cargaController.setContentorCin(contentorSelecionado.getCin());
             cargaController.cargaContentor();
 
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Cargas");
-            stage.show();
 
-        } else {
-            // Exibe uma mensagem de erro se nenhum armazém estiver selecionado
-            System.out.println("Selecione um contentor para visualizar as cargas.");
-        }
     }
 
     @FXML

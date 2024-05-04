@@ -104,7 +104,7 @@ public class ReservasController implements Initializable {
         Table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 IdCliente.setText(newValue.getIdCliente().toString());
-                IdEstadoReserva.setText(newValue.getIdEstadoReserva().toString());
+                IdEstadoReserva.setText(newValue.getEstadoReservaByIdEstadoReserva().getDescricao());
                 IdFuncionario.setText(newValue.getIdFuncionario().toString());
             }
         });
