@@ -7,7 +7,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "funcionario", schema = "public", catalog = "transitario_maritimo")
 public class FuncionarioEntity {
-    private Integer id;
+    private int id;
     private String nome;
     private Integer nif;
     private String rua;
