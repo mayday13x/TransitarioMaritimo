@@ -315,11 +315,12 @@ public class CotacaoController implements Initializable {
 
         //REGISTAR COTACAO
              CotacaoEntity cotacao = new CotacaoEntity();
-             LinhaCotacaoEntity linha = new LinhaCotacaoEntity();
-
+             EstadoCotacaoEntity estadoCotacao = new EstadoCotacaoEntity();
              cotacao.setIdCliente(clienteSelecionado().getId());
              cotacao.setIdEstadoCotacao(3);
+             cotacao.setEstadoCotacaoByIdEstadoCotacao(estadoCotacao);
              cotacao.setData(Date.valueOf(LocalDate.now()));
+             cotacao.setClienteByIdCliente(TableClientes.getSelectionModel().getSelectedItem());
 
             cotacao_repo.save(cotacao);
 
@@ -342,12 +343,18 @@ public class CotacaoController implements Initializable {
 
             carga_repo.save(carga);
 
+            LinhaCotacaoEntity linha = new LinhaCotacaoEntity();
+            LinhaCotacaoEntityPK linhaPK = new LinhaCotacaoEntityPK();
+
+
             double valorTotal = 0;
             for(ServicoEntity i : selected_services){
 
                 valorTotal += i.getPreco() + (i.getComissao() * i.getPreco()); // val + comissão
                 linha.setIdCotacao(cotacao.getId());
                 linha.setIdServico(i.getId());
+                linhaPK.setIdCotacao(cotacao.getId());
+                linhaPK.setIdServico(i.getId());
                 linha_cotacao_repo.save(linha);     //erro aqui
             }
 
