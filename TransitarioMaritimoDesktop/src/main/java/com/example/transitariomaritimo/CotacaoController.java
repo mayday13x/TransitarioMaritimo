@@ -11,26 +11,26 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import pt.ipvc.database.entity.CotacaoEntity;
-import pt.ipvc.database.entity.ServicoEntity;
+import pt.ipvc.database.entity.*;
 import pt.ipvc.database.repository.CotacaoRepository;
+import pt.ipvc.database.repository.EstadoCotacaoRepository;
 import pt.ipvc.database.repository.ServicoRepository;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class CotacaoController {
 
     private AnnotationConfigApplicationContext context;
     private CotacaoRepository cotacao_repo;
     private ServicoRepository servico_repo;
+    private EstadoCotacaoRepository estado_cotacao_repo;
 
     @FXML
     private Pane CriarPane;
@@ -109,6 +109,7 @@ public class CotacaoController {
         context = new AnnotationConfigApplicationContext(AppConfig.class);
         cotacao_repo = context.getBean(CotacaoRepository.class);
         servico_repo = context.getBean(ServicoRepository.class);
+        estado_cotacao_repo = context.getBean(EstadoCotacaoRepository.class);
 
         if(idCliente != 0) {
             ObservableList<CotacaoEntity> cotacoes = FXCollections.observableArrayList(cotacao_repo.findByIdClienteLike(idCliente));
@@ -148,6 +149,80 @@ public class CotacaoController {
     @FXML
     void RegistarCotacao(ActionEvent event) {
 
+    }
+
+    @FXML
+    public void ConfirmarCotacao(ActionEvent event) {
+
+        if (table_cotacoes.getSelectionModel().getSelectedItem() == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erro!");
+            alert.setHeaderText("Nenhuma cotação selecionada!");
+            alert.setContentText("Selecione uma cotação para pagar!");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Pagar Cotação");
+            alert.setHeaderText("Pagar Cotação");
+            alert.setContentText("Tem a certeza que pretende pagar esta Cotação?");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                CotacaoEntity cotacao = table_cotacoes.getSelectionModel().getSelectedItem();
+                EstadoCotacaoEntity estadoCotacao = estado_cotacao_repo.findByDescricaoLike("Confirmado");
+
+                cotacao.setIdEstadoCotacao(estadoCotacao.getId());
+                cotacao.setEstadoCotacaoByIdEstadoCotacao(estadoCotacao);
+
+                try {
+                    cotacao_repo.save(cotacao);
+
+                    table_cotacoes.getItems().clear();
+                    ObservableList<CotacaoEntity> cotacoes = FXCollections.observableArrayList(cotacao_repo.findByIdClienteLike(idCliente));
+                    table_cotacoes.setItems(cotacoes);
+
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+    }
+
+    @FXML
+    public void RejeitarCotacao(ActionEvent event) {
+
+        if (table_cotacoes.getSelectionModel().getSelectedItem() == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erro!");
+            alert.setHeaderText("Nenhuma cotação selecionada!");
+            alert.setContentText("Selecione uma cotação para pagar!");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Pagar Cotação");
+            alert.setHeaderText("Pagar Cotação");
+            alert.setContentText("Tem a certeza que pretende pagar esta Cotação?");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                CotacaoEntity cotacao = table_cotacoes.getSelectionModel().getSelectedItem();
+                EstadoCotacaoEntity estadoCotacao = estado_cotacao_repo.findByDescricaoLike("Rejeitado");
+
+                cotacao.setIdEstadoCotacao(estadoCotacao.getId());
+                cotacao.setEstadoCotacaoByIdEstadoCotacao(estadoCotacao);
+
+                try {
+                    cotacao_repo.save(cotacao);
+
+                    table_cotacoes.getItems().clear();
+                    ObservableList<CotacaoEntity> cotacoes = FXCollections.observableArrayList(cotacao_repo.findByIdClienteLike(idCliente));
+                    table_cotacoes.setItems(cotacoes);
+
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
     }
 
     @FXML
