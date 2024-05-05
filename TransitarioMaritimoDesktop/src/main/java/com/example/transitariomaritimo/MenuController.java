@@ -167,9 +167,12 @@ public class MenuController implements Initializable {
 
     public void CotacaoCliente(ActionEvent event) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CotacaoView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CotacaoCliente.fxml"));
         try {
             Pane cmdPane = fxmlLoader.load();
+            CotacaoController cotacaoController = fxmlLoader.getController();
+            cotacaoController.setIdCliente(idCliente);
+            cotacaoController.CotacaoCliente();
             menu_panel.getChildren().clear();
             menu_panel.getChildren().add(cmdPane);
         } catch (Exception ex) {
