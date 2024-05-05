@@ -76,7 +76,7 @@ public class ClienteEntity {
     }
 
     @Basic
-    @Column(name = "id_cod_postal", nullable = false, insertable=false, updatable=false)
+    @Column(name = "id_cod_postal", nullable = false,insertable=false, updatable=false)
     public Integer getIdCodPostal() {
         return idCodPostal;
     }

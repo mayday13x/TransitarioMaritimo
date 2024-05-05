@@ -7,7 +7,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "transportemaritimo", schema = "public", catalog = "transitario_maritimo")
 public class TransportemaritimoEntity {
-    private int id;
+    private Integer id;
     private String imo;
     private String portoOrigem;
     private String portoDestino;

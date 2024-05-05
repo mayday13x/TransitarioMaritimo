@@ -376,7 +376,6 @@ public class CotacaoController implements Initializable {
             carga_repo.save(carga);
 
             LinhaCotacaoEntity linha = new LinhaCotacaoEntity();
-            LinhaCotacaoEntityPK linhaPK = new LinhaCotacaoEntityPK();
 
 
             double valorTotal = 0;
@@ -384,20 +383,12 @@ public class CotacaoController implements Initializable {
 
                 valorTotal += i.getPreco() + (i.getComissao() * i.getPreco()); // val + comissão
 
-               // linha.setServicoByIdServico(i);
-                System.out.println(i);
-               // linha.setCotacaoByIdCotacao(cotacao);
-                System.out.println(cotacao);
-                linha.setIdCotacao(cotacao.getId());
-                System.out.println(cotacao.getId());
-                linha.setIdServico(i.getId());
-                System.out.println(i.getId());
+               linha.setIdCotacao(cotacao.getId());
+               linha.setIdServico(i.getId());
+               linha.setCotacaoByIdCotacao(cotacao);
+               linha.setServicoByIdServico(i);
 
-                linhaPK.setIdCotacao(cotacao.getId());
-                linhaPK.setIdServico(i.getId());
-
-              //  linha_cotacao_repoPK.save(linhaPK);
-              //  linha_cotacao_repo.save(linha);
+               linha_cotacao_repo.save(linha);
 
             }
 
@@ -411,7 +402,6 @@ public class CotacaoController implements Initializable {
             alert.showAndWait();
 
         }
-
 
     }
 

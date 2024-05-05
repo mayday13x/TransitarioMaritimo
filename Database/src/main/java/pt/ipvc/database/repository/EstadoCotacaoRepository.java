@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pt.ipvc.database.entity.EstadoCotacaoEntity;
-import pt.ipvc.database.entity.EstadoReservaEntity;
 
 @Repository
 public interface EstadoCotacaoRepository extends JpaRepository<EstadoCotacaoEntity, Integer> {

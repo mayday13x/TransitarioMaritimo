@@ -117,7 +117,7 @@ public class CargaEntity {
     }
 
     @Basic
-    @Column(name = "id_tipo_carga", nullable = true, insertable=false, updatable=false)
+    @Column(name = "id_tipo_carga", nullable = true,insertable=false, updatable=false)
     public Integer getIdTipoCarga() {
         return idTipoCarga;
     }
@@ -147,7 +147,7 @@ public class CargaEntity {
     }
 
     @Basic
-    @Column(name = "id_cotacao", nullable = true, insertable=false, updatable=false)
+    @Column(name = "id_cotacao", nullable = true,insertable=false, updatable=false)
     public Integer getIdCotacao() {
         return idCotacao;
     }

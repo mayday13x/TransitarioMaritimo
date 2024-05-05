@@ -6,7 +6,6 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "linha_cotacao", schema = "public", catalog = "transitario_maritimo")
-@IdClass(LinhaCotacaoEntityPK.class)
 public class LinhaCotacaoEntity {
     private int idCotacao;
     private int idServico;
@@ -14,12 +13,12 @@ public class LinhaCotacaoEntity {
     private Date dataPrevFim;
     private Date dataInicio;
     private Date dataFim;
+    private int id;
     private CotacaoEntity cotacaoByIdCotacao;
     private ServicoEntity servicoByIdServico;
 
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "id_cotacao", nullable = false)
+    @Basic
+    @Column(name = "id_cotacao", nullable = false, insertable=false, updatable=false)
     public int getIdCotacao() {
         return idCotacao;
     }
@@ -28,9 +27,8 @@ public class LinhaCotacaoEntity {
         this.idCotacao = idCotacao;
     }
 
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "id_servico", nullable = false)
+    @Basic
+    @Column(name = "id_servico", nullable = false, insertable=false, updatable=false)
     public int getIdServico() {
         return idServico;
     }
@@ -79,6 +77,17 @@ public class LinhaCotacaoEntity {
         this.dataFim = dataFim;
     }
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "id", nullable = false)
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -88,6 +97,7 @@ public class LinhaCotacaoEntity {
 
         if (idCotacao != that.idCotacao) return false;
         if (idServico != that.idServico) return false;
+        if (id != that.id) return false;
         if (dataPrevInicio != null ? !dataPrevInicio.equals(that.dataPrevInicio) : that.dataPrevInicio != null)
             return false;
         if (dataPrevFim != null ? !dataPrevFim.equals(that.dataPrevFim) : that.dataPrevFim != null) return false;
@@ -105,6 +115,7 @@ public class LinhaCotacaoEntity {
         result = 31 * result + (dataPrevFim != null ? dataPrevFim.hashCode() : 0);
         result = 31 * result + (dataInicio != null ? dataInicio.hashCode() : 0);
         result = 31 * result + (dataFim != null ? dataFim.hashCode() : 0);
+        result = 31 * result + id;
         return result;
     }
 

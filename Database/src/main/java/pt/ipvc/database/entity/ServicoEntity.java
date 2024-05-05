@@ -12,8 +12,8 @@ public class ServicoEntity {
     private Double comissao;
     private Double preco;
     private String descricao;
-    private FornecedorEntity fornecedorByIdFornecedor;
     private Collection<LinhaCotacaoEntity> linhaCotacaosById;
+    private FornecedorEntity fornecedorByIdFornecedor;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -92,6 +92,15 @@ public class ServicoEntity {
         return result;
     }
 
+    @OneToMany(mappedBy = "servicoByIdServico")
+    public Collection<LinhaCotacaoEntity> getLinhaCotacaosById() {
+        return linhaCotacaosById;
+    }
+
+    public void setLinhaCotacaosById(Collection<LinhaCotacaoEntity> linhaCotacaosById) {
+        this.linhaCotacaosById = linhaCotacaosById;
+    }
+
     @ManyToOne
     @JoinColumn(name = "id_fornecedor", referencedColumnName = "id")
     public FornecedorEntity getFornecedorByIdFornecedor() {
@@ -100,14 +109,5 @@ public class ServicoEntity {
 
     public void setFornecedorByIdFornecedor(FornecedorEntity fornecedorByIdFornecedor) {
         this.fornecedorByIdFornecedor = fornecedorByIdFornecedor;
-    }
-
-    @OneToMany(mappedBy = "servicoByIdServico")
-    public Collection<LinhaCotacaoEntity> getLinhaCotacaosById() {
-        return linhaCotacaosById;
-    }
-
-    public void setLinhaCotacaosById(Collection<LinhaCotacaoEntity> linhaCotacaosById) {
-        this.linhaCotacaosById = linhaCotacaosById;
     }
 }

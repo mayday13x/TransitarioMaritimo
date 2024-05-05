@@ -76,14 +76,14 @@ public class CotacaoEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CotacaoEntity that = (CotacaoEntity) o;
+        CotacaoEntity cotacao = (CotacaoEntity) o;
 
-        if (id != that.id) return false;
-        if (idCliente != null ? !idCliente.equals(that.idCliente) : that.idCliente != null) return false;
-        if (idEstadoCotacao != null ? !idEstadoCotacao.equals(that.idEstadoCotacao) : that.idEstadoCotacao != null)
+        if (id != cotacao.id) return false;
+        if (idCliente != null ? !idCliente.equals(cotacao.idCliente) : cotacao.idCliente != null) return false;
+        if (idEstadoCotacao != null ? !idEstadoCotacao.equals(cotacao.idEstadoCotacao) : cotacao.idEstadoCotacao != null)
             return false;
-        if (data != null ? !data.equals(that.data) : that.data != null) return false;
-        if (valorTotal != null ? !valorTotal.equals(that.valorTotal) : that.valorTotal != null) return false;
+        if (data != null ? !data.equals(cotacao.data) : cotacao.data != null) return false;
+        if (valorTotal != null ? !valorTotal.equals(cotacao.valorTotal) : cotacao.valorTotal != null) return false;
 
         return true;
     }

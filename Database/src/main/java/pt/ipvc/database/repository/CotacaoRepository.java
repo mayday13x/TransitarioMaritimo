@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pt.ipvc.database.entity.CotacaoEntity;
-import pt.ipvc.database.entity.ReservaEntity;
 import pt.ipvc.database.entity.ServicoEntity;
 
 import java.util.List;
