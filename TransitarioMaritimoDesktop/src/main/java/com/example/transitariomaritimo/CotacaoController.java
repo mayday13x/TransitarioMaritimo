@@ -353,6 +353,7 @@ public class CotacaoController implements Initializable {
                 valorTotal += i.getPreco() + (i.getComissao() * i.getPreco()); // val + comissão
                 linha.setIdCotacao(cotacao.getId());
                 linha.setIdServico(i.getId());
+                linha.setCotacaoByIdCotacao(cotacao);
                 linhaPK.setIdCotacao(cotacao.getId());
                 linhaPK.setIdServico(i.getId());
                 linha_cotacao_repo.save(linha);     //erro aqui
