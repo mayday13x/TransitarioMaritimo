@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pt.ipvc.database.entity.CargaEntity;
+import pt.ipvc.database.entity.CodPostalEntity;
 
 import java.util.List;
 
@@ -18,4 +19,7 @@ public interface CargaRepository extends JpaRepository<CargaEntity, Integer> {
 
     @Query("SELECT ca FROM CargaEntity ca join ContentorEntity c on c.cin = ca.idContentor  where :contentorCin = c.cin order by ca.id")
     List<CargaEntity> findByContentorCin(@Param("contentorCin") int contentorCin);
+
+    @Query("SELECT cp.id FROM TipoCargaEntity cp WHERE cp.descricao LIKE :descricao")
+    Integer findByNameLike(@Param("descricao") String descricao);
 }
