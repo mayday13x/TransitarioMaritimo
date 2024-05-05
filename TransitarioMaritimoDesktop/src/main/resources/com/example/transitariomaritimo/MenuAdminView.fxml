@@ -18,7 +18,7 @@
             <Font size="17.0" />
          </font>
       </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="547.0" mnemonicParsing="false" onAction="#Armazem" prefHeight="42.0" prefWidth="124.0" text="Armazens">
+      <Button defaultButton="true" layoutX="14.0" layoutY="547.0" mnemonicParsing="false" onAction="#ArmazemAdmin" prefHeight="42.0" prefWidth="124.0" text="Armazens">
          <font>
             <Font size="17.0" />
          </font>
@@ -46,7 +46,7 @@
             <Font size="17.0" />
          </font>
       </Button>
-      <Button defaultButton="true" layoutX="14.0" layoutY="430.0" mnemonicParsing="false" onAction="#Contentor" prefHeight="42.0" prefWidth="124.0" text="Contentores">
+      <Button defaultButton="true" layoutX="14.0" layoutY="430.0" mnemonicParsing="false" onAction="#ContentorAdmin" prefHeight="42.0" prefWidth="124.0" text="Contentores">
          <font>
             <Font size="17.0" />
          </font>

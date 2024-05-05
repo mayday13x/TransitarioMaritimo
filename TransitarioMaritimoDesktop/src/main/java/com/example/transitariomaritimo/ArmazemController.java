@@ -189,5 +189,51 @@ public class ArmazemController implements Initializable {
         }
     }
 
+    @FXML
+    public void VisualizarCargasAdmin(ActionEvent event)  throws IOException{
+        ArmazemEntity armazemSelecionado = table.getSelectionModel().getSelectedItem();
+
+        if (armazemSelecionado != null) {
+
+            try {
+                FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuAdminView.fxml")));
+                Parent rootMenu = loaderMenu.load();
+                MenuController menuController = loaderMenu.getController();
+                menu_Panel = menuController.getMenu_panel();
+                Scene regCena = new Scene(rootMenu);
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(regCena);
+                stage.setTitle("Menu");
+                stage.show();
+            } catch (IOException ex) {
+                System.out.println("Erro ao acessar meu" + ex.getMessage());
+            }
+
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CargaArmazem.fxml"));
+
+            try {
+                Pane cmdPane = fxmlLoader.load();
+                menu_Panel.getChildren().clear();
+                menu_Panel.getChildren().add(cmdPane);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            CargaController cargaController = fxmlLoader.getController();
+            cargaController.setArmazemId(armazemSelecionado.getId());
+            cargaController.cargaArmazem();
+
+
+        }else {
+            // Exibe uma mensagem de erro se nenhum armazém estiver selecionado
+            //System.out.println("Selecione um armazém para visualizar as cargas.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setContentText("Selecione um armazém para visualizar as cargas.");
+            alert.showAndWait();
+        }
+    }
+
 
 }

@@ -21,6 +21,7 @@ import javafx.scene.control.TextField;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -31,6 +32,7 @@ public class ContentorController implements Initializable {
 
     private TipoContentorRepository tipo_contentor_repo;
     private EstadoContentorRepository estado_contentor_repo;
+    private CargaRepository carga_repo;
 
     @FXML
     private TableColumn<ContentorEntity, String> Cin;
@@ -103,6 +105,7 @@ public class ContentorController implements Initializable {
             contentor_repo = context.getBean(ContentorRepository.class);
             tipo_contentor_repo = context.getBean(TipoContentorRepository.class);
             estado_contentor_repo = context.getBean(EstadoContentorRepository.class);
+            carga_repo = context.getBean(CargaRepository.class);
 
 
             ObservableList<TipoContentorEntity> tiposConstentor = FXCollections.observableArrayList(tipo_contentor_repo.findAll());
@@ -150,6 +153,11 @@ public class ContentorController implements Initializable {
 
             contentor_repo.save(novoContentor);
 
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Sucesso!");
+            alert.setHeaderText("Registo efetuado com sucesso!");
+            alert.showAndWait();
+
             CapacidadeText.clear();
             PesoMaximoText.clear();
             LocalAtualText.clear();
@@ -170,6 +178,50 @@ public class ContentorController implements Initializable {
 
             try {
                 FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuFuncionarioArmazemView.fxml")));
+                Parent rootMenu = loaderMenu.load();
+                MenuController menuController = loaderMenu.getController();
+                menu_Panel = menuController.getMenu_panel();
+                Scene regCena = new Scene(rootMenu);
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(regCena);
+                stage.setTitle("Menu");
+                stage.show();
+            } catch (IOException ex) {
+                System.out.println("Erro ao acessar meu" + ex.getMessage());
+            }
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CargaContentor.fxml"));
+
+            try {
+                Pane cmdPane = fxmlLoader.load();
+                menu_Panel.getChildren().clear();
+                menu_Panel.getChildren().add(cmdPane);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            CargaController cargaController = fxmlLoader.getController();
+            cargaController.setContentorCin(contentorSelecionado.getCin());
+            cargaController.cargaContentor();
+
+        }else {
+            // Exibe uma mensagem de erro se nenhum armazém estiver selecionado
+            //System.out.println("Selecione um armazém para visualizar as cargas.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setContentText("Selecione um armazém para visualizar as cargas.");
+            alert.showAndWait();
+        }
+
+    }
+
+    public void VisualizarCargasAdmin(ActionEvent event) throws IOException {
+        ContentorEntity contentorSelecionado = table.getSelectionModel().getSelectedItem();
+
+        if(contentorSelecionado != null) {
+
+            try {
+                FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuAdminView.fxml")));
                 Parent rootMenu = loaderMenu.load();
                 MenuController menuController = loaderMenu.getController();
                 menu_Panel = menuController.getMenu_panel();
@@ -275,20 +327,32 @@ public class ContentorController implements Initializable {
         mainPanel.setVisible(true);
     }
 
-    @FXML
-    public void VoltarAtras(ActionEvent event) {
+   @FXML
+    public void RegistarSaida(ActionEvent event){
+        ContentorEntity contentor = table.getSelectionModel().getSelectedItem();
+        EstadoContentorEntity estadoContentor = estado_contentor_repo.findByNameLike("Contentor Fora");
+        List<CargaEntity> cargas = FXCollections.observableArrayList(carga_repo.findByContentorCin(contentor.getCin()));
 
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("MenuFuncionarioArmazemView.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Menu");
-            stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu: " + ex.getMessage());
+        contentor.setIdEstadoContentor(estadoContentor.getId());
+        contentor.setEstadoContentorByIdEstadoContentor(estadoContentor);
+
+        for (CargaEntity carga : cargas) {
+            carga.setIdArmazem(null);
+            carga.setArmazemByIdArmazem(null);
+            carga_repo.save(carga);
         }
-    }
+
+        contentor_repo.save(contentor);
+
+       Alert alert = new Alert(Alert.AlertType.INFORMATION);
+       alert.setTitle("Sucesso!");
+       alert.setHeaderText("Registo de saida efetuado com sucesso!");
+       alert.showAndWait();
+
+       ObservableList<ContentorEntity> contentores = FXCollections.observableArrayList(contentor_repo.findAll());
+       table.setItems(contentores);
+
+   }
 
 
 }

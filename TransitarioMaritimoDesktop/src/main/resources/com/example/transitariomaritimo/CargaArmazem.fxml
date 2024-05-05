@@ -43,9 +43,8 @@
                <TextField fx:id="IdArmazem" layoutX="57.0" layoutY="484.0" prefHeight="36.0" prefWidth="293.0" />
                <TextField fx:id="IdCotacao" layoutX="489.0" layoutY="484.0" prefHeight="36.0" prefWidth="293.0" />
                <Label layoutX="60.0" layoutY="464.0" text="IdArmazem" />
-               <Button defaultButton="true" layoutX="120.0" layoutY="594.0" mnemonicParsing="false" onAction="#InserirCarga" text="Inserir Carga" />
-               <Button layoutX="256.0" layoutY="594.0" mnemonicParsing="false" onAction="#ExcluirCarga" text="Remover Carga" />
-               <Button layoutX="51.0" layoutY="594.0" mnemonicParsing="false" onAction="#VoltarAtrasArmazem" text="&lt;" />
+               <Button defaultButton="true" layoutX="60.0" layoutY="594.0" mnemonicParsing="false" onAction="#InserirCarga" text="Inserir Carga" />
+               <Button layoutX="204.0" layoutY="594.0" mnemonicParsing="false" onAction="#ExcluirCarga" text="Remover Carga" />
                <Label layoutX="487.0" layoutY="464.0" text="IdCotação" />
            </children>
        </Pane>

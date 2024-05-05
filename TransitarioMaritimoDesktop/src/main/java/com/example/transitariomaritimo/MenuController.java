@@ -127,9 +127,38 @@ public class MenuController implements Initializable {
     }
 
     @FXML
+    public void ArmazemAdmin(ActionEvent event)  throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ArmazemAdmin.fxml"));
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            menu_panel.getChildren().clear();
+            menu_panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+
+    }
+
+    @FXML
     public void Contentor(ActionEvent event) {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Contentor.fxml"));
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            menu_panel.getChildren().clear();
+            menu_panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    @FXML
+    public void ContentorAdmin(ActionEvent event) {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ContentorAdmin.fxml"));
         try {
             Pane cmdPane = fxmlLoader.load();
             menu_panel.getChildren().clear();

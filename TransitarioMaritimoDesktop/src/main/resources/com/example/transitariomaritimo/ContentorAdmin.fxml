@@ -55,7 +55,7 @@
          </TableView>
        <TextField fx:id="IdEstadoContentor" layoutX="38.0" layoutY="284.0" prefHeight="26.0" prefWidth="624.0" />
        <Button defaultButton="true" layoutX="36.0" layoutY="429.0" mnemonicParsing="false" onAction="#InserirContentor" prefHeight="36.0" prefWidth="135.0" text="Inserir Contentor" />
-       <Button layoutX="426.0" layoutY="429.0" mnemonicParsing="false" onAction="#VisualizarCargas" text="Visualizar Cargas" />
+       <Button layoutX="426.0" layoutY="429.0" mnemonicParsing="false" onAction="#VisualizarCargasAdmin" text="Visualizar Cargas" />
        <Label layoutX="38.0" layoutY="260.0" text="EstadoContentor" />
        <Button layoutX="203.0" layoutY="429.0" mnemonicParsing="false" onAction="#RegistarSaida" text="Registar Saida do Contentor" />
        <TextField fx:id="TipoContentor" layoutX="38.0" layoutY="350.0" prefHeight="26.0" prefWidth="624.0" />

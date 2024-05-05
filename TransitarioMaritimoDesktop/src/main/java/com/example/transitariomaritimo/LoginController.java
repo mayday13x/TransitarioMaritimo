@@ -92,6 +92,13 @@ public class LoginController implements Initializable {
 
             alert.showAndWait();
 
+        } else if(tipoUtilizadorCombo.getValue() == null){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Campos Inválidos!");
+            alert.setHeaderText("Tipo de Utilizador não selecionado");
+            alert.setContentText("Selecione o tipo de utilizador e tente novamente!");
+
+            alert.showAndWait();
         } else if(tipoUtilizadorCombo.getValue().equals("Cliente") ){
 
             for(ClienteEntity cliente : cliente_repo.findAll()){

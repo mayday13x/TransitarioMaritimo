@@ -153,7 +153,13 @@ public class CargaController{
             if (newValue != null) {
                 LocalAtual.setText(newValue.getLocalAtual());
                 Observacoes.setText(newValue.getObservacoes());
-                IdArmazem.setText(newValue.getIdArmazem().toString());
+
+                if(newValue.getIdArmazem() != null){
+                    IdArmazem.setText(newValue.getIdArmazem().toString());
+                } else {
+                    IdArmazem.setText("");
+                }
+
                 IdContentor.setText(newValue.getIdContentor().toString());
                 IdEstadoCarga.setText(newValue.getEstadoCargaByIdEstadoCarga().getDescricao());
                 IdReserva.setText(newValue.getIdReserva().toString());
@@ -194,62 +200,6 @@ public class CargaController{
             for (ReservaEntity reservaEntity : reservas) {
                 IdReservaCombo.getItems().add(String.valueOf(reservaEntity.getId()));
             }
-        }
-
-    }
-
-    @FXML
-    public void VoltarAtrasArmazem(ActionEvent event) throws IOException {
-
-        try {
-            FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuGestorLogisticoArmazemView.fxml")));
-            Parent rootMenu = loaderMenu.load();
-            MenuController menuController = loaderMenu.getController();
-            menu_panel = menuController.getMenu_panel();
-            Scene regCena = new Scene(rootMenu);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Menu");
-            stage.show();
-        } catch (IOException ex) {
-            System.out.println("Erro ao acessar meu" + ex.getMessage());
-        }
-
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Armazem.fxml"));
-        try {
-            Pane cmdPane = fxmlLoader.load();
-            menu_panel.getChildren().clear();
-            menu_panel.getChildren().add(cmdPane);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-    }
-
-    @FXML
-    public void VoltarAtrasContentor(ActionEvent event) throws IOException {
-
-        try {
-            FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuFuncionarioArmazemView.fxml")));
-            Parent rootMenu = loaderMenu.load();
-            MenuController menuController = loaderMenu.getController();
-            menu_panel = menuController.getMenu_panel();
-            Scene regCena = new Scene(rootMenu);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Menu");
-            stage.show();
-        } catch (IOException ex) {
-            System.out.println("Erro ao acessar meu" + ex.getMessage());
-        }
-
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Contentor.fxml"));
-        try {
-            Pane cmdPane = fxmlLoader.load();
-            menu_panel.getChildren().clear();
-            menu_panel.getChildren().add(cmdPane);
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
 
     }
