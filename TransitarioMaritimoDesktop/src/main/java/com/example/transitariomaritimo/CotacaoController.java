@@ -40,6 +40,7 @@ public class CotacaoController implements Initializable {
     private CotacaoRepository cotacao_repo;
     private TipoCargaRepository tpcarga_repo;
     private LinhaCotacaoRepository linha_cotacao_repo;
+  //  private LinhaCotacaoRepositoryPK linha_cotacao_repoPK;
     private EstadoCotacaoRepository estado_cotacao_repo;
 
 
@@ -190,6 +191,7 @@ public class CotacaoController implements Initializable {
         tpcarga_repo = context.getBean(TipoCargaRepository.class);
         linha_cotacao_repo = context.getBean(LinhaCotacaoRepository.class);
         estado_cotacao_repo = context.getBean(EstadoCotacaoRepository.class);
+        //linha_cotacao_repoPK = context.getBean(LinhaCotacaoRepositoryPK.class);
 
         ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(cliente_repo.findAll());
         ObservableList<ServicoEntity> servicos = FXCollections.observableArrayList(service_repo.findAll());
@@ -234,6 +236,36 @@ public class CotacaoController implements Initializable {
         }   catch (Exception ex){
             System.out.println("Erro no Servico: " + ex.getMessage());
         }
+
+
+        //CARREGAR COTAÇÕES
+      /*  try{
+
+            IdCliente.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+            Utilizador.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
+            Nif.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNif().toString()));
+            Localidade.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCodPostalByIdCodPostal().getLocalidade()));
+            Telefone.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTelefone()));
+            Email.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
+            table.setItems(clientes);
+
+
+            // context = new AnnotationConfigApplicationContext(AppConfig.class);
+            cp_repo = context.getBean(CodPostalRepository.class);
+            // cli_repo = context.getBean(ClienteRepository.class);
+
+            ObservableList<CodPostalEntity> localidades = FXCollections.observableArrayList(cp_repo.findAll());
+            for (CodPostalEntity i : localidades){
+                CodPostalCombo.getItems().addAll(i.getLocalidade());
+                EditCodPostalCombo.getItems().addAll(i.getLocalidade());
+            }
+
+
+        } catch (Exception ex){
+            System.out.println("Erro no Cliente: " + ex.getMessage());
+        }
+*/
+
 
     }
 
@@ -351,15 +383,26 @@ public class CotacaoController implements Initializable {
             for(ServicoEntity i : selected_services){
 
                 valorTotal += i.getPreco() + (i.getComissao() * i.getPreco()); // val + comissão
+
+               // linha.setServicoByIdServico(i);
+                System.out.println(i);
+               // linha.setCotacaoByIdCotacao(cotacao);
+                System.out.println(cotacao);
                 linha.setIdCotacao(cotacao.getId());
+                System.out.println(cotacao.getId());
                 linha.setIdServico(i.getId());
-                linha.setCotacaoByIdCotacao(cotacao);
+                System.out.println(i.getId());
+
                 linhaPK.setIdCotacao(cotacao.getId());
                 linhaPK.setIdServico(i.getId());
-                linha_cotacao_repo.save(linha);     //erro aqui
+
+              //  linha_cotacao_repoPK.save(linhaPK);
+              //  linha_cotacao_repo.save(linha);
+
             }
 
             cotacao.setValorTotal(valorTotal);
+
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Sucesso");

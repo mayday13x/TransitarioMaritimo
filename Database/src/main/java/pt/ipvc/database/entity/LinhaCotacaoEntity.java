@@ -15,8 +15,9 @@ public class LinhaCotacaoEntity {
     private Date dataInicio;
     private Date dataFim;
     private CotacaoEntity cotacaoByIdCotacao;
+    private ServicoEntity servicoByIdServico;
 
-   // @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_cotacao", nullable = false)
     public int getIdCotacao() {
@@ -27,7 +28,7 @@ public class LinhaCotacaoEntity {
         this.idCotacao = idCotacao;
     }
 
-   // @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_servico", nullable = false)
     public int getIdServico() {
@@ -115,5 +116,15 @@ public class LinhaCotacaoEntity {
 
     public void setCotacaoByIdCotacao(CotacaoEntity cotacaoByIdCotacao) {
         this.cotacaoByIdCotacao = cotacaoByIdCotacao;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_servico", referencedColumnName = "id", nullable = false)
+    public ServicoEntity getServicoByIdServico() {
+        return servicoByIdServico;
+    }
+
+    public void setServicoByIdServico(ServicoEntity servicoByIdServico) {
+        this.servicoByIdServico = servicoByIdServico;
     }
 }

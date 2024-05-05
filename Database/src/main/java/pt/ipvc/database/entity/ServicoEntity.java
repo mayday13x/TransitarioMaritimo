@@ -2,6 +2,8 @@ package pt.ipvc.database.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Collection;
+
 @Entity
 @Table(name = "servico", schema = "public", catalog = "transitario_maritimo")
 public class ServicoEntity {
@@ -11,6 +13,7 @@ public class ServicoEntity {
     private Double preco;
     private String descricao;
     private FornecedorEntity fornecedorByIdFornecedor;
+    private Collection<LinhaCotacaoEntity> linhaCotacaosById;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -97,5 +100,14 @@ public class ServicoEntity {
 
     public void setFornecedorByIdFornecedor(FornecedorEntity fornecedorByIdFornecedor) {
         this.fornecedorByIdFornecedor = fornecedorByIdFornecedor;
+    }
+
+    @OneToMany(mappedBy = "servicoByIdServico")
+    public Collection<LinhaCotacaoEntity> getLinhaCotacaosById() {
+        return linhaCotacaosById;
+    }
+
+    public void setLinhaCotacaosById(Collection<LinhaCotacaoEntity> linhaCotacaosById) {
+        this.linhaCotacaosById = linhaCotacaosById;
     }
 }
