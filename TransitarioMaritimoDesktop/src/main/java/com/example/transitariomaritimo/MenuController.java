@@ -141,6 +141,20 @@ public class MenuController implements Initializable {
     }
 
     @FXML
+    public void ContentorListar(ActionEvent event) {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ContentorListar.fxml"));
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            menu_panel.getChildren().clear();
+            menu_panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    @FXML
     public void Servicos(ActionEvent event) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ServicosView.fxml"));

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="480.0" prefWidth="720.0" stylesheets="@css/nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ContentorController">
+   <children>
+
+                                                <Pane fx:id="PaneInserir" layoutX="58.0" layoutY="16.0" prefHeight="448.0" prefWidth="592.0" style="-fx-background-color: #FFFFFF;" visible="false">
+         <children>
+             <Label layoutX="265.0" layoutY="1.0" text="Inserir Contentor">
+                 <font>
+                     <Font size="18.0" />
+                 </font>
+             </Label>
+             <Button layoutX="524.0" layoutY="10.0" mnemonicParsing="false" onAction="#VoltarAtrasInserirContentor" text="x" />
+             <Button layoutX="411.0" layoutY="389.0" mnemonicParsing="false" onAction="#RegistarContentor" text="Inserir Contentor" />
+             <TextField fx:id="CapacidadeText" layoutX="43.0" layoutY="74.0" prefHeight="26.0" prefWidth="202.0" />
+             <TextField fx:id="PesoMaximoText" layoutX="358.0" layoutY="74.0" prefHeight="26.0" prefWidth="202.0" />
+             <TextField fx:id="LocalAtualText" layoutX="43.0" layoutY="146.0" prefHeight="26.0" prefWidth="202.0" />
+             <Label layoutX="43.0" layoutY="57.0" text="Capacidade" />
+             <Label layoutX="358.0" layoutY="57.0" text="Peso Maxímo" />
+             <Label layoutX="43.0" layoutY="128.0" text="Local Atual" />
+             <Label layoutX="358.0" layoutY="128.0" text="Tipo de Contentor" />
+             <Label layoutX="43.0" layoutY="200.0" text="EstadoContentor" />
+             <ComboBox fx:id="TipoContentorCombo" layoutX="358.0" layoutY="147.0" prefHeight="26.0" prefWidth="202.0" />
+             <ComboBox fx:id="EstadoContentorCombo" layoutX="42.0" layoutY="218.0" prefHeight="26.0" prefWidth="202.0" />
+         </children>
+         <effect>
+            <DropShadow />
+         </effect>
+      </Pane>
+      <Pane fx:id="mainPanel" prefHeight="480.0" prefWidth="720.0" style="-fx-background-color: #FFFFFF;">
+         <children>
+            <Label layoutX="311.0" layoutY="14.0" text="Contentores">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+             <TableView fx:id="table" layoutX="37.0" layoutY="56.0" prefHeight="180.0" prefWidth="624.0">
+             <columns>
+                 <TableColumn fx:id="Cin" prefWidth="148.0" text="Cin" />
+                 <TableColumn fx:id="Capacidade" minWidth="0.0" prefWidth="168.79998779296875" text="Capacidade" />
+                 <TableColumn fx:id="PesoMaximo" minWidth="0.0" prefWidth="135.99993896484375" text="Peso Maximo" />
+                 <TableColumn fx:id="LocalAtual" minWidth="0.0" prefWidth="172.00006103515625" text="Local Atual" />
+             </columns>
+         </TableView>
+       <TextField fx:id="IdEstadoContentor" layoutX="38.0" layoutY="284.0" prefHeight="26.0" prefWidth="624.0" />
+       <Button layoutX="36.0" layoutY="429.0" mnemonicParsing="false" onAction="#VoltarAtras" text="&lt;" />
+       <Label layoutX="38.0" layoutY="260.0" text="EstadoContentor" />
+       <TextField fx:id="TipoContentor" layoutX="38.0" layoutY="350.0" prefHeight="26.0" prefWidth="624.0" />
+       <Label layoutX="36.0" layoutY="333.0" text="TipoContentor" />
+         </children>
+      </Pane>
+
+   </children>
+</AnchorPane>

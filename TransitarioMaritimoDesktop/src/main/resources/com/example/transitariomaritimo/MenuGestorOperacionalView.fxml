@@ -27,7 +27,7 @@
          </graphic>
       </Button>
       <AnchorPane fx:id="menu_panel" layoutX="156.0" layoutY="8.0" prefHeight="715.0" prefWidth="850.0" />
-      <Button defaultButton="true" layoutX="14.0" layoutY="154.0" mnemonicParsing="false" onAction="#Contentor" prefHeight="42.0" prefWidth="124.0" text="Contentores">
+      <Button defaultButton="true" layoutX="14.0" layoutY="154.0" mnemonicParsing="false" onAction="#ContentorListar" prefHeight="42.0" prefWidth="124.0" text="Contentores">
          <font>
             <Font size="17.0" />
          </font>

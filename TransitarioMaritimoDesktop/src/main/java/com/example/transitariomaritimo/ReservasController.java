@@ -337,23 +337,30 @@ public class ReservasController implements Initializable {
     }
 
     @FXML
-    public  void ExcluirReserva(ActionEvent event) {
+    public  void CancelarReserva(ActionEvent event) {
 
         if(Table.getSelectionModel().getSelectedItem() == null){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Erro!");
             alert.setHeaderText("Nenhuma reserva selecionada!");
-            alert.setContentText("Selecione uma reserva para eliminar!");
+            alert.setContentText("Selecione uma reserva para cancelar!");
             alert.showAndWait();
         } else {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Eliminar Reserva");
-            alert.setHeaderText("Eliminar Reserva");
-            alert.setContentText("Tem a certeza que pretende eliminar este Reserva?");
+            alert.setTitle("Cancelar Reserva");
+            alert.setHeaderText("Cancelar Reserva");
+            alert.setContentText("Tem a certeza que pretende cancelar este Reserva?");
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                reserva_repo.deleteById(Table.getSelectionModel().getSelectedItem().getId());
+                ReservaEntity reserva = Table.getSelectionModel().getSelectedItem();
+                EstadoReservaEntity estadoReserva = reserva_estado_repo.findByDescricaoLike("Cancelado");
+
+                reserva.setIdEstadoReserva(estadoReserva.getId());
+                reserva.setEstadoReservaByIdEstadoReserva(estadoReserva);
+
+                reserva_repo.save(reserva);
+
                 ObservableList<ReservaEntity> reservaAtualizados = FXCollections.observableArrayList(reserva_repo.findAll());
                 Table.setItems(reservaAtualizados);
             }
