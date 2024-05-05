@@ -5,6 +5,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -26,11 +27,12 @@
       <TextField fx:id="IdFuncionario" layoutX="60.0" layoutY="293.0" prefHeight="26.0" prefWidth="218.0" promptText="IdFuncionario" />
       <TextField fx:id="IdCliente" layoutX="373.0" layoutY="293.0" prefHeight="26.0" prefWidth="218.0" promptText="IdCliente" />
       <TextField fx:id="IdEstadoReserva" layoutX="60.0" layoutY="353.0" prefHeight="26.0" prefWidth="218.0" promptText="IdEstadoReservaa" />
-      <Button layoutX="538.0" layoutY="419.0" mnemonicParsing="false" onAction="#InserirReserva" prefHeight="36.0" prefWidth="127.0" text="Pagar Reserva" />
+      <Button layoutX="538.0" layoutY="419.0" mnemonicParsing="false" onAction="#PagarReserva" prefHeight="36.0" prefWidth="127.0" text="Pagar Reserva" />
       <Button layoutX="60.0" layoutY="419.0" mnemonicParsing="false" onAction="#VoltarAtrasCliente" prefHeight="34.0" prefWidth="27.0" text="&lt;" />
       <Label layoutX="60.0" layoutY="276.0" text="IdFuncionario" />
-      <Label layoutX="60.0" layoutY="335.0" text="IdEstadoReserva" />
+      <Label layoutX="60.0" layoutY="335.0" text="EstadoReserva" />
       <Label layoutX="375.0" layoutY="276.0" text="IdCliente" />
+      <ToggleButton fx:id="ReservasPagarButton" layoutX="359.0" layoutY="419.0" mnemonicParsing="false" onAction="#ReservasPorPagar" text="Reservas Por Pagar" />
 
    </children>
 </AnchorPane>

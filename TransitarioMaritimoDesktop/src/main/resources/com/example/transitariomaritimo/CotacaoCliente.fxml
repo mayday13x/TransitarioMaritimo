@@ -23,7 +23,7 @@
                  <columns>
                      <TableColumn fx:id="Id" prefWidth="91.0" text="Id" />
                      <TableColumn fx:id="IdCliente" prefWidth="177.0" text="IdCliente" />
-                     <TableColumn fx:id="Estado" prefWidth="175.0" text="EstadoReserva" />
+                     <TableColumn fx:id="Estado" prefWidth="175.0" text="EstadoCotação" />
                      <TableColumn fx:id="Data" prefWidth="157.0" text="Data" />
                      <TableColumn fx:id="ValorTotal" prefWidth="167.0" text="ValorTotal" />
                  </columns>
