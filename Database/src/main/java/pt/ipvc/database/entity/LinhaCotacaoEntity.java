@@ -16,7 +16,7 @@ public class LinhaCotacaoEntity {
     private Date dataFim;
     private CotacaoEntity cotacaoByIdCotacao;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   // @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_cotacao", nullable = false)
     public int getIdCotacao() {
@@ -27,7 +27,7 @@ public class LinhaCotacaoEntity {
         this.idCotacao = idCotacao;
     }
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   // @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_servico", nullable = false)
     public int getIdServico() {
