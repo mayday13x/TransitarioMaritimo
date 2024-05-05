@@ -169,7 +169,7 @@ public class ContentorController implements Initializable {
         if(contentorSelecionado != null) {
 
             try {
-                FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuView.fxml")));
+                FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuFuncionarioArmazemView.fxml")));
                 Parent rootMenu = loaderMenu.load();
                 MenuController menuController = loaderMenu.getController();
                 menu_Panel = menuController.getMenu_panel();
@@ -235,7 +235,7 @@ public class ContentorController implements Initializable {
     public void VoltarAtras(ActionEvent event) {
 
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("MenuAdminView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("MenuFuncionarioArmazemView.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);

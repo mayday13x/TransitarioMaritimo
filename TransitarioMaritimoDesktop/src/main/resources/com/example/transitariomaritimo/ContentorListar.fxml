@@ -54,7 +54,6 @@
              </columns>
          </TableView>
        <TextField fx:id="IdEstadoContentor" layoutX="38.0" layoutY="284.0" prefHeight="26.0" prefWidth="624.0" />
-       <Button layoutX="36.0" layoutY="429.0" mnemonicParsing="false" onAction="#VoltarAtras" text="&lt;" />
        <Label layoutX="38.0" layoutY="260.0" text="EstadoContentor" />
        <TextField fx:id="TipoContentor" layoutX="38.0" layoutY="350.0" prefHeight="26.0" prefWidth="624.0" />
        <Label layoutX="36.0" layoutY="333.0" text="TipoContentor" />

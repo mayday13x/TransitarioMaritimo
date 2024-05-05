@@ -150,7 +150,7 @@ public class ArmazemController implements Initializable {
         if (armazemSelecionado != null) {
 
             try {
-                FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuView.fxml")));
+                FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuGestorLogisticoArmazemView.fxml")));
                 Parent rootMenu = loaderMenu.load();
                 MenuController menuController = loaderMenu.getController();
                 menu_Panel = menuController.getMenu_panel();
