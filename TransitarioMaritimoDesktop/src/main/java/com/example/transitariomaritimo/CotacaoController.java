@@ -315,7 +315,7 @@ public class CotacaoController implements Initializable {
 
         //REGISTAR COTACAO
              CotacaoEntity cotacao = new CotacaoEntity();
-             EstadoCotacaoEntity estadoCotacao = new EstadoCotacaoEntity();
+             EstadoCotacaoEntity estadoCotacao = estado_cotacao_repo.findByDescricaoLike("Em analise");
              cotacao.setIdCliente(clienteSelecionado().getId());
              cotacao.setIdEstadoCotacao(3);
              cotacao.setEstadoCotacaoByIdEstadoCotacao(estadoCotacao);
