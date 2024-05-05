@@ -32,9 +32,8 @@
              <TextField fx:id="IdFuncionario" layoutX="60.0" layoutY="293.0" prefHeight="26.0" prefWidth="218.0" promptText="IdFuncionario" />
              <TextField fx:id="IdCliente" layoutX="373.0" layoutY="293.0" prefHeight="26.0" prefWidth="218.0" promptText="IdCliente" />
              <TextField fx:id="IdEstadoReserva" layoutX="60.0" layoutY="353.0" prefHeight="26.0" prefWidth="218.0" promptText="IdEstadoReserva" />
-             <Button layoutX="354.0" layoutY="419.0" mnemonicParsing="false" onAction="#InserirReserva" prefHeight="36.0" prefWidth="129.0" text="Inserir Reserva" />
-             <Button layoutX="527.0" layoutY="419.0" mnemonicParsing="false" onAction="#CancelarReserva" prefHeight="36.0" prefWidth="129.0" text="Cancelar Reserva" />
-             <Button layoutX="60.0" layoutY="419.0" mnemonicParsing="false" onAction="#VoltarAtras" prefHeight="34.0" prefWidth="27.0" text="&lt;" />
+             <Button defaultButton="true" layoutX="48.0" layoutY="419.0" mnemonicParsing="false" onAction="#InserirReserva" prefHeight="36.0" prefWidth="129.0" text="Inserir Reserva" />
+             <Button layoutX="219.0" layoutY="419.0" mnemonicParsing="false" onAction="#CancelarReserva" prefHeight="36.0" prefWidth="129.0" text="Cancelar Reserva" />
              <Label layoutX="60.0" layoutY="276.0" text="IdFuncionario" />
              <Label layoutX="60.0" layoutY="335.0" text="EstadoReserva" />
              <Label layoutX="375.0" layoutY="276.0" text="IdCliente" />

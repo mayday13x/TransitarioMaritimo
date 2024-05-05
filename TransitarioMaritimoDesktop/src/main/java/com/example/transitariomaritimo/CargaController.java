@@ -188,7 +188,7 @@ public class CargaController{
     public void VoltarAtrasArmazem(ActionEvent event) throws IOException {
 
         try {
-            FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuView.fxml")));
+            FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuGestorLogisticoArmazemView.fxml")));
             Parent rootMenu = loaderMenu.load();
             MenuController menuController = loaderMenu.getController();
             menu_panel = menuController.getMenu_panel();
@@ -216,7 +216,7 @@ public class CargaController{
     public void VoltarAtrasContentor(ActionEvent event) throws IOException {
 
         try {
-            FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuView.fxml")));
+            FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuFuncionarioArmazemView.fxml")));
             Parent rootMenu = loaderMenu.load();
             MenuController menuController = loaderMenu.getController();
             menu_panel = menuController.getMenu_panel();
