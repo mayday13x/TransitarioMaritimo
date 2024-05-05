@@ -112,8 +112,8 @@ public class ClienteController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        DoubleClickHandler handler = new DoubleClickHandler();
-        table.setOnMouseClicked(handler);
+            DoubleClickHandler handler = new DoubleClickHandler();
+            table.setOnMouseClicked(handler);
 
         context = new AnnotationConfigApplicationContext(AppConfig.class);
         cli_repo = context.getBean(ClienteRepository.class);

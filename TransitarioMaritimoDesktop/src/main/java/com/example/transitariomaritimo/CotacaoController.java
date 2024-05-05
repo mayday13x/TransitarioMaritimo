@@ -5,17 +5,26 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.CotacaoEntity;
 import pt.ipvc.database.entity.ServicoEntity;
 import pt.ipvc.database.repository.CotacaoRepository;
 import pt.ipvc.database.repository.ServicoRepository;
+
+import java.io.IOException;
 
 public class CotacaoController {
 
@@ -94,6 +103,9 @@ public class CotacaoController {
 
     public void CotacaoCliente() {
 
+        DoubleClickHandler handler = new DoubleClickHandler();
+        table_cotacoes.setOnMouseClicked(handler);
+
         context = new AnnotationConfigApplicationContext(AppConfig.class);
         cotacao_repo = context.getBean(CotacaoRepository.class);
         servico_repo = context.getBean(ServicoRepository.class);
@@ -157,5 +169,39 @@ public class CotacaoController {
         ServicoPane.setVisible(false);
         CotacaoClientePane.setEffect(null);
         CotacaoClientePane.setDisable(false);
+    }
+
+    @FXML
+    public void ShowVisualizarServicos() {
+        ServicoPane.setVisible(true);
+        CotacaoClientePane.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        CotacaoClientePane.setDisable(true);
+
+    }
+
+    @FXML
+    void VoltarAtrasCliente(ActionEvent event) {
+
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("MenuClienteView.fxml"));
+            Scene regCena = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(regCena);
+            stage.setTitle("Menu");
+            stage.show();
+        }catch (IOException ex){
+            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
+        }
+    }
+
+    public class DoubleClickHandler implements EventHandler<MouseEvent> {
+
+        @Override
+        public void handle(MouseEvent event) {
+            if (event.getClickCount() == 2) {
+                ShowVisualizarServicos();
+
+            }
+        }
     }
 }

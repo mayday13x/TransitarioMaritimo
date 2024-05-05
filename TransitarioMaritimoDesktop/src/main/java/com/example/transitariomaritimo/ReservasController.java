@@ -231,6 +231,22 @@ public class ReservasController implements Initializable {
         }
     }
 
+
+    @FXML
+    public void VoltarAtrasCliente(ActionEvent event) {
+
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("MenuClienteView.fxml"));
+            Scene regCena = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(regCena);
+            stage.setTitle("Menu");
+            stage.show();
+        }catch (IOException ex){
+            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
+        }
+    }
+
     @FXML
     public void InserirReserva(ActionEvent event) {
         PaneInserir.setVisible(true);
