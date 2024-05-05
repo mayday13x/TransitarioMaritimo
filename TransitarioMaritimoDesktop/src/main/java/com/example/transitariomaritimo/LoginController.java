@@ -82,6 +82,8 @@ public class LoginController implements Initializable {
     @FXML
     public void Login(ActionEvent event) {
 
+
+
         if (Objects.equals(tipoUtilizadorCombo.getValue(), "") || Objects.equals(utilizadorText.getText(), "")
                 || Objects.equals(passwordText.getText(), "")) {
 
@@ -165,7 +167,8 @@ public class LoginController implements Initializable {
                     }
                 }
             }
-        }else if(mensagem) {
+        }
+        if(mensagem) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Campos Inválidos!");
         alert.setHeaderText("Campos do utilizador ou password incorretos!");
