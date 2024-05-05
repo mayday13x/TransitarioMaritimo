@@ -113,9 +113,20 @@ public class CargaController{
     @FXML
     private Pane menu_panel;
 
+    @FXML
+    private Pane AtualizarPane;
+
+    @FXML
+    private TextField newLocalAtual;
+
     private int armazemId;
 
     private int contentorCin;
+
+    private int idCarga;
+    public void setIDCarga(int idCarga){
+        this.idCarga = idCarga;
+    }
 
     public void setArmazemId(int armazemId) {
         this.armazemId = armazemId;
@@ -159,29 +170,32 @@ public class CargaController{
         estado_carga_repo = context.getBean(EstadoCargaRepository.class);
 
         ObservableList<TipoCargaEntity> tiposCargas = FXCollections.observableArrayList(tipo_carga_repo.findAll());
-        for (TipoCargaEntity tipoCarga : tiposCargas) {
-            TipoCargaCombo.getItems().add(tipoCarga.getDescricao());
+        if(TipoCargaCombo != null){
+            for (TipoCargaEntity tipoCarga : tiposCargas) {
+                TipoCargaCombo.getItems().add(tipoCarga.getDescricao());
+            }
+
+            ObservableList<ArmazemEntity> armazem = FXCollections.observableArrayList(armazem_repo.findAll());
+            for (ArmazemEntity armazemEntity : armazem) {
+                IdArmazemCombo.getItems().add(String.valueOf(armazemEntity.getId()));
+            }
+
+            ObservableList<ContentorEntity> contentor = FXCollections.observableArrayList(contentor_repo.findAll());
+            for (ContentorEntity contentorEntity : contentor) {
+                IdContentorCombo.getItems().addAll(String.valueOf(contentorEntity.getCin()));
+            }
+
+            ObservableList<CotacaoEntity> cotacoes = FXCollections.observableArrayList(cotacao_repo.findAll());
+            for (CotacaoEntity cotacaoEntity : cotacoes) {
+                IdCotacaoCombo.getItems().add(String.valueOf(cotacaoEntity.getId()));
+            }
+
+            ObservableList<ReservaEntity> reservas = FXCollections.observableArrayList(reserva_repo.findAll());
+            for (ReservaEntity reservaEntity : reservas) {
+                IdReservaCombo.getItems().add(String.valueOf(reservaEntity.getId()));
+            }
         }
 
-        ObservableList<ArmazemEntity> armazem = FXCollections.observableArrayList(armazem_repo.findAll());
-        for (ArmazemEntity armazemEntity : armazem) {
-            IdArmazemCombo.getItems().add(String.valueOf(armazemEntity.getId()));
-        }
-
-        ObservableList<ContentorEntity> contentor = FXCollections.observableArrayList(contentor_repo.findAll());
-        for (ContentorEntity contentorEntity : contentor) {
-            IdContentorCombo.getItems().addAll(String.valueOf(contentorEntity.getCin()));
-        }
-
-        ObservableList<CotacaoEntity> cotacoes = FXCollections.observableArrayList(cotacao_repo.findAll());
-        for (CotacaoEntity cotacaoEntity : cotacoes) {
-            IdCotacaoCombo.getItems().add(String.valueOf(cotacaoEntity.getId()));
-        }
-
-        ObservableList<ReservaEntity> reservas = FXCollections.observableArrayList(reserva_repo.findAll());
-        for (ReservaEntity reservaEntity : reservas) {
-            IdReservaCombo.getItems().add(String.valueOf(reservaEntity.getId()));
-        }
     }
 
     @FXML
@@ -374,6 +388,35 @@ public class CargaController{
                 IdCotacao.setText(newValue.getIdCotacao().toString());
             }
         });
+    }
+
+    @FXML
+    public void AtualizarCarga(ActionEvent event) {
+        setIDCarga(table.getSelectionModel().getSelectedItem().getId());
+        AtualizarPane.setVisible(true);
+        mainPanel.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        mainPanel.setDisable(true);
+    }
+
+    @FXML
+    public void voltarAtrasAtualizarCarga(ActionEvent event) {
+        AtualizarPane.setVisible(false);
+
+        mainPanel.setEffect(null);
+        mainPanel.setDisable(false);
+    }
+
+    @FXML
+    public void AtualizarLocalCarga(ActionEvent event) {
+        CargaEntity carga = carga_repo.findByID(idCarga);
+
+        carga.setLocalAtual(newLocalAtual.getText());
+        carga_repo.save(carga);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Sucesso!");
+        alert.setHeaderText("Registo alterado com sucesso!");
+        alert.showAndWait();
     }
 
 

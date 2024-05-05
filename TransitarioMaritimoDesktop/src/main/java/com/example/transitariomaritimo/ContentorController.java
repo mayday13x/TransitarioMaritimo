@@ -207,6 +207,50 @@ public class ContentorController implements Initializable {
 
     }
 
+    public void VisualizarCargasFuncionarioTransporte(ActionEvent event) throws IOException {
+        ContentorEntity contentorSelecionado = table.getSelectionModel().getSelectedItem();
+
+        if(contentorSelecionado != null) {
+
+            try {
+                FXMLLoader loaderMenu = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MenuFuncionarioTransporteView.fxml")));
+                Parent rootMenu = loaderMenu.load();
+                MenuController menuController = loaderMenu.getController();
+                menu_Panel = menuController.getMenu_panel();
+                Scene regCena = new Scene(rootMenu);
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(regCena);
+                stage.setTitle("Menu");
+                stage.show();
+            } catch (IOException ex) {
+                System.out.println("Erro ao acessar meu" + ex.getMessage());
+            }
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CargaFuncionarioTransporte.fxml"));
+
+            try {
+                Pane cmdPane = fxmlLoader.load();
+                menu_Panel.getChildren().clear();
+                menu_Panel.getChildren().add(cmdPane);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            CargaController cargaController = fxmlLoader.getController();
+            cargaController.setContentorCin(contentorSelecionado.getCin());
+            cargaController.cargaContentor();
+
+        }else {
+            // Exibe uma mensagem de erro se nenhum armazém estiver selecionado
+            //System.out.println("Selecione um armazém para visualizar as cargas.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setContentText("Selecione um armazém para visualizar as cargas.");
+            alert.showAndWait();
+        }
+
+    }
+
     @FXML
     public void InserirContentor(ActionEvent event) {
 

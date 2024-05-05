@@ -22,4 +22,7 @@ public interface CargaRepository extends JpaRepository<CargaEntity, Integer> {
 
     @Query("SELECT cp.id FROM TipoCargaEntity cp WHERE cp.descricao LIKE :descricao")
     Integer findByNameLike(@Param("descricao") String descricao);
+
+    @Query("SELECT c FROM CargaEntity c where :armazemId = c.id")
+    CargaEntity findByID(@Param("armazemId") int armazemId);
 }
