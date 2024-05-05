@@ -335,7 +335,10 @@ public class CotacaoController implements Initializable {
             carga.setVolume(altura * comp * largura);
             carga.setPeso(Double.parseDouble(PesoCarga.getText()));
             carga.setIdTipoCarga(tpcarga_repo.findByDescLike(TipoCarga.getSelectionModel().getSelectedItem()).getId());
+            TipoCargaEntity cargaEntity = tpcarga_repo.findByDescLike(TipoCarga.getSelectionModel().getSelectedItem());;
+            carga.setTipoCargaByIdTipoCarga(cargaEntity);
             carga.setObservacoes(Observacoes.getText());
+            carga.setCotacaoByIdCotacao(cotacao);
 
             carga_repo.save(carga);
 

@@ -13,7 +13,7 @@ public class LinhaCotacaoEntityPK implements Serializable {
 
     @Column(name = "id_cotacao", nullable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   // @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getIdCotacao() {
         return idCotacao;
     }
@@ -24,7 +24,7 @@ public class LinhaCotacaoEntityPK implements Serializable {
 
     @Column(name = "id_servico", nullable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   // @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getIdServico() {
         return idServico;
     }
