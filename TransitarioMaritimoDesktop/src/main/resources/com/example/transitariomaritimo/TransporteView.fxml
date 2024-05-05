@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -17,28 +16,15 @@
                   <Font size="18.0" />
                </font>
             </Text>
-            <TableView fx:id="TableTr" layoutX="67.0" layoutY="67.0" prefHeight="380.0" prefWidth="715.0">
+            <TableView fx:id="Table" layoutX="67.0" layoutY="67.0" prefHeight="380.0" prefWidth="715.0">
               <columns>
-                <TableColumn fx:id="IdTr" prefWidth="71.0" text="Id" />
-                <TableColumn fx:id="Matricula" prefWidth="240.0" text="Matricula" />
-                  <TableColumn fx:id="OrigemTr" prefWidth="206.0" text="Origem" />
-                  <TableColumn fx:id="DestinoTr" prefWidth="196.0" text="Destino" />
+                <TableColumn fx:id="Id" prefWidth="71.0" text="Id" />
+                <TableColumn fx:id="Imo" prefWidth="154.0" text="Imo" />
+                  <TableColumn fx:id="Origem" prefWidth="162.0" text="Origem" />
+                  <TableColumn fx:id="Destino" prefWidth="157.0" text="Destino" />
+                  <TableColumn fx:id="Funcionario" prefWidth="169.0" text="Funcionário" />
               </columns>
             </TableView>
-            <ComboBox fx:id="TipoTranporteCombo" layoutX="67.0" layoutY="515.0" prefHeight="36.0" prefWidth="258.0" />
-            <Text layoutX="67.0" layoutY="511.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo de Transporte" />
-            <Pane fx:id="SecondPane" layoutX="68.0" layoutY="66.0" prefHeight="380.0" prefWidth="715.0" style="-fx-background-color: #FFFFFF;" visible="false">
-               <children>
-                  <TableView fx:id="TableTm" prefHeight="380.0" prefWidth="715.0">
-                     <columns>
-                        <TableColumn fx:id="IdTm" prefWidth="71.0" text="Id" />
-                        <TableColumn fx:id="Imo" prefWidth="240.0" text="Imo" />
-                        <TableColumn fx:id="OrigemTm" prefWidth="206.0" text="Origem" />
-                        <TableColumn fx:id="DestinoTm" prefWidth="196.0" text="Destino" />
-                     </columns>
-                  </TableView>
-               </children>
-            </Pane>
          </children>
       </Pane>
    </children>
