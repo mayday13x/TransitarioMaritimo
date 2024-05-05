@@ -87,6 +87,9 @@ public class ReservasController implements Initializable {
     @FXML
     private Pane mainPanel;
 
+    @FXML
+    private ToggleButton ReservasPagarButton;
+
     private int idCliente = 0;
 
     public void setIdCliente(int idCliente) {
@@ -99,7 +102,6 @@ public class ReservasController implements Initializable {
         context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         reserva_repo = context.getBean(ReservaRepository.class);
-        System.out.println(idCliente);
 
         if(idCliente != 0){
             ObservableList<ReservaEntity> reserva = FXCollections.observableArrayList(reserva_repo.findByIdClienteLike(idCliente));
@@ -160,7 +162,7 @@ public class ReservasController implements Initializable {
         context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         reserva_repo = context.getBean(ReservaRepository.class);
-        System.out.println(idCliente);
+
 
         if(idCliente != 0){
             ObservableList<ReservaEntity> reserva = FXCollections.observableArrayList(reserva_repo.findByIdClienteLike(idCliente));
@@ -221,6 +223,22 @@ public class ReservasController implements Initializable {
 
         try{
             Parent root = FXMLLoader.load(getClass().getResource("MenuAdminView.fxml"));
+            Scene regCena = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(regCena);
+            stage.setTitle("Menu");
+            stage.show();
+        }catch (IOException ex){
+            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
+        }
+    }
+
+
+    @FXML
+    public void VoltarAtrasCliente(ActionEvent event) {
+
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("MenuClienteView.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(regCena);
@@ -318,6 +336,7 @@ public class ReservasController implements Initializable {
         Table.setItems(reservasAtualizadas);
     }
 
+    @FXML
     public  void ExcluirReserva(ActionEvent event) {
 
         if(Table.getSelectionModel().getSelectedItem() == null){
@@ -341,5 +360,64 @@ public class ReservasController implements Initializable {
         }
     }
 
+    public void ReservasPorPagar(ActionEvent event) {
 
+        if(ReservasPagarButton.isSelected()){
+            ObservableList<ReservaEntity> reservasnaoPagas = FXCollections.observableArrayList(reserva_repo.findByIdEstadoReserva());
+            Table.setItems(reservasnaoPagas);
+        }
+
+        if(!ReservasPagarButton.isSelected()){
+            ObservableList<ReservaEntity> reservas = FXCollections.observableArrayList(reserva_repo.findByIdClienteLike(idCliente));
+            Table.setItems(reservas);
+        }
+    }
+
+
+    @FXML
+    public  void PagarReserva(ActionEvent event) {
+
+        if (Table.getSelectionModel().getSelectedItem() == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erro!");
+            alert.setHeaderText("Nenhuma reserva selecionada!");
+            alert.setContentText("Selecione uma reserva para pagar!");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Pagar Reserva");
+            alert.setHeaderText("Pagar Reserva");
+            alert.setContentText("Tem a certeza que pretende pagar este Reserva?");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                ReservaEntity reserva = Table.getSelectionModel().getSelectedItem();
+                EstadoReservaEntity estadoReserva = reserva_estado_repo.findByDescricaoLike("Confirmado");
+
+                reserva.setIdEstadoReserva(estadoReserva.getId());
+                reserva.setEstadoReservaByIdEstadoReserva(estadoReserva);
+
+                try{
+                    reserva_repo.save(reserva);
+
+                    if(ReservasPagarButton.isSelected()){
+                        ObservableList<ReservaEntity> reservasnaoPagas = FXCollections.observableArrayList(reserva_repo.findByIdEstadoReserva());
+                        Table.setItems(reservasnaoPagas);
+                    }
+
+                    if(!ReservasPagarButton.isSelected()){
+                        ObservableList<ReservaEntity> reservas = FXCollections.observableArrayList(reserva_repo.findByIdClienteLike(idCliente));
+                        Table.setItems(reservas);
+                    }
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+
+                IdEstadoReserva.clear();
+                IdCliente.clear();
+                IdFuncionario.clear();
+
+            }
+        }
+    }
 }

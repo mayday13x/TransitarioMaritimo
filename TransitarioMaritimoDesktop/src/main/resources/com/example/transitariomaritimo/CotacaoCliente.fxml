@@ -4,29 +4,57 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="480.0" prefWidth="720.0" stylesheets="@css/nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.CotacaoController">
+<AnchorPane prefHeight="715.0" prefWidth="883.0" stylesheets="@css/nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.CotacaoController">
    <children>
-      <Label layoutX="294.0" layoutY="14.0" text="Cotações Clientes">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <TableView layoutX="53.0" layoutY="52.0" prefHeight="167.0" prefWidth="614.0">
-        <columns>
-          <TableColumn prefWidth="137.60003662109375" text="Id" />
-          <TableColumn prefWidth="164.0" text="IdCliente" />
-            <TableColumn prefWidth="162.4000244140625" text="IdEstadoReserva" />
-            <TableColumn prefWidth="147.99997558593748" text="Data" />
-        </columns>
-      </TableView>
-      <TextField layoutX="53.0" layoutY="263.0" prefHeight="26.0" prefWidth="614.0" />
-      <Label layoutX="53.0" layoutY="246.0" text="Valor Total" />
-      <Button layoutX="378.0" layoutY="428.0" mnemonicParsing="false" text="Confirmar Cotacão" />
-      <Button layoutX="554.0" layoutY="428.0" mnemonicParsing="false" text="Rejeitar Cotacão" />
-      <Button layoutX="41.0" layoutY="428.0" mnemonicParsing="false" text="&lt;" />
+      <Pane fx:id="CotacaoClientePane" prefHeight="715.0" prefWidth="883.0" style="-fx-background-color: #FFFFFF;">
+         <children>
+            <Label layoutX="371.0" layoutY="1.0" text="Cotações Clientes">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+             <TableView fx:id="table_cotacoes" layoutX="53.0" layoutY="52.0" prefHeight="420.0" prefWidth="769.0">
+                 <columns>
+                     <TableColumn fx:id="Id" prefWidth="91.0" text="Id" />
+                     <TableColumn fx:id="IdCliente" prefWidth="177.0" text="IdCliente" />
+                     <TableColumn fx:id="Estado" prefWidth="175.0" text="EstadoCotação" />
+                     <TableColumn fx:id="Data" prefWidth="157.0" text="Data" />
+                     <TableColumn fx:id="ValorTotal" prefWidth="167.0" text="ValorTotal" />
+                 </columns>
+             </TableView>
+             <Button layoutX="368.0" layoutY="571.0" mnemonicParsing="false" onAction="#ConfirmarCotacao" text="Confirmar Cotacão" />
+             <Button layoutX="529.0" layoutY="571.0" mnemonicParsing="false" onAction="#RejeitarCotacao" text="Rejeitar Cotacão" />
+             <Button layoutX="686.0" layoutY="571.0" mnemonicParsing="false" onAction="#VisualizarServicos" text="Visualizar Serviços" />
+             <Button layoutX="42.0" layoutY="571.0" mnemonicParsing="false" onAction="#VoltarAtrasCliente" text="&lt;" />
+         </children>
+      </Pane>
+      <Pane fx:id="ServicoPane" layoutX="44.0" layoutY="69.0" prefHeight="536.0" prefWidth="789.0" style="-fx-background-color: #FFFFFF;" visible="false">
+         <effect>
+            <DropShadow />
+         </effect>
+         <children>
+            <Text layoutX="356.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Serviços">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <TableView fx:id="TableServico" layoutX="37.0" layoutY="78.0" prefHeight="420.0" prefWidth="719.0">
+              <columns>
+                <TableColumn fx:id="IdServico" prefWidth="77.0" text="Id" />
+                <TableColumn fx:id="FornedorServico" prefWidth="146.0" text="Fornecedor" />
+                  <TableColumn fx:id="ComissaoServico" prefWidth="141.0" text="Comissão" />
+                  <TableColumn fx:id="PrecoServico" prefWidth="146.0" text="Preço" />
+                  <TableColumn fx:id="DescricaoServico" prefWidth="207.0" text="Descrição" />
+              </columns>
+            </TableView>
+            <Button layoutX="725.0" layoutY="20.0" mnemonicParsing="false" onAction="#VoltarAtrasVisualizarServicos" text="x" />
+         </children>
+      </Pane>
    </children>
 </AnchorPane>

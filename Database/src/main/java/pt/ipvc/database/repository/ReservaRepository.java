@@ -16,4 +16,7 @@ public interface ReservaRepository extends JpaRepository<ReservaEntity,Integer> 
 
     @Query("SELECT r FROM ReservaEntity r WHERE r.idCliente = :id")
     List<ReservaEntity> findByIdClienteLike(@Param("id") Integer id);
+
+    @Query("SELECT r FROM ReservaEntity r WHERE r.idEstadoReserva = 2")
+    List<ReservaEntity> findByIdEstadoReserva();
 }

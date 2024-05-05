@@ -5,10 +5,23 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pt.ipvc.database.entity.CotacaoEntity;
+import pt.ipvc.database.entity.ReservaEntity;
+import pt.ipvc.database.entity.ServicoEntity;
+
+import java.util.List;
 
 @Repository
 public interface CotacaoRepository extends JpaRepository<CotacaoEntity,Integer> {
 
     @Query("SELECT c FROM CotacaoEntity c WHERE c.id = :id")
     CotacaoEntity findByIdLike(@Param("id") Integer id);
+
+    @Query("SELECT c FROM CotacaoEntity c WHERE c.idCliente = :id")
+    List<CotacaoEntity> findByIdClienteLike(@Param("id") Integer id);
+
+
+    @Query("SELECT s FROM ServicoEntity s join LinhaCotacaoEntity lc on lc.idServico = s.id " +
+            "join CotacaoEntity  c on lc.idCotacao = c .id  where c.idCliente = :id")
+    List<ServicoEntity> findByIdClienteServico(@Param("id") Integer id);
+
 }
