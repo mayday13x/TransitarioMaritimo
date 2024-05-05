@@ -11,11 +11,21 @@ import javafx.scene.layout.Pane;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.*;
 import pt.ipvc.database.repository.*;
+import javafx.event.EventHandler;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import java.io.IOException;
 
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -30,6 +40,7 @@ public class CotacaoController implements Initializable {
     private CotacaoRepository cotacao_repo;
     private TipoCargaRepository tpcarga_repo;
     private LinhaCotacaoRepository linha_cotacao_repo;
+    private EstadoCotacaoRepository estado_cotacao_repo;
 
 
     @FXML
@@ -131,9 +142,42 @@ public class CotacaoController implements Initializable {
     private TableColumn<ServicoEntity, String> CotComissao;
 
     @FXML
+    private TableView<ServicoEntity> TableServico;
+
+    @FXML
     private Label totalCota;
 
+    @FXML
+    private TableColumn<CotacaoEntity, String> Id;
+
+    @FXML
+    private TableColumn<ServicoEntity, String> ComissaoServico;
+
+    @FXML
+    private TableColumn<ServicoEntity, String> DescricaoServico;
+
+    @FXML
+    private TableColumn<ServicoEntity, String> FornedorServico;
+
+    @FXML
+    private TableColumn<ServicoEntity, String> IdServico;
+
+    @FXML
+    private TableColumn<ServicoEntity, String> PrecoServico;
+
+    @FXML
+    private Pane ServicoPane;
+    @FXML
+    private Pane CotacaoClientePane;
+
+
     public Set<ServicoEntity> selected_services = new HashSet<>();
+
+    private int idCliente = 0;
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
+    }
 
 
     @Override
@@ -145,6 +189,7 @@ public class CotacaoController implements Initializable {
         cotacao_repo = context.getBean(CotacaoRepository.class);
         tpcarga_repo = context.getBean(TipoCargaRepository.class);
         linha_cotacao_repo = context.getBean(LinhaCotacaoRepository.class);
+        estado_cotacao_repo = context.getBean(EstadoCotacaoRepository.class);
 
         ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(cliente_repo.findAll());
         ObservableList<ServicoEntity> servicos = FXCollections.observableArrayList(service_repo.findAll());
@@ -153,17 +198,17 @@ public class CotacaoController implements Initializable {
         ObservableList<TipoCargaEntity> tpcargas = FXCollections.observableArrayList(tpcarga_repo.findAll());
 
         try{
+            if(TableClientes != null){
+                TClientesID.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+                TClientesNome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
+                TCilentesNIF.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNif().toString()));
+                TableClientes.setItems(clientes);
 
-            TClientesID.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
-            TClientesNome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
-            TCilentesNIF.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNif().toString()));
-            TableClientes.setItems(clientes);
-
-            for (TipoCargaEntity i : tpcargas) {
-                TipoCarga.getItems().add(i.getDescricao());
+                for (TipoCargaEntity i : tpcargas) {
+                    TipoCarga.getItems().add(i.getDescricao());
+                }
+                TipoCarga.getSelectionModel().select(2);
             }
-            TipoCarga.getSelectionModel().select(2);
-
 
         } catch (Exception ex){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -176,16 +221,47 @@ public class CotacaoController implements Initializable {
         // Carregar Serviços
 
         try {
+            if(TableClientes != null){
+                ServServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescricao()));
+                ServPreco.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPreco().toString()));
+                ServComissao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getComissao().toString()));
 
-            ServServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescricao()));
-            ServPreco.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPreco().toString()));
-            ServComissao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getComissao().toString()));
+                TServicos.setItems(servicos);
 
-            TServicos.setItems(servicos);
+            }
 
 
         }   catch (Exception ex){
             System.out.println("Erro no Servico: " + ex.getMessage());
+        }
+
+    }
+
+    public void CotacaoCliente() {
+
+        DoubleClickHandler handler = new DoubleClickHandler();
+        table_cotacoes.setOnMouseClicked(handler);
+        context = new AnnotationConfigApplicationContext(AppConfig.class);
+        cotacao_repo = context.getBean(CotacaoRepository.class);
+        service_repo = context.getBean(ServicoRepository.class);
+
+        if(idCliente != 0) {
+            ObservableList<CotacaoEntity> cotacoes = FXCollections.observableArrayList(cotacao_repo.findByIdClienteLike(idCliente));
+
+            Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+            IdCliente.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIdCliente().toString()));
+            Estado.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEstadoCotacaoByIdEstadoCotacao().getDescricao()));
+            Data.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
+            ValorTotal.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getValorTotal().toString()));
+            table_cotacoes.setItems(cotacoes);
+
+            ObservableList<ServicoEntity> servicos = FXCollections.observableArrayList(cotacao_repo.findByIdClienteServico(idCliente));
+            IdServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+            FornedorServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFornecedorByIdFornecedor().getNome()));
+            ComissaoServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getComissao().toString()));
+            PrecoServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPreco().toString()));
+            DescricaoServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescricao()));
+            TableServico.setItems(servicos);
         }
 
 
@@ -295,6 +371,128 @@ public class CotacaoController implements Initializable {
         CriarPane.setVisible(false);
         mainPane.setEffect(null);
         mainPane.setDisable(false);
+    }
+
+    @FXML
+    public void ConfirmarCotacao(ActionEvent event) {
+
+        if (table_cotacoes.getSelectionModel().getSelectedItem() == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erro!");
+            alert.setHeaderText("Nenhuma cotação selecionada!");
+            alert.setContentText("Selecione uma cotação para pagar!");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Pagar Cotação");
+            alert.setHeaderText("Pagar Cotação");
+            alert.setContentText("Tem a certeza que pretende pagar esta Cotação?");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                CotacaoEntity cotacao = table_cotacoes.getSelectionModel().getSelectedItem();
+                EstadoCotacaoEntity estadoCotacao = estado_cotacao_repo.findByDescricaoLike("Confirmado");
+
+                cotacao.setIdEstadoCotacao(estadoCotacao.getId());
+                cotacao.setEstadoCotacaoByIdEstadoCotacao(estadoCotacao);
+
+                try {
+                    cotacao_repo.save(cotacao);
+
+                    table_cotacoes.getItems().clear();
+                    ObservableList<CotacaoEntity> cotacoes = FXCollections.observableArrayList(cotacao_repo.findByIdClienteLike(idCliente));
+                    table_cotacoes.setItems(cotacoes);
+
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+    }
+
+    @FXML
+    public void RejeitarCotacao(ActionEvent event) {
+
+        if (table_cotacoes.getSelectionModel().getSelectedItem() == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erro!");
+            alert.setHeaderText("Nenhuma cotação selecionada!");
+            alert.setContentText("Selecione uma cotação para pagar!");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Pagar Cotação");
+            alert.setHeaderText("Pagar Cotação");
+            alert.setContentText("Tem a certeza que pretende pagar esta Cotação?");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                CotacaoEntity cotacao = table_cotacoes.getSelectionModel().getSelectedItem();
+                EstadoCotacaoEntity estadoCotacao = estado_cotacao_repo.findByDescricaoLike("Rejeitado");
+
+                cotacao.setIdEstadoCotacao(estadoCotacao.getId());
+                cotacao.setEstadoCotacaoByIdEstadoCotacao(estadoCotacao);
+
+                try {
+                    cotacao_repo.save(cotacao);
+
+                    table_cotacoes.getItems().clear();
+                    ObservableList<CotacaoEntity> cotacoes = FXCollections.observableArrayList(cotacao_repo.findByIdClienteLike(idCliente));
+                    table_cotacoes.setItems(cotacoes);
+
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+    }
+
+    @FXML
+    void VisualizarServicos(ActionEvent event) {
+        ServicoPane.setVisible(true);
+        CotacaoClientePane.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        CotacaoClientePane.setDisable(true);
+    }
+
+    @FXML
+    void VoltarAtrasVisualizarServicos(ActionEvent event) {
+        ServicoPane.setVisible(false);
+        CotacaoClientePane.setEffect(null);
+        CotacaoClientePane.setDisable(false);
+    }
+
+    @FXML
+    void VoltarAtrasCliente(ActionEvent event) {
+
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("MenuClienteView.fxml"));
+            Scene regCena = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(regCena);
+            stage.setTitle("Menu");
+            stage.show();
+        }catch (IOException ex){
+            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
+        }
+    }
+
+    @FXML
+    public void ShowVisualizarServicos() {
+        ServicoPane.setVisible(true);
+        CotacaoClientePane.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        CotacaoClientePane.setDisable(true);
+
+    }
+
+    public class DoubleClickHandler implements EventHandler<MouseEvent> {
+
+        @Override
+        public void handle(MouseEvent event) {
+            if (event.getClickCount() == 2) {
+                ShowVisualizarServicos();
+
+            }
+        }
     }
 
 }

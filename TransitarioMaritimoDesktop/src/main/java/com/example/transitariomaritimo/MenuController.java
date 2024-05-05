@@ -218,4 +218,5 @@ public class MenuController implements Initializable {
             System.out.println("Erro ao acessar login: " + ex.getMessage());
         }
     }
+
 }
