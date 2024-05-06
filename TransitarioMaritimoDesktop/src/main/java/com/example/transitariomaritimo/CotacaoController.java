@@ -393,7 +393,9 @@ public class CotacaoController implements Initializable {
             }
 
             cotacao.setValorTotal(valorTotal);
+            cotacao_repo.save(cotacao);
 
+            System.out.println(valorTotal);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Sucesso");
