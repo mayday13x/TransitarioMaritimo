@@ -84,7 +84,7 @@ public class LoginController implements Initializable {
     @FXML
     public void Login(ActionEvent event) {
 
-        boolean found  = false;
+        boolean found = false;
 
         if (Objects.equals(tipoUtilizadorCombo.getValue(), "") || Objects.equals(utilizadorText.getText(), "")
                 || Objects.equals(passwordText.getText(), "")) {
@@ -96,10 +96,10 @@ public class LoginController implements Initializable {
 
             alert.showAndWait();
 
-        } else if(tipoUtilizadorCombo.getValue().equals("Cliente") ){
+        } else if (tipoUtilizadorCombo.getValue().equals("Cliente")) {
 
-            for(ClienteEntity cliente : cliente_repo.findAll()){
-                if( !found && Objects.equals(utilizadorText.getText(), cliente.getUtilizador()) && Objects.equals(passwordText.getText(), cliente.getPassword())){
+            for (ClienteEntity cliente : cliente_repo.findAll()) {
+                if (!found && Objects.equals(utilizadorText.getText(), cliente.getUtilizador()) && Objects.equals(passwordText.getText(), cliente.getPassword())) {
                     //mensagem = false;
                     found = true;
                     try {
@@ -117,10 +117,10 @@ public class LoginController implements Initializable {
                     }
                 }
             }
-        } else if (tipoUtilizadorCombo.getValue().equals("Funcionario")){
+        } else if (tipoUtilizadorCombo.getValue().equals("Funcionario")) {
 
 
-            for(FuncionarioEntity funcionario : funcionario_repo.findAll()) {
+            for (FuncionarioEntity funcionario : funcionario_repo.findAll()) {
 
                 if (!found && Objects.equals(utilizadorText.getText(), funcionario.getUtilizador()) && Objects.equals(passwordText.getText(), funcionario.getPassword())
                         && Objects.equals(passwordText.getText(), "default")) {
@@ -135,7 +135,7 @@ public class LoginController implements Initializable {
 
                 } else if (Objects.equals(utilizadorText.getText(), funcionario.getUtilizador()) && Objects.equals(passwordText.getText(), funcionario.getPassword())) {
                     //mensagem = false;
-
+                    found = true;
                     switch (funcionario.getIdTipoFuncionario()) {
                         case 1: //Admin
                             mudarPagina(event, "MenuAdminView.fxml");
@@ -161,14 +161,15 @@ public class LoginController implements Initializable {
                     }
                 }
             }
-            if(!found) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Campos Inválidos!");
-                alert.setHeaderText("Campos do utilizador ou password incorretos!");
-                alert.setContentText("Preencha todos os campos e tente novamente!");
 
-                alert.showAndWait();
-            }
+        }
+        if (!found) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Campos Inválidos!");
+            alert.setHeaderText("Campos do utilizador ou password incorretos!");
+            alert.setContentText("Preencha todos os campos e tente novamente!");
+
+            alert.showAndWait();
         }
 
     }
