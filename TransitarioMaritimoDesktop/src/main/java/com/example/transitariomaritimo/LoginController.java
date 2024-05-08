@@ -83,23 +83,12 @@ public class LoginController implements Initializable {
 
     @FXML
     public void Login(ActionEvent event) {
-<<<<<<< HEAD
 
         boolean found  = false;
 
         if (Objects.equals(tipoUtilizadorCombo.getValue(), "") || Objects.equals(utilizadorText.getText(), "")
                 || Objects.equals(passwordText.getText(), "")) {
             found = true;
-=======
-        boolean found = false;
-        mensagem = false;
-
-
-        if (Objects.equals(tipoUtilizadorCombo.getValue(), "") || Objects.equals(utilizadorText.getText(), "")
-                || Objects.equals(passwordText.getText(), "")) {
-            mensagem = true;
-
->>>>>>> 91b2aaca7a5c9af03f6f0ec2b932b41b4899ada9
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Campos Inválidos!");
             alert.setHeaderText("Campos por preencher");
@@ -107,29 +96,12 @@ public class LoginController implements Initializable {
 
             alert.showAndWait();
 
-<<<<<<< HEAD
         } else if(tipoUtilizadorCombo.getValue().equals("Cliente") ){
 
             for(ClienteEntity cliente : cliente_repo.findAll()){
                 if( !found && Objects.equals(utilizadorText.getText(), cliente.getUtilizador()) && Objects.equals(passwordText.getText(), cliente.getPassword())){
                     //mensagem = false;
                     found = true;
-=======
-        } else if(tipoUtilizadorCombo.getValue() == null && !mensagem){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Campos Inválidos!");
-            alert.setHeaderText("Tipo de Utilizador não selecionado");
-            alert.setContentText("Selecione o tipo de utilizador e tente novamente!");
-
-            alert.showAndWait();
-        } else if(tipoUtilizadorCombo.getValue().equals("Cliente") ){
-
-            for(ClienteEntity cliente : cliente_repo.findAll()){
-                if(Objects.equals(utilizadorText.getText(), cliente.getUtilizador()) && Objects.equals(passwordText.getText(), cliente.getPassword())
-                        && !found){
-                    found = true;
-
->>>>>>> 91b2aaca7a5c9af03f6f0ec2b932b41b4899ada9
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("MenuClienteView.fxml"));
                         Parent root = loader.load();
@@ -161,14 +133,8 @@ public class LoginController implements Initializable {
                     funcionarioAtual = funcionario;
 
 
-<<<<<<< HEAD
                 } else if (Objects.equals(utilizadorText.getText(), funcionario.getUtilizador()) && Objects.equals(passwordText.getText(), funcionario.getPassword())) {
                     //mensagem = false;
-=======
-                } else if (Objects.equals(utilizadorText.getText(), funcionario.getUtilizador()) && Objects.equals(passwordText.getText(), funcionario.getPassword())
-                        && !found) {
-                    found = true;
->>>>>>> 91b2aaca7a5c9af03f6f0ec2b932b41b4899ada9
 
                     switch (funcionario.getIdTipoFuncionario()) {
                         case 1: //Admin
@@ -195,20 +161,11 @@ public class LoginController implements Initializable {
                     }
                 }
             }
-<<<<<<< HEAD
             if(!found) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Campos Inválidos!");
                 alert.setHeaderText("Campos do utilizador ou password incorretos!");
                 alert.setContentText("Preencha todos os campos e tente novamente!");
-=======
-        }
-        if(!found) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Campos Inválidos!");
-        alert.setHeaderText("Campos do utilizador ou password incorretos!");
-        alert.setContentText("Preencha todos os campos e tente novamente!");
->>>>>>> 91b2aaca7a5c9af03f6f0ec2b932b41b4899ada9
 
                 alert.showAndWait();
             }
