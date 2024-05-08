@@ -291,19 +291,28 @@ public class FornecedoresController implements Initializable {
         if (table.getSelectionModel().getSelectedItem() == null) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Erro!");
-            alert.setHeaderText("Nenhum cliente selecionado!");
-            alert.setContentText("Selecione um cliente para eliminar!");
+            alert.setHeaderText("Nenhum fornecedor selecionado!");
+            alert.setContentText("Selecione um fornecedor para eliminar!");
             alert.showAndWait();
         } else {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Eliminar Cliente");
-            alert.setHeaderText("Eliminar Cliente");
-            alert.setContentText("Tem a certeza que pretende eliminar este cliente?");
+            alert.setTitle("Eliminar Fornecedor");
+            alert.setHeaderText("Eliminar Fornecedor");
+            alert.setContentText("Tem a certeza que pretende eliminar este fornecedor?");
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                forn_repo.deleteById(table.getSelectionModel().getSelectedItem().getId());
-                refreshTable();
+                try {
+                    forn_repo.deleteById(table.getSelectionModel().getSelectedItem().getId());
+                    refreshTable();
+                } catch (Exception e) {
+                    Alert alert_ = new Alert(Alert.AlertType.INFORMATION);
+                    alert_.setTitle("Erro!");
+                    alert_.setHeaderText("Erro!");
+                    alert_.setContentText("Existem serviços associados a este fornecedor!");
+                    alert_.showAndWait();
+                }
+
             }
         }
 
