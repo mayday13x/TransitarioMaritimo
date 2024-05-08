@@ -2,6 +2,7 @@ package com.example.transitariomaritimo;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,6 +24,7 @@ import java.io.IOException;
 
 import java.net.URL;
 import java.sql.Date;
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
@@ -237,6 +239,20 @@ public class CotacaoController implements Initializable {
             System.out.println("Erro no Servico: " + ex.getMessage());
         }
 
+        ObservableList<ServicoEntity> selectedServicos = TCotaServ.getItems();
+
+
+        selectedServicos.addListener((ListChangeListener<ServicoEntity>) change -> {
+            double total = 0;
+            for( ServicoEntity servico: selectedServicos){
+                total += servico.getPreco() + (servico.getComissao() * servico.getPreco());
+            }
+
+            totalCota.setText(String.valueOf(total) + " €");
+        });
+
+
+
 
         //CARREGAR COTAÇÕES
       /*  try{
@@ -267,6 +283,10 @@ public class CotacaoController implements Initializable {
 */
 
 
+    }
+
+    public void print(){
+        System.out.println("12332432532532532523532532532532532532");
     }
 
     public void CotacaoCliente() {

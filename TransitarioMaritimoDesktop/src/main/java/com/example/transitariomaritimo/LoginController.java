@@ -81,11 +81,13 @@ public class LoginController implements Initializable {
 
     @FXML
     public void Login(ActionEvent event) {
-
+        boolean found = false;
+        mensagem = false;
 
 
         if (Objects.equals(tipoUtilizadorCombo.getValue(), "") || Objects.equals(utilizadorText.getText(), "")
                 || Objects.equals(passwordText.getText(), "")) {
+            mensagem = true;
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Campos Inválidos!");
@@ -94,7 +96,7 @@ public class LoginController implements Initializable {
 
             alert.showAndWait();
 
-        } else if(tipoUtilizadorCombo.getValue() == null){
+        } else if(tipoUtilizadorCombo.getValue() == null && !mensagem){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Campos Inválidos!");
             alert.setHeaderText("Tipo de Utilizador não selecionado");
@@ -104,8 +106,9 @@ public class LoginController implements Initializable {
         } else if(tipoUtilizadorCombo.getValue().equals("Cliente") ){
 
             for(ClienteEntity cliente : cliente_repo.findAll()){
-                if(Objects.equals(utilizadorText.getText(), cliente.getUtilizador()) && Objects.equals(passwordText.getText(), cliente.getPassword())){
-                    mensagem = false;
+                if(Objects.equals(utilizadorText.getText(), cliente.getUtilizador()) && Objects.equals(passwordText.getText(), cliente.getPassword())
+                        && !found){
+                    found = true;
 
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("MenuClienteView.fxml"));
@@ -139,8 +142,9 @@ public class LoginController implements Initializable {
                     funcionarioAtual = funcionario;
 
 
-                } else if (Objects.equals(utilizadorText.getText(), funcionario.getUtilizador()) && Objects.equals(passwordText.getText(), funcionario.getPassword())) {
-                    mensagem = false;
+                } else if (Objects.equals(utilizadorText.getText(), funcionario.getUtilizador()) && Objects.equals(passwordText.getText(), funcionario.getPassword())
+                        && !found) {
+                    found = true;
 
                     switch (funcionario.getIdTipoFuncionario()) {
                         case 1: //Admin
@@ -168,7 +172,7 @@ public class LoginController implements Initializable {
                 }
             }
         }
-        if(mensagem) {
+        if(!found) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Campos Inválidos!");
         alert.setHeaderText("Campos do utilizador ou password incorretos!");
