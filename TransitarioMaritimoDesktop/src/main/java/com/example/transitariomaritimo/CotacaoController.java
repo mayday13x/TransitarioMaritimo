@@ -239,17 +239,19 @@ public class CotacaoController implements Initializable {
             System.out.println("Erro no Servico: " + ex.getMessage());
         }
 
-        ObservableList<ServicoEntity> selectedServicos = TCotaServ.getItems();
+        if(TCotaServ != null){
+            ObservableList<ServicoEntity> selectedServicos = TCotaServ.getItems();
 
+            selectedServicos.addListener((ListChangeListener<ServicoEntity>) change -> {
+                double total = 0;
+                for( ServicoEntity servico: selectedServicos){
+                    total += servico.getPreco() + (servico.getComissao() * servico.getPreco());
+                }
 
-        selectedServicos.addListener((ListChangeListener<ServicoEntity>) change -> {
-            double total = 0;
-            for( ServicoEntity servico: selectedServicos){
-                total += servico.getPreco() + (servico.getComissao() * servico.getPreco());
-            }
+                totalCota.setText(String.valueOf(total) + " €");
+            });
+        }
 
-            totalCota.setText(String.valueOf(total) + " €");
-        });
 
 
 
