@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Cargas</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/listar/cargas')
+                .then(response => response.json())
+                .then(cargas => {
+                    const tbody = document.getElementById('cargas-tbody');
+                    tbody.innerHTML = '';
+                    cargas.forEach(carga => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${carga.id}</td>
+                            <td>${carga.id_reserva}</td>
+                            <td>${carga.id_contentor}</td>
+                            <td>${carga.id_armazem}</td>
+                            <td>${carga.id_estado_carga}</td>
+                            <td>${carga.nome}</td>
+                            <td>${carga.quantidade}</td>
+                            <td>${carga.volume}</td>
+                            <td>${carga.peso}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(error => console.error('Erro ao carregar as cargas:', error));
+        });
+    </script>
+</head>
+<body>
+<h1>Lista de Cargas</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>ID Reserva</th>
+        <th>ID Contentor</th>
+        <th>ID Armazem</th>
+        <th>ID Estado Carga</th>
+        <th>Nome</th>
+        <th>Quantidade</th>
+        <th>Volume</th>
+        <th>Peso</th>
+    </tr>
+    </thead>
+    <tbody id="cargas-tbody">
+    </tbody>
+</table>
+</body>
+</html>

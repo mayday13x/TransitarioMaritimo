@@ -11,6 +11,7 @@
     <modules>
         <module>Database</module>
         <module>TransitarioMaritimoDesktop</module>
+        <module>web</module>
     </modules>
 
     <properties>
