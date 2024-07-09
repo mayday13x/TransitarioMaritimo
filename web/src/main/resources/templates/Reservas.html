@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservas</title>
+    <link rel="stylesheet" href="css/nord-light.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFFFFF;
+            margin: 20px;
+        }
+        .main-panel, .insert-panel {
+            width: calc(100% - 40px);
+            max-width: 1920px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .main-panel h1, .insert-panel h1 {
+            text-align: center;
+            font-size: 23px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-group > div {
+            width: 48%;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+        .table th, .table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        .buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .buttons button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="main-panel">
+    <h1>Reserva</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Data</th>
+            <th>Origem</th>
+            <th>Destino</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="reserva : ${reservas}">
+            <td th:text="${reserva.id}"></td>
+            <td th:text="${reserva.data}"></td>
+            <td th:text="${reserva.origem}"></td>
+            <td th:text="${reserva.destino}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="form-group">
+        <div>
+            <label for="IdFuncionario">IdFuncionario</label>
+            <input type="text" id="IdFuncionario" placeholder="IdFuncionario">
+        </div>
+        <div>
+            <label for="IdCliente">IdCliente</label>
+            <input type="text" id="IdCliente" placeholder="IdCliente">
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label for="IdEstadoReserva">EstadoReserva</label>
+            <input type="text" id="IdEstadoReserva" placeholder="IdEstadoReserva">
+        </div>
+    </div>
+    <div class="buttons">
+        <button onclick="inserirReserva()">Inserir Reserva</button>
+        <button onclick="cancelarReserva()">Cancelar Reserva</button>
+    </div>
+</div>
+
+<div class="main-panel hidden" id="insertPanel">
+    <h1>Inserir Reserva</h1>
+    <div class="form-group">
+        <div>
+            <label for="OrigemText">Origem</label>
+            <input type="text" id="OrigemText" placeholder="Origem">
+        </div>
+        <div>
+            <label for="DestinoText">Destino</label>
+            <input type="text" id="DestinoText" placeholder="Destino">
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label for="DataText">Data</label>
+            <input type="date" id="DataText">
+        </div>
+        <div>
+            <label for="IdClienteCombo">IdCliente</label>
+            <select id="IdClienteCombo">
+                <!-- Opções aqui -->
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label for="IdEstadoReservaCombo">EstadoReserva</label>
+            <select id="IdEstadoReservaCombo">
+                <!-- Opções aqui -->
+            </select>
+        </div>
+        <div>
+            <label for="IdFuncionarioCombo">IdFuncionario</label>
+            <select id="IdFuncionarioCombo">
+                <!-- Opções aqui -->
+            </select>
+        </div>
+    </div>
+    <div class="buttons">
+        <button onclick="registarReserva()">Inserir Reserva</button>
+        <button onclick="voltarAtrasInserirReserva()">Voltar</button>
+    </div>
+</div>
+
+<script>
+    function inserirReserva() {
+        document.getElementById('insertPanel').classList.remove('hidden');
+    }
+
+    function cancelarReserva() {
+        // Implementar lógica para cancelar reserva
+    }
+
+    function registarReserva() {
+        // Implementar lógica para registrar reserva
+    }
+
+    function voltarAtrasInserirReserva() {
+        document.getElementById('insertPanel').classList.add('hidden');
+    }
+</script>
+</body>
+</html>

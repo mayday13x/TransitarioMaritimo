@@ -1,4 +1,4 @@
-package org.example.projetoweb;
+package org.example.projetoweb.Controllers;
 
 
 import org.springframework.stereotype.Controller;
@@ -18,11 +18,11 @@ public class CargaController {
         this.repo_carga = repo_carga;
     }
 
-    @GetMapping("/listar/cargas")
+    @GetMapping("/CargaArmazem")
     public String listarCargas(Model model){
         List<CargaEntity> cargas = repo_carga.findAll();
         model.addAttribute("cargas", cargas);
-        return "listar/cargas";
+        return "CargaArmazem";
     }
 
 

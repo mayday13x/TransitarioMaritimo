@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Cargas</title>
+    <link rel="stylesheet" href="css/nord-light.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFFFFF;
+            margin: 20px;
+        }
+        .main-panel {
+            width: calc(100% - 40px);
+            max-width: 1920px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .main-panel h1 {
+            text-align: center;
+            font-size: 18px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-group > div {
+            width: 48%;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+        .table th, .table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        .buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .buttons button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="main-panel">
+    <h1>Cargas</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Quantidade</th>
+            <th>Volume</th>
+            <th>Peso</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="carga : ${cargas}">
+            <td th:text="${carga.nome}"></td>
+            <td th:text="${carga.quantidade}"></td>
+            <td th:text="${carga.volume}"></td>
+            <td th:text="${carga.peso}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="form-group">
+        <div>
+            <label for="LocalAtual">Local Atual</label>
+            <input type="text" id="LocalAtual">
+        </div>
+        <div>
+            <label for="Observacoes">Observações</label>
+            <input type="text" id="Observacoes">
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label for="IdReserva">Id Reserva</label>
+            <input type="text" id="IdReserva">
+        </div>
+        <div>
+            <label for="IdContentor">Id Contentor</label>
+            <input type="text" id="IdContentor">
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label for="IdEstadoCarga">Estado Carga</label>
+            <input type="text" id="IdEstadoCarga">
+        </div>
+        <div>
+            <label for="IdTipoCarga">Tipo Carga</label>
+            <input type="text" id="IdTipoCarga">
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label for="IdArmazem">Id Armazem</label>
+            <input type="text" id="IdArmazem">
+        </div>
+        <div>
+            <label for="IdCotacao">Id Cotação</label>
+            <input type="text" id="IdCotacao">
+        </div>
+    </div>
+    <div class="buttons">
+        <button onclick="inserirCarga()">Inserir Carga</button>
+        <button onclick="excluirCarga()">Remover Carga</button>
+    </div>
+</div>
+
+<div class="main-panel" id="insertPanel" style="display: none;">
+    <h1>Inserir Carga</h1>
+    <div class="form-group">
+        <div>
+            <label for="NomeText">Nome</label>
+            <input type="text" id="NomeText">
+        </div>
+        <div>
+            <label for="QuantidadeText">Quantidade</label>
+            <input type="text" id="QuantidadeText">
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label for="VolumeText">Volume</label>
+            <input type="text" id="VolumeText">
+        </div>
+        <div>
+            <label for="PesoText">Peso</label>
+            <input type="text" id="PesoText">
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label for="LocalAtualText">Local Atual</label>
+            <input type="text" id="LocalAtualText">
+        </div>
+        <div>
+            <label for="ObservacoesText">Observações</label>
+            <input type="text" id="ObservacoesText">
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label for="IdReservaCombo">Id Reserva</label>
+            <select id="IdReservaCombo"></select>
+        </div>
+        <div>
+            <label for="IdContentorCombo">Id Contentor</label>
+            <select id="IdContentorCombo"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label for="IdArmazemCombo">Id Armazem</label>
+            <select id="IdArmazemCombo"></select>
+        </div>
+        <div>
+            <label for="TipoCargaCombo">Tipo Carga</label>
+            <select id="TipoCargaCombo"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label for="IdCotacaoCombo">Id Cotação</label>
+            <select id="IdCotacaoCombo"></select>
+        </div>
+    </div>
+    <div class="buttons">
+        <button onclick="registarCarga()">Inserir Carga</button>
+        <button onclick="voltarAtrasInserirCarga()">Voltar</button>
+    </div>
+</div>
+
+<script>
+    function inserirCarga() {
+        // Implementar lógica para inserir carga
+    }
+
+    function excluirCarga() {
+        // Implementar lógica para excluir carga
+    }
+
+    function registarCarga() {
+        // Implementar lógica para registrar carga
+    }
+
+    function voltarAtrasInserirCarga() {
+        document.getElementById('insertPanel').style.display = 'none';
+    }
+</script>
+</body>
+</html>
