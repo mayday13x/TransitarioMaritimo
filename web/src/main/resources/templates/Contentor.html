@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Contentores</title>
+    <link rel="stylesheet" href="css/nord-light.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFFFFF;
+            margin: 20px;
+        }
+        .main-panel, .insert-panel {
+            width: calc(100% - 40px);
+            max-width: 1920px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .main-panel h1, .insert-panel h1 {
+            text-align: center;
+            font-size: 23px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-group > div {
+            width: 48%;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+        .table th, .table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        .buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .buttons button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="main-panel">
+    <h1>Contentores</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Cin</th>
+            <th>Capacidade</th>
+            <th>Peso Máximo</th>
+            <th>Local Atual</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="contentor : ${contentores}">
+            <td th:text="${contentor.cin}"></td>
+            <td th:text="${contentor.capacidade}"></td>
+            <td th:text="${contentor.pesoMax}"></td>
+            <td th:text="${contentor.localAtual}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="form-group">
+        <div>
+            <label for="IdEstadoContentor">Estado Contentor</label>
+            <input type="text" id="IdEstadoContentor" placeholder="Estado Contentor">
+        </div>
+        <div>
+            <label for="TipoContentor">Tipo Contentor</label>
+            <input type="text" id="TipoContentor" placeholder="Tipo Contentor">
+        </div>
+    </div>
+    <div class="buttons">
+        <button onclick="inserirContentor()">Inserir Contentor</button>
+        <button onclick="visualizarCargas()">Visualizar Cargas</button>
+        <button onclick="registarSaida()">Registar Saída do Contentor</button>
+    </div>
+</div>
+
+<div class="insert-panel hidden" id="insertPanel">
+    <h1>Inserir Contentor</h1>
+    <button onclick="voltarAtrasInserirContentor()">X</button>
+    <div class="form-group">
+        <div>
+            <label for="CapacidadeText">Capacidade</label>
+            <input type="text" id="CapacidadeText" placeholder="Capacidade">
+        </div>
+        <div>
+            <label for="PesoMaximoText">Peso Máximo</label>
+            <input type="text" id="PesoMaximoText" placeholder="Peso Máximo">
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label for="LocalAtualText">Local Atual</label>
+            <input type="text" id="LocalAtualText" placeholder="Local Atual">
+        </div>
+        <div>
+            <label for="TipoContentorCombo">Tipo de Contentor</label>
+            <select id="TipoContentorCombo">
+                <!-- Opções aqui -->
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <label for="EstadoContentorCombo">Estado Contentor</label>
+            <select id="EstadoContentorCombo">
+                <!-- Opções aqui -->
+            </select>
+        </div>
+    </div>
+    <div class="buttons">
+        <button onclick="registarContentor()">Inserir Contentor</button>
+    </div>
+</div>
+
+<script>
+    function inserirContentor() {
+        document.getElementById('insertPanel').classList.remove('hidden');
+    }
+
+    function visualizarCargas() {
+        // Implementar lógica para visualizar cargas
+    }
+
+    function registarSaida() {
+        // Implementar lógica para registrar saída
+    }
+
+    function registarContentor() {
+        // Implementar lógica para registrar contentor
+    }
+
+    function voltarAtrasInserirContentor() {
+        document.getElementById('insertPanel').classList.add('hidden');
+    }
+</script>
+</body>
+</html>

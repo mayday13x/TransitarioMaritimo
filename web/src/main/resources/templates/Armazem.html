@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Armazem</title>
+    <link rel="stylesheet" href="css/nord-light.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFFFFF;
+            margin: 20px;
+        }
+        .main-panel, .insert-panel {
+            width: calc(100% - 40px);
+            max-width: 1920px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .main-panel h1, .insert-panel h1 {
+            text-align: center;
+            font-size: 23px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-group > div {
+            width: 48%;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+        .table th, .table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        .buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .buttons button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="main-panel">
+    <h1>Armazem</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Capacidade_Max</th>
+            <th>Descrição</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="armazem : ${armazens}">
+            <td th:text="${armazem.id}"></td>
+            <td th:text="${armazem.capacidadeMax}"></td>
+            <td th:text="${armazem.descricao}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="buttons">
+        <button onclick="inserirArmazem()">Inserir Armazém</button>
+        <button onclick="removerArmazem()">Remover Armazém</button>
+        <button onclick="visualizarCargas()">Visualizar Cargas</button>
+    </div>
+</div>
+
+<div class="insert-panel hidden" id="insertPanel">
+    <h1>Inserir Armazém</h1>
+    <button onclick="voltarAtrasInserirArmazem()">X</button>
+    <div class="form-group">
+        <div>
+            <label for="descricaoText">Descrição</label>
+            <input type="text" id="descricaoText" placeholder="Descrição">
+        </div>
+        <div>
+            <label for="CapacidadeMaximaText">Capacidade Máxima</label>
+            <input type="text" id="CapacidadeMaximaText" placeholder="Capacidade Máxima">
+        </div>
+    </div>
+    <div class="buttons">
+        <button onclick="registarArmazem()">Registrar Armazém</button>
+    </div>
+</div>
+
+<script>
+    function inserirArmazem() {
+        document.getElementById('insertPanel').classList.remove('hidden');
+    }
+
+    function removerArmazem() {
+        // Implementar lógica para remover armazém
+    }
+
+    function visualizarCargas() {
+        // Implementar lógica para visualizar cargas
+    }
+
+    function registarArmazem() {
+        // Implementar lógica para registrar armazém
+    }
+
+    function voltarAtrasInserirArmazem() {
+        document.getElementById('insertPanel').classList.add('hidden');
+    }
+</script>
+</body>
+</html>
