@@ -36,32 +36,15 @@
             padding: 20px;
             width: calc(100% - 250px);
         }
-        .main-panel, .insert-panel {
+        .main-panel {
             background-color: #FFFFFF;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .main-panel h1, .insert-panel h1 {
+        .main-panel h1 {
             text-align: center;
             font-size: 23px;
             margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        .form-group > div {
-            width: 48%;
         }
         .table {
             width: 100%;
@@ -92,6 +75,17 @@
         .table td {
             font-size: 14px;
         }
+        .actions {
+            display: flex;
+            justify-content: space-around;
+        }
+        .actions i {
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .actions i:hover {
+            color: #2980b9;
+        }
         .buttons {
             text-align: center;
             margin-top: 20px;
@@ -107,9 +101,6 @@
         }
         .buttons button:hover {
             background-color: #2980b9;
-        }
-        .hidden {
-            display: none;
         }
     </style>
 </head>
@@ -153,95 +144,17 @@
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="inserirCarga()">Inserir Carga</button>
-        </div>
-    </div>
-
-    <div class="insert-panel hidden" id="insertPanel">
-        <h1>Inserir Carga</h1>
-        <button onclick="voltarAtrasInserirCarga()">X</button>
-        <div class="form-group">
-            <div>
-                <label for="NomeText">Nome</label>
-                <input type="text" id="NomeText">
-            </div>
-            <div>
-                <label for="QuantidadeText">Quantidade</label>
-                <input type="text" id="QuantidadeText">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="VolumeText">Volume</label>
-                <input type="text" id="VolumeText">
-            </div>
-            <div>
-                <label for="PesoText">Peso</label>
-                <input type="text" id="PesoText">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="LocalAtualText">Local Atual</label>
-                <input type="text" id="LocalAtualText">
-            </div>
-            <div>
-                <label for="ObservacoesText">Observações</label>
-                <input type="text" id="ObservacoesText">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="IdReservaCombo">Id Reserva</label>
-                <select id="IdReservaCombo"></select>
-            </div>
-            <div>
-                <label for="IdContentorCombo">Id Contentor</label>
-                <select id="IdContentorCombo"></select>
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="IdArmazemCombo">Id Armazem</label>
-                <select id="IdArmazemCombo"></select>
-            </div>
-            <div>
-                <label for="TipoCargaCombo">Tipo Carga</label>
-                <select id="TipoCargaCombo"></select>
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="IdCotacaoCombo">Id Cotação</label>
-                <select id="IdCotacaoCombo"></select>
-            </div>
-        </div>
-        <div class="buttons">
-            <button onclick="registarCarga()">Registrar Carga</button>
+            <button onclick="window.location.href='/inserirCarga'">Inserir Carga</button>
         </div>
     </div>
 </div>
-
 <script>
-    function inserirCarga() {
-        document.getElementById('insertPanel').classList.remove('hidden');
-    }
-
     function excluirCarga(id) {
         // Implementar lógica para excluir carga com o id fornecido
     }
 
-    function registarCarga() {
-        // Implementar lógica para registrar carga
-    }
-
-    function voltarAtrasInserirCarga() {
-        document.getElementById('insertPanel').classList.add('hidden');
-    }
-
     function showEditarCarga(id) {
         // Implementar lógica para mostrar a edição da carga com o id fornecido
-        document.getElementById('insertPanel').classList.remove('hidden');
     }
 </script>
 </body>

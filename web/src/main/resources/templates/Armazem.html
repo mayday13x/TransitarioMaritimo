@@ -36,32 +36,15 @@
             padding: 20px;
             width: calc(100% - 250px);
         }
-        .main-panel, .insert-panel {
+        .main-panel {
             background-color: #FFFFFF;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .main-panel h1, .insert-panel h1 {
+        .main-panel h1 {
             text-align: center;
             font-size: 23px;
             margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        .form-group > div {
-            width: 48%;
         }
         .table {
             width: 100%;
@@ -119,8 +102,46 @@
         .buttons button:hover {
             background-color: #2980b9;
         }
-        .hidden {
+        /* Modal styles */
+        .modal {
             display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group label {
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -162,53 +183,53 @@
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="inserirArmazem()">Inserir Armazém</button>
-        </div>
-    </div>
-
-    <div class="insert-panel hidden" id="insertPanel">
-        <h1>Inserir Armazém</h1>
-        <button onclick="voltarAtrasInserirArmazem()">X</button>
-        <div class="form-group">
-            <div>
-                <label for="descricaoText">Descrição</label>
-                <input type="text" id="descricaoText" placeholder="Descrição">
-            </div>
-            <div>
-                <label for="CapacidadeMaximaText">Capacidade Máxima</label>
-                <input type="text" id="CapacidadeMaximaText" placeholder="Capacidade Máxima">
-            </div>
-        </div>
-        <div class="buttons">
-            <button onclick="registarArmazem()">Registrar Armazém</button>
+            <button onclick="showInserirArmazemModal()">Inserir Armazém</button>
         </div>
     </div>
 </div>
 
+<!-- The Modal -->
+<div id="insertModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h1>Inserir Armazém</h1>
+        <form action="/inserirArmazem" method="post">
+            <div class="form-group">
+                <label for="descricaoText">Descrição</label>
+                <input type="text" id="descricaoText" name="descricao" placeholder="Descrição" required>
+            </div>
+            <div class="form-group">
+                <label for="CapacidadeMaximaText">Capacidade Máxima</label>
+                <input type="number" id="CapacidadeMaximaText" name="capacidadeMaxima" placeholder="Capacidade Máxima" required>
+            </div>
+            <div class="buttons">
+                <button type="submit">Registrar Armazém</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
-    function inserirArmazem() {
-        document.getElementById('insertPanel').classList.remove('hidden');
+    function showInserirArmazemModal() {
+        document.getElementById('insertModal').style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById('insertModal').style.display = "none";
     }
 
     function removerArmazem(id) {
         // Implementar lógica para remover armazém com o id fornecido
     }
 
-    function visualizarCargas() {
-        // Implementar lógica para visualizar cargas
-    }
-
-    function registarArmazem() {
-        // Implementar lógica para registrar armazém
-    }
-
-    function voltarAtrasInserirArmazem() {
-        document.getElementById('insertPanel').classList.add('hidden');
-    }
-
     function showEditarArmazem(id) {
         // Implementar lógica para mostrar a edição do armazém com o id fornecido
-        document.getElementById('editPanel').classList.remove('hidden');
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('insertModal')) {
+            closeModal();
+        }
     }
 </script>
 </body>

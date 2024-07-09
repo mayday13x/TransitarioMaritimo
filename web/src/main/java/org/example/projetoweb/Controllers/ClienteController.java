@@ -1,21 +1,26 @@
 package org.example.projetoweb.Controllers;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import pt.ipvc.database.entity.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import pt.ipvc.database.entity.ClienteEntity;
+import pt.ipvc.database.entity.CodPostalEntity;
 import pt.ipvc.database.repository.ClienteRepository;
+import pt.ipvc.database.repository.CodPostalRepository;
 
 import java.util.List;
 
 @Controller
 public class ClienteController {
 
-    public final ClienteRepository repo_cliente;
+    private final ClienteRepository repo_cliente;
+    private final CodPostalRepository repo_codPostal;
 
-    public ClienteController(ClienteRepository repo_cliente) {
+    public ClienteController(ClienteRepository repo_cliente, CodPostalRepository repo_codPostal) {
         this.repo_cliente = repo_cliente;
+        this.repo_codPostal = repo_codPostal;
     }
 
     @GetMapping("/Clientes")
@@ -23,5 +28,42 @@ public class ClienteController {
         List<ClienteEntity> clientes = repo_cliente.findAll();
         model.addAttribute("clientes", clientes);
         return "Clientes";
+    }
+
+    @GetMapping("/inserirCliente")
+    public String showInserirCliente(Model model) {
+        List<CodPostalEntity> codPostais = repo_codPostal.findAll();
+        model.addAttribute("codPostais", codPostais);
+        return "InserirCliente";
+    }
+
+    @PostMapping("/inserirCliente")
+    public String inserirCliente(
+            @RequestParam("nome") String nome,
+            @RequestParam("nif") Integer nif,
+            @RequestParam("rua") String rua,
+            @RequestParam("porta") Integer porta,
+            @RequestParam("codPostal") Integer codPostalId,
+            @RequestParam("email") String email,
+            @RequestParam("telefone") String telefone
+    ) {
+        CodPostalEntity codPostal = repo_codPostal.findById(codPostalId).orElse(null);
+        System.out.println(codPostal);
+
+        if (codPostal != null) {
+            ClienteEntity novoCliente = new ClienteEntity();
+            novoCliente.setNome(nome);
+            novoCliente.setNif(nif);
+            novoCliente.setRua(rua);
+            novoCliente.setPorta(porta);
+            novoCliente.setIdCodPostal(codPostal.getIdCodPostal());
+            novoCliente.setEmail(email);
+            novoCliente.setTelefone(telefone);
+            novoCliente.setCodPostalByIdCodPostal(codPostal);
+
+            repo_cliente.save(novoCliente);
+        }
+
+        return "redirect:/Clientes";
     }
 }
