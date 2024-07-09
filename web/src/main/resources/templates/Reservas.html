@@ -4,16 +4,39 @@
     <meta charset="UTF-8">
     <title>Reservas</title>
     <link rel="stylesheet" href="css/nord-light.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #FFFFFF;
-            margin: 20px;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .nav-bar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            height: 100vh;
+            padding-top: 20px;
+            position: fixed;
+        }
+        .nav-bar a {
+            display: block;
+            color: #ecf0f1;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .nav-bar a:hover {
+            background-color: #34495e;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
         }
         .main-panel, .insert-panel {
-            width: calc(100% - 40px);
-            max-width: 1920px;
-            margin: 0 auto;
             background-color: #FFFFFF;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -21,6 +44,7 @@
         .main-panel h1, .insert-panel h1 {
             text-align: center;
             font-size: 23px;
+            margin-bottom: 20px;
         }
         .form-group {
             margin-bottom: 15px;
@@ -44,20 +68,56 @@
             border-collapse: collapse;
             margin-top: 20px;
             margin-bottom: 40px;
+            background-color: #ecf0f1;
         }
         .table th, .table td {
-            border: 1px solid #ccc;
-            padding: 10px;
+            padding: 12px 15px;
             text-align: left;
         }
+        .table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .table tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        .table tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .table td {
+            font-size: 14px;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-around;
+        }
+        .actions i {
+            cursor: pointer;
+            color: #3498db;
+        }
+        .actions i:hover {
+            color: #2980b9;
+        }
         .buttons {
-            margin-top: 20px;
             text-align: center;
+            margin-top: 20px;
         }
         .buttons button {
             padding: 10px 15px;
             margin: 5px;
             cursor: pointer;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+        }
+        .buttons button:hover {
+            background-color: #2980b9;
         }
         .hidden {
             display: none;
@@ -65,89 +125,92 @@
     </style>
 </head>
 <body>
-<div class="main-panel">
-    <h1>Reserva</h1>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Id</th>
-            <th>Data</th>
-            <th>Origem</th>
-            <th>Destino</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="reserva : ${reservas}">
-            <td th:text="${reserva.id}"></td>
-            <td th:text="${reserva.data}"></td>
-            <td th:text="${reserva.origem}"></td>
-            <td th:text="${reserva.destino}"></td>
-        </tr>
-        </tbody>
-    </table>
-    <div class="form-group">
-        <div>
-            <label for="IdFuncionario">IdFuncionario</label>
-            <input type="text" id="IdFuncionario" placeholder="IdFuncionario">
-        </div>
-        <div>
-            <label for="IdCliente">IdCliente</label>
-            <input type="text" id="IdCliente" placeholder="IdCliente">
-        </div>
-    </div>
-    <div class="form-group">
-        <div>
-            <label for="IdEstadoReserva">EstadoReserva</label>
-            <input type="text" id="IdEstadoReserva" placeholder="IdEstadoReserva">
-        </div>
-    </div>
-    <div class="buttons">
-        <button onclick="inserirReserva()">Inserir Reserva</button>
-        <button onclick="cancelarReserva()">Cancelar Reserva</button>
-    </div>
+<div class="nav-bar">
+    <a href="/Armazem">Armazem</a>
+    <a href="/CargaArmazem">Cargas</a>
+    <a href="/Clientes">Clientes</a>
+    <a href="/Contentores">Contentores</a>
+    <a href="/Cotacao">Cotação</a>
+    <a href="/Fornecedores">Fornecedores</a>
+    <a href="/Funcionarios">Funcionários</a>
+    <a href="/Reservas">Reservas</a>
+    <a href="/Servicos">Serviços</a>
+    <a href="/Transportes">Transportes</a>
 </div>
+<div class="main-content">
+    <div class="main-panel">
+        <h1>Reservas</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Data</th>
+                <th>Origem</th>
+                <th>Destino</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="reserva : ${reservas}">
+                <td th:text="${reserva.id}"></td>
+                <td th:text="${reserva.data}"></td>
+                <td th:text="${reserva.origem}"></td>
+                <td th:text="${reserva.destino}"></td>
+                <td class="actions">
+                    <i class="fas fa-edit" th:onclick="'showEditarReserva(' + ${reserva.id} + ')'"></i>
+                    <i class="fas fa-trash" th:onclick="'cancelarReserva(' + ${reserva.id} + ')'"></i>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="buttons">
+            <button onclick="inserirReserva()">Inserir Reserva</button>
+        </div>
+    </div>
 
-<div class="main-panel hidden" id="insertPanel">
-    <h1>Inserir Reserva</h1>
-    <div class="form-group">
-        <div>
-            <label for="OrigemText">Origem</label>
-            <input type="text" id="OrigemText" placeholder="Origem">
+    <div class="insert-panel hidden" id="insertPanel">
+        <h1>Inserir Reserva</h1>
+        <button onclick="voltarAtrasInserirReserva()">X</button>
+        <div class="form-group">
+            <div>
+                <label for="OrigemText">Origem</label>
+                <input type="text" id="OrigemText" placeholder="Origem">
+            </div>
+            <div>
+                <label for="DestinoText">Destino</label>
+                <input type="text" id="DestinoText" placeholder="Destino">
+            </div>
         </div>
-        <div>
-            <label for="DestinoText">Destino</label>
-            <input type="text" id="DestinoText" placeholder="Destino">
+        <div class="form-group">
+            <div>
+                <label for="DataText">Data</label>
+                <input type="date" id="DataText">
+            </div>
+            <div>
+                <label for="IdClienteCombo">IdCliente</label>
+                <select id="IdClienteCombo">
+                    <!-- Opções aqui -->
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <div>
-            <label for="DataText">Data</label>
-            <input type="date" id="DataText">
+        <div class="form-group">
+            <div>
+                <label for="IdEstadoReservaCombo">EstadoReserva</label>
+                <select id="IdEstadoReservaCombo">
+                    <!-- Opções aqui -->
+                </select>
+            </div>
+            <div>
+                <label for="IdFuncionarioCombo">IdFuncionario</label>
+                <select id="IdFuncionarioCombo">
+                    <!-- Opções aqui -->
+                </select>
+            </div>
         </div>
-        <div>
-            <label for="IdClienteCombo">IdCliente</label>
-            <select id="IdClienteCombo">
-                <!-- Opções aqui -->
-            </select>
+        <div class="buttons">
+            <button onclick="registarReserva()">Inserir Reserva</button>
+            <button onclick="voltarAtrasInserirReserva()">Voltar</button>
         </div>
-    </div>
-    <div class="form-group">
-        <div>
-            <label for="IdEstadoReservaCombo">EstadoReserva</label>
-            <select id="IdEstadoReservaCombo">
-                <!-- Opções aqui -->
-            </select>
-        </div>
-        <div>
-            <label for="IdFuncionarioCombo">IdFuncionario</label>
-            <select id="IdFuncionarioCombo">
-                <!-- Opções aqui -->
-            </select>
-        </div>
-    </div>
-    <div class="buttons">
-        <button onclick="registarReserva()">Inserir Reserva</button>
-        <button onclick="voltarAtrasInserirReserva()">Voltar</button>
     </div>
 </div>
 
@@ -156,8 +219,13 @@
         document.getElementById('insertPanel').classList.remove('hidden');
     }
 
-    function cancelarReserva() {
-        // Implementar lógica para cancelar reserva
+    function cancelarReserva(id) {
+        // Implementar lógica para cancelar reserva com o id fornecido
+    }
+
+    function showEditarReserva(id) {
+        document.getElementById('editPanel').classList.remove('hidden');
+        // Implementar lógica para carregar os dados da reserva com o id fornecido
     }
 
     function registarReserva() {

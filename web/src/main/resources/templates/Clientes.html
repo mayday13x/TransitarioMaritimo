@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Funcionários</title>
+    <title>Clientes</title>
     <link rel="stylesheet" href="css/nord-light.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -36,32 +36,15 @@
             padding: 20px;
             width: calc(100% - 250px);
         }
-        .main-panel, .insert-panel, .edit-panel {
+        .main-panel {
             background-color: #FFFFFF;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .main-panel h1, .insert-panel h1, .edit-panel h1 {
+        .main-panel h1 {
             text-align: center;
             font-size: 23px;
             margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        .form-group > div {
-            width: 48%;
         }
         .table {
             width: 100%;
@@ -122,6 +105,23 @@
         .hidden {
             display: none;
         }
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-group > div {
+            width: 48%;
+        }
     </style>
 </head>
 <body>
@@ -139,7 +139,7 @@
 </div>
 <div class="main-content">
     <div class="main-panel">
-        <h1>Funcionários</h1>
+        <h1>Clientes</h1>
         <table class="table">
             <thead>
             <tr>
@@ -153,27 +153,27 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="funcionario : ${funcionarios}">
-                <td th:text="${funcionario.id}"></td>
-                <td th:text="${funcionario.nome}"></td>
-                <td th:text="${funcionario.nif}"></td>
-                <td th:text="${funcionario.rua}"></td>
-                <td th:text="${funcionario.telefone}"></td>
-                <td th:text="${funcionario.email}"></td>
+            <tr th:each="cliente : ${clientes}">
+                <td th:text="${cliente.id}"></td>
+                <td th:text="${cliente.nome}"></td>
+                <td th:text="${cliente.nif}"></td>
+                <td th:text="${cliente.getCodPostalByIdCodPostal().localidade}"></td>
+                <td th:text="${cliente.telefone}"></td>
+                <td th:text="${cliente.email}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:onclick="'showEditarFuncionario(' + ${funcionario.id} + ')'"></i>
-                    <i class="fas fa-trash" th:onclick="'excluirFuncionario(' + ${funcionario.id} + ')'"></i>
+                    <i class="fas fa-edit" th:onclick="'showEditarCliente(' + ${cliente.id} + ')'"></i>
+                    <i class="fas fa-trash" th:onclick="'excluirCliente(' + ${cliente.id} + ')'"></i>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="showInserirFuncionario()">Inserir Funcionário</button>
+            <button onclick="showInserirCliente()">Inserir Cliente</button>
         </div>
     </div>
 
     <div class="insert-panel hidden" id="insertPanel">
-        <h1>Inserir Funcionário</h1>
+        <h1>Inserir Cliente</h1>
         <button onclick="voltar()">X</button>
         <div class="form-group">
             <div>
@@ -197,7 +197,7 @@
         </div>
         <div class="form-group">
             <div>
-                <label for="CodPostalCombo">Localidade</label>
+                <label for="CodPostalCombo">Código Postal</label>
                 <select id="CodPostalCombo">
                     <!-- Opções aqui -->
                 </select>
@@ -212,20 +212,14 @@
                 <label for="TelefoneText">Telefone</label>
                 <input type="text" id="TelefoneText" placeholder="Telefone">
             </div>
-            <div>
-                <label for="TipoFuncionarioCombo">Tipo de Funcionario</label>
-                <select id="TipoFuncionarioCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
         </div>
         <div class="buttons">
-            <button onclick="registarFuncionario()">Inserir Funcionário</button>
+            <button onclick="registarCliente()">Inserir Cliente</button>
         </div>
     </div>
 
     <div class="edit-panel hidden" id="editPanel">
-        <h1>Editar Funcionário</h1>
+        <h1>Editar Cliente</h1>
         <button onclick="voltar()">X</button>
         <div class="form-group">
             <div>
@@ -249,7 +243,7 @@
         </div>
         <div class="form-group">
             <div>
-                <label for="EditCodPostalCombo">Localidade</label>
+                <label for="EditCodPostalCombo">Código Postal</label>
                 <select id="EditCodPostalCombo">
                     <!-- Opções aqui -->
                 </select>
@@ -264,35 +258,29 @@
                 <label for="EditTelefoneText">Telefone</label>
                 <input type="text" id="EditTelefoneText" placeholder="Telefone">
             </div>
-            <div>
-                <label for="EditTipoFuncionarioCombo">Tipo de Funcionario</label>
-                <select id="EditTipoFuncionarioCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
         </div>
         <div class="buttons">
-            <button onclick="guardarFuncionario()">Guardar</button>
+            <button onclick="guardarCliente()">Guardar</button>
         </div>
     </div>
 </div>
 
 <script>
-    function showInserirFuncionario() {
+    function showInserirCliente() {
         document.getElementById('insertPanel').classList.remove('hidden');
     }
 
-    function excluirFuncionario(id) {
-        // Implementar lógica para excluir funcionário com o id fornecido
+    function excluirCliente(id) {
+        // Implementar lógica para excluir cliente com o id fornecido
     }
 
-    function showEditarFuncionario(id) {
+    function showEditarCliente(id) {
         document.getElementById('editPanel').classList.remove('hidden');
-        // Implementar lógica para carregar os dados do funcionário com o id fornecido
+        // Implementar lógica para carregar os dados do cliente com o id fornecido
     }
 
-    function registarFuncionario() {
-        // Implementar lógica para registrar funcionário
+    function registarCliente() {
+        // Implementar lógica para registrar cliente
     }
 
     function voltar() {
@@ -300,8 +288,8 @@
         document.getElementById('editPanel').classList.add('hidden');
     }
 
-    function guardarFuncionario() {
-        // Implementar lógica para guardar funcionário
+    function guardarCliente() {
+        // Implementar lógica para guardar cliente
     }
 </script>
 </body>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Cargas</title>
+    <title>Contentores</title>
     <link rel="stylesheet" href="css/nord-light.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -92,6 +92,17 @@
         .table td {
             font-size: 14px;
         }
+        .actions {
+            display: flex;
+            justify-content: space-around;
+        }
+        .actions i {
+            cursor: pointer;
+            color: #3498db;
+        }
+        .actions i:hover {
+            color: #2980b9;
+        }
         .buttons {
             text-align: center;
             margin-top: 20px;
@@ -128,120 +139,105 @@
 </div>
 <div class="main-content">
     <div class="main-panel">
-        <h1>Cargas</h1>
+        <h1>Contentores</h1>
         <table class="table">
             <thead>
             <tr>
-                <th>Nome</th>
-                <th>Quantidade</th>
-                <th>Volume</th>
-                <th>Peso</th>
+                <th>Cin</th>
+                <th>Capacidade</th>
+                <th>Peso Máximo</th>
+                <th>Local Atual</th>
                 <th>Ações</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="carga : ${cargas}">
-                <td th:text="${carga.nome}"></td>
-                <td th:text="${carga.quantidade}"></td>
-                <td th:text="${carga.volume}"></td>
-                <td th:text="${carga.peso}"></td>
+            <tr th:each="contentor : ${contentores}">
+                <td th:text="${contentor.cin}"></td>
+                <td th:text="${contentor.capacidade}"></td>
+                <td th:text="${contentor.pesoMax}"></td>
+                <td th:text="${contentor.localAtual}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:onclick="'showEditarCarga(' + ${carga.id} + ')'"></i>
-                    <i class="fas fa-trash" th:onclick="'excluirCarga(' + ${carga.id} + ')'"></i>
+                    <i class="fas fa-edit" th:onclick="'showEditarContentor(' + ${contentor.cin} + ')'"></i>
+                    <i class="fas fa-trash" th:onclick="'excluirContentor(' + ${contentor.cin} + ')'"></i>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="inserirCarga()">Inserir Carga</button>
+            <button onclick="inserirContentor()">Inserir Contentor</button>
+            <button onclick="visualizarCargas()">Visualizar Cargas</button>
+            <button onclick="registarSaida()">Registar Saída do Contentor</button>
         </div>
     </div>
 
     <div class="insert-panel hidden" id="insertPanel">
-        <h1>Inserir Carga</h1>
-        <button onclick="voltarAtrasInserirCarga()">X</button>
+        <h1>Inserir Contentor</h1>
+        <button onclick="voltarAtrasInserirContentor()">X</button>
         <div class="form-group">
             <div>
-                <label for="NomeText">Nome</label>
-                <input type="text" id="NomeText">
+                <label for="CapacidadeText">Capacidade</label>
+                <input type="text" id="CapacidadeText" placeholder="Capacidade">
             </div>
             <div>
-                <label for="QuantidadeText">Quantidade</label>
-                <input type="text" id="QuantidadeText">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="VolumeText">Volume</label>
-                <input type="text" id="VolumeText">
-            </div>
-            <div>
-                <label for="PesoText">Peso</label>
-                <input type="text" id="PesoText">
+                <label for="PesoMaximoText">Peso Máximo</label>
+                <input type="text" id="PesoMaximoText" placeholder="Peso Máximo">
             </div>
         </div>
         <div class="form-group">
             <div>
                 <label for="LocalAtualText">Local Atual</label>
-                <input type="text" id="LocalAtualText">
+                <input type="text" id="LocalAtualText" placeholder="Local Atual">
             </div>
             <div>
-                <label for="ObservacoesText">Observações</label>
-                <input type="text" id="ObservacoesText">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="IdReservaCombo">Id Reserva</label>
-                <select id="IdReservaCombo"></select>
-            </div>
-            <div>
-                <label for="IdContentorCombo">Id Contentor</label>
-                <select id="IdContentorCombo"></select>
+                <label for="TipoContentorCombo">Tipo de Contentor</label>
+                <select id="TipoContentorCombo">
+                    <!-- Opções aqui -->
+                </select>
             </div>
         </div>
         <div class="form-group">
             <div>
-                <label for="IdArmazemCombo">Id Armazem</label>
-                <select id="IdArmazemCombo"></select>
-            </div>
-            <div>
-                <label for="TipoCargaCombo">Tipo Carga</label>
-                <select id="TipoCargaCombo"></select>
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="IdCotacaoCombo">Id Cotação</label>
-                <select id="IdCotacaoCombo"></select>
+                <label for="EstadoContentorCombo">Estado Contentor</label>
+                <select id="EstadoContentorCombo">
+                    <!-- Opções aqui -->
+                </select>
             </div>
         </div>
         <div class="buttons">
-            <button onclick="registarCarga()">Registrar Carga</button>
+            <button onclick="registarContentor()">Inserir Contentor</button>
+            <button onclick="voltarAtrasInserirContentor()">Voltar</button>
         </div>
     </div>
 </div>
 
 <script>
-    function inserirCarga() {
+    function inserirContentor() {
         document.getElementById('insertPanel').classList.remove('hidden');
     }
 
-    function excluirCarga(id) {
-        // Implementar lógica para excluir carga com o id fornecido
+    function visualizarCargas() {
+        // Implementar lógica para visualizar cargas
     }
 
-    function registarCarga() {
-        // Implementar lógica para registrar carga
+    function registarSaida() {
+        // Implementar lógica para registrar saída
     }
 
-    function voltarAtrasInserirCarga() {
+    function registarContentor() {
+        // Implementar lógica para registrar contentor
+    }
+
+    function voltarAtrasInserirContentor() {
         document.getElementById('insertPanel').classList.add('hidden');
     }
 
-    function showEditarCarga(id) {
-        // Implementar lógica para mostrar a edição da carga com o id fornecido
+    function showEditarContentor(id) {
+        // Implementar lógica para mostrar a edição do contentor com o id fornecido
         document.getElementById('insertPanel').classList.remove('hidden');
+    }
+
+    function excluirContentor(id) {
+        // Implementar lógica para excluir contentor com o id fornecido
     }
 </script>
 </body>

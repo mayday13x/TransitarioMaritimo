@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Cargas</title>
+    <title>Serviços</title>
     <link rel="stylesheet" href="css/nord-light.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -36,12 +36,12 @@
             padding: 20px;
             width: calc(100% - 250px);
         }
-        .main-panel, .insert-panel {
+        .main-panel, .insert-panel, .edit-panel {
             background-color: #FFFFFF;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .main-panel h1, .insert-panel h1 {
+        .main-panel h1, .insert-panel h1, .edit-panel h1 {
             text-align: center;
             font-size: 23px;
             margin-bottom: 20px;
@@ -92,6 +92,17 @@
         .table td {
             font-size: 14px;
         }
+        .actions {
+            display: flex;
+            justify-content: space-around;
+        }
+        .actions i {
+            cursor: pointer;
+            color: #3498db;
+        }
+        .actions i:hover {
+            color: #2980b9;
+        }
         .buttons {
             text-align: center;
             margin-top: 20px;
@@ -128,120 +139,123 @@
 </div>
 <div class="main-content">
     <div class="main-panel">
-        <h1>Cargas</h1>
+        <h1>Serviços</h1>
         <table class="table">
             <thead>
             <tr>
-                <th>Nome</th>
-                <th>Quantidade</th>
-                <th>Volume</th>
-                <th>Peso</th>
+                <th>Id</th>
+                <th>Descrição</th>
+                <th>Fornecedor</th>
+                <th>Comissão</th>
+                <th>Preço</th>
                 <th>Ações</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="carga : ${cargas}">
-                <td th:text="${carga.nome}"></td>
-                <td th:text="${carga.quantidade}"></td>
-                <td th:text="${carga.volume}"></td>
-                <td th:text="${carga.peso}"></td>
+            <tr th:each="servico : ${servicos}">
+                <td th:text="${servico.id}"></td>
+                <td th:text="${servico.descricao}"></td>
+                <td th:text="${servico.getFornecedorByIdFornecedor().nome}"></td>
+                <td th:text="${servico.comissao}"></td>
+                <td th:text="${servico.preco}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:onclick="'showEditarCarga(' + ${carga.id} + ')'"></i>
-                    <i class="fas fa-trash" th:onclick="'excluirCarga(' + ${carga.id} + ')'"></i>
+                    <i class="fas fa-edit" th:onclick="'showEditarServico(' + ${servico.id} + ')'"></i>
+                    <i class="fas fa-trash" th:onclick="'excluirServico(' + ${servico.id} + ')'"></i>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="inserirCarga()">Inserir Carga</button>
+            <button onclick="showInserirServico()">Criar Serviço</button>
         </div>
     </div>
 
     <div class="insert-panel hidden" id="insertPanel">
-        <h1>Inserir Carga</h1>
-        <button onclick="voltarAtrasInserirCarga()">X</button>
+        <h1>Inserir Serviço</h1>
+        <button onclick="voltar()">X</button>
         <div class="form-group">
             <div>
-                <label for="NomeText">Nome</label>
-                <input type="text" id="NomeText">
+                <label for="DescServico">Descrição</label>
+                <input type="text" id="DescServico" placeholder="Descrição">
             </div>
             <div>
-                <label for="QuantidadeText">Quantidade</label>
-                <input type="text" id="QuantidadeText">
+                <label for="PrecoServico">Preço</label>
+                <input type="text" id="PrecoServico" placeholder="Preço">
             </div>
         </div>
         <div class="form-group">
             <div>
-                <label for="VolumeText">Volume</label>
-                <input type="text" id="VolumeText">
+                <label for="ComissServico">Comissão</label>
+                <input type="text" id="ComissServico" placeholder="Comissão">
             </div>
             <div>
-                <label for="PesoText">Peso</label>
-                <input type="text" id="PesoText">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="LocalAtualText">Local Atual</label>
-                <input type="text" id="LocalAtualText">
-            </div>
-            <div>
-                <label for="ObservacoesText">Observações</label>
-                <input type="text" id="ObservacoesText">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="IdReservaCombo">Id Reserva</label>
-                <select id="IdReservaCombo"></select>
-            </div>
-            <div>
-                <label for="IdContentorCombo">Id Contentor</label>
-                <select id="IdContentorCombo"></select>
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="IdArmazemCombo">Id Armazem</label>
-                <select id="IdArmazemCombo"></select>
-            </div>
-            <div>
-                <label for="TipoCargaCombo">Tipo Carga</label>
-                <select id="TipoCargaCombo"></select>
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="IdCotacaoCombo">Id Cotação</label>
-                <select id="IdCotacaoCombo"></select>
+                <label for="FornecedorCombo">Fornecedor</label>
+                <select id="FornecedorCombo">
+                    <!-- Opções aqui -->
+                </select>
             </div>
         </div>
         <div class="buttons">
-            <button onclick="registarCarga()">Registrar Carga</button>
+            <button onclick="registarServico()">Inserir Serviço</button>
+        </div>
+    </div>
+
+    <div class="edit-panel hidden" id="editPanel">
+        <h1>Editar Serviço</h1>
+        <button onclick="voltar()">X</button>
+        <div class="form-group">
+            <div>
+                <label for="EditDescServico">Descrição</label>
+                <input type="text" id="EditDescServico" placeholder="Descrição">
+            </div>
+            <div>
+                <label for="EditPrecoServico">Preço</label>
+                <input type="text" id="EditPrecoServico" placeholder="Preço">
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <label for="EditComissServico">Comissão</label>
+                <input type="text" id="EditComissServico" placeholder="Comissão">
+            </div>
+            <div>
+                <label for="EditFornecedorCombo">Fornecedor</label>
+                <select id="EditFornecedorCombo">
+                    <!-- Opções aqui -->
+                </select>
+            </div>
+        </div>
+        <div class="buttons">
+            <button onclick="guardarServico()">Guardar</button>
         </div>
     </div>
 </div>
 
 <script>
-    function inserirCarga() {
+    function showInserirServico() {
         document.getElementById('insertPanel').classList.remove('hidden');
     }
 
-    function excluirCarga(id) {
-        // Implementar lógica para excluir carga com o id fornecido
+    function excluirServico(id) {
+        // Implementar lógica para excluir serviço com o id fornecido
     }
 
-    function registarCarga() {
-        // Implementar lógica para registrar carga
+    function showEditarServico(id) {
+        document.getElementById('editPanel').classList.remove('hidden');
+        // Implementar lógica para carregar os dados do serviço com o id fornecido
     }
 
-    function voltarAtrasInserirCarga() {
+    function registarServico() {
+        // Implementar lógica para registrar serviço
+    }
+
+    function voltar() {
         document.getElementById('insertPanel').classList.add('hidden');
+        document.getElementById('editPanel').classList.add('hidden');
     }
 
-    function showEditarCarga(id) {
-        // Implementar lógica para mostrar a edição da carga com o id fornecido
-        document.getElementById('insertPanel').classList.remove('hidden');
+    function guardarServico() {
+        // Implementar lógica para guardar serviço
     }
 </script>
 </body>

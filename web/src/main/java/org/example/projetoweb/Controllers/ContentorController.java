@@ -17,10 +17,10 @@ public class ContentorController {
         this.repo_contentor = repo_contentor;
     }
 
-    @GetMapping("/Contentor")
+    @GetMapping("/Contentores")
     public String listarContentores(Model model){
         List<ContentorEntity> contentores = repo_contentor.findAll();
         model.addAttribute("contentores", contentores);
-        return "Contentor";
+        return "Contentores";
     }
 }
