@@ -36,32 +36,15 @@
             padding: 20px;
             width: calc(100% - 250px);
         }
-        .main-panel, .insert-panel {
+        .main-panel {
             background-color: #FFFFFF;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .main-panel h1, .insert-panel h1 {
+        .main-panel h1 {
             text-align: center;
             font-size: 23px;
             margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        .form-group > div {
-            width: 48%;
         }
         .table {
             width: 100%;
@@ -122,6 +105,47 @@
         .hidden {
             display: none;
         }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group label {
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
@@ -164,55 +188,58 @@
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="inserirContentor()">Inserir Contentor</button>
+            <button onclick="showInserirContentorModal()">Inserir Contentor</button>
             <button onclick="visualizarCargas()">Visualizar Cargas</button>
             <button onclick="registarSaida()">Registar Saída do Contentor</button>
         </div>
     </div>
+</div>
 
-    <div class="insert-panel hidden" id="insertPanel">
+<!-- The Modal -->
+<div id="insertModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
         <h1>Inserir Contentor</h1>
-        <button onclick="voltarAtrasInserirContentor()">X</button>
-        <div class="form-group">
-            <div>
+        <form action="/inserirContentor" method="post">
+            <div class="form-group">
                 <label for="CapacidadeText">Capacidade</label>
-                <input type="text" id="CapacidadeText" placeholder="Capacidade">
+                <input type="text" id="CapacidadeText" name="capacidade" placeholder="Capacidade" required>
             </div>
-            <div>
+            <div class="form-group">
                 <label for="PesoMaximoText">Peso Máximo</label>
-                <input type="text" id="PesoMaximoText" placeholder="Peso Máximo">
+                <input type="text" id="PesoMaximoText" name="pesoMaximo" placeholder="Peso Máximo" required>
             </div>
-        </div>
-        <div class="form-group">
-            <div>
+            <div class="form-group">
                 <label for="LocalAtualText">Local Atual</label>
-                <input type="text" id="LocalAtualText" placeholder="Local Atual">
+                <input type="text" id="LocalAtualText" name="localAtual" placeholder="Local Atual" required>
             </div>
-            <div>
+            <div class="form-group">
                 <label for="TipoContentorCombo">Tipo de Contentor</label>
-                <select id="TipoContentorCombo">
-                    <!-- Opções aqui -->
+                <select id="TipoContentorCombo" name="tipoContentor" required>
+                    <option th:each="tipo : ${tiposContentor}" th:value="${tipo.id}" th:text="${tipo.descricao}"></option>
                 </select>
             </div>
-        </div>
-        <div class="form-group">
-            <div>
+            <div class="form-group">
                 <label for="EstadoContentorCombo">Estado Contentor</label>
-                <select id="EstadoContentorCombo">
-                    <!-- Opções aqui -->
+                <select id="EstadoContentorCombo" name="estadoContentor" required>
+                    <option th:each="estado : ${estadosContentor}" th:value="${estado.id}" th:text="${estado.descricao}"></option>
                 </select>
             </div>
-        </div>
-        <div class="buttons">
-            <button onclick="registarContentor()">Inserir Contentor</button>
-            <button onclick="voltarAtrasInserirContentor()">Voltar</button>
-        </div>
+            <div class="buttons">
+                <button type="submit">Inserir Contentor</button>
+                <button type="button" onclick="closeModal()">Cancelar</button>
+            </div>
+        </form>
     </div>
 </div>
 
 <script>
-    function inserirContentor() {
-        document.getElementById('insertPanel').classList.remove('hidden');
+    function showInserirContentorModal() {
+        document.getElementById('insertModal').style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById('insertModal').style.display = "none";
     }
 
     function visualizarCargas() {
@@ -223,14 +250,6 @@
         // Implementar lógica para registrar saída
     }
 
-    function registarContentor() {
-        // Implementar lógica para registrar contentor
-    }
-
-    function voltarAtrasInserirContentor() {
-        document.getElementById('insertPanel').classList.add('hidden');
-    }
-
     function showEditarContentor(id) {
         // Implementar lógica para mostrar a edição do contentor com o id fornecido
         document.getElementById('insertPanel').classList.remove('hidden');
@@ -238,6 +257,12 @@
 
     function excluirContentor(id) {
         // Implementar lógica para excluir contentor com o id fornecido
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('insertModal')) {
+            closeModal();
+        }
     }
 </script>
 </body>

@@ -36,32 +36,15 @@
             padding: 20px;
             width: calc(100% - 250px);
         }
-        .main-panel, .insert-panel {
+        .main-panel {
             background-color: #FFFFFF;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .main-panel h1, .insert-panel h1 {
+        .main-panel h1 {
             text-align: center;
             font-size: 23px;
             margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        .form-group > div {
-            width: 48%;
         }
         .table {
             width: 100%;
@@ -98,7 +81,7 @@
         }
         .actions i {
             cursor: pointer;
-            color: #3498db;
+            font-size: 18px;
         }
         .actions i:hover {
             color: #2980b9;
@@ -119,8 +102,56 @@
         .buttons button:hover {
             background-color: #2980b9;
         }
-        .hidden {
+        /* Modal styles */
+        .modal {
             display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-group > div {
+            width: 48%;
         }
     </style>
 </head>
@@ -164,59 +195,67 @@
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="inserirReserva()">Inserir Reserva</button>
-        </div>
-    </div>
-
-    <div class="insert-panel hidden" id="insertPanel">
-        <h1>Inserir Reserva</h1>
-        <button onclick="voltarAtrasInserirReserva()">X</button>
-        <div class="form-group">
-            <div>
-                <label for="OrigemText">Origem</label>
-                <input type="text" id="OrigemText" placeholder="Origem">
-            </div>
-            <div>
-                <label for="DestinoText">Destino</label>
-                <input type="text" id="DestinoText" placeholder="Destino">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="DataText">Data</label>
-                <input type="date" id="DataText">
-            </div>
-            <div>
-                <label for="IdClienteCombo">IdCliente</label>
-                <select id="IdClienteCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="IdEstadoReservaCombo">EstadoReserva</label>
-                <select id="IdEstadoReservaCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
-            <div>
-                <label for="IdFuncionarioCombo">IdFuncionario</label>
-                <select id="IdFuncionarioCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
-        </div>
-        <div class="buttons">
-            <button onclick="registarReserva()">Inserir Reserva</button>
-            <button onclick="voltarAtrasInserirReserva()">Voltar</button>
+            <button onclick="showInserirReservaModal()">Inserir Reserva</button>
         </div>
     </div>
 </div>
 
+<!-- The Modal -->
+<div id="insertModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h1>Inserir Reserva</h1>
+        <form id="formInserirReserva" action="/inserirReserva" method="post">
+            <div class="form-group">
+                <div>
+                    <label for="OrigemText">Origem</label>
+                    <input type="text" id="OrigemText" name="origem" placeholder="Origem" required>
+                </div>
+                <div>
+                    <label for="DestinoText">Destino</label>
+                    <input type="text" id="DestinoText" name="destino" placeholder="Destino" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="DataText">Data</label>
+                    <input type="date" id="DataText" name="data" required>
+                </div>
+                <div>
+                    <label for="IdClienteCombo">Cliente</label>
+                    <select id="IdClienteCombo" name="idCliente" required>
+                        <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="IdEstadoReservaCombo">Estado da Reserva</label>
+                    <select id="IdEstadoReservaCombo" name="idEstadoReserva" required>
+                        <option th:each="estado : ${estados}" th:value="${estado.id}" th:text="${estado.descricao}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="IdFuncionarioCombo">Funcionário</label>
+                    <select id="IdFuncionarioCombo" name="idFuncionario" required>
+                        <option th:each="funcionario : ${funcionarios}" th:value="${funcionario.id}" th:text="${funcionario.nome}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Inserir Reserva</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
-    function inserirReserva() {
-        document.getElementById('insertPanel').classList.remove('hidden');
+    function showInserirReservaModal() {
+        document.getElementById('insertModal').style.display = "flex";
+    }
+
+    function closeModal() {
+        document.getElementById('insertModal').style.display = "none";
     }
 
     function cancelarReserva(id) {
@@ -224,16 +263,13 @@
     }
 
     function showEditarReserva(id) {
-        document.getElementById('editPanel').classList.remove('hidden');
-        // Implementar lógica para carregar os dados da reserva com o id fornecido
+        // Implementar lógica para mostrar a edição da reserva com o id fornecido
     }
 
-    function registarReserva() {
-        // Implementar lógica para registrar reserva
-    }
-
-    function voltarAtrasInserirReserva() {
-        document.getElementById('insertPanel').classList.add('hidden');
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('insertModal')) {
+            closeModal();
+        }
     }
 </script>
 </body>
