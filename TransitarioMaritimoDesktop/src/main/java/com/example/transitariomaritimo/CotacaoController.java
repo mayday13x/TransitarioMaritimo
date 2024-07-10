@@ -1,5 +1,6 @@
 package com.example.transitariomaritimo;
 
+import com.example.transitariomaritimo.session.Current_Session;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -251,40 +252,6 @@ public class CotacaoController implements Initializable {
                 totalCota.setText(String.valueOf(total) + " €");
             });
         }
-
-
-
-
-
-        //CARREGAR COTAÇÕES
-      /*  try{
-
-            IdCliente.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
-            Utilizador.setCellValueFactory(data -> new SimpleStringProperty(data.getValue()));
-            Nif.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNif().toString()));
-            Localidade.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCodPostalByIdCodPostal().getLocalidade()));
-            Telefone.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTelefone()));
-            Email.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
-            table.setItems(clientes);
-
-
-            // context = new AnnotationConfigApplicationContext(AppConfig.class);
-            cp_repo = context.getBean(CodPostalRepository.class);
-            // cli_repo = context.getBean(ClienteRepository.class);
-
-            ObservableList<CodPostalEntity> localidades = FXCollections.observableArrayList(cp_repo.findAll());
-            for (CodPostalEntity i : localidades){
-                CodPostalCombo.getItems().addAll(i.getLocalidade());
-                EditCodPostalCombo.getItems().addAll(i.getLocalidade());
-            }
-
-
-        } catch (Exception ex){
-            System.out.println("Erro no Cliente: " + ex.getMessage());
-        }
-*/
-
-
     }
 
     public void print(){
@@ -317,9 +284,6 @@ public class CotacaoController implements Initializable {
             DescricaoServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescricao()));
             TableServico.setItems(servicos);
         }
-
-
-
     }
 
     @FXML
@@ -327,6 +291,8 @@ public class CotacaoController implements Initializable {
         CriarPane.setVisible(true);
         mainPane.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
         mainPane.setDisable(true);
+       // System.out.println(Current_Session.current_client.getId() + ": " + Current_Session.current_client.getNome());
+        System.out.println(Current_Session.current_funcionario.getId() + ": " + Current_Session.current_funcionario.getNome());
     }
 
     public void AddServico(){

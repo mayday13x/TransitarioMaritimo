@@ -1,5 +1,6 @@
 package com.example.transitariomaritimo;
 
+import com.example.transitariomaritimo.session.Current_Session;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,6 +47,14 @@ public class MenuController implements Initializable {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+
+            try {
+                System.out.println(Current_Session.current_client.getNome());
+                System.out.println(Current_Session.current_funcionario.getNome());
+            } catch (Exception e) {
+                System.out.println("Erro current session!");
+            }
+
     }
 
     @FXML
@@ -265,6 +274,10 @@ public class MenuController implements Initializable {
     public void Logout(MouseEvent event) {
 
         try{
+
+            //Current_Session.current_funcionario = null;
+            //Current_Session.current_client = null;
+
             Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
             Scene regCena = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

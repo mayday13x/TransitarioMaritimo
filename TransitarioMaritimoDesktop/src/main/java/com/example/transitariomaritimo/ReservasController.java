@@ -1,5 +1,6 @@
 package com.example.transitariomaritimo;
 
+import com.example.transitariomaritimo.session.Current_Session;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -104,21 +105,20 @@ public class ReservasController implements Initializable {
         reserva_repo = context.getBean(ReservaRepository.class);
 
         if(idCliente != 0){
-            ObservableList<ReservaEntity> reserva = FXCollections.observableArrayList(reserva_repo.findByIdClienteLike(idCliente));
+            ObservableList<ReservaEntity> reserva = FXCollections.observableArrayList(reserva_repo.findByIdClienteLike(Current_Session.current_client.getId()));
             Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
-            Data.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
+        //    Data.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
             Origem.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getOrigem()));
             Destino.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDestino()));
             Table.setItems(reserva);
         }else {
             ObservableList<ReservaEntity> reserva = FXCollections.observableArrayList(reserva_repo.findAll());
             Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
-            Data.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
+       //     Data.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
             Origem.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getOrigem()));
             Destino.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDestino()));
             Table.setItems(reserva);
         }
-
 
 
         Table.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -158,17 +158,17 @@ public class ReservasController implements Initializable {
 
     }
 
-    public void ReservaCliente() {
+    public void ReservaCliente() {  //reservas de um cliente
         context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         reserva_repo = context.getBean(ReservaRepository.class);
 
 
         if(idCliente != 0){
-            ObservableList<ReservaEntity> reserva = FXCollections.observableArrayList(reserva_repo.findByIdClienteLike(idCliente));
+            ObservableList<ReservaEntity> reserva = FXCollections.observableArrayList(reserva_repo.findByIdClienteLike(Current_Session.current_client.getId()));
 
             Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
-            Data.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
+         //   Data.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
             Origem.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getOrigem()));
             Destino.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDestino()));
             Table.setItems(reserva);
@@ -176,7 +176,7 @@ public class ReservasController implements Initializable {
             ObservableList<ReservaEntity> reserva = FXCollections.observableArrayList(reserva_repo.findAll());
 
             Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
-            Data.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
+          //  Data.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
             Origem.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getOrigem()));
             Destino.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDestino()));
             Table.setItems(reserva);
@@ -375,7 +375,7 @@ public class ReservasController implements Initializable {
         }
 
         if(!ReservasPagarButton.isSelected()){
-            ObservableList<ReservaEntity> reservas = FXCollections.observableArrayList(reserva_repo.findByIdClienteLike(idCliente));
+            ObservableList<ReservaEntity> reservas = FXCollections.observableArrayList(reserva_repo.findByIdClienteLike(Current_Session.current_client.getId()));
             Table.setItems(reservas);
         }
     }
@@ -413,7 +413,7 @@ public class ReservasController implements Initializable {
                     }
 
                     if(!ReservasPagarButton.isSelected()){
-                        ObservableList<ReservaEntity> reservas = FXCollections.observableArrayList(reserva_repo.findByIdClienteLike(idCliente));
+                        ObservableList<ReservaEntity> reservas = FXCollections.observableArrayList(reserva_repo.findByIdClienteLike(Current_Session.current_client.getId()));
                         Table.setItems(reservas);
                     }
                 } catch (Exception e) {

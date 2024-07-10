@@ -1,5 +1,6 @@
 package com.example.transitariomaritimo;
 
+import com.example.transitariomaritimo.session.Current_Session;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -51,7 +52,7 @@ public class LoginController implements Initializable {
 
 //    private boolean mensagem = true;
 
-    FuncionarioEntity funcionarioAtual = new FuncionarioEntity();
+   // FuncionarioEntity funcionarioAtual = new FuncionarioEntity();
 
 
 
@@ -103,6 +104,9 @@ public class LoginController implements Initializable {
                     //mensagem = false;
                     found = true;
                     try {
+                        Current_Session.current_client = cliente;
+                        System.out.println(Current_Session.current_client.getNome());
+
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("MenuClienteView.fxml"));
                         Parent root = loader.load();
                         MenuController controller = loader.getController();
@@ -130,12 +134,14 @@ public class LoginController implements Initializable {
                     mainPane.setDisable(true);
                     mainPane.setVisible(false);
 
-                    funcionarioAtual = funcionario;
+                    //funcionarioAtual = funcionario;
+                    Current_Session.current_funcionario = funcionario;
 
 
                 } else if (Objects.equals(utilizadorText.getText(), funcionario.getUtilizador()) && Objects.equals(passwordText.getText(), funcionario.getPassword())) {
                     //mensagem = false;
                     found = true;
+                    Current_Session.current_funcionario = funcionario;
                     switch (funcionario.getIdTipoFuncionario()) {
                         case 1: //Admin
                             mudarPagina(event, "MenuAdminView.fxml");
@@ -177,19 +183,20 @@ public class LoginController implements Initializable {
     @FXML
     public void AlterarPassword(ActionEvent event) {
 
-        funcionarioAtual.setPassword(NewPassword.getText());
+        //funcionarioAtual.setPassword(NewPassword.getText());
+        Current_Session.current_funcionario.setPassword(NewPassword.getText());
 
-        funcionario_repo.save(funcionarioAtual);
+        //funcionario_repo.save(Current_Session.current_funcionario);
 
         try {
-            funcionario_repo.save(funcionarioAtual);
+            funcionario_repo.save(Current_Session.current_funcionario);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Sucesso!");
             alert.setHeaderText("Registo editado com sucesso!");
             alert.showAndWait();
 
-            switch (funcionarioAtual.getIdTipoFuncionario()) {
+            switch (Current_Session.current_funcionario.getIdTipoFuncionario()) {
                 case 1:
                     mudarPagina(event, "MenuAdminView.fxml");
                     break;
