@@ -176,8 +176,8 @@
                 <td th:text="${armazem.capacidadeMax}"></td>
                 <td th:text="${armazem.descricao}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:onclick="'showEditarArmazem(' + ${armazem.id} + ')'"></i>
-                    <i class="fas fa-trash" th:onclick="'removerArmazem(' + ${armazem.id} + ')'"></i>
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarArmazemModal(${armazem.id}, '${armazem.descricao}', ${armazem.capacidadeMax})|"></i>
+                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverArmazem(${armazem.id})|"></i>
                 </td>
             </tr>
             </tbody>
@@ -188,10 +188,10 @@
     </div>
 </div>
 
-<!-- The Modal -->
+<!-- Inserir Modal -->
 <div id="insertModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
+        <span class="close" onclick="closeModal('insertModal')">&times;</span>
         <h1>Inserir Armazém</h1>
         <form action="/inserirArmazem" method="post">
             <div class="form-group">
@@ -209,26 +209,73 @@
     </div>
 </div>
 
+<!-- Editar Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editModal')">&times;</span>
+        <h1>Editar Armazém</h1>
+        <form id="editForm" action="/editarArmazem" method="post">
+            <input type="hidden" id="editId" name="id">
+            <div class="form-group">
+                <label for="editDescricaoText">Descrição</label>
+                <input type="text" id="editDescricaoText" name="descricao" placeholder="Descrição" required>
+            </div>
+            <div class="form-group">
+                <label for="editCapacidadeMaximaText">Capacidade Máxima</label>
+                <input type="number" id="editCapacidadeMaximaText" name="capacidadeMaxima" placeholder="Capacidade Máxima" required>
+            </div>
+            <div class="buttons">
+                <button type="submit">Guardar Alterações</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmar Remover Modal -->
+<div id="confirmRemoveModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
+        <h1>Remover Armazém</h1>
+        <p>Tem certeza que deseja remover este armazém?</p>
+        <div class="buttons">
+            <form id="removeForm" action="/removerArmazem" method="post">
+                <input type="hidden" id="removeId" name="id">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit">Remover</button>
+                <button type="button" onclick="closeModal('confirmRemoveModal')">Cancelar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     function showInserirArmazemModal() {
         document.getElementById('insertModal').style.display = "block";
     }
 
-    function closeModal() {
-        document.getElementById('insertModal').style.display = "none";
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
     }
 
-    function removerArmazem(id) {
-        // Implementar lógica para remover armazém com o id fornecido
+    function showEditarArmazemModal(id, descricao, capacidadeMaxima) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editDescricaoText').value = descricao;
+        document.getElementById('editCapacidadeMaximaText').value = capacidadeMaxima;
+        document.getElementById('editModal').style.display = "block";
     }
 
-    function showEditarArmazem(id) {
-        // Implementar lógica para mostrar a edição do armazém com o id fornecido
+    function confirmarRemoverArmazem(id) {
+        document.getElementById('removeId').value = id;
+        document.getElementById('confirmRemoveModal').style.display = "block";
     }
 
     window.onclick = function(event) {
         if (event.target == document.getElementById('insertModal')) {
-            closeModal();
+            closeModal('insertModal');
+        } else if (event.target == document.getElementById('editModal')) {
+            closeModal('editModal');
+        } else if (event.target == document.getElementById('confirmRemoveModal')) {
+            closeModal('confirmRemoveModal');
         }
     }
 </script>

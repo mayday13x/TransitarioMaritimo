@@ -9,6 +9,7 @@ import pt.ipvc.database.entity.ArmazemEntity;
 import pt.ipvc.database.repository.ArmazemRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class ArmazemController {
@@ -37,6 +38,29 @@ public class ArmazemController {
 
         repo_armazem.save(novoArmazem);
 
+        return "redirect:/Armazem";
+    }
+
+    @PostMapping("/editarArmazem")
+    public String editarArmazem(
+            @RequestParam("id") int id,
+            @RequestParam("descricao") String descricao,
+            @RequestParam("capacidadeMaxima") int capacidadeMaxima
+    ) {
+        Optional<ArmazemEntity> armazemOptional = repo_armazem.findById(id);
+        if (armazemOptional.isPresent()) {
+            ArmazemEntity armazem = armazemOptional.get();
+            armazem.setDescricao(descricao);
+            armazem.setCapacidadeMax(capacidadeMaxima);
+            repo_armazem.save(armazem);
+        }
+
+        return "redirect:/Armazem";
+    }
+
+    @PostMapping("/removerArmazem")
+    public String removerArmazem(@RequestParam("id") int id) {
+        repo_armazem.deleteById(id);
         return "redirect:/Armazem";
     }
 }
