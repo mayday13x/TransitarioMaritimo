@@ -36,32 +36,15 @@
             padding: 20px;
             width: calc(100% - 250px);
         }
-        .main-panel, .insert-panel, .edit-panel {
+        .main-panel {
             background-color: #FFFFFF;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .main-panel h1, .insert-panel h1, .edit-panel h1 {
+        .main-panel h1 {
             text-align: center;
             font-size: 23px;
             margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        .form-group > div {
-            width: 48%;
         }
         .table {
             width: 100%;
@@ -98,7 +81,7 @@
         }
         .actions i {
             cursor: pointer;
-            color: #3498db;
+            font-size: 18px;
         }
         .actions i:hover {
             color: #2980b9;
@@ -119,8 +102,57 @@
         .buttons button:hover {
             background-color: #2980b9;
         }
-        .hidden {
+        /* Modal styles */
+        .modal {
             display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-group > div {
+            width: 48%;
         }
     </style>
 </head>
@@ -155,107 +187,142 @@
             <tr th:each="servico : ${servicos}">
                 <td th:text="${servico.id}"></td>
                 <td th:text="${servico.descricao}"></td>
-                <td th:text="${servico.getFornecedorByIdFornecedor().nome}"></td>
+                <td th:text="${servico.fornecedorByIdFornecedor.nome}"></td>
                 <td th:text="${servico.comissao}"></td>
                 <td th:text="${servico.preco}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:onclick="'showEditarServico(' + ${servico.id} + ')'"></i>
-                    <i class="fas fa-trash" th:onclick="'excluirServico(' + ${servico.id} + ')'"></i>
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarServicoModal(${servico.id}, '${servico.descricao}', ${servico.preco}, ${servico.comissao}, ${servico.idFornecedor})|"></i>
+                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverServico(${servico.id})|"></i>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="showInserirServico()">Criar Serviço</button>
-        </div>
-    </div>
-
-    <div class="insert-panel hidden" id="insertPanel">
-        <h1>Inserir Serviço</h1>
-        <button onclick="voltar()">X</button>
-        <div class="form-group">
-            <div>
-                <label for="DescServico">Descrição</label>
-                <input type="text" id="DescServico" placeholder="Descrição">
-            </div>
-            <div>
-                <label for="PrecoServico">Preço</label>
-                <input type="text" id="PrecoServico" placeholder="Preço">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="ComissServico">Comissão</label>
-                <input type="text" id="ComissServico" placeholder="Comissão">
-            </div>
-            <div>
-                <label for="FornecedorCombo">Fornecedor</label>
-                <select id="FornecedorCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
-        </div>
-        <div class="buttons">
-            <button onclick="registarServico()">Inserir Serviço</button>
-        </div>
-    </div>
-
-    <div class="edit-panel hidden" id="editPanel">
-        <h1>Editar Serviço</h1>
-        <button onclick="voltar()">X</button>
-        <div class="form-group">
-            <div>
-                <label for="EditDescServico">Descrição</label>
-                <input type="text" id="EditDescServico" placeholder="Descrição">
-            </div>
-            <div>
-                <label for="EditPrecoServico">Preço</label>
-                <input type="text" id="EditPrecoServico" placeholder="Preço">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="EditComissServico">Comissão</label>
-                <input type="text" id="EditComissServico" placeholder="Comissão">
-            </div>
-            <div>
-                <label for="EditFornecedorCombo">Fornecedor</label>
-                <select id="EditFornecedorCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
-        </div>
-        <div class="buttons">
-            <button onclick="guardarServico()">Guardar</button>
+            <button onclick="showInserirServicoModal()">Criar Serviço</button>
         </div>
     </div>
 </div>
 
+<!-- Inserir Modal -->
+<div id="insertModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('insertModal')">&times;</span>
+        <h1>Inserir Serviço</h1>
+        <form id="formInserirServico" action="/inserirServico" method="post">
+            <div class="form-group">
+                <div>
+                    <label for="DescServico">Descrição</label>
+                    <input type="text" id="DescServico" name="descricao" placeholder="Descrição" required>
+                </div>
+                <div>
+                    <label for="PrecoServico">Preço</label>
+                    <input type="text" id="PrecoServico" name="preco" placeholder="Preço" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="ComissServico">Comissão</label>
+                    <input type="text" id="ComissServico" name="comissao" placeholder="Comissão" required>
+                </div>
+                <div>
+                    <label for="FornecedorCombo">Fornecedor</label>
+                    <select id="FornecedorCombo" name="idFornecedor" required>
+                        <option th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.id}" th:text="${fornecedor.nome}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Inserir Serviço</button>
+                <button type="button" onclick="closeModal('insertModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Editar Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editModal')">&times;</span>
+        <h1>Editar Serviço</h1>
+        <form id="editForm" action="/editarServico" method="post">
+            <input type="hidden" id="editId" name="id">
+            <div class="form-group">
+                <div>
+                    <label for="editDescServico">Descrição</label>
+                    <input type="text" id="editDescServico" name="descricao" placeholder="Descrição" required>
+                </div>
+                <div>
+                    <label for="editPrecoServico">Preço</label>
+                    <input type="text" id="editPrecoServico" name="preco" placeholder="Preço" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="editComissServico">Comissão</label>
+                    <input type="text" id="editComissServico" name="comissao" placeholder="Comissão" required>
+                </div>
+                <div>
+                    <label for="editFornecedorCombo">Fornecedor</label>
+                    <select id="editFornecedorCombo" name="idFornecedor" required>
+                        <option th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.id}" th:text="${fornecedor.nome}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Guardar Alterações</button>
+                <button type="button" onclick="closeModal('editModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmar Remover Modal -->
+<div id="confirmRemoveModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
+        <h1>Remover Serviço</h1>
+        <p>Tem certeza que deseja remover este serviço?</p>
+        <form id="removeForm" action="/removerServico" method="post">
+            <input type="hidden" id="removeId" name="id">
+            <div class="buttons">
+                <button type="submit">Remover</button>
+                <button type="button" onclick="closeModal('confirmRemoveModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
-    function showInserirServico() {
-        document.getElementById('insertPanel').classList.remove('hidden');
+    function showInserirServicoModal() {
+        document.getElementById('insertModal').style.display = "flex";
     }
 
-    function excluirServico(id) {
-        // Implementar lógica para excluir serviço com o id fornecido
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
     }
 
-    function showEditarServico(id) {
-        document.getElementById('editPanel').classList.remove('hidden');
-        // Implementar lógica para carregar os dados do serviço com o id fornecido
+    function showEditarServicoModal(id, descricao, preco, comissao, idFornecedor) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editDescServico').value = descricao;
+        document.getElementById('editPrecoServico').value = preco;
+        document.getElementById('editComissServico').value = comissao;
+        document.getElementById('editFornecedorCombo').value = idFornecedor;
+        document.getElementById('editModal').style.display = "flex";
     }
 
-    function registarServico() {
-        // Implementar lógica para registrar serviço
+    function confirmarRemoverServico(id) {
+        document.getElementById('removeId').value = id;
+        document.getElementById('confirmRemoveModal').style.display = "flex";
     }
 
-    function voltar() {
-        document.getElementById('insertPanel').classList.add('hidden');
-        document.getElementById('editPanel').classList.add('hidden');
-    }
-
-    function guardarServico() {
-        // Implementar lógica para guardar serviço
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('insertModal')) {
+            closeModal('insertModal');
+        } else if (event.target == document.getElementById('editModal')) {
+            closeModal('editModal');
+        } else if (event.target == document.getElementById('confirmRemoveModal')) {
+            closeModal('confirmRemoveModal');
+        }
     }
 </script>
 </body>

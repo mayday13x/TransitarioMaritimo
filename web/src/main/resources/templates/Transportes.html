@@ -81,7 +81,7 @@
         }
         .actions i {
             cursor: pointer;
-            color: #3498db;
+            font-size: 18px;
         }
         .actions i:hover {
             color: #2980b9;
@@ -102,8 +102,57 @@
         .buttons button:hover {
             background-color: #2980b9;
         }
-        .hidden {
+        /* Modal styles */
+        .modal {
             display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-group > div {
+            width: 48%;
         }
     </style>
 </head>
@@ -140,105 +189,140 @@
                 <td th:text="${transporte.imo}"></td>
                 <td th:text="${transporte.portoOrigem}"></td>
                 <td th:text="${transporte.portoDestino}"></td>
-                <td th:text="${transporte.getFuncionarioByIdFuncionario().nome}"></td>
+                <td th:text="${transporte.funcionarioByIdFuncionario.nome}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:onclick="'showEditarTransporte(' + ${transporte.id} + ')'"></i>
-                    <i class="fas fa-trash" th:onclick="'excluirTransporte(' + ${transporte.id} + ')'"></i>
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarTransporteModal(${transporte.id}, '${transporte.imo}', '${transporte.portoOrigem}', '${transporte.portoDestino}', ${transporte.idFuncionario})|"></i>
+                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverTransporte(${transporte.id})|"></i>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="showInserirTransporte()">Inserir Transporte</button>
-        </div>
-    </div>
-
-    <div class="insert-panel hidden" id="insertPanel">
-        <h1>Inserir Transporte</h1>
-        <button onclick="voltar()">X</button>
-        <div class="form-group">
-            <div>
-                <label for="ImoText">Imo</label>
-                <input type="text" id="ImoText" placeholder="Imo">
-            </div>
-            <div>
-                <label for="OrigemText">Origem</label>
-                <input type="text" id="OrigemText" placeholder="Origem">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="DestinoText">Destino</label>
-                <input type="text" id="DestinoText" placeholder="Destino">
-            </div>
-            <div>
-                <label for="FuncionarioCombo">Funcionário</label>
-                <select id="FuncionarioCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
-        </div>
-        <div class="buttons">
-            <button onclick="registarTransporte()">Inserir Transporte</button>
-        </div>
-    </div>
-
-    <div class="edit-panel hidden" id="editPanel">
-        <h1>Editar Transporte</h1>
-        <button onclick="voltar()">X</button>
-        <div class="form-group">
-            <div>
-                <label for="EditImoText">Imo</label>
-                <input type="text" id="EditImoText" placeholder="Imo">
-            </div>
-            <div>
-                <label for="EditOrigemText">Origem</label>
-                <input type="text" id="EditOrigemText" placeholder="Origem">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="EditDestinoText">Destino</label>
-                <input type="text" id="EditDestinoText" placeholder="Destino">
-            </div>
-            <div>
-                <label for="EditFuncionarioCombo">Funcionário</label>
-                <select id="EditFuncionarioCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
-        </div>
-        <div class="buttons">
-            <button onclick="guardarTransporte()">Guardar</button>
+            <button onclick="showInserirTransporteModal()">Inserir Transporte</button>
         </div>
     </div>
 </div>
 
+<!-- Inserir Modal -->
+<div id="insertModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('insertModal')">&times;</span>
+        <h1>Inserir Transporte</h1>
+        <form id="formInserirTransporte" action="/inserirTransporte" method="post">
+            <div class="form-group">
+                <div>
+                    <label for="ImoText">Imo</label>
+                    <input type="text" id="ImoText" name="imo" placeholder="Imo" required>
+                </div>
+                <div>
+                    <label for="OrigemText">Origem</label>
+                    <input type="text" id="OrigemText" name="portoOrigem" placeholder="Origem" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="DestinoText">Destino</label>
+                    <input type="text" id="DestinoText" name="portoDestino" placeholder="Destino" required>
+                </div>
+                <div>
+                    <label for="FuncionarioCombo">Funcionário</label>
+                    <select id="FuncionarioCombo" name="idFuncionario" required>
+                        <option th:each="funcionario : ${funcionarios}" th:value="${funcionario.id}" th:text="${funcionario.nome}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Inserir Transporte</button>
+                <button type="button" onclick="closeModal('insertModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Editar Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editModal')">&times;</span>
+        <h1>Editar Transporte</h1>
+        <form id="editForm" action="/editarTransporte" method="post">
+            <input type="hidden" id="editId" name="id">
+            <div class="form-group">
+                <div>
+                    <label for="editImoText">Imo</label>
+                    <input type="text" id="editImoText" name="imo" placeholder="Imo" required>
+                </div>
+                <div>
+                    <label for="editOrigemText">Origem</label>
+                    <input type="text" id="editOrigemText" name="portoOrigem" placeholder="Origem" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="editDestinoText">Destino</label>
+                    <input type="text" id="editDestinoText" name="portoDestino" placeholder="Destino" required>
+                </div>
+                <div>
+                    <label for="editFuncionarioCombo">Funcionário</label>
+                    <select id="editFuncionarioCombo" name="idFuncionario" required>
+                        <option th:each="funcionario : ${funcionarios}" th:value="${funcionario.id}" th:text="${funcionario.nome}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Guardar Alterações</button>
+                <button type="button" onclick="closeModal('editModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmar Remover Modal -->
+<div id="confirmRemoveModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
+        <h1>Remover Transporte</h1>
+        <p>Tem certeza que deseja remover este transporte?</p>
+        <form id="removeForm" action="/removerTransporte" method="post">
+            <input type="hidden" id="removeId" name="id">
+            <div class="buttons">
+                <button type="submit">Remover</button>
+                <button type="button" onclick="closeModal('confirmRemoveModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
-    function showInserirTransporte() {
-        document.getElementById('insertPanel').classList.remove('hidden');
+    function showInserirTransporteModal() {
+        document.getElementById('insertModal').style.display = "flex";
     }
 
-    function excluirTransporte(id) {
-        // Implementar lógica para excluir transporte com o id fornecido
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
     }
 
-    function showEditarTransporte(id) {
-        document.getElementById('editPanel').classList.remove('hidden');
-        // Implementar lógica para carregar os dados do transporte com o id fornecido
+    function showEditarTransporteModal(id, imo, portoOrigem, portoDestino, idFuncionario) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editImoText').value = imo;
+        document.getElementById('editOrigemText').value = portoOrigem;
+        document.getElementById('editDestinoText').value = portoDestino;
+        document.getElementById('editFuncionarioCombo').value = idFuncionario;
+        document.getElementById('editModal').style.display = "flex";
     }
 
-    function registarTransporte() {
-        // Implementar lógica para registrar transporte
+    function confirmarRemoverTransporte(id) {
+        document.getElementById('removeId').value = id;
+        document.getElementById('confirmRemoveModal').style.display = "flex";
     }
 
-    function voltar() {
-        document.getElementById('insertPanel').classList.add('hidden');
-        document.getElementById('editPanel').classList.add('hidden');
-    }
-
-    function guardarTransporte() {
-        // Implementar lógica para guardar transporte
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('insertModal')) {
+            closeModal('insertModal');
+        } else if (event.target == document.getElementById('editModal')) {
+            closeModal('editModal');
+        } else if (event.target == document.getElementById('confirmRemoveModal')) {
+            closeModal('confirmRemoveModal');
+        }
     }
 </script>
 </body>

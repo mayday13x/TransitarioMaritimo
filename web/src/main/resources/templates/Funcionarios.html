@@ -36,32 +36,15 @@
             padding: 20px;
             width: calc(100% - 250px);
         }
-        .main-panel, .insert-panel, .edit-panel {
+        .main-panel {
             background-color: #FFFFFF;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .main-panel h1, .insert-panel h1, .edit-panel h1 {
+        .main-panel h1 {
             text-align: center;
             font-size: 23px;
             margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        .form-group > div {
-            width: 48%;
         }
         .table {
             width: 100%;
@@ -107,7 +90,7 @@
             text-align: center;
             margin-top: 20px;
         }
-        .buttons button {
+        .buttons button, .buttons a {
             padding: 10px 15px;
             margin: 5px;
             cursor: pointer;
@@ -115,12 +98,10 @@
             background-color: #3498db;
             color: white;
             font-size: 16px;
+            text-decoration: none;
         }
-        .buttons button:hover {
+        .buttons button:hover, .buttons a:hover {
             background-color: #2980b9;
-        }
-        .hidden {
-            display: none;
         }
     </style>
 </head>
@@ -168,120 +149,12 @@
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="showInserirFuncionario()">Inserir Funcionário</button>
-        </div>
-    </div>
-
-    <div class="insert-panel hidden" id="insertPanel">
-        <h1>Inserir Funcionário</h1>
-        <button onclick="voltar()">X</button>
-        <div class="form-group">
-            <div>
-                <label for="NomeText">Nome</label>
-                <input type="text" id="NomeText" placeholder="Nome">
-            </div>
-            <div>
-                <label for="NifText">NIF</label>
-                <input type="text" id="NifText" placeholder="NIF">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="RuaText">Rua</label>
-                <input type="text" id="RuaText" placeholder="Rua">
-            </div>
-            <div>
-                <label for="PortaText">Porta</label>
-                <input type="text" id="PortaText" placeholder="Porta">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="CodPostalCombo">Localidade</label>
-                <select id="CodPostalCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
-            <div>
-                <label for="EmailText">Email</label>
-                <input type="email" id="EmailText" placeholder="Email">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="TelefoneText">Telefone</label>
-                <input type="text" id="TelefoneText" placeholder="Telefone">
-            </div>
-            <div>
-                <label for="TipoFuncionarioCombo">Tipo de Funcionario</label>
-                <select id="TipoFuncionarioCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
-        </div>
-        <div class="buttons">
-            <button onclick="registarFuncionario()">Inserir Funcionário</button>
-        </div>
-    </div>
-
-    <div class="edit-panel hidden" id="editPanel">
-        <h1>Editar Funcionário</h1>
-        <button onclick="voltar()">X</button>
-        <div class="form-group">
-            <div>
-                <label for="EditNomeText">Nome</label>
-                <input type="text" id="EditNomeText" placeholder="Nome">
-            </div>
-            <div>
-                <label for="EditNifText">NIF</label>
-                <input type="text" id="EditNifText" placeholder="NIF">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="EditRuaText">Rua</label>
-                <input type="text" id="EditRuaText" placeholder="Rua">
-            </div>
-            <div>
-                <label for="EditPortaText">Porta</label>
-                <input type="text" id="EditPortaText" placeholder="Porta">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="EditCodPostalCombo">Localidade</label>
-                <select id="EditCodPostalCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
-            <div>
-                <label for="EditEmailText">Email</label>
-                <input type="email" id="EditEmailText" placeholder="Email">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="EditTelefoneText">Telefone</label>
-                <input type="text" id="EditTelefoneText" placeholder="Telefone">
-            </div>
-            <div>
-                <label for="EditTipoFuncionarioCombo">Tipo de Funcionario</label>
-                <select id="EditTipoFuncionarioCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
-        </div>
-        <div class="buttons">
-            <button onclick="guardarFuncionario()">Guardar</button>
+            <a href="/inserirFuncionario">Inserir Funcionário</a>
         </div>
     </div>
 </div>
 
 <script>
-    function showInserirFuncionario() {
-        document.getElementById('insertPanel').classList.remove('hidden');
-    }
-
     function excluirFuncionario(id) {
         // Implementar lógica para excluir funcionário com o id fornecido
     }
@@ -291,12 +164,7 @@
         // Implementar lógica para carregar os dados do funcionário com o id fornecido
     }
 
-    function registarFuncionario() {
-        // Implementar lógica para registrar funcionário
-    }
-
     function voltar() {
-        document.getElementById('insertPanel').classList.add('hidden');
         document.getElementById('editPanel').classList.add('hidden');
     }
 

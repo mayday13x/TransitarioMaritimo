@@ -36,32 +36,15 @@
             padding: 20px;
             width: calc(100% - 250px);
         }
-        .main-panel, .insert-panel {
+        .main-panel {
             background-color: #FFFFFF;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .main-panel h1, .insert-panel h1 {
+        .main-panel h1 {
             text-align: center;
             font-size: 23px;
             margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        .form-group > div {
-            width: 48%;
         }
         .table {
             width: 100%;
@@ -98,7 +81,7 @@
         }
         .actions i {
             cursor: pointer;
-            color: #3498db;
+            font-size: 18px;
         }
         .actions i:hover {
             color: #2980b9;
@@ -119,8 +102,56 @@
         .buttons button:hover {
             background-color: #2980b9;
         }
-        .hidden {
+        /* Modal styles */
+        .modal {
             display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-group > div {
+            width: 48%;
         }
     </style>
 </head>
@@ -157,83 +188,168 @@
                 <td th:text="${reserva.origem}"></td>
                 <td th:text="${reserva.destino}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:onclick="'showEditarReserva(' + ${reserva.id} + ')'"></i>
-                    <i class="fas fa-trash" th:onclick="'cancelarReserva(' + ${reserva.id} + ')'"></i>
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarReservaModal(${reserva.id}, '${reserva.origem}', '${reserva.destino}', '${reserva.data}', ${reserva.idCliente}, ${reserva.idEstadoReserva}, ${reserva.idFuncionario})|"></i>
+                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverReserva(${reserva.id})|"></i>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="inserirReserva()">Inserir Reserva</button>
-        </div>
-    </div>
-
-    <div class="insert-panel hidden" id="insertPanel">
-        <h1>Inserir Reserva</h1>
-        <button onclick="voltarAtrasInserirReserva()">X</button>
-        <div class="form-group">
-            <div>
-                <label for="OrigemText">Origem</label>
-                <input type="text" id="OrigemText" placeholder="Origem">
-            </div>
-            <div>
-                <label for="DestinoText">Destino</label>
-                <input type="text" id="DestinoText" placeholder="Destino">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="DataText">Data</label>
-                <input type="date" id="DataText">
-            </div>
-            <div>
-                <label for="IdClienteCombo">IdCliente</label>
-                <select id="IdClienteCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="IdEstadoReservaCombo">EstadoReserva</label>
-                <select id="IdEstadoReservaCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
-            <div>
-                <label for="IdFuncionarioCombo">IdFuncionario</label>
-                <select id="IdFuncionarioCombo">
-                    <!-- Opções aqui -->
-                </select>
-            </div>
-        </div>
-        <div class="buttons">
-            <button onclick="registarReserva()">Inserir Reserva</button>
-            <button onclick="voltarAtrasInserirReserva()">Voltar</button>
+            <button onclick="showInserirReservaModal()">Inserir Reserva</button>
         </div>
     </div>
 </div>
 
+<!-- Inserir Modal -->
+<div id="insertModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('insertModal')">&times;</span>
+        <h1>Inserir Reserva</h1>
+        <form id="formInserirReserva" action="/inserirReserva" method="post">
+            <div class="form-group">
+                <div>
+                    <label for="OrigemText">Origem</label>
+                    <input type="text" id="OrigemText" name="origem" placeholder="Origem" required>
+                </div>
+                <div>
+                    <label for="DestinoText">Destino</label>
+                    <input type="text" id="DestinoText" name="destino" placeholder="Destino" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="DataText">Data</label>
+                    <input type="date" id="DataText" name="data" required>
+                </div>
+                <div>
+                    <label for="IdClienteCombo">Cliente</label>
+                    <select id="IdClienteCombo" name="idCliente" required>
+                        <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="IdEstadoReservaCombo">Estado da Reserva</label>
+                    <select id="IdEstadoReservaCombo" name="idEstadoReserva" required>
+                        <option th:each="estado : ${estados}" th:value="${estado.id}" th:text="${estado.descricao}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="IdFuncionarioCombo">Funcionário</label>
+                    <select id="IdFuncionarioCombo" name="idFuncionario" required>
+                        <option th:each="funcionario : ${funcionarios}" th:value="${funcionario.id}" th:text="${funcionario.nome}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Inserir Reserva</button>
+                <button type="button" onclick="closeModal('insertModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Editar Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editModal')">&times;</span>
+        <h1>Editar Reserva</h1>
+        <form id="editForm" action="/editarReserva" method="post">
+            <input type="hidden" id="editId" name="id">
+            <div class="form-group">
+                <div>
+                    <label for="editOrigemText">Origem</label>
+                    <input type="text" id="editOrigemText" name="origem" placeholder="Origem" required>
+                </div>
+                <div>
+                    <label for="editDestinoText">Destino</label>
+                    <input type="text" id="editDestinoText" name="destino" placeholder="Destino" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="editDataText">Data</label>
+                    <input type="date" id="editDataText" name="data" required>
+                </div>
+                <div>
+                    <label for="editIdClienteCombo">Cliente</label>
+                    <select id="editIdClienteCombo" name="idCliente" required>
+                        <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="editIdEstadoReservaCombo">Estado da Reserva</label>
+                    <select id="editIdEstadoReservaCombo" name="idEstadoReserva" required>
+                        <option th:each="estado : ${estados}" th:value="${estado.id}" th:text="${estado.descricao}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="editIdFuncionarioCombo">Funcionário</label>
+                    <select id="editIdFuncionarioCombo" name="idFuncionario" required>
+                        <option th:each="funcionario : ${funcionarios}" th:value="${funcionario.id}" th:text="${funcionario.nome}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Guardar Alterações</button>
+                <button type="button" onclick="closeModal('editModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmar Remover Modal -->
+<div id="confirmRemoveModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
+        <h1>Remover Reserva</h1>
+        <p>Tem certeza que deseja remover esta reserva?</p>
+        <form id="removeForm" action="/removerReserva" method="post">
+            <input type="hidden" id="removeId" name="id">
+            <div class="buttons">
+                <button type="submit">Remover</button>
+                <button type="button" onclick="closeModal('confirmRemoveModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
-    function inserirReserva() {
-        document.getElementById('insertPanel').classList.remove('hidden');
+    function showInserirReservaModal() {
+        document.getElementById('insertModal').style.display = "flex";
     }
 
-    function cancelarReserva(id) {
-        // Implementar lógica para cancelar reserva com o id fornecido
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
     }
 
-    function showEditarReserva(id) {
-        document.getElementById('editPanel').classList.remove('hidden');
-        // Implementar lógica para carregar os dados da reserva com o id fornecido
+    function showEditarReservaModal(id, origem, destino, data, idCliente, idEstadoReserva, idFuncionario) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editOrigemText').value = origem;
+        document.getElementById('editDestinoText').value = destino;
+        document.getElementById('editDataText').value = data;
+        document.getElementById('editIdClienteCombo').value = idCliente;
+        document.getElementById('editIdEstadoReservaCombo').value = idEstadoReserva;
+        document.getElementById('editIdFuncionarioCombo').value = idFuncionario;
+        document.getElementById('editModal').style.display = "flex";
     }
 
-    function registarReserva() {
-        // Implementar lógica para registrar reserva
+    function confirmarRemoverReserva(id) {
+        document.getElementById('removeId').value = id;
+        document.getElementById('confirmRemoveModal').style.display = "flex";
     }
 
-    function voltarAtrasInserirReserva() {
-        document.getElementById('insertPanel').classList.add('hidden');
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('insertModal')) {
+            closeModal('insertModal');
+        } else if (event.target == document.getElementById('editModal')) {
+            closeModal('editModal');
+        } else if (event.target == document.getElementById('confirmRemoveModal')) {
+            closeModal('confirmRemoveModal');
+        }
     }
 </script>
 </body>

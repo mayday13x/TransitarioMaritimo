@@ -36,32 +36,15 @@
             padding: 20px;
             width: calc(100% - 250px);
         }
-        .main-panel, .insert-panel, .edit-panel {
+        .main-panel {
             background-color: #FFFFFF;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .main-panel h1, .insert-panel h1, .edit-panel h1 {
+        .main-panel h1 {
             text-align: center;
             font-size: 23px;
             margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        .form-group > div {
-            width: 48%;
         }
         .table {
             width: 100%;
@@ -98,7 +81,7 @@
         }
         .actions i {
             cursor: pointer;
-            color: #3498db;
+            font-size: 18px;
         }
         .actions i:hover {
             color: #2980b9;
@@ -121,6 +104,47 @@
         }
         .hidden {
             display: none;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group label {
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -158,142 +182,151 @@
                 <td th:text="${fornecedor.nome}"></td>
                 <td th:text="${fornecedor.nif}"></td>
                 <td th:text="${fornecedor.rua}"></td>
-                <td th:text="${fornecedor.getCodPostalByIdCodPostal().getLocalidade()}"></td>
+                <td th:text="${fornecedor.codPostalByIdCodPostal.localidade}"></td>
                 <td th:text="${fornecedor.telefone}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:onclick="'showEditarFornecedor(' + ${fornecedor.id} + ')'"></i>
-                    <i class="fas fa-trash" th:onclick="'excluirFornecedor(' + ${fornecedor.id} + ')'"></i>
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarFornecedorModal(${fornecedor.id}, '${fornecedor.nome}', '${fornecedor.nif}', '${fornecedor.rua}', '${fornecedor.porta}', '${fornecedor.codPostalByIdCodPostal.idCodPostal}', '${fornecedor.telefone}')|"></i>
+                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverFornecedor(${fornecedor.id})|"></i>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="showInserirFornecedor()">Inserir Fornecedor</button>
-        </div>
-    </div>
-
-    <div class="insert-panel hidden" id="insertPanel">
-        <h1>Inserir Fornecedor</h1>
-        <button onclick="voltar()">X</button>
-        <div class="form-group">
-            <div>
-                <label for="NomeText">Nome</label>
-                <input type="text" id="NomeText" placeholder="Nome">
-            </div>
-            <div>
-                <label for="NifText">NIF</label>
-                <input type="text" id="NifText" placeholder="NIF">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="RuaText">Rua</label>
-                <input type="text" id="RuaText" placeholder="Rua">
-            </div>
-            <div>
-                <label for="PortaText">Porta</label>
-                <input type="text" id="PortaText" placeholder="Porta">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="CodPostalCombo">Código Postal</label>
-                <input type="text" id="CodPostalCombo" onblur="buscarLocalidade()">
-            </div>
-            <div>
-                <label for="LocalidadeText">Localidade</label>
-                <input type="text" id="LocalidadeText" placeholder="Localidade" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="TelefoneText">Telefone</label>
-                <input type="text" id="TelefoneText" placeholder="Telefone">
-            </div>
-        </div>
-        <div class="buttons">
-            <button onclick="registarFornecedor()">Inserir</button>
-        </div>
-    </div>
-
-    <div class="edit-panel hidden" id="editPanel">
-        <h1>Editar Fornecedor</h1>
-        <button onclick="voltar()">X</button>
-        <div class="form-group">
-            <div>
-                <label for="EditNomeText">Nome</label>
-                <input type="text" id="EditNomeText" placeholder="Nome">
-            </div>
-            <div>
-                <label for="EditNifText">NIF</label>
-                <input type="text" id="EditNifText" placeholder="NIF">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="EditRuaText">Rua</label>
-                <input type="text" id="EditRuaText" placeholder="Rua">
-            </div>
-            <div>
-                <label for="EditPortaText">Porta</label>
-                <input type="text" id="EditPortaText" placeholder="Porta">
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="EditCodPostalCombo">Código Postal</label>
-                <input type="text" id="EditCodPostalCombo" onblur="buscarLocalidadeEditar()">
-            </div>
-            <div>
-                <label for="EditLocalidadeText">Localidade</label>
-                <input type="text" id="EditLocalidadeText" placeholder="Localidade" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <div>
-                <label for="EditTelefoneText">Telefone</label>
-                <input type="text" id="EditTelefoneText" placeholder="Telefone">
-            </div>
-        </div>
-        <div class="buttons">
-            <button onclick="guardarFornecedor()">Guardar</button>
+            <button onclick="showInserirFornecedorModal()">Inserir Fornecedor</button>
         </div>
     </div>
 </div>
 
+<!-- Inserir Modal -->
+<div id="insertModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('insertModal')">&times;</span>
+        <h1>Inserir Fornecedor</h1>
+        <form action="/inserirFornecedor" method="post">
+            <div class="form-group">
+                <label for="NomeText">Nome</label>
+                <input type="text" id="NomeText" name="nome" placeholder="Nome" required>
+            </div>
+            <div class="form-group">
+                <label for="NifText">NIF</label>
+                <input type="text" id="NifText" name="nif" placeholder="NIF" required>
+            </div>
+            <div class="form-group">
+                <label for="RuaText">Rua</label>
+                <input type="text" id="RuaText" name="rua" placeholder="Rua" required>
+            </div>
+            <div class="form-group">
+                <label for="PortaText">Porta</label>
+                <input type="text" id="PortaText" name="porta" placeholder="Porta" required>
+            </div>
+            <div class="form-group">
+                <label for="CodPostalCombo">Código Postal</label>
+                <select id="CodPostalCombo" name="idCodPostal" required>
+                    <option th:each="codPostal : ${codPostais}" th:value="${codPostal.idCodPostal}" th:text="${codPostal.localidade}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="TelefoneText">Telefone</label>
+                <input type="text" id="TelefoneText" name="telefone" placeholder="Telefone" required>
+            </div>
+            <div class="buttons">
+                <button type="submit">Inserir Fornecedor</button>
+                <button type="button" onclick="closeModal('insertModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Editar Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editModal')">&times;</span>
+        <h1>Editar Fornecedor</h1>
+        <form id="editForm" action="/editarFornecedor" method="post">
+            <input type="hidden" id="editId" name="id">
+            <div class="form-group">
+                <label for="editNomeText">Nome</label>
+                <input type="text" id="editNomeText" name="nome" placeholder="Nome" required>
+            </div>
+            <div class="form-group">
+                <label for="editNifText">NIF</label>
+                <input type="text" id="editNifText" name="nif" placeholder="NIF" required>
+            </div>
+            <div class="form-group">
+                <label for="editRuaText">Rua</label>
+                <input type="text" id="editRuaText" name="rua" placeholder="Rua" required>
+            </div>
+            <div class="form-group">
+                <label for="editPortaText">Porta</label>
+                <input type="text" id="editPortaText" name="porta" placeholder="Porta" required>
+            </div>
+            <div class="form-group">
+                <label for="editCodPostalCombo">Código Postal</label>
+                <select id="editCodPostalCombo" name="idCodPostal" required>
+                    <option th:each="codPostal : ${codPostais}" th:value="${codPostal.idCodPostal}" th:text="${codPostal.localidade}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="editTelefoneText">Telefone</label>
+                <input type="text" id="editTelefoneText" name="telefone" placeholder="Telefone" required>
+            </div>
+            <div class="buttons">
+                <button type="submit">Guardar Alterações</button>
+                <button type="button" onclick="closeModal('editModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmar Remover Modal -->
+<div id="confirmRemoveModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
+        <h1>Remover Fornecedor</h1>
+        <p>Tem certeza que deseja remover este fornecedor?</p>
+        <form id="removeForm" action="/removerFornecedor" method="post">
+            <input type="hidden" id="removeId" name="id">
+            <div class="buttons">
+                <button type="submit">Remover</button>
+                <button type="button" onclick="closeModal('confirmRemoveModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
-    function showInserirFornecedor() {
-        document.getElementById('insertPanel').classList.remove('hidden');
+    function showInserirFornecedorModal() {
+        document.getElementById('insertModal').style.display = "block";
     }
 
-    function excluirFornecedor(id) {
-        // Implementar lógica para excluir fornecedor com o id fornecido
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
     }
 
-    function showEditarFornecedor(id) {
-        document.getElementById('editPanel').classList.remove('hidden');
-        // Implementar lógica para carregar os dados do fornecedor com o id fornecido
+    function showEditarFornecedorModal(id, nome, nif, rua, porta, idCodPostal, telefone) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editNomeText').value = nome;
+        document.getElementById('editNifText').value = nif;
+        document.getElementById('editRuaText').value = rua;
+        document.getElementById('editPortaText').value = porta;
+        document.getElementById('editCodPostalCombo').value = idCodPostal;
+        document.getElementById('editTelefoneText').value = telefone;
+        document.getElementById('editModal').style.display = "block";
     }
 
-    function registarFornecedor() {
-        // Implementar lógica para registrar fornecedor
+    function confirmarRemoverFornecedor(id) {
+        document.getElementById('removeId').value = id;
+        document.getElementById('confirmRemoveModal').style.display = "block";
     }
 
-    function voltar() {
-        document.getElementById('insertPanel').classList.add('hidden');
-        document.getElementById('editPanel').classList.add('hidden');
-    }
-
-    function guardarFornecedor() {
-        // Implementar lógica para guardar fornecedor
-    }
-
-    function buscarLocalidade() {
-        // Implementar lógica para buscar localidade com base no código postal no modo de inserção
-    }
-
-    function buscarLocalidadeEditar() {
-        // Implementar lógica para buscar localidade com base no código postal no modo de edição
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('insertModal')) {
+            closeModal('insertModal');
+        } else if (event.target == document.getElementById('editModal')) {
+            closeModal('editModal');
+        } else if (event.target == document.getElementById('confirmRemoveModal')) {
+            closeModal('confirmRemoveModal');
+        }
     }
 </script>
 </body>
