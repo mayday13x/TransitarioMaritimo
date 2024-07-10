@@ -191,8 +191,8 @@
                 <td th:text="${servico.comissao}"></td>
                 <td th:text="${servico.preco}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:onclick="'showEditarServico(' + ${servico.id} + ')'"></i>
-                    <i class="fas fa-trash" th:onclick="'excluirServico(' + ${servico.id} + ')'"></i>
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarServicoModal(${servico.id}, '${servico.descricao}', ${servico.preco}, ${servico.comissao}, ${servico.idFornecedor})|"></i>
+                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverServico(${servico.id})|"></i>
                 </td>
             </tr>
             </tbody>
@@ -203,10 +203,10 @@
     </div>
 </div>
 
-<!-- The Modal -->
+<!-- Inserir Modal -->
 <div id="insertModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
+        <span class="close" onclick="closeModal('insertModal')">&times;</span>
         <h1>Inserir Serviço</h1>
         <form id="formInserirServico" action="/inserirServico" method="post">
             <div class="form-group">
@@ -233,6 +233,60 @@
             </div>
             <div class="buttons">
                 <button type="submit">Inserir Serviço</button>
+                <button type="button" onclick="closeModal('insertModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Editar Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editModal')">&times;</span>
+        <h1>Editar Serviço</h1>
+        <form id="editForm" action="/editarServico" method="post">
+            <input type="hidden" id="editId" name="id">
+            <div class="form-group">
+                <div>
+                    <label for="editDescServico">Descrição</label>
+                    <input type="text" id="editDescServico" name="descricao" placeholder="Descrição" required>
+                </div>
+                <div>
+                    <label for="editPrecoServico">Preço</label>
+                    <input type="text" id="editPrecoServico" name="preco" placeholder="Preço" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="editComissServico">Comissão</label>
+                    <input type="text" id="editComissServico" name="comissao" placeholder="Comissão" required>
+                </div>
+                <div>
+                    <label for="editFornecedorCombo">Fornecedor</label>
+                    <select id="editFornecedorCombo" name="idFornecedor" required>
+                        <option th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.id}" th:text="${fornecedor.nome}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Guardar Alterações</button>
+                <button type="button" onclick="closeModal('editModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmar Remover Modal -->
+<div id="confirmRemoveModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
+        <h1>Remover Serviço</h1>
+        <p>Tem certeza que deseja remover este serviço?</p>
+        <form id="removeForm" action="/removerServico" method="post">
+            <input type="hidden" id="removeId" name="id">
+            <div class="buttons">
+                <button type="submit">Remover</button>
+                <button type="button" onclick="closeModal('confirmRemoveModal')">Cancelar</button>
             </div>
         </form>
     </div>
@@ -243,21 +297,31 @@
         document.getElementById('insertModal').style.display = "flex";
     }
 
-    function closeModal() {
-        document.getElementById('insertModal').style.display = "none";
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
     }
 
-    function excluirServico(id) {
-        // Implementar lógica para excluir serviço com o id fornecido
+    function showEditarServicoModal(id, descricao, preco, comissao, idFornecedor) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editDescServico').value = descricao;
+        document.getElementById('editPrecoServico').value = preco;
+        document.getElementById('editComissServico').value = comissao;
+        document.getElementById('editFornecedorCombo').value = idFornecedor;
+        document.getElementById('editModal').style.display = "flex";
     }
 
-    function showEditarServico(id) {
-        // Implementar lógica para mostrar a edição do serviço com o id fornecido
+    function confirmarRemoverServico(id) {
+        document.getElementById('removeId').value = id;
+        document.getElementById('confirmRemoveModal').style.display = "flex";
     }
 
     window.onclick = function(event) {
         if (event.target == document.getElementById('insertModal')) {
-            closeModal();
+            closeModal('insertModal');
+        } else if (event.target == document.getElementById('editModal')) {
+            closeModal('editModal');
+        } else if (event.target == document.getElementById('confirmRemoveModal')) {
+            closeModal('confirmRemoveModal');
         }
     }
 </script>

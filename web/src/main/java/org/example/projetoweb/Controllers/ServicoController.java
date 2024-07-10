@@ -10,6 +10,7 @@ import pt.ipvc.database.repository.ServicoRepository;
 import pt.ipvc.database.repository.FornecedorRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Objects;
 
 @Controller
@@ -57,5 +58,46 @@ public class ServicoController {
 
             return "redirect:/Servicos";
         }
+    }
+
+    @PostMapping("/editarServico")
+    public String editarServico(
+            @RequestParam int id,
+            @RequestParam String descricao,
+            @RequestParam double preco,
+            @RequestParam double comissao,
+            @RequestParam int idFornecedor, Model model) {
+
+        Optional<ServicoEntity> servicoOptional = repo_servico.findById(id);
+        if (servicoOptional.isPresent()) {
+            ServicoEntity servico = servicoOptional.get();
+            servico.setDescricao(descricao);
+            servico.setPreco(preco);
+            servico.setComissao(comissao);
+
+            FornecedorEntity fornecedor = fornecedor_repo.findById(idFornecedor).orElse(null);
+            servico.setFornecedorByIdFornecedor(fornecedor);
+            servico.setIdFornecedor(fornecedor.getId());
+
+            try {
+                repo_servico.save(servico);
+                model.addAttribute("success", "Serviço editado com sucesso!");
+            } catch (Exception e) {
+                model.addAttribute("error", e.getMessage());
+            }
+        }
+
+        return "redirect:/Servicos";
+    }
+
+    @PostMapping("/removerServico")
+    public String removerServico(@RequestParam int id, Model model) {
+        try {
+            repo_servico.deleteById(id);
+            model.addAttribute("success", "Serviço removido com sucesso!");
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+        }
+        return "redirect:/Servicos";
     }
 }

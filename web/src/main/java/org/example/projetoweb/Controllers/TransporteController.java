@@ -10,7 +10,7 @@ import pt.ipvc.database.repository.TransportemaritimoRepository;
 import pt.ipvc.database.repository.FuncionarioRepository;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 public class TransporteController {
@@ -33,22 +33,50 @@ public class TransporteController {
     }
 
     @PostMapping("/inserirTransporte")
-    public String adicionarTransporte(@RequestParam String imo, @RequestParam String portoOrigem, @RequestParam String portoDestino, @RequestParam int idFuncionario, Model model) {
+    public String adicionarTransporte(@RequestParam String imo, @RequestParam String portoOrigem, @RequestParam String portoDestino, @RequestParam int idFuncionario) {
 
-            TransportemaritimoEntity novoTransporte = new TransportemaritimoEntity();
-            novoTransporte.setImo(imo);
-            novoTransporte.setPortoOrigem(portoOrigem);
-            novoTransporte.setPortoDestino(portoDestino);
+        TransportemaritimoEntity novoTransporte = new TransportemaritimoEntity();
+        novoTransporte.setImo(imo);
+        novoTransporte.setPortoOrigem(portoOrigem);
+        novoTransporte.setPortoDestino(portoDestino);
+
+        FuncionarioEntity funcionario = funcionario_repo.findById(idFuncionario).orElse(null);
+        novoTransporte.setFuncionarioByIdFuncionario(funcionario);
+        novoTransporte.setIdFuncionario(funcionario.getId());
+
+        repo_transporte.save(novoTransporte);
+
+        return "redirect:/Transportes";
+    }
+
+    @PostMapping("/editarTransporte")
+    public String editarTransporte(
+            @RequestParam int id,
+            @RequestParam String imo,
+            @RequestParam String portoOrigem,
+            @RequestParam String portoDestino,
+            @RequestParam int idFuncionario) {
+
+        Optional<TransportemaritimoEntity> transporteOptional = repo_transporte.findById(id);
+        if (transporteOptional.isPresent()) {
+            TransportemaritimoEntity transporte = transporteOptional.get();
+            transporte.setImo(imo);
+            transporte.setPortoOrigem(portoOrigem);
+            transporte.setPortoDestino(portoDestino);
 
             FuncionarioEntity funcionario = funcionario_repo.findById(idFuncionario).orElse(null);
-            novoTransporte.setFuncionarioByIdFuncionario(funcionario);
-            novoTransporte.setIdFuncionario(funcionario.getId());
+            transporte.setFuncionarioByIdFuncionario(funcionario);
+            transporte.setIdFuncionario(funcionario.getId());
 
-
-            repo_transporte.save(novoTransporte);
-
-
-            return "redirect:/Transportes";
+            repo_transporte.save(transporte);
         }
 
+        return "redirect:/Transportes";
+    }
+
+    @PostMapping("/removerTransporte")
+    public String removerTransporte(@RequestParam int id) {
+        repo_transporte.deleteById(id);
+        return "redirect:/Transportes";
+    }
 }

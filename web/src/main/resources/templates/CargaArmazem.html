@@ -102,6 +102,47 @@
         .buttons button:hover {
             background-color: #2980b9;
         }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group label {
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
@@ -137,8 +178,8 @@
                 <td th:text="${carga.volume}"></td>
                 <td th:text="${carga.peso}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:onclick="'showEditarCarga(' + ${carga.id} + ')'"></i>
-                    <i class="fas fa-trash" th:onclick="'excluirCarga(' + ${carga.id} + ')'"></i>
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarCargaModal(${carga.id}, '${carga.nome}', ${carga.quantidade}, ${carga.volume}, ${carga.peso}, '${carga.localAtual}', '${carga.observacoes}', ${carga.idReserva}, ${carga.idContentor}, ${carga.idArmazem}, ${carga.idTipoCarga}, ${carga.idCotacao})|"></i>
+                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverCarga(${carga.id})|"></i>
                 </td>
             </tr>
             </tbody>
@@ -148,13 +189,123 @@
         </div>
     </div>
 </div>
+
+<!-- Editar Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editModal')">&times;</span>
+        <h1>Editar Carga</h1>
+        <form id="editForm" action="/editarCarga" method="post">
+            <input type="hidden" id="editId" name="id">
+            <div class="form-group">
+                <label for="editNomeText">Nome</label>
+                <input type="text" id="editNomeText" name="nome" placeholder="Nome" required>
+            </div>
+            <div class="form-group">
+                <label for="editQuantidadeText">Quantidade</label>
+                <input type="number" id="editQuantidadeText" name="quantidade" placeholder="Quantidade" required>
+            </div>
+            <div class="form-group">
+                <label for="editVolumeText">Volume</label>
+                <input type="number" step="0.01" id="editVolumeText" name="volume" placeholder="Volume" required>
+            </div>
+            <div class="form-group">
+                <label for="editPesoText">Peso</label>
+                <input type="number" step="0.01" id="editPesoText" name="peso" placeholder="Peso" required>
+            </div>
+            <div class="form-group">
+                <label for="editLocalAtualText">Local Atual</label>
+                <input type="text" id="editLocalAtualText" name="localAtual" placeholder="Local Atual" required>
+            </div>
+            <div class="form-group">
+                <label for="editObservacoesText">Observações</label>
+                <input type="text" id="editObservacoesText" name="observacoes" placeholder="Observações" required>
+            </div>
+            <div class="form-group">
+                <label for="editReservaCombo">Reserva</label>
+                <select id="editReservaCombo" name="idReserva" required>
+                    <option th:each="reserva : ${reservas}" th:value="${reserva.id}" th:text="${reserva.id}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="editContentorCombo">Contentor</label>
+                <select id="editContentorCombo" name="idContentor" required>
+                    <option th:each="contentor : ${contentores}" th:value="${contentor.cin}" th:text="${contentor.cin}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="editArmazemCombo">Armazém</label>
+                <select id="editArmazemCombo" name="idArmazem" required>
+                    <option th:each="armazem : ${armazens}" th:value="${armazem.id}" th:text="${armazem.descricao}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="editTipoCargaCombo">Tipo de Carga</label>
+                <select id="editTipoCargaCombo" name="idTipoCarga" required>
+                    <option th:each="tipoCarga : ${tiposCarga}" th:value="${tipoCarga.id}" th:text="${tipoCarga.descricao}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="editCotacaoCombo">Cotação</label>
+                <select id="editCotacaoCombo" name="idCotacao" required>
+                    <option th:each="cotacao : ${cotacoes}" th:value="${cotacao.id}" th:text="${cotacao.id}"></option>
+                </select>
+            </div>
+            <div class="buttons">
+                <button type="submit">Guardar Alterações</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmar Remover Modal -->
+<div id="confirmRemoveModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
+        <h1>Remover Carga</h1>
+        <p>Tem certeza que deseja remover esta carga?</p>
+        <form id="removeForm" action="/removerCarga" method="post">
+            <input type="hidden" id="removeId" name="id">
+            <div class="buttons">
+                <button type="submit">Remover</button>
+                <button type="button" onclick="closeModal('confirmRemoveModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
-    function excluirCarga(id) {
-        // Implementar lógica para excluir carga com o id fornecido
+    function showEditarCargaModal(id, nome, quantidade, volume, peso, localAtual, observacoes, idReserva, idContentor, idArmazem, idTipoCarga, idCotacao) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editNomeText').value = nome;
+        document.getElementById('editQuantidadeText').value = quantidade;
+        document.getElementById('editVolumeText').value = volume;
+        document.getElementById('editPesoText').value = peso;
+        document.getElementById('editLocalAtualText').value = localAtual;
+        document.getElementById('editObservacoesText').value = observacoes;
+        document.getElementById('editReservaCombo').value = idReserva;
+        document.getElementById('editContentorCombo').value = idContentor;
+        document.getElementById('editArmazemCombo').value = idArmazem;
+        document.getElementById('editTipoCargaCombo').value = idTipoCarga;
+        document.getElementById('editCotacaoCombo').value = idCotacao;
+        document.getElementById('editModal').style.display = "block";
     }
 
-    function showEditarCarga(id) {
-        // Implementar lógica para mostrar a edição da carga com o id fornecido
+    function confirmarRemoverCarga(id) {
+        document.getElementById('removeId').value = id;
+        document.getElementById('confirmRemoveModal').style.display = "block";
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('editModal')) {
+            closeModal('editModal');
+        } else if (event.target == document.getElementById('confirmRemoveModal')) {
+            closeModal('confirmRemoveModal');
+        }
     }
 </script>
 </body>

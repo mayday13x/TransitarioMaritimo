@@ -9,6 +9,7 @@ import pt.ipvc.database.entity.*;
 import pt.ipvc.database.repository.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class CargaController {
@@ -33,6 +34,11 @@ public class CargaController {
     @GetMapping("/CargaArmazem")
     public String listarCargas(Model model) {
         List<CargaEntity> cargas = repo_carga.findAll();
+        model.addAttribute("reservas", repo_reserva.findAll());
+        model.addAttribute("contentores", repo_contentor.findAll());
+        model.addAttribute("armazens", repo_armazem.findAll());
+        model.addAttribute("tiposCarga", repo_tipoCarga.findAll());
+        model.addAttribute("cotacoes", repo_cotacao.findAll());
         model.addAttribute("cargas", cargas);
         return "CargaArmazem";
     }
@@ -83,6 +89,55 @@ public class CargaController {
 
         repo_carga.save(novaCarga);
 
+        return "redirect:/CargaArmazem";
+    }
+
+    @PostMapping("/editarCarga")
+    public String editarCarga(
+            @RequestParam("id") int id,
+            @RequestParam("nome") String nome,
+            @RequestParam("quantidade") int quantidade,
+            @RequestParam("volume") double volume,
+            @RequestParam("peso") double peso,
+            @RequestParam("localAtual") String localAtual,
+            @RequestParam("observacoes") String observacoes,
+            @RequestParam("idReserva") Integer idReserva,
+            @RequestParam("idContentor") Integer idContentor,
+            @RequestParam("idArmazem") Integer idArmazem,
+            @RequestParam("idTipoCarga") Integer idTipoCarga,
+            @RequestParam("idCotacao") Integer idCotacao
+    ) {
+        Optional<CargaEntity> cargaOptional = repo_carga.findById(id);
+        if (cargaOptional.isPresent()) {
+            CargaEntity carga = cargaOptional.get();
+            carga.setNome(nome);
+            carga.setQuantidade(quantidade);
+            carga.setVolume(volume);
+            carga.setPeso(peso);
+            carga.setLocalAtual(localAtual);
+            carga.setObservacoes(observacoes);
+
+            ReservaEntity reserva = repo_reserva.findById(idReserva).orElse(null);
+            ContentorEntity contentor = repo_contentor.findById(idContentor).orElse(null);
+            ArmazemEntity armazem = repo_armazem.findById(idArmazem).orElse(null);
+            TipoCargaEntity tipoCarga = repo_tipoCarga.findById(idTipoCarga).orElse(null);
+            CotacaoEntity cotacao = repo_cotacao.findById(idCotacao).orElse(null);
+
+            carga.setReservaByIdReserva(reserva);
+            carga.setContentorByIdContentor(contentor);
+            carga.setArmazemByIdArmazem(armazem);
+            carga.setTipoCargaByIdTipoCarga(tipoCarga);
+            carga.setCotacaoByIdCotacao(cotacao);
+
+            repo_carga.save(carga);
+        }
+
+        return "redirect:/CargaArmazem";
+    }
+
+    @PostMapping("/removerCarga")
+    public String removerCarga(@RequestParam("id") int id) {
+        repo_carga.deleteById(id);
         return "redirect:/CargaArmazem";
     }
 }

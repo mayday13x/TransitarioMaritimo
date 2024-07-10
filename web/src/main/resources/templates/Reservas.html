@@ -188,8 +188,8 @@
                 <td th:text="${reserva.origem}"></td>
                 <td th:text="${reserva.destino}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:onclick="'showEditarReserva(' + ${reserva.id} + ')'"></i>
-                    <i class="fas fa-trash" th:onclick="'cancelarReserva(' + ${reserva.id} + ')'"></i>
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarReservaModal(${reserva.id}, '${reserva.origem}', '${reserva.destino}', '${reserva.data}', ${reserva.idCliente}, ${reserva.idEstadoReserva}, ${reserva.idFuncionario})|"></i>
+                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverReserva(${reserva.id})|"></i>
                 </td>
             </tr>
             </tbody>
@@ -200,10 +200,10 @@
     </div>
 </div>
 
-<!-- The Modal -->
+<!-- Inserir Modal -->
 <div id="insertModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
+        <span class="close" onclick="closeModal('insertModal')">&times;</span>
         <h1>Inserir Reserva</h1>
         <form id="formInserirReserva" action="/inserirReserva" method="post">
             <div class="form-group">
@@ -244,6 +244,74 @@
             </div>
             <div class="buttons">
                 <button type="submit">Inserir Reserva</button>
+                <button type="button" onclick="closeModal('insertModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Editar Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editModal')">&times;</span>
+        <h1>Editar Reserva</h1>
+        <form id="editForm" action="/editarReserva" method="post">
+            <input type="hidden" id="editId" name="id">
+            <div class="form-group">
+                <div>
+                    <label for="editOrigemText">Origem</label>
+                    <input type="text" id="editOrigemText" name="origem" placeholder="Origem" required>
+                </div>
+                <div>
+                    <label for="editDestinoText">Destino</label>
+                    <input type="text" id="editDestinoText" name="destino" placeholder="Destino" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="editDataText">Data</label>
+                    <input type="date" id="editDataText" name="data" required>
+                </div>
+                <div>
+                    <label for="editIdClienteCombo">Cliente</label>
+                    <select id="editIdClienteCombo" name="idCliente" required>
+                        <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="editIdEstadoReservaCombo">Estado da Reserva</label>
+                    <select id="editIdEstadoReservaCombo" name="idEstadoReserva" required>
+                        <option th:each="estado : ${estados}" th:value="${estado.id}" th:text="${estado.descricao}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="editIdFuncionarioCombo">Funcionário</label>
+                    <select id="editIdFuncionarioCombo" name="idFuncionario" required>
+                        <option th:each="funcionario : ${funcionarios}" th:value="${funcionario.id}" th:text="${funcionario.nome}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Guardar Alterações</button>
+                <button type="button" onclick="closeModal('editModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmar Remover Modal -->
+<div id="confirmRemoveModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
+        <h1>Remover Reserva</h1>
+        <p>Tem certeza que deseja remover esta reserva?</p>
+        <form id="removeForm" action="/removerReserva" method="post">
+            <input type="hidden" id="removeId" name="id">
+            <div class="buttons">
+                <button type="submit">Remover</button>
+                <button type="button" onclick="closeModal('confirmRemoveModal')">Cancelar</button>
             </div>
         </form>
     </div>
@@ -254,21 +322,33 @@
         document.getElementById('insertModal').style.display = "flex";
     }
 
-    function closeModal() {
-        document.getElementById('insertModal').style.display = "none";
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
     }
 
-    function cancelarReserva(id) {
-        // Implementar lógica para cancelar reserva com o id fornecido
+    function showEditarReservaModal(id, origem, destino, data, idCliente, idEstadoReserva, idFuncionario) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editOrigemText').value = origem;
+        document.getElementById('editDestinoText').value = destino;
+        document.getElementById('editDataText').value = data;
+        document.getElementById('editIdClienteCombo').value = idCliente;
+        document.getElementById('editIdEstadoReservaCombo').value = idEstadoReserva;
+        document.getElementById('editIdFuncionarioCombo').value = idFuncionario;
+        document.getElementById('editModal').style.display = "flex";
     }
 
-    function showEditarReserva(id) {
-        // Implementar lógica para mostrar a edição da reserva com o id fornecido
+    function confirmarRemoverReserva(id) {
+        document.getElementById('removeId').value = id;
+        document.getElementById('confirmRemoveModal').style.display = "flex";
     }
 
     window.onclick = function(event) {
         if (event.target == document.getElementById('insertModal')) {
-            closeModal();
+            closeModal('insertModal');
+        } else if (event.target == document.getElementById('editModal')) {
+            closeModal('editModal');
+        } else if (event.target == document.getElementById('confirmRemoveModal')) {
+            closeModal('confirmRemoveModal');
         }
     }
 </script>

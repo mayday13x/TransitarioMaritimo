@@ -9,6 +9,7 @@ import pt.ipvc.database.entity.*;
 import pt.ipvc.database.repository.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class ContentorController {
@@ -31,15 +32,6 @@ public class ContentorController {
         model.addAttribute("tiposContentor", tiposContentor);
         model.addAttribute("estadosContentor", estadosContentor);
         model.addAttribute("contentores", contentores);
-        return "Contentores";
-    }
-
-    @GetMapping("/inserirContentor")
-    public String showInserirContentorForm(Model model) {
-        List<TipoContentorEntity> tiposContentor = repo_tipoContentor.findAll();
-        List<EstadoContentorEntity> estadosContentor = repo_estadoContentor.findAll();
-        model.addAttribute("tiposContentor", tiposContentor);
-        model.addAttribute("estadosContentor", estadosContentor);
         return "Contentores";
     }
 
@@ -67,6 +59,44 @@ public class ContentorController {
             repo_contentor.save(novoContentor);
         }
 
+        return "redirect:/Contentores";
+    }
+
+    @PostMapping("/editarContentor")
+    public String editarContentor(
+            @RequestParam("cin") Integer cin,
+            @RequestParam("capacidade") double capacidade,
+            @RequestParam("localAtual") String localAtual,
+            @RequestParam("pesoMaximo") double pesoMaximo,
+            @RequestParam("tipoContentor") Integer tipoContentorId,
+            @RequestParam("estadoContentor") Integer estadoContentorId
+    ) {
+        Optional<ContentorEntity> contentorOptional = repo_contentor.findById(cin);
+        if (contentorOptional.isPresent()) {
+            ContentorEntity contentor = contentorOptional.get();
+            contentor.setCapacidade(capacidade);
+            contentor.setLocalAtual(localAtual);
+            contentor.setPesoMax(pesoMaximo);
+
+            TipoContentorEntity tipoContentor = repo_tipoContentor.findById(tipoContentorId).orElse(null);
+            EstadoContentorEntity estadoContentor = repo_estadoContentor.findById(estadoContentorId).orElse(null);
+
+            if (tipoContentor != null && estadoContentor != null) {
+                contentor.setTipoContentorByTipoContentor(tipoContentor);
+                contentor.setEstadoContentorByIdEstadoContentor(estadoContentor);
+                contentor.setTipoContentor(tipoContentor.getId());
+                contentor.setIdEstadoContentor(estadoContentor.getId());
+            }
+
+            repo_contentor.save(contentor);
+        }
+
+        return "redirect:/Contentores";
+    }
+
+    @PostMapping("/removerContentor")
+    public String removerContentor(@RequestParam("cin") Integer cin) {
+        repo_contentor.deleteById(cin);
         return "redirect:/Contentores";
     }
 }
