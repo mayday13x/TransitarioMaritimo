@@ -273,6 +273,21 @@ public class MenuController implements Initializable {
     }
 
     @FXML
+    public void CotacaoOperacional(ActionEvent event) throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CotacoesOperacionalView.fxml"));
+        try {
+            Pane cmdPane = fxmlLoader.load();
+            menu_panel.getChildren().clear();
+            menu_panel.getChildren().add(cmdPane);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+
+    }
+
+    @FXML
     public void Logout(MouseEvent event) {
 
         try{

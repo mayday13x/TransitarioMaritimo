@@ -34,7 +34,7 @@ import java.util.Set;
 
 import static javafx.scene.input.KeyCode.L;
 
-public class CotacaoController implements Initializable {
+public class CotacaoOperacionalController implements Initializable {
 
     public AnnotationConfigApplicationContext context;
     private ServicoRepository service_repo;
@@ -43,7 +43,7 @@ public class CotacaoController implements Initializable {
     private CotacaoRepository cotacao_repo;
     private TipoCargaRepository tpcarga_repo;
     private LinhaCotacaoRepository linha_cotacao_repo;
-  //  private LinhaCotacaoRepositoryPK linha_cotacao_repoPK;
+    //  private LinhaCotacaoRepositoryPK linha_cotacao_repoPK;
     private EstadoCotacaoRepository estado_cotacao_repo;
 
 
@@ -219,13 +219,13 @@ public class CotacaoController implements Initializable {
         estado_cotacao_repo = context.getBean(EstadoCotacaoRepository.class);
         //linha_cotacao_repoPK = context.getBean(LinhaCotacaoRepositoryPK.class);
 
-        ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(cliente_repo.findAll());
-        ObservableList<ServicoEntity> servicos = FXCollections.observableArrayList(service_repo.findAll());
-        ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(carga_repo.findAll());
-        ObservableList<CotacaoEntity> cotacoes = FXCollections.observableArrayList(cotacao_repo.findAll());
-        ObservableList<TipoCargaEntity> tpcargas = FXCollections.observableArrayList(tpcarga_repo.findAll());
+     //   ObservableList<ClienteEntity> clientes = FXCollections.observableArrayList(cliente_repo.findAll());
+     //   ObservableList<ServicoEntity> servicos = FXCollections.observableArrayList(service_repo.findAll());
+     //   ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(carga_repo.findAll());
+        ObservableList<CotacaoEntity> cotacoes = FXCollections.observableArrayList(cotacao_repo.findByEstadoConfirmado());
+     //   ObservableList<TipoCargaEntity> tpcargas = FXCollections.observableArrayList(tpcarga_repo.findAll());
 
-        try{
+     /*   try{
             if(TableClientes != null){
                 TClientesID.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
                 TClientesNome.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
@@ -274,7 +274,7 @@ public class CotacaoController implements Initializable {
 
                 totalCota.setText(String.valueOf(total) + " €");
             });
-        }
+        }*/
 
         if(TCotacoes != null){
             IdCotacao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
@@ -292,7 +292,7 @@ public class CotacaoController implements Initializable {
         System.out.println("12332432532532532523532532532532532532");
     }
 
-    public void CotacaoCliente() {
+/*    public void CotacaoCliente() {
         System.out.println("cotacaoCliente()");
         DoubleClickHandler handler = new DoubleClickHandler();
         table_cotacoes.setOnMouseClicked(handler);
@@ -310,47 +310,32 @@ public class CotacaoController implements Initializable {
             ValorTotal.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getValorTotal().toString()));
             table_cotacoes.setItems(cotacoes);
 
+            ObservableList<ServicoEntity> servicos = FXCollections.observableArrayList(cotacao_repo.findByIdClienteServico(Current_Session.current_client.getId()));
+            IdServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+            FornedorServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFornecedorByIdFornecedor().getNome()));
+            ComissaoServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getComissao().toString()));
+            PrecoServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPreco().toString()));
+            DescricaoServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescricao()));
+            TableServico.setItems(servicos);
         }
-    }
+    }*/
 
     @FXML
     void ShowCriarCotacao(ActionEvent event) {
         CriarPane.setVisible(true);
         mainPane.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
         mainPane.setDisable(true);
-       // System.out.println(Current_Session.current_client.getId() + ": " + Current_Session.current_client.getNome());
-       // System.out.println(Current_Session.current_funcionario.getId() + ": " + Current_Session.current_funcionario.getNome());
+        // System.out.println(Current_Session.current_client.getId() + ": " + Current_Session.current_client.getNome());
+        // System.out.println(Current_Session.current_funcionario.getId() + ": " + Current_Session.current_funcionario.getNome());
     }
 
-    public void AddServico(){
-        ServicoEntity servico = TServicos.getSelectionModel().getSelectedItem();
-
-        if(servico!= null && !TCotaServ.getItems().contains(servico)){
-
-            CotServico.setCellValueFactory(data -> new SimpleStringProperty(servico.getDescricao()));
-            CotPreco.setCellValueFactory(data -> new SimpleStringProperty(servico.getPreco().toString()));
-            CotComissao.setCellValueFactory(data -> new SimpleStringProperty(servico.getComissao().toString()));
-            TCotaServ.getItems().add(servico);
-            selected_services.add(servico);
-
-        }
-
-
-    }
-
-    public void RemoveServico(){
-        ServicoEntity servico = TCotaServ.getSelectionModel().getSelectedItem();
-
-        TCotaServ.getItems().remove(servico);
-        selected_services.remove(servico);
-    }
 
     @FXML
-    void RegistarCotacao(ActionEvent event) {
+    void RegistarReserva(ActionEvent event) {
 
-        if(TableClientes.getSelectionModel().getSelectedItem() == null || TCotaServ.getItems().size() == 0 ||
-         AlturaCarga.getText().isEmpty() || CompCarga.getText().isEmpty() || LarguraCarga.getText().isEmpty() ||
-         NomeCarga.getText().isEmpty() || PesoCarga.getText().isEmpty() || QtdCarga.getText().isEmpty() || Observacoes.getText().isEmpty()){
+   /*     if(TableClientes.getSelectionModel().getSelectedItem() == null || TCotaServ.getItems().size() == 0 ||
+                AlturaCarga.getText().isEmpty() || CompCarga.getText().isEmpty() || LarguraCarga.getText().isEmpty() ||
+                NomeCarga.getText().isEmpty() || PesoCarga.getText().isEmpty() || QtdCarga.getText().isEmpty() || Observacoes.getText().isEmpty()){
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Error");
@@ -360,18 +345,18 @@ public class CotacaoController implements Initializable {
 
         } else {
 
-        //REGISTAR COTACAO
-             CotacaoEntity cotacao = new CotacaoEntity();
-             EstadoCotacaoEntity estadoCotacao = estado_cotacao_repo.findByDescricaoLike("Em analise");
-             cotacao.setIdCliente(clienteSelecionado().getId());
-             cotacao.setIdEstadoCotacao(3);
-             cotacao.setEstadoCotacaoByIdEstadoCotacao(estadoCotacao);
-             cotacao.setData(Date.valueOf(LocalDate.now()));
-             cotacao.setClienteByIdCliente(TableClientes.getSelectionModel().getSelectedItem());
+            //REGISTAR COTACAO
+            CotacaoEntity cotacao = new CotacaoEntity();
+            EstadoCotacaoEntity estadoCotacao = estado_cotacao_repo.findByDescricaoLike("Em analise");
+            cotacao.setIdCliente(clienteSelecionado().getId());
+            cotacao.setIdEstadoCotacao(3);
+            cotacao.setEstadoCotacaoByIdEstadoCotacao(estadoCotacao);
+            cotacao.setData(Date.valueOf(LocalDate.now()));
+            cotacao.setClienteByIdCliente(TableClientes.getSelectionModel().getSelectedItem());
 
             cotacao_repo.save(cotacao);
 
-         //REGISTAR CARGA
+            //REGISTAR CARGA
 
             CargaEntity carga = new CargaEntity();
             carga.setIdCotacao(cotacao.getId());
@@ -398,12 +383,12 @@ public class CotacaoController implements Initializable {
 
                 valorTotal += i.getPreco() + (i.getComissao() * i.getPreco()); // val + comissão
 
-               linha.setIdCotacao(cotacao.getId());
-               linha.setIdServico(i.getId());
-               linha.setCotacaoByIdCotacao(cotacao);
-               linha.setServicoByIdServico(i);
+                linha.setIdCotacao(cotacao.getId());
+                linha.setIdServico(i.getId());
+                linha.setCotacaoByIdCotacao(cotacao);
+                linha.setServicoByIdServico(i);
 
-               linha_cotacao_repo.save(linha);
+                linha_cotacao_repo.save(linha);
 
             }
 
@@ -418,13 +403,29 @@ public class CotacaoController implements Initializable {
             alert.setContentText("Cotação registada com sucesso");
             alert.showAndWait();
 
-        }
+        } */
 
     }
 
-    public ClienteEntity clienteSelecionado() {
-        ClienteEntity cliente = TableClientes.getSelectionModel().getSelectedItem();
-        return cliente;
+    void MostrarDetalhes() {
+     /*   CotacaoEntity cotacao = TCotacoes.getSelectionModel().getSelectedItem();
+        if (cotacao!= null) {
+            DetalhesPane.setVisible(true);
+            mainPane.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+            mainPane.setDisable(true);
+
+            DetalhesNomeCliente.setText(cotacao.getClienteByIdCliente().getNome());
+            DetalhesCarga.setText(cotacao.getCargaByIdCarga().getNome());
+            DetalhesValorTotal.setText(cotacao.getValorTotal().toString());
+            DetalhesData.setText(cotacao.getData().toString());
+
+            ObservableList<ServicoEntity> servicos = FXCollections.observableArrayList(servico_repo.findAllByCotacaoByIdCotacao(cotacao));
+            DetalhesServicos.setItems(servicos);
+        }*/
+    }
+
+    public CotacaoEntity cotacaoSelecionada() {
+        return TCotacoes.getSelectionModel().getSelectedItem();
     }
 
     @FXML
@@ -434,7 +435,7 @@ public class CotacaoController implements Initializable {
         mainPane.setDisable(false);
     }
 
-    @FXML
+/*    @FXML
     public void ConfirmarCotacao(ActionEvent event) {
 
         if (table_cotacoes.getSelectionModel().getSelectedItem() == null) {
@@ -482,9 +483,9 @@ public class CotacaoController implements Initializable {
             alert.showAndWait();
         } else {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Rejeitar Cotação");
-            alert.setHeaderText("Rejeitar Cotação");
-            alert.setContentText("Tem a certeza que pretende rejeitar esta Cotação?");
+            alert.setTitle("Pagar Cotação");
+            alert.setHeaderText("Pagar Cotação");
+            alert.setContentText("Tem a certeza que pretende pagar esta Cotação?");
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -506,24 +507,13 @@ public class CotacaoController implements Initializable {
                 }
             }
         }
-    }
+    }*/
 
     @FXML
     void VisualizarServicos(ActionEvent event) {
         ServicoPane.setVisible(true);
         CotacaoClientePane.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
         CotacaoClientePane.setDisable(true);
-
-        CotacaoEntity cotacao = table_cotacoes.getSelectionModel().getSelectedItem();
-
-        ObservableList<ServicoEntity> servicos = FXCollections.observableArrayList(cotacao_repo.findByIdCotacao(cotacao.getId()));
-        IdServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
-        FornedorServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFornecedorByIdFornecedor().getNome()));
-        ComissaoServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getComissao().toString()));
-        PrecoServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPreco().toString()));
-        DescricaoServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescricao()));
-        TableServico.setItems(servicos);
-
     }
 
     @FXML

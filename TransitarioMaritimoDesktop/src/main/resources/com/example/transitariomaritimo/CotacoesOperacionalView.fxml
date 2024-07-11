@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="715.0" prefWidth="883.0" stylesheets="@css/nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.CotacaoController">
+<AnchorPane prefHeight="715.0" prefWidth="883.0" stylesheets="@css/nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.CotacaoOperacionalController">
    <children>
       <Pane fx:id="mainPane" layoutX="47.0" layoutY="25.0" prefHeight="715.0" prefWidth="903.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -33,7 +33,7 @@
                   <Font size="23.0" />
                </font>
             </Label>
-            <Button defaultButton="true" layoutX="21.0" layoutY="532.0" mnemonicParsing="false" onAction="#ShowCriarCotacao" prefHeight="42.0" prefWidth="109.0" text="Criar Cotação" />
+            <Button defaultButton="true" layoutX="21.0" layoutY="532.0" mnemonicParsing="false" onAction="#RegistarReserva" prefHeight="42.0" prefWidth="109.0" text="Criar Cotação" />
             <Button fx:id="deleteButton" layoutX="150.0" layoutY="532.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="145.0" text="Excluir Cotação" />
          </children>
       </Pane>
@@ -49,19 +49,19 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Button defaultButton="true" layoutX="363.0" layoutY="522.0" mnemonicParsing="false" onAction="#RegistarCotacao" text="Criar Cotação" />
+            <Button defaultButton="true" layoutX="363.0" layoutY="522.0" mnemonicParsing="false" onAction="#RegistarReserva" text="Registar Reserva" />
             <TabPane layoutX="23.0" layoutY="54.0" prefHeight="448.0" prefWidth="823.0" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="100.0" tabMinHeight="10.0">
-              <tabs>
+               <tabs>
                   <Tab text="Cliente">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <TableView fx:id="TableClientes" layoutY="48.0" prefHeight="354.0" prefWidth="823.0">
-                                <columns>
-                                  <TableColumn fx:id="TClientesID" prefWidth="103.99996948242188" text="Id" />
-                                  <TableColumn fx:id="TClientesNome" prefWidth="321.6000213623047" text="Nome" />
+                                 <columns>
+                                    <TableColumn fx:id="TClientesID" prefWidth="103.99996948242188" text="Id" />
+                                    <TableColumn fx:id="TClientesNome" prefWidth="321.6000213623047" text="Nome" />
                                     <TableColumn fx:id="TCilentesNIF" prefWidth="284.7999267578125" text="NIF" />
-                                </columns>
+                                 </columns>
                               </TableView>
                               <Label layoutY="14.0" text="Selecione o cliente a vincular à cotação:">
                                  <font>
@@ -72,9 +72,9 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                <Tab text="Carga">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                  <Tab text="Carga">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <TextField fx:id="NomeCarga" layoutX="37.0" layoutY="90.0" maxWidth="-Infinity" prefHeight="36.0" prefWidth="158.0" />
                               <Label layoutX="39.0" layoutY="12.0" text="Dados Carga">
@@ -104,13 +104,13 @@
                               <TextArea fx:id="Observacoes" layoutX="37.0" layoutY="265.0" prefHeight="124.0" prefWidth="714.0" />
                            </children>
                         </AnchorPane>
-                  </content>
-                </Tab>
-                <Tab text="Serviços">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     </content>
+                  </Tab>
+                  <Tab text="Serviços">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Button layoutX="775.0" layoutY="99.0" mnemonicParsing="false" onAction="#RemoveServico" prefHeight="31.0" prefWidth="31.0" text="-" />
+                              <Button layoutX="775.0" layoutY="99.0" mnemonicParsing="false"  prefHeight="31.0" prefWidth="31.0" text="-" />
                               <Label layoutX="600.0" layoutY="366.0" text="Total Cotação:">
                                  <font>
                                     <Font size="18.0" />
@@ -122,11 +122,11 @@
                                  </font>
                               </Label>
                               <TableView fx:id="TServicos" editable="true" layoutX="14.0" layoutY="48.0" prefHeight="306.0" prefWidth="355.0">
-                                <columns>
-                                  <TableColumn fx:id="ServServico" prefWidth="145.59997177124023" text="Servico" />
-                                  <TableColumn fx:id="ServPreco" prefWidth="93.60005187988281" text="Preço" />
+                                 <columns>
+                                    <TableColumn fx:id="ServServico" prefWidth="145.59997177124023" text="Servico" />
+                                    <TableColumn fx:id="ServPreco" prefWidth="93.60005187988281" text="Preço" />
                                     <TableColumn fx:id="ServComissao" prefWidth="108.7999267578125" text="Comissao" />
-                                </columns>
+                                 </columns>
                               </TableView>
                               <TableView fx:id="TCotaServ" layoutX="412.0" layoutY="48.0" prefHeight="306.0" prefWidth="354.0">
                                  <columns>
@@ -145,31 +145,13 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Button layoutX="373.0" layoutY="99.0" mnemonicParsing="false" onAction="#AddServico" prefHeight="36.0" prefWidth="31.0" text="+" />
+                              <Button layoutX="373.0" layoutY="99.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="31.0" text="+" />
                            </children>
                         </AnchorPane>
-                  </content>
-                </Tab>
-              </tabs>
+                     </content>
+                  </Tab>
+               </tabs>
             </TabPane>
-         </children>
-         <effect>
-            <DropShadow />
-         </effect>
-      </Pane>
-      <Pane fx:id="EditarPane" layoutX="27.0" layoutY="72.0" prefHeight="578.0" prefWidth="891.0" style="-fx-background-color: #FFFFFF;" visible="false">
-         <children>
-            <Button layoutX="835.0" layoutY="16.0" mnemonicParsing="false" onAction="#Voltar" text="X">
-               <font>
-                  <Font name="Century Gothic" size="12.0" />
-               </font>
-            </Button>
-            <Label layoutX="392.0" layoutY="16.0" text="Criar Cotação">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-            <Button defaultButton="true" layoutX="401.0" layoutY="516.0" mnemonicParsing="false" onAction="#RegistarCotacao" text="Criar Cotação" />
          </children>
          <effect>
             <DropShadow />
