@@ -103,6 +103,57 @@
         .buttons button:hover, .buttons a:hover {
             background-color: #2980b9;
         }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-group > div {
+            width: 48%;
+        }
     </style>
 </head>
 <body>
@@ -113,7 +164,7 @@
     <a href="/Contentores">Contentores</a>
     <a href="/Cotacao">Cotação</a>
     <a href="/Fornecedores">Fornecedores</a>
-    <a href="/Funcionarios">Funcionários</a>
+    <a href="/Funcionários">Funcionários</a>
     <a href="/Reservas">Reservas</a>
     <a href="/Servicos">Serviços</a>
     <a href="/Transportes">Transportes</a>
@@ -138,12 +189,12 @@
                 <td th:text="${funcionario.id}"></td>
                 <td th:text="${funcionario.nome}"></td>
                 <td th:text="${funcionario.nif}"></td>
-                <td th:text="${funcionario.rua}"></td>
+                <td th:text="${funcionario.codPostalByIdCodPostal.localidade}"></td>
                 <td th:text="${funcionario.telefone}"></td>
                 <td th:text="${funcionario.email}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:onclick="'showEditarFuncionario(' + ${funcionario.id} + ')'"></i>
-                    <i class="fas fa-trash" th:onclick="'excluirFuncionario(' + ${funcionario.id} + ')'"></i>
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarFuncionarioModal(${funcionario.id}, '${funcionario.nome}', '${funcionario.nif}', '${funcionario.codPostalByIdCodPostal.localidade}', '${funcionario.rua}', '${funcionario.porta}', '${funcionario.email}', '${funcionario.telefone}')|"></i>
+                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverFuncionario(${funcionario.id})|"></i>
                 </td>
             </tr>
             </tbody>
@@ -154,22 +205,182 @@
     </div>
 </div>
 
+<!-- Inserir Modal -->
+<div id="insertModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('insertModal')">&times;</span>
+        <h1>Inserir Funcionário</h1>
+        <form id="formInserirFuncionario" action="/inserirFuncionario" method="post">
+            <div class="form-group">
+                <div>
+                    <label for="NomeText">Nome</label>
+                    <input type="text" id="NomeText" name="nome" placeholder="Nome" required>
+                </div>
+                <div>
+                    <label for="NifText">Nif</label>
+                    <input type="text" id="NifText" name="nif" placeholder="Nif" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="RuaText">Rua</label>
+                    <input type="text" id="RuaText" name="rua" placeholder="Rua" required>
+                </div>
+                <div>
+                    <label for="PortaText">Porta</label>
+                    <input type="text" id="PortaText" name="porta" placeholder="Porta" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="CodPostalCombo">Código Postal</label>
+                    <select id="CodPostalCombo" name="localidade" required>
+                        <option th:each="codPostal : ${codPostais}" th:value="${codPostal.idCodPostal}" th:text="${codPostal.localidade}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="EmailText">Email</label>
+                    <input type="email" id="EmailText" name="email" placeholder="Email" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="TelefoneText">Telefone</label>
+                    <input type="text" id="TelefoneText" name="telefone" placeholder="Telefone" required>
+                </div>
+                <div>
+                    <label for="TipoFuncionarioCombo">Tipo de Funcionário</label>
+                    <select id="TipoFuncionarioCombo" name="tipoFuncionario" required>
+                        <option th:each="tipo : ${tiposFuncionario}" th:value="${tipo.id}" th:text="${tipo.descricao}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Inserir Funcionário</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Editar Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editModal')">&times;</span>
+        <h1>Editar Funcionário</h1>
+        <form id="formEditarFuncionario" action="/editarFuncionario" method="post">
+            <input type="hidden" id="editId" name="id">
+            <div class="form-group">
+                <div>
+                    <label for="editNomeText">Nome</label>
+                    <input type="text" id="editNomeText" name="nome" placeholder="Nome" required>
+                </div>
+                <div>
+                    <label for="editNifText">Nif</label>
+                    <input type="text" id="editNifText" name="nif" placeholder="Nif" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="editRuaText">Rua</label>
+                    <input type="text" id="editRuaText" name="rua" placeholder="Rua" required>
+                </div>
+                <div>
+                    <label for="editPortaText">Porta</label>
+                    <input type="text" id="editPortaText" name="porta" placeholder="Porta" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="editCodPostalCombo">Código Postal</label>
+                    <select id="editCodPostalCombo" name="localidade" required>
+                        <option th:each="codPostal : ${codPostais}" th:value="${codPostal.localidade}" th:text="${codPostal.localidade}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="editEmailText">Email</label>
+                    <input type="email" id="editEmailText" name="email" placeholder="Email" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="editTelefoneText">Telefone</label>
+                    <input type="text" id="editTelefoneText" name="telefone" placeholder="Telefone" required>
+                </div>
+                <div>
+                    <label for="editTipoFuncionarioCombo">Tipo de Funcionário</label>
+                    <select id="editTipoFuncionarioCombo" name="tipoFuncionario" required>
+                        <option th:each="tipo : ${tiposFuncionario}" th:value="${tipo.descricao}" th:text="${tipo.descricao}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Guardar Alterações</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmar Remover Modal -->
+<div id="confirmRemoveModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
+        <h1>Remover Funcionário</h1>
+        <p>Tem certeza que deseja remover este funcionário?</p>
+        <div class="buttons">
+            <button id="confirmRemoveButton">Remover</button>
+            <button type="button" onclick="closeModal('confirmRemoveModal')">Cancelar</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    function excluirFuncionario(id) {
-        // Implementar lógica para excluir funcionário com o id fornecido
+    function showInserirFuncionarioModal() {
+        document.getElementById('insertModal').style.display = "flex";
     }
 
-    function showEditarFuncionario(id) {
-        document.getElementById('editPanel').classList.remove('hidden');
-        // Implementar lógica para carregar os dados do funcionário com o id fornecido
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
     }
 
-    function voltar() {
-        document.getElementById('editPanel').classList.add('hidden');
+    function showEditarFuncionarioModal(id, nome, nif, codPostal, rua, porta, email, telefone) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editNomeText').value = nome;
+        document.getElementById('editNifText').value = nif;
+        document.getElementById('editRuaText').value = rua;
+        document.getElementById('editPortaText').value = porta;
+        document.getElementById('editCodPostalCombo').value = codPostal;
+        document.getElementById('editEmailText').value = email;
+        document.getElementById('editTelefoneText').value = telefone;
+        document.getElementById('editModal').style.display = "flex";
     }
 
-    function guardarFuncionario() {
-        // Implementar lógica para guardar funcionário
+    function confirmarRemoverFuncionario(id) {
+        document.getElementById('confirmRemoveButton').onclick = function() {
+            removerFuncionario(id);
+        };
+        document.getElementById('confirmRemoveModal').style.display = "flex";
+    }
+
+    function removerFuncionario(id) {
+        fetch(`/removerFuncionario?id=${id}`, {
+            method: 'DELETE'
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert("Erro ao remover funcionário.");
+            }
+        });
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('insertModal')) {
+            closeModal('insertModal');
+        } else if (event.target == document.getElementById('editModal')) {
+            closeModal('editModal');
+        } else if (event.target == document.getElementById('confirmRemoveModal')) {
+            closeModal('confirmRemoveModal');
+        }
     }
 </script>
 </body>
