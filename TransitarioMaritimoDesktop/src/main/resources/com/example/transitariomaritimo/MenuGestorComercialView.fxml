@@ -27,7 +27,7 @@
          </graphic>
       </Button>
       <AnchorPane fx:id="menu_panel" layoutX="156.0" layoutY="8.0" prefHeight="715.0" prefWidth="850.0" />
-      <Button defaultButton="true" layoutX="14.0" layoutY="165.0" mnemonicParsing="false" onAction="#Cotacao" prefHeight="42.0" prefWidth="124.0" text="Cotações">
+      <Button defaultButton="true" layoutX="14.0" layoutY="163.0" mnemonicParsing="false" onAction="#Cotacao" prefHeight="42.0" prefWidth="124.0" text="Cotações">
          <font>
             <Font size="17.0" />
          </font>
@@ -37,5 +37,15 @@
             <Font size="18.0" />
          </font>
       </Text>
+      <Button defaultButton="true" layoutX="14.0" layoutY="222.0" mnemonicParsing="false" onAction="#Servicos" prefHeight="42.0" prefWidth="124.0" text="Serviços">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Button>
+      <Button defaultButton="true" layoutX="14.0" layoutY="279.0" mnemonicParsing="false" onAction="#Fornecedores" prefHeight="42.0" prefWidth="124.0" text="Fornecedores">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
