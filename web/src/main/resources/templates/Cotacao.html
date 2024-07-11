@@ -102,6 +102,58 @@
         .buttons button:hover {
             background-color: #2980b9;
         }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-group > div {
+            width: 48%;
+        }
     </style>
 </head>
 <body>
@@ -139,8 +191,8 @@
                 <td th:text="${cotacao.data}"></td>
                 <td th:text="${cotacao.valorTotal}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:onclick="'showEditarCotacao(' + ${cotacao.id} + ')'"></i>
-                    <i class="fas fa-trash" th:onclick="'excluirCotacao(' + ${cotacao.id} + ')'"></i>
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarCotacao(${cotacao.id}, ${cotacao.idCliente}, '${cotacao.getEstadoCotacaoByIdEstadoCotacao().descricao}', '${cotacao.data}', ${cotacao.valorTotal})|"></i>
+                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverCotacao(${cotacao.id})|"></i>
                 </td>
             </tr>
             </tbody>
@@ -151,13 +203,94 @@
     </div>
 </div>
 
+<!-- Editar Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editModal')">&times;</span>
+        <h1>Editar Cotação</h1>
+        <form id="formEditarCotacao" action="/editarCotacao" method="post">
+            <input type="hidden" id="editId" name="id">
+            <div class="form-group">
+                <div>
+                    <label for="editIdCliente">ID Cliente</label>
+                    <input type="text" id="editIdCliente" name="idCliente" required>
+                </div>
+                <div>
+                    <label for="editEstado">Estado</label>
+                    <select id="editEstado" name="estado" required>
+                        <option th:each="estado : ${estadosCotacao}" th:value="${estado.descricao}" th:text="${estado.descricao}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="editData">Data</label>
+                    <input type="date" id="editData" name="data" required>
+                </div>
+                <div>
+                    <label for="editValorTotal">Valor Total</label>
+                    <input type="text" id="editValorTotal" name="valorTotal" required>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Guardar Alterações</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmar Remover Modal -->
+<div id="confirmRemoveModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
+        <h1>Remover Cotação</h1>
+        <p>Tem certeza que deseja remover esta cotação?</p>
+        <div class="buttons">
+            <button id="confirmRemoveButton">Remover</button>
+            <button type="button" onclick="closeModal('confirmRemoveModal')">Cancelar</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    function excluirCotacao(id) {
-        // Implementar lógica para excluir cotação com o id fornecido
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
     }
 
-    function showEditarCotacao(id) {
-        // Implementar lógica para mostrar a edição da cotação com o id fornecido
+    function showEditarCotacao(id, idCliente, estado, data, valorTotal) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editIdCliente').value = idCliente;
+        document.getElementById('editEstado').value = estado;
+        document.getElementById('editData').value = data;
+        document.getElementById('editValorTotal').value = valorTotal;
+        document.getElementById('editModal').style.display = "flex";
+    }
+
+    function confirmarRemoverCotacao(id) {
+        document.getElementById('confirmRemoveButton').onclick = function() {
+            removerCotacao(id);
+        };
+        document.getElementById('confirmRemoveModal').style.display = "flex";
+    }
+
+    function removerCotacao(id) {
+        fetch(`/removerCotacao?id=${id}`, {
+            method: 'DELETE'
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert("Erro ao remover cotação.");
+            }
+        });
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('editModal')) {
+            closeModal('editModal');
+        } else if (event.target == document.getElementById('confirmRemoveModal')) {
+            closeModal('confirmRemoveModal');
+        }
     }
 </script>
 </body>

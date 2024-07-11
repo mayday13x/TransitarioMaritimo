@@ -1,10 +1,9 @@
 package org.example.projetoweb.Controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import pt.ipvc.database.entity.*;
 import pt.ipvc.database.repository.*;
 
@@ -36,7 +35,7 @@ public class CotacaoController {
     }
 
     @GetMapping("/Cotacao")
-    public String listarCotacoes(Model model){
+    public String listarCotacoes(Model model) {
         List<CotacaoEntity> cotacoes = repo_cotacao.findAll();
         model.addAttribute("cotacoes", cotacoes);
         return "Cotacao";
@@ -54,10 +53,6 @@ public class CotacaoController {
     @PostMapping("/inserirCotacao")
     public String inserirCotacao(
             @RequestParam("idCliente") Integer idCliente,
-            @RequestParam("descricao") String descricao,
-            @RequestParam("preco") double preco,
-            @RequestParam("comissao") double comissao,
-            @RequestParam("idFornecedor") Integer idFornecedor,
             @RequestParam("nomeCarga") String nomeCarga,
             @RequestParam("quantidadeCarga") int quantidadeCarga,
             @RequestParam("alturaCarga") double alturaCarga,
@@ -66,14 +61,13 @@ public class CotacaoController {
             @RequestParam("pesoCarga") double pesoCarga,
             @RequestParam("observacoesCarga") String observacoesCarga,
             @RequestParam("idTipoCarga") Integer idTipoCarga,
-            @RequestParam("servicosSelecionados") List<Integer> servicosSelecionados
+            @RequestParam(value = "servicosSelecionados", required = false) List<Integer> servicosSelecionados
     ) {
-        FornecedorEntity fornecedor = repo_fornecedor.findById(idFornecedor).orElse(null);
         EstadoCotacaoEntity estadoCotacao = repo_estadoCotacao.findByDescricaoLike("Em análise");
         ClienteEntity cliente = repo_cliente.findById(idCliente).orElse(null);
         TipoCargaEntity tipoCarga = repo_tipoCarga.findById(idTipoCarga).orElse(null);
 
-        if (fornecedor != null && estadoCotacao != null && cliente != null && tipoCarga != null) {
+        if (estadoCotacao != null && cliente != null && tipoCarga != null) {
             CotacaoEntity novaCotacao = new CotacaoEntity();
             novaCotacao.setIdCliente(idCliente);
             novaCotacao.setIdEstadoCotacao(estadoCotacao.getId());
@@ -96,19 +90,22 @@ public class CotacaoController {
 
             repo_carga.save(carga);
 
-            double valorTotal = preco + (comissao * preco);
+            double valorTotal = 0;
 
-            for (Integer idServico : servicosSelecionados) {
-                ServicoEntity servico = repo_servico.findById(idServico).orElse(null);
-                if (servico != null) {
-                    LinhaCotacaoEntity linha = new LinhaCotacaoEntity();
-                    linha.setIdCotacao(novaCotacao.getId());
-                    linha.setIdServico(servico.getId());
-                    linha.setCotacaoByIdCotacao(novaCotacao);
-                    linha.setServicoByIdServico(servico);
+            if (servicosSelecionados != null) {
+                for (Integer idServico : servicosSelecionados) {
+                    ServicoEntity servico = repo_servico.findById(idServico).orElse(null);
+                    if (servico != null) {
+                        valorTotal += servico.getPreco() + (servico.getComissao() * servico.getPreco());
 
-                    repo_linhaCotacao.save(linha);
-                    valorTotal += servico.getPreco() + (servico.getComissao() * servico.getPreco());
+                        LinhaCotacaoEntity linha = new LinhaCotacaoEntity();
+                        linha.setIdCotacao(novaCotacao.getId());
+                        linha.setIdServico(servico.getId());
+                        linha.setCotacaoByIdCotacao(novaCotacao);
+                        linha.setServicoByIdServico(servico);
+
+                        repo_linhaCotacao.save(linha);
+                    }
                 }
             }
 
@@ -117,5 +114,37 @@ public class CotacaoController {
         }
 
         return "redirect:/Cotacao";
+    }
+
+    @PostMapping("/editarCotacao")
+    public String editarCotacao(
+            @RequestParam int id,
+            @RequestParam int idCliente,
+            @RequestParam int idEstadoCotacao,
+            @RequestParam Date data,
+            @RequestParam double valorTotal) {
+
+        CotacaoEntity cotacao = repo_cotacao.findById(id).orElse(null);
+        EstadoCotacaoEntity estadoCotacao = repo_estadoCotacao.findById(idEstadoCotacao).orElse(null);
+
+        if (cotacao != null && estadoCotacao != null) {
+            cotacao.setIdCliente(idCliente);
+            cotacao.setEstadoCotacaoByIdEstadoCotacao(estadoCotacao);
+            cotacao.setData(data);
+            cotacao.setValorTotal(valorTotal);
+
+            repo_cotacao.save(cotacao);
+        }
+
+        return "redirect:/Cotacao";
+    }
+
+    @DeleteMapping("/removerCotacao")
+    @ResponseBody
+    @Transactional
+    public String removerCotacao(@RequestParam("id") int id) {
+        // Remover a cotação (cascata remove as linhas de cotação e cargas associadas)
+        repo_cotacao.deleteById(id);
+        return "Cotação removida com sucesso";
     }
 }

@@ -89,19 +89,16 @@
             display: none;
         }
         .tabs {
-            list-style: none;
-            padding: 0;
-            margin: 0;
             display: flex;
-            justify-content: space-around;
-            border-bottom: 2px solid #ddd;
+            justify-content: center;
+            margin-bottom: 20px;
         }
         .tabs li {
-            margin: 0;
+            list-style: none;
         }
         .tabs li a {
             display: block;
-            padding: 10px 20px;
+            padding: 15px 30px;
             text-decoration: none;
             color: #3498db;
             border: 2px solid #ddd;
@@ -312,7 +309,7 @@
         const servicoDescricao = checkbox.closest('tr').children[0].innerText;
         const servicoPreco = parseFloat(checkbox.getAttribute('data-preco'));
         const servicoComissao = parseFloat(checkbox.getAttribute('data-comissao'));
-        const valorComComissao = servicoPreco + (servicoPreco * servicoComissao / 100);
+        const valorComComissao = servicoPreco + (servicoPreco * servicoComissao);
 
         if (checkbox.checked) {
             const newRow = document.createElement('tr');
@@ -320,7 +317,8 @@
             newRow.innerHTML = `
                 <td>${servicoDescricao}</td>
                 <td>${valorComComissao.toFixed(2)}</td>
-                <td>${servicoComissao}</td>
+                <td>${servicoComissao}%</td>
+                <input type="hidden" name="servicosSelecionados" value="${servicoId}">
             `;
             servicosSelecionadosTable.appendChild(newRow);
         } else {
@@ -329,16 +327,15 @@
                 servicosSelecionadosTable.removeChild(rowToRemove);
             }
         }
+
         atualizarValorTotal();
     }
 
     function atualizarValorTotal() {
         const servicosSelecionadosTable = document.getElementById('servicosSelecionados').querySelector('tbody');
         const selectedRows = servicosSelecionadosTable.querySelectorAll('tr');
-        const preco = parseFloat(document.getElementById('preco').value) || 0;
-        const comissao = parseFloat(document.getElementById('comissao').value) || 0;
 
-        let valorTotal = preco + (preco * comissao / 100);
+        let valorTotal = 0;
 
         selectedRows.forEach(row => {
             const valorServico = parseFloat(row.children[1].innerText) || 0;
