@@ -11,6 +11,7 @@ import pt.ipvc.database.repository.ClienteRepository;
 import pt.ipvc.database.repository.CodPostalRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class ClienteController {
@@ -26,7 +27,9 @@ public class ClienteController {
     @GetMapping("/Clientes")
     public String listarClientes(Model model){
         List<ClienteEntity> clientes = repo_cliente.findAll();
+        List<CodPostalEntity> codPostais = repo_codPostal.findAll();
         model.addAttribute("clientes", clientes);
+        model.addAttribute("codPostais", codPostais);
         return "Clientes";
     }
 
@@ -59,11 +62,50 @@ public class ClienteController {
             novoCliente.setIdCodPostal(codPostal.getIdCodPostal());
             novoCliente.setEmail(email);
             novoCliente.setTelefone(telefone);
+            novoCliente.setUtilizador(email.substring(0, email.indexOf('@')));
+            novoCliente.setPassword("default");
             novoCliente.setCodPostalByIdCodPostal(codPostal);
 
             repo_cliente.save(novoCliente);
         }
 
+        return "redirect:/Clientes";
+    }
+
+    @PostMapping("/editarCliente")
+    public String editarCliente(
+            @RequestParam("id") Integer id,
+            @RequestParam("nome") String nome,
+            @RequestParam("nif") Integer nif,
+            @RequestParam("rua") String rua,
+            @RequestParam("porta") Integer porta,
+            @RequestParam("codPostal") Integer codPostalId,
+            @RequestParam("email") String email,
+            @RequestParam("telefone") String telefone
+    ) {
+        Optional<ClienteEntity> clienteOptional = repo_cliente.findById(id);
+        CodPostalEntity codPostal = repo_codPostal.findById(codPostalId).orElse(null);
+
+        if (clienteOptional.isPresent() && codPostal != null) {
+            ClienteEntity cliente = clienteOptional.get();
+            cliente.setNome(nome);
+            cliente.setNif(nif);
+            cliente.setRua(rua);
+            cliente.setPorta(porta);
+            cliente.setIdCodPostal(codPostal.getIdCodPostal());
+            cliente.setEmail(email);
+            cliente.setTelefone(telefone);
+            cliente.setCodPostalByIdCodPostal(codPostal);
+
+            repo_cliente.save(cliente);
+        }
+
+        return "redirect:/Clientes";
+    }
+
+    @PostMapping("/removerCliente")
+    public String removerCliente(@RequestParam("id") Integer id) {
+        repo_cliente.deleteById(id);
         return "redirect:/Clientes";
     }
 }

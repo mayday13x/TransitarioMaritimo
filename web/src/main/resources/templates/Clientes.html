@@ -102,6 +102,58 @@
         .buttons button:hover {
             background-color: #2980b9;
         }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-group > div {
+            width: 48%;
+        }
     </style>
 </head>
 <body>
@@ -141,26 +193,173 @@
                 <td th:text="${cliente.telefone}"></td>
                 <td th:text="${cliente.email}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:onclick="'showEditarCliente(' + ${cliente.id} + ')'"></i>
-                    <i class="fas fa-trash" th:onclick="'excluirCliente(' + ${cliente.id} + ')'"></i>
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarClienteModal(${cliente.id}, '${cliente.nome}', '${cliente.nif}', '${cliente.codPostalByIdCodPostal.idCodPostal}', '${cliente.rua}', '${cliente.porta}', '${cliente.email}', '${cliente.telefone}')|"></i>
+                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverCliente(${cliente.id})|"></i>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="window.location.href='/inserirCliente'">Inserir Cliente</button>
+            <button onclick="showInserirClienteModal()">Inserir Cliente</button>
         </div>
     </div>
 </div>
 
+<!-- Inserir Modal -->
+<div id="insertModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('insertModal')">&times;</span>
+        <h1>Inserir Cliente</h1>
+        <form id="formInserirCliente" action="/inserirCliente" method="post">
+            <div class="form-group">
+                <div>
+                    <label for="NomeText">Nome</label>
+                    <input type="text" id="NomeText" name="nome" placeholder="Nome" required>
+                </div>
+                <div>
+                    <label for="NifText">Nif</label>
+                    <input type="text" id="NifText" name="nif" placeholder="Nif" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="RuaText">Rua</label>
+                    <input type="text" id="RuaText" name="rua" placeholder="Rua" required>
+                </div>
+                <div>
+                    <label for="PortaText">Porta</label>
+                    <input type="text" id="PortaText" name="porta" placeholder="Porta" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="CodPostalCombo">Código Postal</label>
+                    <select id="CodPostalCombo" name="codPostal" required>
+                        <option th:each="codPostal : ${codPostais}" th:value="${codPostal.idCodPostal}" th:text="${codPostal.localidade}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="EmailText">Email</label>
+                    <input type="email" id="EmailText" name="email" placeholder="Email" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="TelefoneText">Telefone</label>
+                    <input type="text" id="TelefoneText" name="telefone" placeholder="Telefone" required>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Inserir Cliente</button>
+                <button type="button" onclick="closeModal('insertModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Editar Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editModal')">&times;</span>
+        <h1>Editar Cliente</h1>
+        <form id="formEditarCliente" action="/editarCliente" method="post">
+            <input type="hidden" id="editId" name="id">
+            <div class="form-group">
+                <div>
+                    <label for="editNomeText">Nome</label>
+                    <input type="text" id="editNomeText" name="nome" placeholder="Nome" required>
+                </div>
+                <div>
+                    <label for="editNifText">Nif</label>
+                    <input type="text" id="editNifText" name="nif" placeholder="Nif" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="editRuaText">Rua</label>
+                    <input type="text" id="editRuaText" name="rua" placeholder="Rua" required>
+                </div>
+                <div>
+                    <label for="editPortaText">Porta</label>
+                    <input type="text" id="editPortaText" name="porta" placeholder="Porta" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="editCodPostalCombo">Código Postal</label>
+                    <select id="editCodPostalCombo" name="codPostal" required>
+                        <option th:each="codPostal : ${codPostais}" th:value="${codPostal.idCodPostal}" th:text="${codPostal.localidade}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="editEmailText">Email</label>
+                    <input type="email" id="editEmailText" name="email" placeholder="Email" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="editTelefoneText">Telefone</label>
+                    <input type="text" id="editTelefoneText" name="telefone" placeholder="Telefone" required>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Guardar Alterações</button>
+                <button type="button" onclick="closeModal('editModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmar Remover Modal -->
+<div id="confirmRemoveModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
+        <h1>Remover Cliente</h1>
+        <p>Tem certeza que deseja remover este cliente?</p>
+        <form id="removeForm" action="/removerCliente" method="post">
+            <input type="hidden" id="removeId" name="id">
+            <div class="buttons">
+                <button type="submit">Remover</button>
+                <button type="button" onclick="closeModal('confirmRemoveModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
-    function excluirCliente(id) {
-        // Implementar lógica para excluir cliente com o id fornecido
+    function showInserirClienteModal() {
+        document.getElementById('insertModal').style.display = "flex";
     }
 
-    function showEditarCliente(id) {
-        document.getElementById('editPanel').classList.remove('hidden');
-        // Implementar lógica para carregar os dados do cliente com o id fornecido
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+
+    function showEditarClienteModal(id, nome, nif, codPostal, rua, porta, email, telefone) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editNomeText').value = nome;
+        document.getElementById('editNifText').value = nif;
+        document.getElementById('editRuaText').value = rua;
+        document.getElementById('editPortaText').value = porta;
+        document.getElementById('editCodPostalCombo').value = codPostal;
+        document.getElementById('editEmailText').value = email;
+        document.getElementById('editTelefoneText').value = telefone;
+        document.getElementById('editModal').style.display = "flex";
+    }
+
+    function confirmarRemoverCliente(id) {
+        document.getElementById('removeId').value = id;
+        document.getElementById('confirmRemoveModal').style.display = "flex";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('insertModal')) {
+            closeModal('insertModal');
+        } else if (event.target == document.getElementById('editModal')) {
+            closeModal('editModal');
+        } else if (event.target == document.getElementById('confirmRemoveModal')) {
+            closeModal('confirmRemoveModal');
+        }
     }
 </script>
 </body>
