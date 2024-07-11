@@ -12,6 +12,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import pt.ipvc.database.entity.ClienteEntity;
+import pt.ipvc.database.entity.FuncionarioEntity;
 
 import java.io.IOException;
 import java.net.URL;
@@ -274,9 +276,8 @@ public class MenuController implements Initializable {
     public void Logout(MouseEvent event) {
 
         try{
-
-            //Current_Session.current_funcionario = null;
-            //Current_Session.current_client = null;
+            Current_Session.current_funcionario = new FuncionarioEntity();
+            Current_Session.current_client = new ClienteEntity();
 
             Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
             Scene regCena = new Scene(root);

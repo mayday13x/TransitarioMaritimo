@@ -72,6 +72,12 @@ public class CotacaoController implements Initializable {
     private TableColumn<CotacaoEntity, String> ValorTotal;
 
     @FXML
+    private TableView<CotacaoEntity> table_cotacoes;
+
+    @FXML
+    private TableColumn<CotacaoEntity, String> Id;
+
+    @FXML
     private Button deleteButton;
 
     @FXML
@@ -79,9 +85,6 @@ public class CotacaoController implements Initializable {
 
     @FXML
     private Pane mainPane;
-
-    @FXML
-    private TableView<CotacaoEntity> table_cotacoes;
 
     // ADD Cotacao
 
@@ -152,9 +155,6 @@ public class CotacaoController implements Initializable {
     private Label totalCota;
 
     @FXML
-    private TableColumn<CotacaoEntity, String> Id;
-
-    @FXML
     private TableColumn<ServicoEntity, String> ComissaoServico;
 
     @FXML
@@ -173,6 +173,29 @@ public class CotacaoController implements Initializable {
     private Pane ServicoPane;
     @FXML
     private Pane CotacaoClientePane;
+
+    //Elementos da View para mostrar todas as cotações
+
+    @FXML
+    private TableView<CotacaoEntity> TCotacoes;
+
+    @FXML
+    private TableColumn<CotacaoEntity, String> IdCotacao;
+
+    @FXML
+    private TableColumn<CotacaoEntity, String> IdUtilizadorCotacao;
+
+    @FXML
+    private TableColumn<CotacaoEntity, String> UtilizadorCotacao;    //nome do user
+
+    @FXML
+    private TableColumn<CotacaoEntity, String> DataCotacao;
+
+    @FXML
+    private TableColumn<CotacaoEntity, String> ValorTotalCotacao;
+
+    @FXML
+    private TableColumn<CotacaoEntity, String> EstadoCotacao;
 
 
     public Set<ServicoEntity> selected_services = new HashSet<>();
@@ -252,6 +275,17 @@ public class CotacaoController implements Initializable {
                 totalCota.setText(String.valueOf(total) + " €");
             });
         }
+
+        if(TCotacoes != null){
+            IdCotacao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+            IdUtilizadorCotacao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIdCliente().toString()));
+            UtilizadorCotacao.setCellValueFactory(data -> new SimpleStringProperty((data.getValue().getClienteByIdCliente()).getNome()));
+            DataCotacao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getData().toString()));
+            ValorTotalCotacao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getValorTotal().toString()));
+            EstadoCotacao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEstadoCotacaoByIdEstadoCotacao().getDescricao()));
+
+            TCotacoes.setItems(cotacoes);
+        }
     }
 
     public void print(){
@@ -259,7 +293,7 @@ public class CotacaoController implements Initializable {
     }
 
     public void CotacaoCliente() {
-
+        System.out.println("cotacaoCliente()");
         DoubleClickHandler handler = new DoubleClickHandler();
         table_cotacoes.setOnMouseClicked(handler);
         context = new AnnotationConfigApplicationContext(AppConfig.class);
@@ -267,7 +301,7 @@ public class CotacaoController implements Initializable {
         service_repo = context.getBean(ServicoRepository.class);
 
         if(idCliente != 0) {
-            ObservableList<CotacaoEntity> cotacoes = FXCollections.observableArrayList(cotacao_repo.findByIdClienteLike(idCliente));
+            ObservableList<CotacaoEntity> cotacoes = FXCollections.observableArrayList(cotacao_repo.findByIdClienteLike(Current_Session.current_client.getId()));
 
             Id.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
             IdCliente.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIdCliente().toString()));
@@ -276,7 +310,7 @@ public class CotacaoController implements Initializable {
             ValorTotal.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getValorTotal().toString()));
             table_cotacoes.setItems(cotacoes);
 
-            ObservableList<ServicoEntity> servicos = FXCollections.observableArrayList(cotacao_repo.findByIdClienteServico(idCliente));
+            ObservableList<ServicoEntity> servicos = FXCollections.observableArrayList(cotacao_repo.findByIdClienteServico(Current_Session.current_client.getId()));
             IdServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
             FornedorServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFornecedorByIdFornecedor().getNome()));
             ComissaoServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getComissao().toString()));
@@ -292,7 +326,7 @@ public class CotacaoController implements Initializable {
         mainPane.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
         mainPane.setDisable(true);
        // System.out.println(Current_Session.current_client.getId() + ": " + Current_Session.current_client.getNome());
-        System.out.println(Current_Session.current_funcionario.getId() + ": " + Current_Session.current_funcionario.getNome());
+       // System.out.println(Current_Session.current_funcionario.getId() + ": " + Current_Session.current_funcionario.getNome());
     }
 
     public void AddServico(){

@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="715.0" prefWidth="883.0" stylesheets="@css/nord-light.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.CotacaoController">
+<AnchorPane prefHeight="715.0" prefWidth="883.0" stylesheets="@css/nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.CotacaoController">
    <children>
       <Pane fx:id="mainPane" layoutX="47.0" layoutY="25.0" prefHeight="715.0" prefWidth="903.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TableView fx:id="table_cotacoes" layoutX="14.0" layoutY="81.0" prefHeight="431.0" prefWidth="829.0">
+            <TableView fx:id="TCotacoes" layoutX="14.0" layoutY="81.0" prefHeight="431.0" prefWidth="858.0">
                <columns>
-                  <TableColumn fx:id="IdCliente" prefWidth="107.19998168945312" text="ID_Cliente" />
-                  <TableColumn fx:id="Utilizador" prefWidth="113.60002136230469" text="Utilizador" />
-                  <TableColumn fx:id="Data" minWidth="0.0" prefWidth="113.60002136230469" text="Data" />
-                  <TableColumn fx:id="ValorTotal" maxWidth="288.0" prefWidth="147.199951171875" text="Valor Total" />
-                  <TableColumn fx:id="Funcionario" maxWidth="288.0" prefWidth="142.4000244140625" text="Funcionario" />
-                  <TableColumn fx:id="Estado" maxWidth="288.0" prefWidth="203.20001220703125" text="Estado" />
+                  <TableColumn fx:id="IdCotacao" prefWidth="64.0" text="ID" />
+                  <TableColumn fx:id="IdUtilizadorCotacao" prefWidth="136.80001831054688" text="ID_Utilizador" />
+                  <TableColumn fx:id="UtilizadorCotacao" prefWidth="109.5999755859375" text="Utilizador" />
+                  <TableColumn fx:id="DataCotacao" minWidth="0.0" prefWidth="115.20001220703125" text="Data" />
+                  <TableColumn fx:id="ValorTotalCotacao" maxWidth="288.0" prefWidth="147.199951171875" text="Valor Total" />
+                  <TableColumn fx:id="EstadoCotacao" maxWidth="288.0" prefWidth="203.20001220703125" text="Estado" />
                </columns>
             </TableView>
             <Label layoutX="370.0" layoutY="25.0" text="Cotações">
@@ -28,7 +37,7 @@
             <Button fx:id="deleteButton" layoutX="150.0" layoutY="532.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="145.0" text="Excluir Cotação" />
          </children>
       </Pane>
-      <Pane fx:id="CriarPane" layoutX="3.0" layoutY="62.0" prefHeight="578.0" prefWidth="874.0" style="-fx-background-color: #FFFFFF;">
+      <Pane fx:id="CriarPane" layoutX="3.0" layoutY="62.0" prefHeight="578.0" prefWidth="874.0" style="-fx-background-color: #FFFFFF;" visible="false">
          <children>
             <Button layoutX="814.0" layoutY="14.0" mnemonicParsing="false" onAction="#Voltar" text="X">
                <font>
