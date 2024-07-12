@@ -52,7 +52,13 @@ public class LoginController {
                 session.setAttribute("username", username);
                 session.setAttribute("userType", "funcionario");
                 session.setAttribute("userId", funcionario.getId());
-                return "redirect:/Funcionarios";
+
+                int tipoFuncionario = funcionario.getIdTipoFuncionario();
+                if (tipoFuncionario == 4) {
+                    return "redirect:/ArmazemGestorLogistico";
+                } else if (tipoFuncionario == 1)  {
+                    return "redirect:/Armazem";
+                }
             }
         }
 

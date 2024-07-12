@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import pt.ipvc.database.entity.*;
 import pt.ipvc.database.repository.*;
 
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,13 +26,17 @@ public class ContentorController {
     }
 
     @GetMapping("/Contentores")
-    public String listarContentores(Model model){
+    public String listarContentores(Model model, HttpSession session){
         List<ContentorEntity> contentores = repo_contentor.findAll();
         List<TipoContentorEntity> tiposContentor = repo_tipoContentor.findAll();
         List<EstadoContentorEntity> estadosContentor = repo_estadoContentor.findAll();
         model.addAttribute("tiposContentor", tiposContentor);
         model.addAttribute("estadosContentor", estadosContentor);
         model.addAttribute("contentores", contentores);
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
         return "Contentores";
     }
 
@@ -99,4 +104,20 @@ public class ContentorController {
         repo_contentor.deleteById(cin);
         return "redirect:/Contentores";
     }
+
+    @GetMapping("/ContentoresGestorLogistico")
+    public String listarContentoresGestorLogistico(Model model, HttpSession session) {
+        List<ContentorEntity> contentores = repo_contentor.findAll();
+        List<TipoContentorEntity> tiposContentor = repo_tipoContentor.findAll();
+        List<EstadoContentorEntity> estadosContentor = repo_estadoContentor.findAll();
+        model.addAttribute("tiposContentor", tiposContentor);
+        model.addAttribute("estadosContentor", estadosContentor);
+        model.addAttribute("contentores", contentores);
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
+        return "ContentorGestorLogisticoArmazem";
+    }
+
 }

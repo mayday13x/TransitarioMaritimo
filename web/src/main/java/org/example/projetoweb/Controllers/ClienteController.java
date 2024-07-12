@@ -1,5 +1,6 @@
 package org.example.projetoweb.Controllers;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import pt.ipvc.database.entity.CodPostalEntity;
 import pt.ipvc.database.repository.ClienteRepository;
 import pt.ipvc.database.repository.CodPostalRepository;
 
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,18 +27,26 @@ public class ClienteController {
     }
 
     @GetMapping("/Clientes")
-    public String listarClientes(Model model){
+    public String listarClientes(Model model, HttpSession session){
         List<ClienteEntity> clientes = repo_cliente.findAll();
         List<CodPostalEntity> codPostais = repo_codPostal.findAll();
         model.addAttribute("clientes", clientes);
         model.addAttribute("codPostais", codPostais);
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
         return "Clientes";
     }
 
     @GetMapping("/inserirCliente")
-    public String showInserirCliente(Model model) {
+    public String showInserirCliente(Model model, HttpSession session) {
         List<CodPostalEntity> codPostais = repo_codPostal.findAll();
         model.addAttribute("codPostais", codPostais);
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
         return "InserirCliente";
     }
 

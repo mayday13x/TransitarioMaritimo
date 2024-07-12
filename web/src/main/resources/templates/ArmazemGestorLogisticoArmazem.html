@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Fornecedores</title>
+    <title>Armazém Logístico</title>
     <link rel="stylesheet" href="css/nord-light.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -138,9 +138,6 @@
         .buttons button:hover {
             background-color: #2980b9;
         }
-        .hidden {
-            display: none;
-        }
         /* Modal styles */
         .modal {
             display: none;
@@ -176,7 +173,7 @@
         .form-group label {
             margin-bottom: 5px;
         }
-        .form-group input, .form-group select {
+        .form-group input {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
@@ -187,16 +184,8 @@
 <body>
 <div class="nav-bar">
     <div class="menu-items">
-        <a href="/Armazem">Armazem</a>
-        <a href="/CargaArmazem">Cargas</a>
-        <a href="/Clientes">Clientes</a>
-        <a href="/Contentores">Contentores</a>
-        <a href="/Cotacao">Cotação</a>
-        <a href="/Fornecedores">Fornecedores</a>
-        <a href="/Funcionarios">Funcionários</a>
-        <a href="/Reservas">Reservas</a>
-        <a href="/Servicos">Serviços</a>
-        <a href="/Transportes">Transportes</a>
+    <a href="/ArmazemGestorLogistico">Armazéns</a>
+    <a href="/ContentoresGestorLogistico">Contentores</a>
     </div>
     <div class="user-info">
         <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
@@ -208,36 +197,30 @@
 </div>
 <div class="main-content">
     <div class="main-panel">
-        <h1>Fornecedores</h1>
+        <h1>Armazém Logístico</h1>
         <table class="table">
             <thead>
             <tr>
                 <th>Id</th>
-                <th>Nome</th>
-                <th>Nif</th>
-                <th>Rua</th>
-                <th>Localidade</th>
-                <th>Telefone</th>
+                <th>Capacidade Máxima</th>
+                <th>Descrição</th>
                 <th>Ações</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="fornecedor : ${fornecedores}">
-                <td th:text="${fornecedor.id}"></td>
-                <td th:text="${fornecedor.nome}"></td>
-                <td th:text="${fornecedor.nif}"></td>
-                <td th:text="${fornecedor.rua}"></td>
-                <td th:text="${fornecedor.codPostalByIdCodPostal.localidade}"></td>
-                <td th:text="${fornecedor.telefone}"></td>
+            <tr th:each="armazem : ${armazens}">
+                <td th:text="${armazem.id}"></td>
+                <td th:text="${armazem.capacidadeMax}"></td>
+                <td th:text="${armazem.descricao}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:attr="onclick=|showEditarFornecedorModal(${fornecedor.id}, '${fornecedor.nome}', '${fornecedor.nif}', '${fornecedor.rua}', '${fornecedor.porta}', '${fornecedor.codPostalByIdCodPostal.idCodPostal}', '${fornecedor.telefone}')|"></i>
-                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverFornecedor(${fornecedor.id})|"></i>
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarArmazemModal(${armazem.id}, '${armazem.descricao}', ${armazem.capacidadeMax})|"></i>
+                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverArmazem(${armazem.id})|"></i>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="showInserirFornecedorModal()">Inserir Fornecedor</button>
+            <button onclick="showInserirArmazemModal()">Inserir Armazém</button>
         </div>
     </div>
 </div>
@@ -246,37 +229,18 @@
 <div id="insertModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('insertModal')">&times;</span>
-        <h1>Inserir Fornecedor</h1>
-        <form action="/inserirFornecedor" method="post">
+        <h1>Inserir Armazém</h1>
+        <form action="/inserirArmazemGestorLogistico" method="post">
             <div class="form-group">
-                <label for="NomeText">Nome</label>
-                <input type="text" id="NomeText" name="nome" placeholder="Nome" required>
+                <label for="descricaoText">Descrição</label>
+                <input type="text" id="descricaoText" name="descricao" placeholder="Descrição" required>
             </div>
             <div class="form-group">
-                <label for="NifText">NIF</label>
-                <input type="text" id="NifText" name="nif" placeholder="NIF" required>
-            </div>
-            <div class="form-group">
-                <label for="RuaText">Rua</label>
-                <input type="text" id="RuaText" name="rua" placeholder="Rua" required>
-            </div>
-            <div class="form-group">
-                <label for="PortaText">Porta</label>
-                <input type="text" id="PortaText" name="porta" placeholder="Porta" required>
-            </div>
-            <div class="form-group">
-                <label for="CodPostalCombo">Código Postal</label>
-                <select id="CodPostalCombo" name="idCodPostal" required>
-                    <option th:each="codPostal : ${codPostais}" th:value="${codPostal.idCodPostal}" th:text="${codPostal.localidade}"></option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="TelefoneText">Telefone</label>
-                <input type="text" id="TelefoneText" name="telefone" placeholder="Telefone" required>
+                <label for="CapacidadeMaximaText">Capacidade Máxima</label>
+                <input type="number" id="CapacidadeMaximaText" name="capacidadeMaxima" placeholder="Capacidade Máxima" required>
             </div>
             <div class="buttons">
-                <button type="submit">Inserir Fornecedor</button>
-                <button type="button" onclick="closeModal('insertModal')">Cancelar</button>
+                <button type="submit">Registrar Armazém</button>
             </div>
         </form>
     </div>
@@ -286,38 +250,19 @@
 <div id="editModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('editModal')">&times;</span>
-        <h1>Editar Fornecedor</h1>
-        <form id="editForm" action="/editarFornecedor" method="post">
+        <h1>Editar Armazém</h1>
+        <form id="editForm" action="/editarArmazemGestorLogistico" method="post">
             <input type="hidden" id="editId" name="id">
             <div class="form-group">
-                <label for="editNomeText">Nome</label>
-                <input type="text" id="editNomeText" name="nome" placeholder="Nome" required>
+                <label for="editDescricaoText">Descrição</label>
+                <input type="text" id="editDescricaoText" name="descricao" placeholder="Descrição" required>
             </div>
             <div class="form-group">
-                <label for="editNifText">NIF</label>
-                <input type="text" id="editNifText" name="nif" placeholder="NIF" required>
-            </div>
-            <div class="form-group">
-                <label for="editRuaText">Rua</label>
-                <input type="text" id="editRuaText" name="rua" placeholder="Rua" required>
-            </div>
-            <div class="form-group">
-                <label for="editPortaText">Porta</label>
-                <input type="text" id="editPortaText" name="porta" placeholder="Porta" required>
-            </div>
-            <div class="form-group">
-                <label for="editCodPostalCombo">Código Postal</label>
-                <select id="editCodPostalCombo" name="idCodPostal" required>
-                    <option th:each="codPostal : ${codPostais}" th:value="${codPostal.idCodPostal}" th:text="${codPostal.localidade}"></option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="editTelefoneText">Telefone</label>
-                <input type="text" id="editTelefoneText" name="telefone" placeholder="Telefone" required>
+                <label for="editCapacidadeMaximaText">Capacidade Máxima</label>
+                <input type="number" id="editCapacidadeMaximaText" name="capacidadeMaxima" placeholder="Capacidade Máxima" required>
             </div>
             <div class="buttons">
                 <button type="submit">Guardar Alterações</button>
-                <button type="button" onclick="closeModal('editModal')">Cancelar</button>
             </div>
         </form>
     </div>
@@ -327,20 +272,21 @@
 <div id="confirmRemoveModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
-        <h1>Remover Fornecedor</h1>
-        <p>Tem certeza que deseja remover este fornecedor?</p>
-        <form id="removeForm" action="/removerFornecedor" method="post">
-            <input type="hidden" id="removeId" name="id">
-            <div class="buttons">
+        <h1>Remover Armazém</h1>
+        <p>Tem certeza que deseja remover este armazém?</p>
+        <div class="buttons">
+            <form id="removeForm" action="/removerArmazemGestorLogistico" method="post">
+                <input type="hidden" id="removeId" name="id">
+                <input type="hidden" name="_method" value="delete">
                 <button type="submit">Remover</button>
                 <button type="button" onclick="closeModal('confirmRemoveModal')">Cancelar</button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 
 <script>
-    function showInserirFornecedorModal() {
+    function showInserirArmazemModal() {
         document.getElementById('insertModal').style.display = "block";
     }
 
@@ -348,18 +294,14 @@
         document.getElementById(modalId).style.display = "none";
     }
 
-    function showEditarFornecedorModal(id, nome, nif, rua, porta, idCodPostal, telefone) {
+    function showEditarArmazemModal(id, descricao, capacidadeMaxima) {
         document.getElementById('editId').value = id;
-        document.getElementById('editNomeText').value = nome;
-        document.getElementById('editNifText').value = nif;
-        document.getElementById('editRuaText').value = rua;
-        document.getElementById('editPortaText').value = porta;
-        document.getElementById('editCodPostalCombo').value = idCodPostal;
-        document.getElementById('editTelefoneText').value = telefone;
+        document.getElementById('editDescricaoText').value = descricao;
+        document.getElementById('editCapacidadeMaximaText').value = capacidadeMaxima;
         document.getElementById('editModal').style.display = "block";
     }
 
-    function confirmarRemoverFornecedor(id) {
+    function confirmarRemoverArmazem(id) {
         document.getElementById('removeId').value = id;
         document.getElementById('confirmRemoveModal').style.display = "block";
     }

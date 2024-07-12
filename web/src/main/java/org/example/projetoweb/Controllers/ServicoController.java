@@ -9,6 +9,7 @@ import pt.ipvc.database.entity.*;
 import pt.ipvc.database.repository.ServicoRepository;
 import pt.ipvc.database.repository.FornecedorRepository;
 
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 import java.util.Objects;
@@ -25,11 +26,15 @@ public class ServicoController {
     }
 
     @GetMapping("/Servicos")
-    public String listarServicos(Model model){
+    public String listarServicos(Model model, HttpSession session){
         List<ServicoEntity> servicos = repo_servico.findAll();
         List<FornecedorEntity> fornecedores = fornecedor_repo.findAll();
         model.addAttribute("servicos", servicos);
         model.addAttribute("fornecedores", fornecedores);
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
         return "Servicos";
     }
 

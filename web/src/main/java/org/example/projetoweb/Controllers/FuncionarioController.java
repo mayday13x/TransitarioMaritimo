@@ -33,7 +33,7 @@ public class FuncionarioController {
         model.addAttribute("codPostais", codPostais);
         model.addAttribute("tiposFuncionario", tiposFuncionario);
 
-        // Adiciona o nome do usuário logado ao modelo
+
         String loggedInUser = (String) session.getAttribute("username");
         model.addAttribute("loggedInUser", loggedInUser);
 
@@ -41,11 +41,15 @@ public class FuncionarioController {
     }
 
     @GetMapping("/inserirFuncionario")
-    public String showAdicionarFuncionario(Model model) {
+    public String showAdicionarFuncionario(Model model, HttpSession session) {
         List<CodPostalEntity> codPostais = cod_postal_repo.findAll();
         List<TipoFuncionarioEntity> tiposFuncionario = tipo_funcionario_repo.findAll();
         model.addAttribute("codPostais", codPostais);
         model.addAttribute("tiposFuncionario", tiposFuncionario);
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
         return "InserirFuncionario";
     }
 

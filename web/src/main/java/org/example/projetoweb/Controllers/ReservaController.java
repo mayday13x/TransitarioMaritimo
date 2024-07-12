@@ -53,6 +53,10 @@ public class ReservaController {
         int clienteId = (int) session.getAttribute("userId");
         List<ReservaEntity> reservas = repo_reserva.findByIdClienteLike(clienteId);
         model.addAttribute("reservas", reservas);
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
         return "ReservasCliente";
     }
 
