@@ -554,6 +554,16 @@ public class CotacaoController implements Initializable {
         CotacaoClientePane.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
         CotacaoClientePane.setDisable(true);
 
+        CotacaoEntity cotacao = table_cotacoes.getSelectionModel().getSelectedItem();
+
+        ObservableList<ServicoEntity> servicos = FXCollections.observableArrayList(cotacao_repo.findByIdCotacao(cotacao.getId()));
+        IdServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+        FornedorServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFornecedorByIdFornecedor().getNome()));
+        ComissaoServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getComissao().toString()));
+        PrecoServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPreco().toString()));
+        DescricaoServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescricao()));
+        TableServico.setItems(servicos);
+
     }
 
     public class DoubleClickHandler implements EventHandler<MouseEvent> {
