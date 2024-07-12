@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservas</title>
+    <link rel="stylesheet" href="css/nord-light.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .nav-bar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: fixed;
+            padding-top: 20px;
+        }
+        .nav-bar a {
+            display: block;
+            color: #ecf0f1;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .nav-bar a:hover {
+            background-color: #34495e;
+        }
+        .nav-bar .menu-items {
+            flex-grow: 1;
+        }
+        .user-info {
+            padding: 15px;
+            background-color: #34495e;
+            text-align: center;
+            border-top: 1px solid #34495e;
+        }
+        .user-info p {
+            margin: 0;
+            color: #ecf0f1;
+            font-size: 16px;
+        }
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #e74c3c;
+            color: #ecf0f1;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        .logout-btn i {
+            margin-right: 8px;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+        .main-panel {
+            background-color: #FFFFFF;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .main-panel h1 {
+            text-align: center;
+            font-size: 23px;
+            margin-bottom: 20px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            background-color: #ecf0f1;
+        }
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+        .table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .table tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        .table tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .table td {
+            font-size: 14px;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-around;
+        }
+        .actions i {
+            cursor: pointer;
+            color: #3498db;
+        }
+        .actions i:hover {
+            color: #2980b9;
+        }
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .buttons button, .buttons a {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+            text-decoration: none;
+        }
+        .buttons button:hover, .buttons a:hover {
+            background-color: #2980b9;
+        }
+        .filter {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .filter input {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="nav-bar">
+    <div class="menu-items">
+        <a href="/CotacaoCliente">Cotação</a>
+        <a href="/ReservasCliente">Reservas</a>
+    </div>
+    <div class="user-info">
+        <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
+        <a href="/logout" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </a>
+    </div>
+</div>
+<div class="main-content">
+    <div class="main-panel">
+        <h1>Reservas</h1>
+        <div class="filter">
+            <input type="checkbox" id="showUnpaid" onclick="toggleUnpaid()">
+            <label for="showUnpaid">Mostrar apenas não pagas</label>
+        </div>
+        <table class="table" id="reservasTable">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Origem</th>
+                <th>Destino</th>
+                <th>Data</th>
+                <th>Estado</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="reserva : ${reservas}">
+                <td th:text="${reserva.id}"></td>
+                <td th:text="${reserva.origem}"></td>
+                <td th:text="${reserva.destino}"></td>
+                <td th:text="${reserva.data}"></td>
+                <td th:text="${reserva.estadoReservaByIdEstadoReserva.descricao}"></td>
+                <td class="actions">
+                    <i class="fas fa-dollar-sign" th:if="${reserva.estadoReservaByIdEstadoReserva.id == 2}" th:attr="onclick=|pagarReserva(${reserva.id})|"></i>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function toggleUnpaid() {
+        var table, tr, td, i, txtValue;
+        table = document.getElementById("reservasTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[4];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (document.getElementById("showUnpaid").checked) {
+                    if (txtValue !== "Pende Pagamento") {
+                        tr[i].style.display = "none";
+                    }
+                } else {
+                    tr[i].style.display = "";
+                }
+            }
+        }
+    }
+
+    function pagarReserva(id) {
+        fetch(`/pagarReserva?id=${id}`, {
+            method: 'POST'
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert("Erro ao pagar a reserva.");
+            }
+        });
+    }
+</script>
+</body>
+</html>

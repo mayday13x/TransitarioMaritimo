@@ -12,6 +12,6 @@ public interface FuncionarioRepository extends JpaRepository<FuncionarioEntity, 
     @Query("SELECT f FROM FuncionarioEntity f WHERE f.id = :id")
     FuncionarioEntity findByidLike(@Param("id") String id);
 
-    @Query("SELECT CASE WHEN COUNT(f) > 0 THEN true ELSE false END FROM FuncionarioEntity f WHERE f.utilizador = :username AND f.password = :password")
-    boolean existsByEmailAndPassword(@Param("username") String username, @Param("password") String password);
+    @Query("SELECT f FROM FuncionarioEntity f WHERE f.utilizador = :username AND f.password = :password")
+    FuncionarioEntity findByEmailAndPassword(@Param("username") String username, @Param("password") String password);
 }

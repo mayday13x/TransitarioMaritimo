@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Cotação</title>
+    <link rel="stylesheet" href="css/nord-light.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .nav-bar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: fixed;
+            padding-top: 20px;
+        }
+        .nav-bar a {
+            display: block;
+            color: #ecf0f1;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .nav-bar a:hover {
+            background-color: #34495e;
+        }
+        .nav-bar .menu-items {
+            flex-grow: 1;
+        }
+        .user-info {
+            padding: 15px;
+            background-color: #34495e;
+            text-align: center;
+            border-top: 1px solid #34495e;
+        }
+        .user-info p {
+            margin: 0;
+            color: #ecf0f1;
+            font-size: 16px;
+        }
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #e74c3c;
+            color: #ecf0f1;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        .logout-btn i {
+            margin-right: 8px;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+        .main-panel {
+            background-color: #FFFFFF;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .main-panel h1 {
+            text-align: center;
+            font-size: 23px;
+            margin-bottom: 20px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            background-color: #ecf0f1;
+        }
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+        .table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .table tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        .table tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .table td {
+            font-size: 14px;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-around;
+        }
+        .actions i {
+            cursor: pointer;
+            color: #3498db;
+        }
+        .actions i:hover {
+            color: #2980b9;
+        }
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .buttons button, .buttons a {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+            text-decoration: none;
+        }
+        .buttons button:hover, .buttons a:hover {
+            background-color: #2980b9;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="nav-bar">
+    <div class="menu-items">
+        <a href="/CotacaoCliente">Cotação</a>
+        <a href="/ReservasCliente">Reservas</a>
+    </div>
+    <div class="user-info">
+        <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
+        <a href="/logout" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </a>
+    </div>
+</div>
+<div class="main-content">
+    <div class="main-panel">
+        <h1>Cotações</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Data</th>
+                <th>Valor Total</th>
+                <th>Estado</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="cotacao : ${cotacoes}">
+                <td th:text="${cotacao.id}"></td>
+                <td th:text="${cotacao.data}"></td>
+                <td th:text="${cotacao.valorTotal}"></td>
+                <td th:text="${cotacao.estadoCotacaoByIdEstadoCotacao.descricao}"></td>
+                <td class="actions">
+                    <i class="fas fa-check" th:attr="onclick=|confirmarCotacao(${cotacao.id})|"></i>
+                    <i class="fas fa-times" th:attr="onclick=|rejeitarCotacao(${cotacao.id})|"></i>
+                    <i class="fas fa-eye" th:attr="onclick=|verServicos(${cotacao.id})|"></i>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="servicosModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('servicosModal')">&times;</span>
+        <h1>Serviços</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Descrição</th>
+                <th>Preço</th>
+            </tr>
+            </thead>
+            <tbody id="servicosTableBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function confirmarCotacao(id) {
+        fetch(`/confirmarCotacao?id=${id}`, {
+            method: 'POST'
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert("Erro ao confirmar a cotação.");
+            }
+        });
+    }
+
+    function rejeitarCotacao(id) {
+        fetch(`/rejeitarCotacao?id=${id}`, {
+            method: 'POST'
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert("Erro ao rejeitar a cotação.");
+            }
+        });
+    }
+
+    function verServicos(id) {
+        fetch(`/verServicosCotacao?id=${id}`)
+            .then(response => response.json())
+            .then(data => {
+                var servicosTableBody = document.getElementById("servicosTableBody");
+                servicosTableBody.innerHTML = "";
+                data.forEach(servico => {
+                    var row = document.createElement("tr");
+                    row.innerHTML = `<td>${servico.id}</td><td>${servico.descricao}</td><td>${servico.preco}</td>`;
+                    servicosTableBody.appendChild(row);
+                });
+                document.getElementById("servicosModal").style.display = "flex";
+            });
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('servicosModal')) {
+            closeModal('servicosModal');
+        }
+    }
+</script>
+</body>
+</html>

@@ -8,7 +8,7 @@ import pt.ipvc.database.repository.FuncionarioRepository;
 import pt.ipvc.database.repository.CodPostalRepository;
 import pt.ipvc.database.repository.TipoFuncionarioRepository;
 
-
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -25,13 +25,18 @@ public class FuncionarioController {
     }
 
     @GetMapping("/Funcionarios")
-    public String listarFuncionarios(Model model) {
+    public String listarFuncionarios(Model model, HttpSession session) {
         List<FuncionarioEntity> funcionarios = repo_funcionario.findAll();
         List<CodPostalEntity> codPostais = cod_postal_repo.findAll();
         List<TipoFuncionarioEntity> tiposFuncionario = tipo_funcionario_repo.findAll();
         model.addAttribute("funcionarios", funcionarios);
         model.addAttribute("codPostais", codPostais);
         model.addAttribute("tiposFuncionario", tiposFuncionario);
+
+        // Adiciona o nome do usuário logado ao modelo
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
         return "Funcionarios";
     }
 
