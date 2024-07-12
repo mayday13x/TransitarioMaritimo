@@ -242,6 +242,12 @@ public class CotacaoOperacionalController implements Initializable {
     @FXML
     private TableColumn<ServicoEntity, String> TDetServicosPreco;
 
+    @FXML
+    private DatePicker DataPrevFim;
+
+    @FXML
+    private DatePicker DataPrevInicio;
+
 
     // Registar reserva fields
 
@@ -273,19 +279,11 @@ public class CotacaoOperacionalController implements Initializable {
     public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
     }
+    private ServicoEntity servicoSelecionado;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-   /*     context = new AnnotationConfigApplicationContext(AppConfig.class);
-        service_repo = context.getBean(ServicoRepository.class);
-        cliente_repo = context.getBean(ClienteRepository.class);
-        carga_repo = context.getBean(CargaRepository.class);
-        cotacao_repo = context.getBean(CotacaoRepository.class);
-        tpcarga_repo = context.getBean(TipoCargaRepository.class);
-        linha_cotacao_repo = context.getBean(LinhaCotacaoRepository.class);
-        estado_cotacao_repo = context.getBean(EstadoCotacaoRepository.class);
-        //linha_cotacao_repoPK = context.getBean(LinhaCotacaoRepositoryPK.class);*/
 
        ObservableList<CotacaoEntity> cotacoes = FXCollections.observableArrayList(cotacao_repo.findByEstadoConfirmado());
 
@@ -299,6 +297,57 @@ public class CotacaoOperacionalController implements Initializable {
             EstadoCotacao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEstadoCotacaoByIdEstadoCotacao().getDescricao()));
 
             TCotacoes.setItems(cotacoes);
+
+            // Listener para seleção de cotação
+            TDetServicos.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    servicoSelecionado = newSelection;
+                    updateDatePickers();
+                }
+            });
+        }
+
+        // Listener para mudanças de data nos DatePicker
+        DataPrevInicio.valueProperty().addListener((obs, oldDate, newDate) -> saveDateChanges());
+        DataPrevFim.valueProperty().addListener((obs, oldDate, newDate) -> saveDateChanges());
+
+    }
+
+    private void updateDatePickers() {
+
+        ServicoEntity servico = TDetServicos.getSelectionModel().getSelectedItem();
+        CotacaoEntity cotacao = TCotacoes.getSelectionModel().getSelectedItem();
+
+        LinhaCotacaoEntity linha = service_repo.findLinhaCotacaoByIdServicoAndCotacao(servico.getId(), cotacao.getId());
+       // LocalDate currentDate = LocalDate.now();
+        Date datePrevIni = linha.getDataPrevInicio();
+        Date datePrevFim = linha.getDataPrevFim();
+
+        if (datePrevIni != null && datePrevFim != null) {
+            DataPrevInicio.setValue(datePrevIni.toLocalDate());
+            DataPrevFim.setValue(datePrevFim.toLocalDate());
+        }
+
+    }
+
+    private void saveDateChanges() {
+        if (servicoSelecionado != null) {
+
+            ServicoEntity servico = TDetServicos.getSelectionModel().getSelectedItem();
+            CotacaoEntity cotacao = TCotacoes.getSelectionModel().getSelectedItem();
+            LinhaCotacaoEntity linha = service_repo.findLinhaCotacaoByIdServicoAndCotacao(servico.getId(), cotacao.getId());
+
+            Date prevIni = Date.valueOf(DataPrevInicio.getValue());
+            Date prevFim = Date.valueOf(DataPrevFim.getValue());
+            System.out.println(prevIni);
+            System.out.println(prevFim);
+
+            linha.setDataPrevInicio(Date.valueOf(prevIni.toLocalDate()));
+            linha.setDataPrevFim(Date.valueOf(prevFim.toLocalDate()));
+            //linha.setDataPrevFim(DataPrevFim.getValue());
+
+            linha_cotacao_repo.save(linha);
+
         }
     }
 
@@ -378,9 +427,9 @@ public class CotacaoOperacionalController implements Initializable {
         CotacaoEntity cotacao = TCotacoes.getSelectionModel().getSelectedItem();
 
         if(Objects.equals(OrigemField.getText(), "") || Objects.equals(DestinoField.getText(), "") || Objects.isNull(DataField.getValue())
-                 || TTranspMaritimo.getSelectionModel().getSelectedItem() == null) {
+                 || DataField.getValue().isBefore(LocalDate.now()) || TTranspMaritimo.getSelectionModel().getSelectedItem() == null) {
 
-            if (DataField.getValue().isBefore(LocalDate.now())) {
+            if (!Objects.isNull(DataField.getValue()) && DataField.getValue().isBefore(LocalDate.now())) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Data Inválida!");
                 alert.setHeaderText("Data de reserva não pode ser anterior à data de hoje");
@@ -445,6 +494,7 @@ public class CotacaoOperacionalController implements Initializable {
             OrigemField.clear();
             DestinoField.clear();
             DataField.setValue(null);
+            Voltar();
 
         }
 
@@ -475,7 +525,7 @@ public class CotacaoOperacionalController implements Initializable {
     }
 
     @FXML
-    void Voltar(ActionEvent event) {
+    void Voltar() {
         CriarPane.setVisible(false);
         mainPane.setEffect(null);
         mainPane.setDisable(false);
