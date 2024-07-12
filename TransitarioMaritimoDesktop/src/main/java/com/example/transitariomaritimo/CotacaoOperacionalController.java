@@ -27,24 +27,35 @@ import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLOutput;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 import static javafx.scene.input.KeyCode.L;
 
 public class CotacaoOperacionalController implements Initializable {
 
-    public AnnotationConfigApplicationContext context;
-    private ServicoRepository service_repo;
-    private ClienteRepository cliente_repo;
-    private CargaRepository carga_repo;
-    private CotacaoRepository cotacao_repo;
-    private TipoCargaRepository tpcarga_repo;
-    private LinhaCotacaoRepository linha_cotacao_repo;
+    public AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+    private ServicoRepository service_repo = context.getBean(ServicoRepository.class);
+    private ClienteRepository cliente_repo = context.getBean(ClienteRepository.class);
+    private CargaRepository carga_repo = context.getBean(CargaRepository.class);
+    private CotacaoRepository cotacao_repo = context.getBean(CotacaoRepository.class);
+    private TipoCargaRepository tpcarga_repo = context.getBean(TipoCargaRepository.class);
+    private LinhaCotacaoRepository linha_cotacao_repo = context.getBean(LinhaCotacaoRepository.class);;
     //  private LinhaCotacaoRepositoryPK linha_cotacao_repoPK;
-    private EstadoCotacaoRepository estado_cotacao_repo;
+    private EstadoCotacaoRepository estado_cotacao_repo = context.getBean(EstadoCotacaoRepository.class);;
+    private EstadoReservaRepository reserva_estado_repo = context.getBean(EstadoReservaRepository.class);
+    private ReservaRepository reserva_repo = context.getBean(ReservaRepository.class);
+
+    private TransportemaritimoRepository transporte_repo = context.getBean(TransportemaritimoRepository.class);
+
+    /*
+    *
+    * service_repo = context.getBean(ServicoRepository.class);
+        cliente_repo = context.getBean(ClienteRepository.class);
+        carga_repo = context.getBean(CargaRepository.class);
+        cotacao_repo = context.getBean(CotacaoRepository.class);
+        tpcarga_repo = context.getBean(TipoCargaRepository.class);
+        linha_cotacao_repo = context.getBean(LinhaCotacaoRepository.class);
+        estado_cotacao_repo = context.getBean(EstadoCotacaoRepository.class);*/
 
 
     @FXML
@@ -231,6 +242,30 @@ public class CotacaoOperacionalController implements Initializable {
     @FXML
     private TableColumn<ServicoEntity, String> TDetServicosPreco;
 
+
+    // Registar reserva fields
+
+    @FXML
+    private DatePicker DataField;
+    @FXML
+    private TextField OrigemField;
+    @FXML
+    private TextField DestinoField;
+
+    //Registar reserva tabela transporte
+
+    @FXML
+    private TableView<TransportemaritimoEntity> TTranspMaritimo;
+
+    @FXML
+    private TableColumn<TransportemaritimoEntity, String> TransporteIMO;
+
+    @FXML
+    private TableColumn<TransportemaritimoEntity, String> TransportePDestino;
+
+    @FXML
+    private TableColumn<TransportemaritimoEntity, String> TransportePOrigem;
+
     public Set<ServicoEntity> selected_services = new HashSet<>();
 
     private int idCliente = 0;
@@ -242,7 +277,7 @@ public class CotacaoOperacionalController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        context = new AnnotationConfigApplicationContext(AppConfig.class);
+   /*     context = new AnnotationConfigApplicationContext(AppConfig.class);
         service_repo = context.getBean(ServicoRepository.class);
         cliente_repo = context.getBean(ClienteRepository.class);
         carga_repo = context.getBean(CargaRepository.class);
@@ -250,7 +285,7 @@ public class CotacaoOperacionalController implements Initializable {
         tpcarga_repo = context.getBean(TipoCargaRepository.class);
         linha_cotacao_repo = context.getBean(LinhaCotacaoRepository.class);
         estado_cotacao_repo = context.getBean(EstadoCotacaoRepository.class);
-        //linha_cotacao_repoPK = context.getBean(LinhaCotacaoRepositoryPK.class);
+        //linha_cotacao_repoPK = context.getBean(LinhaCotacaoRepositoryPK.class);*/
 
        ObservableList<CotacaoEntity> cotacoes = FXCollections.observableArrayList(cotacao_repo.findByEstadoConfirmado());
 
@@ -281,8 +316,9 @@ public class CotacaoOperacionalController implements Initializable {
             ObservableList<CotacaoEntity> cotacoes = FXCollections.observableArrayList(cotacao_repo.findByIdLike(cotacao.getId()));
            // ObservableList<ServicoEntity> servicos = FXCollections.observableArrayList(service_repo.);
             ObservableList<ServicoEntity> servicos = FXCollections.observableArrayList(cotacao_repo.findByIdCotacao(cotacao.getId()));
+            ObservableList<TransportemaritimoEntity> transportes = FXCollections.observableArrayList(transporte_repo.findAll());
 
-
+            //dtalhes da cotacao
             TDetalhesId.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
             TDetalhesIdUtilizador.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIdCliente().toString()));
             TDetalhesUtilizador.setCellValueFactory(data -> new SimpleStringProperty((data.getValue().getClienteByIdCliente()).getNome()));
@@ -292,13 +328,19 @@ public class CotacaoOperacionalController implements Initializable {
 
             TDetalhesCotacao.setItems(cotacoes);
 
-
-           // IdServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
-           // FornedorServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFornecedorByIdFornecedor().getNome()));
-           // ComissaoServico.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getComissao().toString()));
+            //servicos da cotacao selecionada
             TDetServicosPreco.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPreco().toString()));
             TDetServicosDescricao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescricao()));
             TDetServicos.setItems(servicos);
+
+            //transportes maritimos disponiveis
+
+            TransporteIMO.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getImo()));
+            TransportePOrigem.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPortoOrigem()));
+            TransportePDestino.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPortoDestino()));
+
+            TTranspMaritimo.setItems(transportes);
+
 
             CriarPane.setVisible(true);
             mainPane.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
@@ -329,7 +371,85 @@ public class CotacaoOperacionalController implements Initializable {
     @FXML
     void RegistarReserva(ActionEvent event) {
 
+       // context = new AnnotationConfigApplicationContext(AppConfig.class);
 
+       // reserva_repo = context.getBean(ReservaRepository.class);
+
+        CotacaoEntity cotacao = TCotacoes.getSelectionModel().getSelectedItem();
+
+        if(Objects.equals(OrigemField.getText(), "") || Objects.equals(DestinoField.getText(), "") || Objects.isNull(DataField.getValue())
+                 || TTranspMaritimo.getSelectionModel().getSelectedItem() == null) {
+
+            if (DataField.getValue().isBefore(LocalDate.now())) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Data Inválida!");
+                alert.setHeaderText("Data de reserva não pode ser anterior à data de hoje");
+                alert.setContentText("Escolha uma data válida!");
+
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Campos Inválidos!");
+                alert.setHeaderText("Campos por preencher ou não selecionados");
+                alert.setContentText("Preencha todos os campos e tente novamente!");
+
+                alert.showAndWait();
+            }
+
+
+        } else {
+
+            ReservaEntity novareserva = new ReservaEntity();
+            novareserva.setOrigem(OrigemField.getText());
+            novareserva.setDestino(DestinoField.getText());
+            novareserva.setData(Date.valueOf(DataField.getValue()));
+            novareserva.setIdCliente(cotacao.getIdCliente());
+
+            EstadoReservaEntity estadoreserva;
+            estadoreserva = reserva_estado_repo.findByDescricaoLike("Pende pagamento");
+
+            ClienteEntity cliente = new ClienteEntity();
+            cliente = cliente_repo.findByidLike(cotacao.getIdCliente().toString());
+
+            novareserva.setIdEstadoReserva(estadoreserva.getId());  // 2 - Pende pagamento
+            novareserva.setIdFuncionario(Current_Session.current_funcionario.getId());
+            novareserva.setEstadoReservaByIdEstadoReserva(estadoreserva);
+            novareserva.setFuncionarioByIdFuncionario(Current_Session.current_funcionario);
+            novareserva.setClienteByIdCliente(cliente);
+            novareserva.setIdCotacao(cotacao.getId());
+            novareserva.setCotacaoByIdCotacao(cotacao);
+
+            //add transporte
+            TransportemaritimoEntity transporte = TTranspMaritimo.getSelectionModel().getSelectedItem();
+            novareserva.setIdTransporteMaritimo(transporte.getId());
+            novareserva.setTransportemaritimoByIdTransporteMaritimo(transporte);
+
+
+            try {
+                reserva_repo.save(novareserva);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sucesso!");
+                alert.setHeaderText("Registo efetuado com sucesso!");
+                alert.showAndWait();
+
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Erro ao criar reserva!");
+                alert.setHeaderText("Ocorreu um erro! A reserva não foi criada!");
+                alert.showAndWait();
+            }
+
+            OrigemField.clear();
+            DestinoField.clear();
+            DataField.setValue(null);
+
+        }
+
+    //    ObservableList<ReservaEntity> reservasAtualizadas = FXCollections.observableArrayList(reserva_repo.findAll());
+    //    Table.setItems(reservasAtualizadas);
 
     }
 
