@@ -14,10 +14,12 @@ public class ContentorEntity {
     private String localAtual;
     private Integer tipoContentor;
     private Integer idTransporteMaritimo;
+    private Integer idArmazem;
     private Collection<CargaEntity> cargasByCin;
     private EstadoContentorEntity estadoContentorByIdEstadoContentor;
     private TipoContentorEntity tipoContentorByTipoContentor;
     private TransportemaritimoEntity transportemaritimoByIdTransporteMaritimo;
+    private ArmazemEntity armazemByIdArmazem;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -90,6 +92,16 @@ public class ContentorEntity {
         this.idTransporteMaritimo = idTransporteMaritimo;
     }
 
+    @Basic
+    @Column(name = "id_armazem", nullable = true, insertable=false, updatable=false)
+    public Integer getIdArmazem() {
+        return idArmazem;
+    }
+
+    public void setIdArmazem(Integer idArmazem ) {
+        this.idArmazem= idArmazem;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -160,5 +172,15 @@ public class ContentorEntity {
 
     public void setTransportemaritimoByIdTransporteMaritimo(TransportemaritimoEntity transportemaritimoByIdTransporteMaritimo) {
         this.transportemaritimoByIdTransporteMaritimo = transportemaritimoByIdTransporteMaritimo;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_armazem", referencedColumnName = "id")
+    public ArmazemEntity getArmazemByIdArmazem() {
+        return armazemByIdArmazem;
+    }
+
+    public void setArmazemByIdArmazem(ArmazemEntity armazemByIdArmazem) {
+        this.armazemByIdArmazem = armazemByIdArmazem;
     }
 }

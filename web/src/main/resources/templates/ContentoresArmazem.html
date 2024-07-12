@@ -152,10 +152,12 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
         }
         .modal-content {
             background-color: #fefefe;
-            margin: 15% auto;
+            margin: auto;
             padding: 20px;
             border: 1px solid #888;
             width: 40%;
@@ -187,16 +189,7 @@
 <body>
 <div class="nav-bar">
     <div class="menu-items">
-        <a href="/Armazem">Armazem</a>
-        <a href="/CargaArmazem">Cargas</a>
-        <a href="/Clientes">Clientes</a>
-        <a href="/Contentores">Contentores</a>
-        <a href="/Cotacao">Cotação</a>
-        <a href="/Fornecedores">Fornecedores</a>
-        <a href="/Funcionarios">Funcionários</a>
-        <a href="/Reservas">Reservas</a>
-        <a href="/Servicos">Serviços</a>
-        <a href="/Transportes">Transportes</a>
+        <a href="/ContentoresArmazem">Contentores</a>
     </div>
     <div class="user-info">
         <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
@@ -228,6 +221,8 @@
                 <td class="actions">
                     <i class="fas fa-edit" th:attr="onclick=|showEditarContentorModal(${contentor.cin}, '${contentor.capacidade}', '${contentor.pesoMax}', '${contentor.localAtual}', ${contentor.tipoContentor}, ${contentor.idEstadoContentor}, ${contentor.idArmazem})|"></i>
                     <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverContentor(${contentor.cin})|"></i>
+                    <i class="fas fa-truck" th:attr="onclick=|registrarSaidaContentor(${contentor.cin})|"></i>
+                    <i class="fas fa-box" th:attr="onclick=|verCargas(${contentor.cin})|"></i>
                 </td>
             </tr>
             </tbody>
@@ -243,7 +238,7 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal('insertModal')">&times;</span>
         <h1>Inserir Contentor</h1>
-        <form action="/inserirContentor" method="post">
+        <form action="/inserirContentorFuncionario" method="post">
             <div class="form-group">
                 <label for="CapacidadeText">Capacidade</label>
                 <input type="text" id="CapacidadeText" name="capacidade" placeholder="Capacidade" required>
@@ -258,13 +253,13 @@
             </div>
             <div class="form-group">
                 <label for="TipoContentorCombo">Tipo de Contentor</label>
-                <select id="TipoContentorCombo" name="tipoContentor" required>
+                <select id="TipoContentorCombo" name="tipoContentorId" required>
                     <option th:each="tipo : ${tiposContentor}" th:value="${tipo.id}" th:text="${tipo.descricao}"></option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="EstadoContentorCombo">Estado Contentor</label>
-                <select id="EstadoContentorCombo" name="estadoContentor" required>
+                <select id="EstadoContentorCombo" name="estadoContentorId" required>
                     <option th:each="estado : ${estadosContentor}" th:value="${estado.id}" th:text="${estado.descricao}"></option>
                 </select>
             </div>
@@ -287,7 +282,7 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal('editModal')">&times;</span>
         <h1>Editar Contentor</h1>
-        <form id="editForm" action="/editarContentor" method="post">
+        <form id="editForm" action="/editarContentorArmazem" method="post">
             <input type="hidden" id="editCin" name="cin">
             <div class="form-group">
                 <label for="editCapacidadeText">Capacidade</label>
@@ -332,7 +327,7 @@
         <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
         <h1>Remover Contentor</h1>
         <p>Tem certeza que deseja remover este contentor?</p>
-        <form id="removeForm" action="/removerContentor" method="post">
+        <form id="removeForm" action="/removerContentorArmazem" method="post">
             <input type="hidden" id="removeCin" name="cin">
             <div class="buttons">
                 <button type="submit">Remover</button>
@@ -342,29 +337,85 @@
     </div>
 </div>
 
+<!-- Confirmar Saída Modal -->
+<div id="confirmSaidaModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmSaidaModal')">&times;</span>
+        <h1>Registrar Saída do Contentor</h1>
+        <p>Tem certeza que deseja registrar a saída deste contentor?</p>
+        <form id="saidaForm" action="/registrarSaidaContentor" method="post">
+            <input type="hidden" id="saidaCin" name="cin">
+            <div class="buttons">
+                <button type="submit">Registrar Saída</button>
+                <button type="button" onclick="closeModal('confirmSaidaModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Ver Cargas Modal -->
+<div id="cargasModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('cargasModal')">&times;</span>
+        <h1>Cargas</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Descrição</th>
+                <th>Peso</th>
+                <th>Volume</th>
+            </tr>
+            </thead>
+            <tbody id="cargasTableBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <script>
     function showInserirContentorModal() {
-        document.getElementById('insertModal').style.display = "block";
+        document.getElementById('insertModal').style.display = "flex";
     }
 
     function closeModal(modalId) {
         document.getElementById(modalId).style.display = "none";
     }
 
-    function showEditarContentorModal(cin, capacidade, pesoMaximo, localAtual, tipoContentor, estadoContentor, armazemId) {
+    function showEditarContentorModal(cin, capacidade, pesoMaximo, localAtual, tipoContentor, estadoContentor, idArmazem) {
         document.getElementById('editCin').value = cin;
         document.getElementById('editCapacidadeText').value = capacidade;
         document.getElementById('editPesoMaximoText').value = pesoMaximo;
         document.getElementById('editLocalAtualText').value = localAtual;
         document.getElementById('editTipoContentorCombo').value = tipoContentor;
         document.getElementById('editEstadoContentorCombo').value = estadoContentor;
-        document.getElementById('editArmazemIdCombo').value = armazemId;
-        document.getElementById('editModal').style.display = "block";
+        document.getElementById('editArmazemCombo').value = idArmazem;
+        document.getElementById('editModal').style.display = "flex";
     }
 
     function confirmarRemoverContentor(cin) {
         document.getElementById('removeCin').value = cin;
-        document.getElementById('confirmRemoveModal').style.display = "block";
+        document.getElementById('confirmRemoveModal').style.display = "flex";
+    }
+
+    function registrarSaidaContentor(cin) {
+        document.getElementById('saidaCin').value = cin;
+        document.getElementById('confirmSaidaModal').style.display = "flex";
+    }
+
+    function verCargas(cin) {
+        fetch(`/verCargasContentor?cin=${cin}`)
+            .then(response => response.json())
+            .then(data => {
+                var cargasTableBody = document.getElementById("cargasTableBody");
+                cargasTableBody.innerHTML = "";
+                data.forEach(carga => {
+                    var row = document.createElement("tr");
+                    row.innerHTML = `<td>${carga.id}</td><td>${carga.descricao}</td><td>${carga.peso}</td><td>${carga.volume}</td>`;
+                    cargasTableBody.appendChild(row);
+                });
+                document.getElementById("cargasModal").style.display = "flex";
+            });
     }
 
     window.onclick = function(event) {
@@ -374,6 +425,10 @@
             closeModal('editModal');
         } else if (event.target == document.getElementById('confirmRemoveModal')) {
             closeModal('confirmRemoveModal');
+        } else if (event.target == document.getElementById('cargasModal')) {
+            closeModal('cargasModal');
+        } else if (event.target == document.getElementById('confirmSaidaModal')) {
+            closeModal('confirmSaidaModal');
         }
     }
 </script>

@@ -2,6 +2,7 @@ package pt.ipvc.database.repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -26,9 +27,12 @@ public interface CargaRepository extends JpaRepository<CargaEntity, Integer> {
     CargaEntity findByID(@Param("armazemId") int armazemId);
 
 
-    //mostrar a carga de uma determinada cotacao
     @Query("SELECT c FROM CargaEntity c join CotacaoEntity co on c.idCotacao = co.id  where co.id = :cotacaoId")
     List<CargaEntity> findByIdCotacao(@Param("cotacaoId") int cotacaoId);
+
+    @Modifying
+    @Query("UPDATE CargaEntity c SET c.idArmazem = null WHERE c.idContentor = :contentorId")
+    void updateArmazemIdByContentorId(int contentorId);
 
 
 }
