@@ -5,8 +5,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import pt.ipvc.database.entity.ClienteEntity;
+import pt.ipvc.database.entity.FuncionarioEntity;
 import pt.ipvc.database.repository.ClienteRepository;
 import pt.ipvc.database.repository.FuncionarioRepository;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
@@ -29,21 +33,45 @@ public class LoginController {
             @RequestParam("username") String username,
             @RequestParam("password") String password,
             @RequestParam("userType") String userType,
-            Model model) {
+            Model model,
+            HttpSession session) {
 
         if ("cliente".equals(userType)) {
             // Lógica de autenticação para cliente
-            if (clienteRepo.existsByEmailAndPassword(username, password)) {
-                return "redirect:/Clientes";
+            ClienteEntity cliente = clienteRepo.findByEmailAndPassword(username, password);
+            if (cliente != null) {
+                session.setAttribute("username", username);
+                session.setAttribute("userType", "cliente");
+                session.setAttribute("userId", cliente.getId()); // Store client ID in session
+                return "redirect:/CotacaoCliente";
             }
         } else if ("funcionario".equals(userType)) {
             // Lógica de autenticação para funcionário
-            if (funcionarioRepo.existsByEmailAndPassword(username, password)) {
+            FuncionarioEntity funcionario = funcionarioRepo.findByEmailAndPassword(username, password);
+            if (funcionario != null) {
+                session.setAttribute("username", username);
+                session.setAttribute("userType", "funcionario");
+                session.setAttribute("userId", funcionario.getId());
                 return "redirect:/Funcionarios";
             }
         }
 
         model.addAttribute("error", "Credenciais inválidas!");
         return "login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
+
+    public static String getLoggedInUser(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        String userType = (String) session.getAttribute("userType");
+        if (username != null && userType != null) {
+            return userType + ": " + username;
+        }
+        return "No user logged in";
     }
 }

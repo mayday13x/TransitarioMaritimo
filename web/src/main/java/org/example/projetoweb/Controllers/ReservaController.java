@@ -1,6 +1,8 @@
 package org.example.projetoweb.Controllers;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import pt.ipvc.database.entity.*;
 import pt.ipvc.database.repository.*;
 
+import jakarta.servlet.http.HttpSession;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +32,7 @@ public class ReservaController {
     }
 
     @GetMapping("/Reservas")
-    public String listarReservas(Model model){
+    public String listarReservas(Model model, HttpSession session){
         List<ReservaEntity> reservas = repo_reserva.findAll();
         List<EstadoReservaEntity> estados = reserva_estado_repo.findAll();
         List<FuncionarioEntity> funcionarios = funcionario_repo.findAll();
@@ -38,7 +41,19 @@ public class ReservaController {
         model.addAttribute("estados", estados);
         model.addAttribute("funcionarios", funcionarios);
         model.addAttribute("clientes", clientes);
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
         return "Reservas";
+    }
+
+    @GetMapping("/ReservasCliente")
+    public String listarReservasCliente(Model model, HttpSession session) {
+        int clienteId = (int) session.getAttribute("userId");
+        List<ReservaEntity> reservas = repo_reserva.findByIdClienteLike(clienteId);
+        model.addAttribute("reservas", reservas);
+        return "ReservasCliente";
     }
 
     @PostMapping("/inserirReserva")
@@ -109,5 +124,17 @@ public class ReservaController {
     public String removerReserva(@RequestParam int id) {
         repo_reserva.deleteById(id);
         return "redirect:/Reservas";
+    }
+
+    @PostMapping("/pagarReserva")
+    @Transactional
+    public String pagarReserva(@RequestParam int id) {
+        ReservaEntity reserva = repo_reserva.findById(id).orElse(null);
+        if (reserva != null) {
+            EstadoReservaEntity estadoReserva = reserva_estado_repo.findById(1).orElse(null); // Assume 2 is the paid state
+            reserva.setEstadoReservaByIdEstadoReserva(estadoReserva);
+            repo_reserva.save(reserva);
+        }
+        return "redirect:/ReservasCliente";
     }
 }

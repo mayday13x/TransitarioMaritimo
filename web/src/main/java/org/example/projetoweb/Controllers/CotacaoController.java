@@ -6,10 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pt.ipvc.database.entity.*;
 import pt.ipvc.database.repository.*;
+import org.example.projetoweb.Dto.ServicoDto;
 
+import jakarta.servlet.http.HttpSession;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class CotacaoController {
@@ -35,18 +38,32 @@ public class CotacaoController {
     }
 
     @GetMapping("/Cotacao")
-    public String listarCotacoes(Model model) {
+    public String listarCotacoes(Model model, HttpSession session) {
         List<CotacaoEntity> cotacoes = repo_cotacao.findAll();
         model.addAttribute("cotacoes", cotacoes);
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
         return "Cotacao";
+    }
+
+    @GetMapping("/CotacaoCliente")
+    public String listarCotacoesCliente(Model model, HttpSession session) {
+        int clienteId = (int) session.getAttribute("userId");
+        List<CotacaoEntity> cotacoes = repo_cotacao.findByIdClienteLike(clienteId);
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute("cotacoes", cotacoes);
+        return "CotacaoCliente";
     }
 
     @GetMapping("/inserirCotacao")
     public String showInserirCotacaoForm(Model model) {
         model.addAttribute("fornecedores", repo_fornecedor.findAll());
         model.addAttribute("clientes", repo_cliente.findAll());
-        model.addAttribute("tiposCarga", repo_tipoCarga.findAll());
-        model.addAttribute("servicos", repo_servico.findAll());
+        model.addAttribute("cargas", repo_carga.findAll());
+        model.addAttribute("tipoCargas", repo_tipoCarga.findAll());
+
         return "InserirCotacao";
     }
 
@@ -113,38 +130,45 @@ public class CotacaoController {
             repo_cotacao.save(novaCotacao);
         }
 
-        return "redirect:/Cotacao";
+        return "redirect:/CotacaoCliente";
     }
 
-    @PostMapping("/editarCotacao")
-    public String editarCotacao(
-            @RequestParam int id,
-            @RequestParam int idCliente,
-            @RequestParam int idEstadoCotacao,
-            @RequestParam Date data,
-            @RequestParam double valorTotal) {
-
+    @PostMapping("/confirmarCotacao")
+    @Transactional
+    public String confirmarCotacao(@RequestParam int id) {
         CotacaoEntity cotacao = repo_cotacao.findById(id).orElse(null);
-        EstadoCotacaoEntity estadoCotacao = repo_estadoCotacao.findById(idEstadoCotacao).orElse(null);
-
-        if (cotacao != null && estadoCotacao != null) {
-            cotacao.setIdCliente(idCliente);
+        if (cotacao != null) {
+            EstadoCotacaoEntity estadoCotacao = repo_estadoCotacao.findById(2).orElse(null); // Assume 2 is the confirmed state
             cotacao.setEstadoCotacaoByIdEstadoCotacao(estadoCotacao);
-            cotacao.setData(data);
-            cotacao.setValorTotal(valorTotal);
-
             repo_cotacao.save(cotacao);
         }
-
-        return "redirect:/Cotacao";
+        return "redirect:/CotacaoCliente";
     }
 
-    @DeleteMapping("/removerCotacao")
-    @ResponseBody
+    @PostMapping("/rejeitarCotacao")
     @Transactional
-    public String removerCotacao(@RequestParam("id") int id) {
-        // Remover a cotação (cascata remove as linhas de cotação e cargas associadas)
-        repo_cotacao.deleteById(id);
-        return "Cotação removida com sucesso";
+    public String rejeitarCotacao(@RequestParam int id) {
+        CotacaoEntity cotacao = repo_cotacao.findById(id).orElse(null);
+        if (cotacao != null) {
+            EstadoCotacaoEntity estadoCotacao = repo_estadoCotacao.findById(3).orElse(null); // Assume 3 is the rejected state
+            cotacao.setEstadoCotacaoByIdEstadoCotacao(estadoCotacao);
+            repo_cotacao.save(cotacao);
+        }
+        return "redirect:/CotacaoCliente";
+    }
+
+    @GetMapping("/verServicosCotacao")
+    @ResponseBody
+    public List<ServicoDto> verServicosCotacao(@RequestParam int id) {
+        List<ServicoEntity> servicos = repo_servico.findByIdCotacao(id);
+        return servicos.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    private ServicoDto convertToDTO(ServicoEntity servico) {
+        ServicoDto dto = new ServicoDto();
+        dto.setId(servico.getId());
+        dto.setDescricao(servico.getDescricao());
+        dto.setPreco(servico.getPreco());
+        return dto;
     }
 }
