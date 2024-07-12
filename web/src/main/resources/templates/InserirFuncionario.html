@@ -128,7 +128,7 @@
                 <div>
                     <label for="CodPostalCombo">Localidade</label>
                     <select id="CodPostalCombo" name="localidade">
-                        <option th:each="codPostal : ${codPostais}" th:value="${codPostal.idCodPostal}" th:text="${codPostal.localidade}"></option>
+                        <option th:each="codPostal : ${codPostais}" th:value="${codPostal.localidade}" th:text="${codPostal.localidade}"></option>
                     </select>
                 </div>
                 <div>
@@ -144,7 +144,7 @@
                 <div>
                     <label for="TipoFuncionarioCombo">Tipo de Funcionario</label>
                     <select id="TipoFuncionarioCombo" name="tipoFuncionario">
-                        <option th:each="tipo : ${tiposFuncionario}" th:value="${tipo.id}" th:text="${tipo.descricao}"></option>
+                        <option th:each="tipo : ${tiposFuncionario}" th:value="${tipo.descricao}" th:text="${tipo.descricao}"></option>
                     </select>
                 </div>
             </div>

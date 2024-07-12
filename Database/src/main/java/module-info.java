@@ -11,6 +11,7 @@ open module pt.ipvc.database {
     requires spring.beans;
     requires spring.jdbc;
     requires spring.data.commons;
+    requires spring.tx;
 
 
     exports pt.ipvc.database.repository;

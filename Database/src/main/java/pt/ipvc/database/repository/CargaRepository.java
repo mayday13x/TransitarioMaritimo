@@ -25,8 +25,10 @@ public interface CargaRepository extends JpaRepository<CargaEntity, Integer> {
     @Query("SELECT c FROM CargaEntity c where :armazemId = c.id")
     CargaEntity findByID(@Param("armazemId") int armazemId);
 
+
     //mostrar a carga de uma determinada cotacao
     @Query("SELECT c FROM CargaEntity c join CotacaoEntity co on c.idCotacao = co.id  where co.id = :cotacaoId")
     List<CargaEntity> findByIdCotacao(@Param("cotacaoId") int cotacaoId);
+
 
 }

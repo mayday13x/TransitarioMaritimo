@@ -12,4 +12,6 @@ public interface ClienteRepository extends JpaRepository<ClienteEntity, Integer>
     @Query("SELECT c FROM ClienteEntity c WHERE c.id = :id")
     ClienteEntity findByidLike(@Param("id") String id);
 
+    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM ClienteEntity c WHERE c.utilizador = :username AND c.password = :password")
+    boolean existsByEmailAndPassword(@Param("username") String username, @Param("password") String password);
 }
