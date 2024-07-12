@@ -18,8 +18,11 @@
             background-color: #2c3e50;
             color: #ecf0f1;
             height: 100vh;
-            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             position: fixed;
+            padding-top: 20px;
         }
         .nav-bar a {
             display: block;
@@ -30,6 +33,39 @@
         }
         .nav-bar a:hover {
             background-color: #34495e;
+        }
+        .nav-bar .menu-items {
+            flex-grow: 1;
+        }
+        .user-info {
+            padding: 15px;
+            background-color: #34495e;
+            text-align: center;
+            border-top: 1px solid #34495e;
+        }
+        .user-info p {
+            margin: 0;
+            color: #ecf0f1;
+            font-size: 16px;
+        }
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #e74c3c;
+            color: #ecf0f1;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        .logout-btn i {
+            margin-right: 8px;
         }
         .main-content {
             margin-left: 250px;
@@ -150,16 +186,25 @@
 </head>
 <body>
 <div class="nav-bar">
-    <a href="/Armazem">Armazem</a>
-    <a href="/CargaArmazem">Cargas</a>
-    <a href="/Clientes">Clientes</a>
-    <a href="/Contentores">Contentores</a>
-    <a href="/Cotacao">Cotação</a>
-    <a href="/Fornecedores">Fornecedores</a>
-    <a href="/Funcionarios">Funcionários</a>
-    <a href="/Reservas">Reservas</a>
-    <a href="/Servicos">Serviços</a>
-    <a href="/Transportes">Transportes</a>
+    <div class="menu-items">
+        <a href="/Armazem">Armazem</a>
+        <a href="/CargaArmazem">Cargas</a>
+        <a href="/Clientes">Clientes</a>
+        <a href="/Contentores">Contentores</a>
+        <a href="/Cotacao">Cotação</a>
+        <a href="/Fornecedores">Fornecedores</a>
+        <a href="/Funcionarios">Funcionários</a>
+        <a href="/Reservas">Reservas</a>
+        <a href="/Servicos">Serviços</a>
+        <a href="/Transportes">Transportes</a>
+    </div>
+    <div class="user-info">
+        <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
+        <a href="/logout" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </a>
+    </div>
 </div>
 <div class="main-content">
     <div class="main-panel">

@@ -9,8 +9,10 @@ import pt.ipvc.database.entity.*;
 import pt.ipvc.database.repository.TransportemaritimoRepository;
 import pt.ipvc.database.repository.FuncionarioRepository;
 
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class TransporteController {
@@ -24,11 +26,18 @@ public class TransporteController {
     }
 
     @GetMapping("/Transportes")
-    public String listarTransportes(Model model){
+    public String listarTransportes(Model model, HttpSession session){
         List<TransportemaritimoEntity> transportes = repo_transporte.findAll();
         List<FuncionarioEntity> funcionarios = funcionario_repo.findAll();
+        List<FuncionarioEntity> filteredFuncionarios = funcionarios.stream()
+                .filter(funcionario -> funcionario.getTipoFuncionarioByIdTipoFuncionario().getId() == 6)
+                .toList();
         model.addAttribute("transportes", transportes);
-        model.addAttribute("funcionarios", funcionarios);
+        model.addAttribute("funcionarios", filteredFuncionarios);
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
         return "Transportes";
     }
 

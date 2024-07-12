@@ -1,5 +1,6 @@
 package org.example.projetoweb.Controllers;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import pt.ipvc.database.entity.*;
 import pt.ipvc.database.repository.*;
 
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +34,7 @@ public class CargaController {
     }
 
     @GetMapping("/CargaArmazem")
-    public String listarCargas(Model model) {
+    public String listarCargas(Model model, HttpSession session) {
         List<CargaEntity> cargas = repo_carga.findAll();
         model.addAttribute("reservas", repo_reserva.findAll());
         model.addAttribute("contentores", repo_contentor.findAll());
@@ -40,16 +42,24 @@ public class CargaController {
         model.addAttribute("tiposCarga", repo_tipoCarga.findAll());
         model.addAttribute("cotacoes", repo_cotacao.findAll());
         model.addAttribute("cargas", cargas);
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
         return "CargaArmazem";
     }
 
     @GetMapping("/inserirCarga")
-    public String showInserirCargaForm(Model model) {
+    public String showInserirCargaForm(Model model, HttpSession session) {
         model.addAttribute("reservas", repo_reserva.findAll());
         model.addAttribute("contentores", repo_contentor.findAll());
         model.addAttribute("armazens", repo_armazem.findAll());
         model.addAttribute("tiposCarga", repo_tipoCarga.findAll());
         model.addAttribute("cotacoes", repo_cotacao.findAll());
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
         return "InserirCarga";
     }
 

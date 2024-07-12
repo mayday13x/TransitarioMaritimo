@@ -10,6 +10,7 @@ import pt.ipvc.database.entity.FornecedorEntity;
 import pt.ipvc.database.repository.CodPostalRepository;
 import pt.ipvc.database.repository.FornecedorRepository;
 
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,11 +26,15 @@ public class FornecedorController {
     }
 
     @GetMapping("/Fornecedores")
-    public String listarFornecedores(Model model){
+    public String listarFornecedores(Model model, HttpSession session){
         List<FornecedorEntity> fornecedores = repo_fornecedor.findAll();
         List<CodPostalEntity> codPostais = repo_codPostal.findAll();
         model.addAttribute("fornecedores", fornecedores);
         model.addAttribute("codPostais", codPostais);
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
         return "Fornecedores";
     }
 

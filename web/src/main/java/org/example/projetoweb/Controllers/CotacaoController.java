@@ -58,11 +58,14 @@ public class CotacaoController {
     }
 
     @GetMapping("/inserirCotacao")
-    public String showInserirCotacaoForm(Model model) {
+    public String showInserirCotacaoForm(Model model, HttpSession session) {
         model.addAttribute("fornecedores", repo_fornecedor.findAll());
         model.addAttribute("clientes", repo_cliente.findAll());
         model.addAttribute("cargas", repo_carga.findAll());
         model.addAttribute("tipoCargas", repo_tipoCarga.findAll());
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
 
         return "InserirCotacao";
     }
