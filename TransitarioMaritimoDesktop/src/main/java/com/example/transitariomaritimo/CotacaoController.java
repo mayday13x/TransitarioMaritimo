@@ -364,7 +364,7 @@ public class CotacaoController implements Initializable {
              CotacaoEntity cotacao = new CotacaoEntity();
              EstadoCotacaoEntity estadoCotacao = estado_cotacao_repo.findByDescricaoLike("Em analise");
              cotacao.setIdCliente(clienteSelecionado().getId());
-             cotacao.setIdEstadoCotacao(3);
+             cotacao.setIdEstadoCotacao(estadoCotacao.getId());
              cotacao.setEstadoCotacaoByIdEstadoCotacao(estadoCotacao);
              cotacao.setData(Date.valueOf(LocalDate.now()));
              cotacao.setClienteByIdCliente(TableClientes.getSelectionModel().getSelectedItem());
@@ -377,13 +377,15 @@ public class CotacaoController implements Initializable {
             carga.setIdCotacao(cotacao.getId());
             carga.setNome(NomeCarga.getText());
             carga.setQuantidade(Integer.parseInt(QtdCarga.getText()));
+
             Double altura = Double.parseDouble(AlturaCarga.getText());
             Double comp = Double.parseDouble(CompCarga.getText());
             Double largura = Double.parseDouble(LarguraCarga.getText());
+
             carga.setVolume(altura * comp * largura);
             carga.setPeso(Double.parseDouble(PesoCarga.getText()));
             carga.setIdTipoCarga(tpcarga_repo.findByDescLike(TipoCarga.getSelectionModel().getSelectedItem()).getId());
-            TipoCargaEntity cargaEntity = tpcarga_repo.findByDescLike(TipoCarga.getSelectionModel().getSelectedItem());;
+            TipoCargaEntity cargaEntity = tpcarga_repo.findByDescLike(TipoCarga.getSelectionModel().getSelectedItem());
             carga.setTipoCargaByIdTipoCarga(cargaEntity);
             carga.setObservacoes(Observacoes.getText());
             carga.setCotacaoByIdCotacao(cotacao);
@@ -407,10 +409,11 @@ public class CotacaoController implements Initializable {
 
             }
 
+            System.out.println(valorTotal);
+
             cotacao.setValorTotal(valorTotal);
             cotacao_repo.save(cotacao);
 
-            System.out.println(valorTotal);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Sucesso");

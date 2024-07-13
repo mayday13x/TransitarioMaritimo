@@ -473,9 +473,17 @@ public class CotacaoOperacionalController implements Initializable {
             novareserva.setIdTransporteMaritimo(transporte.getId());
             novareserva.setTransportemaritimoByIdTransporteMaritimo(transporte);
 
+            //atualizar id_reserva em carga
+
+          //  List<CargaEntity> cargas = carga_repo.findByIdCotacao(cotacao.getId());
 
             try {
                 reserva_repo.save(novareserva);
+
+              /*  for (CargaEntity carga : cargas) {
+                    carga.setIdReserva(novareserva.getId());
+                    carga_repo.save(carga);
+                }*/
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Sucesso!");
