@@ -25,6 +25,7 @@ public class ReservaController {
     private final CotacaoRepository repo_cotacao;
     private final TransportemaritimoRepository repo_transporte;
     private final LinhaCotacaoRepository linhaCotacaoRepository;
+    private final ServicoRepository repo_servico;
 
     public ReservaController(
             ReservaRepository repo_reserva,
@@ -33,7 +34,9 @@ public class ReservaController {
             ClienteRepository cliente_repo,
             CotacaoRepository repo_cotacao,
             TransportemaritimoRepository repo_transporte,
-            LinhaCotacaoRepository linhaCotacaoRepository) {
+            LinhaCotacaoRepository linhaCotacaoRepository,
+            ServicoRepository repo_servico
+    ) {
         this.repo_reserva = repo_reserva;
         this.reserva_estado_repo = reserva_estado_repo;
         this.funcionario_repo = funcionario_repo;
@@ -41,20 +44,24 @@ public class ReservaController {
         this.repo_cotacao = repo_cotacao;
         this.repo_transporte = repo_transporte;
         this.linhaCotacaoRepository = linhaCotacaoRepository;
+        this.repo_servico = repo_servico;
     }
 
     //Admin
 
     @GetMapping("/Reservas/Admin")
-    public String listarReservas(Model model, HttpSession session){
+    public String listarReservas(Model model, HttpSession session) {
         List<ReservaEntity> reservas = repo_reserva.findAll();
         List<EstadoReservaEntity> estados = reserva_estado_repo.findAll();
         List<FuncionarioEntity> funcionarios = funcionario_repo.findAll();
         List<ClienteEntity> clientes = cliente_repo.findAll();
+        List<CotacaoEntity> cotacoes = repo_cotacao.findByEstadoConfirmadoSemReserva();
+
         model.addAttribute("reservas", reservas);
         model.addAttribute("estados", estados);
         model.addAttribute("funcionarios", funcionarios);
         model.addAttribute("clientes", clientes);
+        model.addAttribute("cotacoes", cotacoes);
 
         String loggedInUser = (String) session.getAttribute("username");
         model.addAttribute("loggedInUser", loggedInUser);
@@ -63,32 +70,73 @@ public class ReservaController {
     }
 
 
+    @GetMapping("/Reservas/Inserir/Admin")
+    public String showRegistarReservaForm(@RequestParam("cotacaoId") Integer cotacaoId, Model model, HttpSession session) {
+        CotacaoEntity cotacao = repo_cotacao.findById(cotacaoId).orElse(null);
+        List<ServicoEntity> servicos = repo_servico.findByIdCotacao(cotacaoId);
+
+        model.addAttribute("cotacao", cotacao);
+        model.addAttribute("servicos", servicos);
+        model.addAttribute("transportes", repo_transporte.findAll());
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
+        return "InserirReserva";
+    }
+
     @PostMapping("/Reservas/Inserir/Admin")
-    public String adicionarReserva(
-            @RequestParam String origem,
-            @RequestParam String destino,
-            @RequestParam Date data,
-            @RequestParam int idCliente,
-            @RequestParam int idEstadoReserva,
-            @RequestParam int idFuncionario) {
+    public String registarReserva(
+            @RequestParam("cotacaoId") Integer cotacaoId,
+            @RequestParam("origem") String origem,
+            @RequestParam("destino") String destino,
+            @RequestParam("dataReserva") Date dataReserva,
+            @RequestParam("transporteMaritimo") Integer transporteMaritimoId,
+            @RequestParam("dataPrevistaInicio") Date dataPrevistaInicio,
+            @RequestParam("dataPrevistaFim") Date dataPrevistaFim,
+            HttpSession session) {
 
-        ReservaEntity novareserva = new ReservaEntity();
-        novareserva.setOrigem(origem);
-        novareserva.setDestino(destino);
-        novareserva.setData(data);
-        novareserva.setIdCliente(idCliente);
-        novareserva.setIdEstadoReserva(idEstadoReserva);
-        novareserva.setIdFuncionario(idFuncionario);
+        // Retrieve and validate the cotacao
+        CotacaoEntity cotacao = repo_cotacao.findById(cotacaoId).orElse(null);
+        if (cotacao == null || cotacao.getEstadoCotacaoByIdEstadoCotacao().getId() != 2) {
+            return "redirect:/CotacaoCliente";
+        }
 
-        EstadoReservaEntity estadoreserva = reserva_estado_repo.findById(idEstadoReserva).orElse(null);
-        FuncionarioEntity funcionario = funcionario_repo.findById(idFuncionario).orElse(null);
-        ClienteEntity cliente = cliente_repo.findById(idCliente).orElse(null);
+        List<LinhaCotacaoEntity> linhaCotacao = linhaCotacaoRepository.findByIdCotacao(cotacaoId);
+        for (LinhaCotacaoEntity linha : linhaCotacao) {
+            linha.setDataPrevInicio(dataPrevistaInicio);
+            linha.setDataPrevFim(dataPrevistaFim);
 
-        novareserva.setEstadoReservaByIdEstadoReserva(estadoreserva);
-        novareserva.setFuncionarioByIdFuncionario(funcionario);
-        novareserva.setClienteByIdCliente(cliente);
+            linhaCotacaoRepository.save(linha);
+        }
 
-        repo_reserva.save(novareserva);
+        // Create the new reserva
+        ReservaEntity reserva = new ReservaEntity();
+        reserva.setOrigem(origem);
+        reserva.setDestino(destino);
+        reserva.setData(dataReserva);
+        reserva.setIdCliente(cotacao.getIdCliente());
+
+        EstadoReservaEntity estadoreserva;
+        estadoreserva = reserva_estado_repo.findByDescricaoLike("Pende pagamento");
+
+        ClienteEntity cliente = new ClienteEntity();
+        cliente = cliente_repo.findByidLike(cotacao.getIdCliente().toString());
+
+        reserva.setIdEstadoReserva(estadoreserva.getId());
+        reserva.setIdFuncionario(session.getAttribute("userId").hashCode());
+        reserva.setEstadoReservaByIdEstadoReserva(estadoreserva);
+        reserva.setFuncionarioByIdFuncionario(funcionario_repo.findByidLike(session.getAttribute("userId").toString()));
+        reserva.setClienteByIdCliente(cliente);
+        reserva.setIdCotacao(cotacao.getId());
+        reserva.setCotacaoByIdCotacao(cotacao);
+
+        TransportemaritimoEntity transporte = repo_transporte.findById(transporteMaritimoId).orElse(null);
+        reserva.setTransportemaritimoByIdTransporteMaritimo(transporte);
+        reserva.setIdTransporteMaritimo(transporteMaritimoId);
+
+        repo_reserva.save(reserva);
+
 
         return "redirect:/Reservas/Admin";
     }
