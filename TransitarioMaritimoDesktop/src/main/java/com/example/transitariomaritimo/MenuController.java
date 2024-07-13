@@ -110,9 +110,9 @@ public class MenuController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ReservaCliente.fxml"));
         try {
             Pane cmdPane = fxmlLoader.load();
-            ReservasController reservasController = fxmlLoader.getController();
-            reservasController.setIdCliente(idCliente);
-            reservasController.ReservaCliente();
+          //  ReservasController reservasController = fxmlLoader.getController();
+          //  reservasController.setIdCliente(idCliente);
+          //  reservasController.ReservaCliente();
             menu_panel.getChildren().clear();
             menu_panel.getChildren().add(cmdPane);
         } catch (Exception ex) {

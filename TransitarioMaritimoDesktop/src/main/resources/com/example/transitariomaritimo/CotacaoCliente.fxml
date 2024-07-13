@@ -28,9 +28,9 @@
                      <TableColumn fx:id="ValorTotal" prefWidth="167.0" text="ValorTotal" />
                  </columns>
              </TableView>
-             <Button defaultButton="true" layoutX="53.0" layoutY="571.0" mnemonicParsing="false" onAction="#ConfirmarCotacao" text="Confirmar Cotacão" />
-             <Button layoutX="234.0" layoutY="571.0" mnemonicParsing="false" onAction="#RejeitarCotacao" text="Rejeitar Cotacão" />
-             <Button layoutX="408.0" layoutY="571.0" mnemonicParsing="false" onAction="#VisualizarServicos" text="Visualizar Serviços" />
+             <Button defaultButton="true" layoutX="53.0" layoutY="500.0" mnemonicParsing="false" onAction="#ConfirmarCotacao" text="Confirmar Cotacão" />
+             <Button layoutX="234.0" layoutY="500.0" mnemonicParsing="false" onAction="#RejeitarCotacao" text="Rejeitar Cotacão" />
+             <Button layoutX="408.0" layoutY="500.0" mnemonicParsing="false" onAction="#VisualizarServicos" text="Visualizar Serviços" />
          </children>
       </Pane>
       <Pane fx:id="ServicoPane" layoutX="44.0" layoutY="69.0" prefHeight="536.0" prefWidth="789.0" style="-fx-background-color: #FFFFFF;" visible="false">

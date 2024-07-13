@@ -4,34 +4,34 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="480.0" prefWidth="720.0" stylesheets="@css/nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ReservasController">
+<AnchorPane prefHeight="715.0" prefWidth="883.0" stylesheets="@css/nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ReservasClienteController">
    <children>
-      <Label layoutX="283.0" layoutY="14.0" text="Reserva Cliente">
-         <font>
-            <Font size="23.0" />
-         </font>
-      </Label>
-      <TableView fx:id="Table" layoutX="60.0" layoutY="61.0" prefHeight="202.0" prefWidth="605.0">
-        <columns>
-          <TableColumn fx:id="Id" prefWidth="126.4000244140625" text="Id" />
-          <TableColumn fx:id="Data" prefWidth="141.0" text="Data" />
-            <TableColumn fx:id="Origem" prefWidth="183.0" text="Origem" />
-            <TableColumn fx:id="Destino" prefWidth="153.0" text="Destino" />
-        </columns>
-      </TableView>
-      <TextField fx:id="IdFuncionario" layoutX="60.0" layoutY="293.0" prefHeight="26.0" prefWidth="218.0" promptText="IdFuncionario" />
-      <TextField fx:id="IdCliente" layoutX="373.0" layoutY="293.0" prefHeight="26.0" prefWidth="218.0" promptText="IdCliente" />
-      <TextField fx:id="IdEstadoReserva" layoutX="60.0" layoutY="353.0" prefHeight="26.0" prefWidth="218.0" promptText="IdEstadoReservaa" />
-      <Button layoutX="248.0" layoutY="419.0" mnemonicParsing="false" onAction="#PagarReserva" prefHeight="36.0" prefWidth="127.0" text="Pagar Reserva" />
-      <Label layoutX="60.0" layoutY="276.0" text="IdFuncionario" />
-      <Label layoutX="60.0" layoutY="335.0" text="EstadoReserva" />
-      <Label layoutX="375.0" layoutY="276.0" text="IdCliente" />
-      <ToggleButton fx:id="ReservasPagarButton" layoutX="60.0" layoutY="419.0" mnemonicParsing="false" onAction="#ReservasPorPagar" text="Reservas Por Pagar" />
+      <Pane prefHeight="740.0" prefWidth="883.0">
+         <children>
+            <Label layoutX="370.0" layoutY="25.0" text="Reserva Cliente">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Label>
+            <TableView fx:id="Table" layoutX="14.0" layoutY="81.0" prefHeight="261.0" prefWidth="813.0">
+              <columns>
+                <TableColumn fx:id="Id" prefWidth="68.80002021789551" text="Id" />
+                <TableColumn fx:id="Data" prefWidth="99.1999740600586" text="Data" />
+                  <TableColumn fx:id="Origem" prefWidth="156.79998779296875" text="Origem" />
+                  <TableColumn fx:id="Destino" prefWidth="140.0" text="Destino" />
+                  <TableColumn fx:id="Estado" prefWidth="129.60003662109375" text="Estado" />
+              </columns>
+            </TableView>
+            <Button defaultButton="true" layoutX="24.0" layoutY="378.0" mnemonicParsing="false" onAction="#PagarReserva" prefHeight="36.0" prefWidth="127.0" text="Pagar Reserva" />
+            <ToggleButton fx:id="ReservasPagarButton" layoutX="685.0" layoutY="342.0" mnemonicParsing="false" onAction="#ReservasPorPagar" text="Reservas Por Pagar" />
+            <Label layoutX="634.0" layoutY="350.0" text="Filtrar:" />
+         </children>
+      </Pane>
 
    </children>
 </AnchorPane>

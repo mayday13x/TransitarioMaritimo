@@ -98,7 +98,7 @@ public class CotacaoEntity {
         return result;
     }
 
-    @OneToMany(mappedBy = "cotacaoByIdCotacao",  cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cotacaoByIdCotacao")
     public Collection<CargaEntity> getCargasById() {
         return cargasById;
     }
@@ -136,7 +136,7 @@ public class CotacaoEntity {
         this.faturasById = faturasById;
     }
 
-    @OneToMany(mappedBy = "cotacaoByIdCotacao",  cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cotacaoByIdCotacao")
     public Collection<LinhaCotacaoEntity> getLinhaCotacaosById() {
         return linhaCotacaosById;
     }
