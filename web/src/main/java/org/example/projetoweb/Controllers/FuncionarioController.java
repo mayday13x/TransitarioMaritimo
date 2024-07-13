@@ -24,7 +24,9 @@ public class FuncionarioController {
         this.tipo_funcionario_repo = tipo_funcionario_repo;
     }
 
-    @GetMapping("/Funcionarios")
+    // Admin
+
+    @GetMapping("/Funcionarios/Admin")
     public String listarFuncionarios(Model model, HttpSession session) {
         List<FuncionarioEntity> funcionarios = repo_funcionario.findAll();
         List<CodPostalEntity> codPostais = cod_postal_repo.findAll();
@@ -40,7 +42,7 @@ public class FuncionarioController {
         return "Funcionarios";
     }
 
-    @GetMapping("/inserirFuncionario")
+    @GetMapping("/Funcionarios/Inserir/Admin")
     public String showAdicionarFuncionario(Model model, HttpSession session) {
         List<CodPostalEntity> codPostais = cod_postal_repo.findAll();
         List<TipoFuncionarioEntity> tiposFuncionario = tipo_funcionario_repo.findAll();
@@ -53,7 +55,7 @@ public class FuncionarioController {
         return "InserirFuncionario";
     }
 
-    @PostMapping("/inserirFuncionario")
+    @PostMapping("/Funcionarios/Inserir/Admin")
     public String adicionarFuncionario(@RequestParam String nome, @RequestParam String nif, @RequestParam String rua,
                                        @RequestParam String porta, @RequestParam String localidade, @RequestParam String email,
                                        @RequestParam String telefone, @RequestParam String tipoFuncionario) {
@@ -78,10 +80,10 @@ public class FuncionarioController {
 
         repo_funcionario.save(novoFuncionario);
 
-        return "redirect:/Funcionarios";
+        return "redirect:/Funcionarios/Admin";
     }
 
-    @PostMapping("/editarFuncionario")
+    @PostMapping("/Funcionarios/Editar/Admin")
     public String editarFuncionario(@RequestParam("id") int id, @RequestParam("nome") String nome, @RequestParam("nif") String nif,
                                     @RequestParam("rua") String rua, @RequestParam("porta") String porta, @RequestParam("localidade") String localidade,
                                     @RequestParam("email") String email, @RequestParam("telefone") String telefone, @RequestParam("tipoFuncionario") String tipoFuncionario) {
@@ -107,10 +109,10 @@ public class FuncionarioController {
             repo_funcionario.save(funcionario);
         }
 
-        return "redirect:/Funcionarios";
+        return "redirect:/Funcionarios/Admin";
     }
 
-    @DeleteMapping("/removerFuncionario")
+    @DeleteMapping("/Funcionarios/Remover/Admin")
     @ResponseBody
     public String removerFuncionario(@RequestParam("id") int id) {
         repo_funcionario.deleteById(id);

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Armazém Logístico</title>
+    <title>Transportes</title>
     <link rel="stylesheet" href="css/nord-light.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -149,14 +149,17 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
         }
         .modal-content {
             background-color: #fefefe;
-            margin: 15% auto;
+            margin: auto;
             padding: 20px;
             border: 1px solid #888;
             width: 40%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
         .close {
             color: #aaa;
@@ -170,22 +173,31 @@
             text-decoration: none;
             cursor: pointer;
         }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
         .form-group label {
+            display: block;
             margin-bottom: 5px;
         }
-        .form-group input {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 10px;
-            margin-bottom: 10px;
             box-sizing: border-box;
+        }
+        .form-group > div {
+            width: 48%;
         }
     </style>
 </head>
 <body>
 <div class="nav-bar">
     <div class="menu-items">
-    <a href="/Armazem/GestorLogistico">Armazéns</a>
-    <a href="/Contentores/GestorLogistico">Contentores</a>
+        <a href="/Reservas/GestorOperacional">Reservas</a>
+        <a href="/Cotacao/GestorOperacional">Cotação</a>
+        <a href="/Transportes/GestorOperacional">Transportes</a>
     </div>
     <div class="user-info">
         <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
@@ -197,30 +209,34 @@
 </div>
 <div class="main-content">
     <div class="main-panel">
-        <h1>Armazém Logístico</h1>
+        <h1>Transportes</h1>
         <table class="table">
             <thead>
             <tr>
                 <th>Id</th>
-                <th>Capacidade Máxima</th>
-                <th>Descrição</th>
+                <th>Imo</th>
+                <th>Origem</th>
+                <th>Destino</th>
+                <th>Funcionário</th>
                 <th>Ações</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="armazem : ${armazens}">
-                <td th:text="${armazem.id}"></td>
-                <td th:text="${armazem.capacidadeMax}"></td>
-                <td th:text="${armazem.descricao}"></td>
+            <tr th:each="transporte : ${transportes}">
+                <td th:text="${transporte.id}"></td>
+                <td th:text="${transporte.imo}"></td>
+                <td th:text="${transporte.portoOrigem}"></td>
+                <td th:text="${transporte.portoDestino}"></td>
+                <td th:text="${transporte.funcionarioByIdFuncionario.nome}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:attr="onclick=|showEditarArmazemModal(${armazem.id}, '${armazem.descricao}', ${armazem.capacidadeMax})|"></i>
-                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverArmazem(${armazem.id})|"></i>
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarTransporteModal(${transporte.id}, '${transporte.imo}', '${transporte.portoOrigem}', '${transporte.portoDestino}', ${transporte.idFuncionario})|"></i>
+                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverTransporte(${transporte.id})|"></i>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="showInserirArmazemModal()">Inserir Armazém</button>
+            <button onclick="showInserirTransporteModal()">Inserir Transporte</button>
         </div>
     </div>
 </div>
@@ -229,18 +245,33 @@
 <div id="insertModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('insertModal')">&times;</span>
-        <h1>Inserir Armazém</h1>
-        <form action="/Armazem/Inserir/GestorLogistico" method="post">
+        <h1>Inserir Transporte</h1>
+        <form id="formInserirTransporte" action="/Transportes/Inserir/GestorOperacional" method="post">
             <div class="form-group">
-                <label for="descricaoText">Descrição</label>
-                <input type="text" id="descricaoText" name="descricao" placeholder="Descrição" required>
+                <div>
+                    <label for="ImoText">Imo</label>
+                    <input type="text" id="ImoText" name="imo" placeholder="Imo" required>
+                </div>
+                <div>
+                    <label for="OrigemText">Origem</label>
+                    <input type="text" id="OrigemText" name="portoOrigem" placeholder="Origem" required>
+                </div>
             </div>
             <div class="form-group">
-                <label for="CapacidadeMaximaText">Capacidade Máxima</label>
-                <input type="number" id="CapacidadeMaximaText" name="capacidadeMaxima" placeholder="Capacidade Máxima" required>
+                <div>
+                    <label for="DestinoText">Destino</label>
+                    <input type="text" id="DestinoText" name="portoDestino" placeholder="Destino" required>
+                </div>
+                <div>
+                    <label for="FuncionarioCombo">Funcionário</label>
+                    <select id="FuncionarioCombo" name="idFuncionario" required>
+                        <option th:each="funcionario : ${funcionarios}" th:value="${funcionario.id}" th:text="${funcionario.nome}"></option>
+                    </select>
+                </div>
             </div>
             <div class="buttons">
-                <button type="submit">Registrar Armazém</button>
+                <button type="submit">Inserir Transporte</button>
+                <button type="button" onclick="closeModal('insertModal')">Cancelar</button>
             </div>
         </form>
     </div>
@@ -250,19 +281,34 @@
 <div id="editModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('editModal')">&times;</span>
-        <h1>Editar Armazém</h1>
-        <form id="editForm" action="/Armazem/Editar/GestorLogistico" method="post">
+        <h1>Editar Transporte</h1>
+        <form id="editForm" action="/Transportes/Editar/GestorOperacional" method="post">
             <input type="hidden" id="editId" name="id">
             <div class="form-group">
-                <label for="editDescricaoText">Descrição</label>
-                <input type="text" id="editDescricaoText" name="descricao" placeholder="Descrição" required>
+                <div>
+                    <label for="editImoText">Imo</label>
+                    <input type="text" id="editImoText" name="imo" placeholder="Imo" required>
+                </div>
+                <div>
+                    <label for="editOrigemText">Origem</label>
+                    <input type="text" id="editOrigemText" name="portoOrigem" placeholder="Origem" required>
+                </div>
             </div>
             <div class="form-group">
-                <label for="editCapacidadeMaximaText">Capacidade Máxima</label>
-                <input type="number" id="editCapacidadeMaximaText" name="capacidadeMaxima" placeholder="Capacidade Máxima" required>
+                <div>
+                    <label for="editDestinoText">Destino</label>
+                    <input type="text" id="editDestinoText" name="portoDestino" placeholder="Destino" required>
+                </div>
+                <div>
+                    <label for="editFuncionarioCombo">Funcionário</label>
+                    <select id="editFuncionarioCombo" name="idFuncionario" required>
+                        <option th:each="funcionario : ${funcionarios}" th:value="${funcionario.id}" th:text="${funcionario.nome}"></option>
+                    </select>
+                </div>
             </div>
             <div class="buttons">
                 <button type="submit">Guardar Alterações</button>
+                <button type="button" onclick="closeModal('editModal')">Cancelar</button>
             </div>
         </form>
     </div>
@@ -272,38 +318,39 @@
 <div id="confirmRemoveModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
-        <h1>Remover Armazém</h1>
-        <p>Tem certeza que deseja remover este armazém?</p>
-        <div class="buttons">
-            <form id="removeForm" action="/Armazem/Remover/GestorLogistico" method="post">
-                <input type="hidden" id="removeId" name="id">
-                <input type="hidden" name="_method" value="delete">
+        <h1>Remover Transporte</h1>
+        <p>Tem certeza que deseja remover este transporte?</p>
+        <form id="removeForm" action="/Transportes/Remover/GestorOperacional" method="post">
+            <input type="hidden" id="removeId" name="id">
+            <div class="buttons">
                 <button type="submit">Remover</button>
                 <button type="button" onclick="closeModal('confirmRemoveModal')">Cancelar</button>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 
 <script>
-    function showInserirArmazemModal() {
-        document.getElementById('insertModal').style.display = "block";
+    function showInserirTransporteModal() {
+        document.getElementById('insertModal').style.display = "flex";
     }
 
     function closeModal(modalId) {
         document.getElementById(modalId).style.display = "none";
     }
 
-    function showEditarArmazemModal(id, descricao, capacidadeMaxima) {
+    function showEditarTransporteModal(id, imo, portoOrigem, portoDestino, idFuncionario) {
         document.getElementById('editId').value = id;
-        document.getElementById('editDescricaoText').value = descricao;
-        document.getElementById('editCapacidadeMaximaText').value = capacidadeMaxima;
-        document.getElementById('editModal').style.display = "block";
+        document.getElementById('editImoText').value = imo;
+        document.getElementById('editOrigemText').value = portoOrigem;
+        document.getElementById('editDestinoText').value = portoDestino;
+        document.getElementById('editFuncionarioCombo').value = idFuncionario;
+        document.getElementById('editModal').style.display = "flex";
     }
 
-    function confirmarRemoverArmazem(id) {
+    function confirmarRemoverTransporte(id) {
         document.getElementById('removeId').value = id;
-        document.getElementById('confirmRemoveModal').style.display = "block";
+        document.getElementById('confirmRemoveModal').style.display = "flex";
     }
 
     window.onclick = function(event) {

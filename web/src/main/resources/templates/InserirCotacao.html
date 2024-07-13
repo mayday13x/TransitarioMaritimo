@@ -193,16 +193,16 @@
 <body>
 <div class="nav-bar">
     <div class="menu-items">
-        <a href="/Armazem">Armazem</a>
-        <a href="/CargaArmazem">Cargas</a>
-        <a href="/Clientes">Clientes</a>
-        <a href="/Contentores">Contentores</a>
-        <a href="/Cotacao">Cotação</a>
-        <a href="/Fornecedores">Fornecedores</a>
-        <a href="/Funcionarios">Funcionários</a>
-        <a href="/Reservas">Reservas</a>
-        <a href="/Servicos">Serviços</a>
-        <a href="/Transportes">Transportes</a>
+        <a href="/Armazem/Admin">Armazem</a>
+        <a href="/Carga/Admin">Cargas</a>
+        <a href="/Clientes/Admin">Clientes</a>
+        <a href="/Contentores/Admin">Contentores</a>
+        <a href="/Cotacao/Admin">Cotação</a>
+        <a href="/Fornecedores/Admin">Fornecedores</a>
+        <a href="/Funcionarios/Admin">Funcionários</a>
+        <a href="/Reservas/Admin">Reservas</a>
+        <a href="/Servicos/Admin">Serviços</a>
+        <a href="/Transportes/Admin">Transportes</a>
     </div>
     <div class="user-info">
         <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
@@ -267,7 +267,7 @@
                         <div>
                             <label for="idTipoCarga">Tipo de Carga</label>
                             <select id="idTipoCarga" name="idTipoCarga">
-                                <option th:each="tipoCarga : ${tiposCarga}" th:value="${tipoCarga.id}" th:text="${tipoCarga.descricao}"></option>
+                                <option th:each="tipoCarga : ${tipoCargas}" th:value="${tipoCarga.id}" th:text="${tipoCarga.descricao}"></option>
                             </select>
                         </div>
                         <div>

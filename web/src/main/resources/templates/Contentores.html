@@ -187,16 +187,16 @@
 <body>
 <div class="nav-bar">
     <div class="menu-items">
-        <a href="/Armazem">Armazem</a>
-        <a href="/CargaArmazem">Cargas</a>
-        <a href="/Clientes">Clientes</a>
-        <a href="/Contentores">Contentores</a>
-        <a href="/Cotacao">Cotação</a>
-        <a href="/Fornecedores">Fornecedores</a>
-        <a href="/Funcionarios">Funcionários</a>
-        <a href="/Reservas">Reservas</a>
-        <a href="/Servicos">Serviços</a>
-        <a href="/Transportes">Transportes</a>
+        <a href="/Armazem/Admin">Armazem</a>
+        <a href="/Carga/Admin">Cargas</a>
+        <a href="/Clientes/Admin">Clientes</a>
+        <a href="/Contentores/Admin">Contentores</a>
+        <a href="/Cotacao/Admin">Cotação</a>
+        <a href="/Fornecedores/Admin">Fornecedores</a>
+        <a href="/Funcionarios/Admin">Funcionários</a>
+        <a href="/Reservas/Admin">Reservas</a>
+        <a href="/Servicos/Admin">Serviços</a>
+        <a href="/Transportes/Admin">Transportes</a>
     </div>
     <div class="user-info">
         <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
@@ -243,7 +243,7 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal('insertModal')">&times;</span>
         <h1>Inserir Contentor</h1>
-        <form action="/inserirContentor" method="post">
+        <form action="/Contentores/Inserir/Admin" method="post">
             <div class="form-group">
                 <label for="CapacidadeText">Capacidade</label>
                 <input type="text" id="CapacidadeText" name="capacidade" placeholder="Capacidade" required>
@@ -287,7 +287,7 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal('editModal')">&times;</span>
         <h1>Editar Contentor</h1>
-        <form id="editForm" action="/editarContentor" method="post">
+        <form id="editForm" action="/Contentores/Editar/Admin" method="post">
             <input type="hidden" id="editCin" name="cin">
             <div class="form-group">
                 <label for="editCapacidadeText">Capacidade</label>
@@ -332,7 +332,7 @@
         <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
         <h1>Remover Contentor</h1>
         <p>Tem certeza que deseja remover este contentor?</p>
-        <form id="removeForm" action="/removerContentor" method="post">
+        <form id="removeForm" action="/Contentores/Remover/Admin" method="post">
             <input type="hidden" id="removeCin" name="cin">
             <div class="buttons">
                 <button type="submit">Remover</button>

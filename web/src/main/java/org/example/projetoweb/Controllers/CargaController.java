@@ -33,7 +33,9 @@ public class CargaController {
         this.repo_cotacao = repo_cotacao;
     }
 
-    @GetMapping("/CargaArmazem")
+    // Admin
+
+    @GetMapping("/Carga/Admin")
     public String listarCargas(Model model, HttpSession session) {
         List<CargaEntity> cargas = repo_carga.findAll();
         model.addAttribute("reservas", repo_reserva.findAll());
@@ -49,7 +51,7 @@ public class CargaController {
         return "CargaArmazem";
     }
 
-    @GetMapping("/inserirCarga")
+    @GetMapping("/Carga/Inserir/Admin")
     public String showInserirCargaForm(Model model, HttpSession session) {
         model.addAttribute("reservas", repo_reserva.findAll());
         model.addAttribute("contentores", repo_contentor.findAll());
@@ -63,7 +65,7 @@ public class CargaController {
         return "InserirCarga";
     }
 
-    @PostMapping("/inserirCarga")
+    @PostMapping("/Carga/Inserir/Admin")
     public String inserirCarga(
             @RequestParam("nome") String nome,
             @RequestParam("quantidade") int quantidade,
@@ -99,10 +101,10 @@ public class CargaController {
 
         repo_carga.save(novaCarga);
 
-        return "redirect:/CargaArmazem";
+        return "redirect:/Carga/Admin";
     }
 
-    @PostMapping("/editarCarga")
+    @PostMapping("/Carga/Editar/Admin")
     public String editarCarga(
             @RequestParam("id") int id,
             @RequestParam("nome") String nome,
@@ -142,12 +144,12 @@ public class CargaController {
             repo_carga.save(carga);
         }
 
-        return "redirect:/CargaArmazem";
+        return "redirect:/Carga/Admin";
     }
 
-    @PostMapping("/removerCarga")
+    @PostMapping("/Carga/Remover/Admin")
     public String removerCarga(@RequestParam("id") int id) {
         repo_carga.deleteById(id);
-        return "redirect:/CargaArmazem";
+        return "redirect:/Carga/Admin";
     }
 }

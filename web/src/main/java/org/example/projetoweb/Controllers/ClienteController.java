@@ -26,7 +26,9 @@ public class ClienteController {
         this.repo_codPostal = repo_codPostal;
     }
 
-    @GetMapping("/Clientes")
+    // Admin
+
+    @GetMapping("/Clientes/Admin")
     public String listarClientes(Model model, HttpSession session){
         List<ClienteEntity> clientes = repo_cliente.findAll();
         List<CodPostalEntity> codPostais = repo_codPostal.findAll();
@@ -39,7 +41,7 @@ public class ClienteController {
         return "Clientes";
     }
 
-    @GetMapping("/inserirCliente")
+    @GetMapping("/Clientes/Inserir/Admin")
     public String showInserirCliente(Model model, HttpSession session) {
         List<CodPostalEntity> codPostais = repo_codPostal.findAll();
         model.addAttribute("codPostais", codPostais);
@@ -50,7 +52,7 @@ public class ClienteController {
         return "InserirCliente";
     }
 
-    @PostMapping("/inserirCliente")
+    @PostMapping("/Clientes/Inserir/Admin")
     public String inserirCliente(
             @RequestParam("nome") String nome,
             @RequestParam("nif") Integer nif,
@@ -79,10 +81,10 @@ public class ClienteController {
             repo_cliente.save(novoCliente);
         }
 
-        return "redirect:/Clientes";
+        return "redirect:/Clientes/Admin";
     }
 
-    @PostMapping("/editarCliente")
+    @PostMapping("/Clientes/Editar/Admin")
     public String editarCliente(
             @RequestParam("id") Integer id,
             @RequestParam("nome") String nome,
@@ -110,12 +112,12 @@ public class ClienteController {
             repo_cliente.save(cliente);
         }
 
-        return "redirect:/Clientes";
+        return "redirect:/Clientes/Admin";
     }
 
-    @PostMapping("/removerCliente")
+    @PostMapping("/Clientes/Remover/Admin")
     public String removerCliente(@RequestParam("id") Integer id) {
         repo_cliente.deleteById(id);
-        return "redirect:/Clientes";
+        return "redirect:/Clientes/Admin";
     }
 }

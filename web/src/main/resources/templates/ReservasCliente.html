@@ -152,8 +152,8 @@
 <body>
 <div class="nav-bar">
     <div class="menu-items">
-        <a href="/CotacaoCliente">Cotação</a>
-        <a href="/ReservasCliente">Reservas</a>
+        <a href="/Cotacao/Cliente">Cotação</a>
+        <a href="/Reservas/Cliente">Reservas</a>
     </div>
     <div class="user-info">
         <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
@@ -218,7 +218,7 @@
     }
 
     function pagarReserva(id) {
-        fetch(`/pagarReserva?id=${id}`, {
+        fetch(`/Reservas/Pagar/Cliente?id=${id}`, {
             method: 'POST'
         }).then(response => {
             if (response.ok) {

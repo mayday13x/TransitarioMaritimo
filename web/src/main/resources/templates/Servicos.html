@@ -195,16 +195,16 @@
 <body>
 <div class="nav-bar">
     <div class="menu-items">
-        <a href="/Armazem">Armazem</a>
-        <a href="/CargaArmazem">Cargas</a>
-        <a href="/Clientes">Clientes</a>
-        <a href="/Contentores">Contentores</a>
-        <a href="/Cotacao">Cotação</a>
-        <a href="/Fornecedores">Fornecedores</a>
-        <a href="/Funcionarios">Funcionários</a>
-        <a href="/Reservas">Reservas</a>
-        <a href="/Servicos">Serviços</a>
-        <a href="/Transportes">Transportes</a>
+        <a href="/Armazem/Admin">Armazem</a>
+        <a href="/Carga/Admin">Cargas</a>
+        <a href="/Clientes/Admin">Clientes</a>
+        <a href="/Contentores/Admin">Contentores</a>
+        <a href="/Cotacao/Admin">Cotação</a>
+        <a href="/Fornecedores/Admin">Fornecedores</a>
+        <a href="/Funcionarios/Admin">Funcionários</a>
+        <a href="/Reservas/Admin">Reservas</a>
+        <a href="/Servicos/Admin">Serviços</a>
+        <a href="/Transportes/Admin">Transportes</a>
     </div>
     <div class="user-info">
         <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
@@ -253,7 +253,7 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal('insertModal')">&times;</span>
         <h1>Inserir Serviço</h1>
-        <form id="formInserirServico" action="/inserirServico" method="post">
+        <form id="formInserirServico" action="/Servicos/Inserir/Admin" method="post">
             <div class="form-group">
                 <div>
                     <label for="DescServico">Descrição</label>
@@ -289,7 +289,7 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal('editModal')">&times;</span>
         <h1>Editar Serviço</h1>
-        <form id="editForm" action="/editarServico" method="post">
+        <form id="editForm" action="/Servicos/Editar/Admin" method="post">
             <input type="hidden" id="editId" name="id">
             <div class="form-group">
                 <div>
@@ -327,7 +327,7 @@
         <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
         <h1>Remover Serviço</h1>
         <p>Tem certeza que deseja remover este serviço?</p>
-        <form id="removeForm" action="/removerServico" method="post">
+        <form id="removeForm" action="/Servicos/Remover/Admin" method="post">
             <input type="hidden" id="removeId" name="id">
             <div class="buttons">
                 <button type="submit">Remover</button>

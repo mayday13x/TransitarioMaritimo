@@ -28,8 +28,11 @@ public interface CotacaoRepository extends JpaRepository<CotacaoEntity,Integer> 
             "join CotacaoEntity  c on lc.idCotacao = :idCotacao")
     List<ServicoEntity> findByIdCotacao(@Param("idCotacao") Integer idCotacao);
 
-    //mostrar cotaoes em que o id_estado_cotacao é 1
-    @Query("SELECT c FROM CotacaoEntity c WHERE c.idEstadoCotacao = 1")
+    @Query("SELECT c FROM CotacaoEntity c WHERE c.idEstadoCotacao = 2 ")
     List<CotacaoEntity> findByEstadoConfirmado();
+
+    //mostrar cotaoes em que o id_estado_cotacao é 2
+    @Query("SELECT c FROM CotacaoEntity c WHERE c.idEstadoCotacao = 2 AND NOT EXISTS (SELECT r FROM ReservaEntity r WHERE r.cotacaoByIdCotacao.id = c.id)")
+    List<CotacaoEntity> findByEstadoConfirmadoSemReserva();
 
 }

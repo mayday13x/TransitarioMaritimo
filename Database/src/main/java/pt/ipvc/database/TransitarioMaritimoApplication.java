@@ -22,8 +22,8 @@ public class TransitarioMaritimoApplication {
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/transitario_maritimo");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("martins00");
-        //dataSource.setPassword("-Jfma2004");
+        //dataSource.setPassword("martins00");
+        dataSource.setPassword("-Jfma2004");
         return dataSource;
 
     }

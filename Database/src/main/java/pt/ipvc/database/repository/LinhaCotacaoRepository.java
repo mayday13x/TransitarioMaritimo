@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import pt.ipvc.database.entity.LinhaCotacaoEntity;
 
+import java.util.List;
+
 @Repository
 public interface LinhaCotacaoRepository extends JpaRepository<LinhaCotacaoEntity, Integer> {
 
@@ -15,4 +17,7 @@ public interface LinhaCotacaoRepository extends JpaRepository<LinhaCotacaoEntity
     @Modifying
     @Query("DELETE FROM CargaEntity c WHERE c.idCotacao = :cotacaoId")
     void deleteByIdCotacao(@Param("cotacaoId") int cotacaoId);
+
+    @Query("SELECT l FROM LinhaCotacaoEntity l WHERE l.idCotacao = :cotacaoId")
+    List<LinhaCotacaoEntity> findByIdCotacao(@Param("cotacaoId") int cotacaoId);
 }
