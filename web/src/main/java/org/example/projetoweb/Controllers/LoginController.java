@@ -25,7 +25,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String showLoginForm() {
-        return "login";
+        return "index";
     }
 
     @PostMapping("/login")
@@ -65,7 +65,7 @@ public class LoginController {
         }
 
         model.addAttribute("error", "Credenciais inválidas!");
-        return "login";
+        return "index";
     }
 
     @GetMapping("/logout")

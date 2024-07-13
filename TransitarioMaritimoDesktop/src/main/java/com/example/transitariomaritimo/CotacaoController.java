@@ -445,9 +445,9 @@ public class CotacaoController implements Initializable {
             alert.showAndWait();
         } else {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Pagar Cotação");
-            alert.setHeaderText("Pagar Cotação");
-            alert.setContentText("Tem a certeza que pretende pagar esta Cotação?");
+            alert.setTitle("Confirmar Cotação");
+            alert.setHeaderText("Confirmar Cotação");
+            alert.setContentText("Pretende confirmar a cotação?");
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
