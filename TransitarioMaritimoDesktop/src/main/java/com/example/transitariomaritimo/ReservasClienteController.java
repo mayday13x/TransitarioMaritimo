@@ -360,9 +360,9 @@ public class ReservasClienteController implements Initializable {
                     System.out.println(e.getMessage());
                 }
 
-                IdEstadoReserva.clear();
-                IdCliente.clear();
-                IdFuncionario.clear();
+              //  IdEstadoReserva.clear();
+              //  IdCliente.clear();
+              //  IdFuncionario.clear();
 
             }
         }
