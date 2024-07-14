@@ -35,4 +35,5 @@ public interface CargaRepository extends JpaRepository<CargaEntity, Integer> {
     void updateArmazemIdByContentorId(int contentorId);
 
 
+
 }

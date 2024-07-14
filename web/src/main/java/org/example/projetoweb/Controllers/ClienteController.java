@@ -120,4 +120,99 @@ public class ClienteController {
         repo_cliente.deleteById(id);
         return "redirect:/Clientes/Admin";
     }
+
+    // Gestor Comercial
+
+    @GetMapping("/Clientes/GestorComercial")
+    public String listarClientesGestorComercial(Model model, HttpSession session){
+        List<ClienteEntity> clientes = repo_cliente.findAll();
+        List<CodPostalEntity> codPostais = repo_codPostal.findAll();
+        model.addAttribute("clientes", clientes);
+        model.addAttribute("codPostais", codPostais);
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
+        return "ClientesGestorComercial";
+    }
+
+    @GetMapping("/Clientes/Inserir/GestorComercial")
+    public String showInserirClienteGestorComercial(Model model, HttpSession session) {
+        List<CodPostalEntity> codPostais = repo_codPostal.findAll();
+        model.addAttribute("codPostais", codPostais);
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
+        return "InserirClienteGestorComercial";
+    }
+
+    @PostMapping("/Clientes/Inserir/GestorComercial")
+    public String inserirClienteGestorComercial(
+            @RequestParam("nome") String nome,
+            @RequestParam("nif") Integer nif,
+            @RequestParam("rua") String rua,
+            @RequestParam("porta") Integer porta,
+            @RequestParam("codPostal") Integer codPostalId,
+            @RequestParam("email") String email,
+            @RequestParam("telefone") String telefone
+    ) {
+        CodPostalEntity codPostal = repo_codPostal.findById(codPostalId).orElse(null);
+        System.out.println(codPostal);
+
+        if (codPostal != null) {
+            ClienteEntity novoCliente = new ClienteEntity();
+            novoCliente.setNome(nome);
+            novoCliente.setNif(nif);
+            novoCliente.setRua(rua);
+            novoCliente.setPorta(porta);
+            novoCliente.setIdCodPostal(codPostal.getIdCodPostal());
+            novoCliente.setEmail(email);
+            novoCliente.setTelefone(telefone);
+            novoCliente.setUtilizador(email.substring(0, email.indexOf('@')));
+            novoCliente.setPassword("default");
+            novoCliente.setCodPostalByIdCodPostal(codPostal);
+
+            repo_cliente.save(novoCliente);
+        }
+
+        return "redirect:/Clientes/GestorComercial";
+    }
+
+    @PostMapping("/Clientes/Editar/GestorComercial")
+    public String editarClienteGestorComercial(
+            @RequestParam("id") Integer id,
+            @RequestParam("nome") String nome,
+            @RequestParam("nif") Integer nif,
+            @RequestParam("rua") String rua,
+            @RequestParam("porta") Integer porta,
+            @RequestParam("codPostal") Integer codPostalId,
+            @RequestParam("email") String email,
+            @RequestParam("telefone") String telefone
+    ) {
+        Optional<ClienteEntity> clienteOptional = repo_cliente.findById(id);
+        CodPostalEntity codPostal = repo_codPostal.findById(codPostalId).orElse(null);
+
+        if (clienteOptional.isPresent() && codPostal != null) {
+            ClienteEntity cliente = clienteOptional.get();
+            cliente.setNome(nome);
+            cliente.setNif(nif);
+            cliente.setRua(rua);
+            cliente.setPorta(porta);
+            cliente.setIdCodPostal(codPostal.getIdCodPostal());
+            cliente.setEmail(email);
+            cliente.setTelefone(telefone);
+            cliente.setCodPostalByIdCodPostal(codPostal);
+
+            repo_cliente.save(cliente);
+        }
+
+        return "redirect:/Clientes/GestorComercial";
+    }
+
+    @PostMapping("/Clientes/Remover/GestorComercial")
+    public String removerClienteGestorComercial(@RequestParam("id") Integer id) {
+        repo_cliente.deleteById(id);
+        return "redirect:/Clientes/GestorComercial";
+    }
 }

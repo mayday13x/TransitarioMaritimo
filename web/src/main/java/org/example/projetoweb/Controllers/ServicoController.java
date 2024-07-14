@@ -107,4 +107,87 @@ public class ServicoController {
         }
         return "redirect:/Servicos/Admin";
     }
+
+    // Gestor Comercial
+
+    @GetMapping("/Servicos/GestorComercial")
+    public String listarServicosGestorComercial(Model model, HttpSession session){
+        List<ServicoEntity> servicos = repo_servico.findAll();
+        List<FornecedorEntity> fornecedores = fornecedor_repo.findAll();
+        model.addAttribute("servicos", servicos);
+        model.addAttribute("fornecedores", fornecedores);
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
+        return "ServicosGestorComercial";
+    }
+
+    @PostMapping("/Servicos/Inserir/GestorComercial")
+    public String adicionarServicoGestorComercial(@RequestParam String descricao, @RequestParam double preco, @RequestParam double comissao, @RequestParam int idFornecedor, Model model) {
+
+        if (Objects.equals(descricao, "") || preco <= 0 || comissao < 0 || idFornecedor == 0) {
+            model.addAttribute("error", "Preencha todos os campos corretamente e tente novamente!");
+            return "redirect:/Servicos";
+        } else {
+            ServicoEntity novoServico = new ServicoEntity();
+            novoServico.setDescricao(descricao);
+            novoServico.setPreco(preco);
+            novoServico.setComissao(comissao);
+
+            FornecedorEntity fornecedor = fornecedor_repo.findById(idFornecedor).orElse(null);
+            novoServico.setFornecedorByIdFornecedor(fornecedor);
+            novoServico.setIdFornecedor(fornecedor.getId());
+
+            try {
+                repo_servico.save(novoServico);
+                model.addAttribute("success", "Serviço inserido com sucesso!");
+            } catch (Exception e) {
+                model.addAttribute("error", e.getMessage());
+            }
+
+            return "redirect:/Servicos/GestorComercial";
+        }
+    }
+
+    @PostMapping("/Servicos/Editar/GestorComercial")
+    public String editarServicoGestorComercial(
+            @RequestParam int id,
+            @RequestParam String descricao,
+            @RequestParam double preco,
+            @RequestParam double comissao,
+            @RequestParam int idFornecedor, Model model) {
+
+        Optional<ServicoEntity> servicoOptional = repo_servico.findById(id);
+        if (servicoOptional.isPresent()) {
+            ServicoEntity servico = servicoOptional.get();
+            servico.setDescricao(descricao);
+            servico.setPreco(preco);
+            servico.setComissao(comissao);
+
+            FornecedorEntity fornecedor = fornecedor_repo.findById(idFornecedor).orElse(null);
+            servico.setFornecedorByIdFornecedor(fornecedor);
+            servico.setIdFornecedor(fornecedor.getId());
+
+            try {
+                repo_servico.save(servico);
+                model.addAttribute("success", "Serviço editado com sucesso!");
+            } catch (Exception e) {
+                model.addAttribute("error", e.getMessage());
+            }
+        }
+
+        return "redirect:/Servicos/GestorComercial";
+    }
+
+    @PostMapping("/Servicos/Remover/GestorComercial")
+    public String removerServicoGestorComercial(@RequestParam int id, Model model) {
+        try {
+            repo_servico.deleteById(id);
+            model.addAttribute("success", "Serviço removido com sucesso!");
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+        }
+        return "redirect:/Servicos/GestorComercial";
+    }
 }

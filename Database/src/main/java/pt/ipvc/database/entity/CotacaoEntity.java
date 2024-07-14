@@ -145,6 +145,14 @@ public class CotacaoEntity {
         this.linhaCotacaosById = linhaCotacaosById;
     }
 
+    @Transient
+    public LinhaCotacaoEntity getFirstLinhaCotacao() {
+        if (linhaCotacaosById != null && !linhaCotacaosById.isEmpty()) {
+            return linhaCotacaosById.iterator().next();
+        }
+        return null;
+    }
+
     @OneToMany(mappedBy = "cotacaoByIdCotacao")
     public Collection<ReservaEntity> getReservasById() {
         return reservasById;
