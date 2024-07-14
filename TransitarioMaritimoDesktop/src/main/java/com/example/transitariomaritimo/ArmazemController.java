@@ -241,6 +241,13 @@ public class ArmazemController implements Initializable {
     public void atualizarInfo(ActionEvent event) {
 
         ArmazemEntity armazemSelecionado = ArmazemCombo.getSelectionModel().getSelectedItem();
+
+        if(armazemSelecionado == null) {
+            ArmazemCombo.getSelectionModel().selectFirst();
+        }
+
+
+        assert armazemSelecionado != null;
         Double capacidadeOcupada = armazem_repo.sumVolumes(armazemSelecionado.getId());
 
 
@@ -482,29 +489,36 @@ public class ArmazemController implements Initializable {
         mainPanel.setDisable(false);
     }
 
+    @FXML
     public void EditarArmazem(ActionEvent event) {
         ArmazemEntity armazemSelecionado = ArmazemCombo.getSelectionModel().getSelectedItem();
 
-        if(Objects.equals(descricaoTextEdit.getText(), "") || Objects.equals(CapacidadeMaximaTextEdit.getText(), "")) {
+        if (Objects.equals(descricaoTextEdit.getText(), "") || Objects.equals(CapacidadeMaximaTextEdit.getText(), "")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro!");
             alert.setHeaderText("Todos os campos devem estar preenchidos!");
             alert.setContentText("Por favor preencha todos os campos.");
             alert.showAndWait();
         } else {
+            Double capacidadeMinima = armazem_repo.sumVolumes(armazemSelecionado.getId());
+            if (capacidadeMinima == null) capacidadeMinima = 0.0;
 
-            if((armazem_repo.sumVolumes(armazemSelecionado.getId()) > Double.parseDouble(CapacidadeMaximaText.getText()))){
+            if ((capacidadeMinima > Double.parseDouble(CapacidadeMaximaTextEdit.getText()))) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Erro!");
                 alert.setHeaderText("Capacidade insuficiente para as cargas existentes!");
-                alert.setContentText("Capacidade minima necessaria: " + armazem_repo.sumVolumes(armazemSelecionado.getId()));
+                alert.setContentText("Capacidade mínima necessária: " + capacidadeMinima);
                 alert.showAndWait();
             } else {
-
                 try {
-                    armazem_repo.save(armazemSelecionado);
                     armazemSelecionado.setDescricao(descricaoTextEdit.getText());
                     armazemSelecionado.setCapacidadeMax(Double.parseDouble(CapacidadeMaximaTextEdit.getText()));
+                    armazem_repo.save(armazemSelecionado);
+
+                   /* Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText("Armazém editado com sucesso!");
+                    alert.showAndWait();*/
+
                 } catch (Exception e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Erro!");
@@ -516,11 +530,10 @@ public class ArmazemController implements Initializable {
                 closeEditarArmazem(null);
 
                 ObservableList<ArmazemEntity> armazensAtualizados = FXCollections.observableArrayList(armazem_repo.findAll());
-                //table.setItems(armazensAtualizados);
-                ArmazemCombo.setItems(armazensAtualizados);
+                atualizarInfo(null);
+               // ArmazemCombo.setItems(armazensAtualizados);
             }
         }
-
     }
 
     @FXML
