@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Serviços</title>
+    <link rel="stylesheet" href="css/nord-light.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .nav-bar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: fixed;
+            padding-top: 20px;
+        }
+        .nav-bar a {
+            display: block;
+            color: #ecf0f1;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .nav-bar a:hover {
+            background-color: #34495e;
+        }
+        .nav-bar .menu-items {
+            flex-grow: 1;
+        }
+        .user-info {
+            padding: 15px;
+            background-color: #34495e;
+            text-align: center;
+            border-top: 1px solid #34495e;
+        }
+        .user-info p {
+            margin: 0;
+            color: #ecf0f1;
+            font-size: 16px;
+        }
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #e74c3c;
+            color: #ecf0f1;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        .logout-btn i {
+            margin-right: 8px;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+        .main-panel {
+            background-color: #FFFFFF;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .main-panel h1 {
+            text-align: center;
+            font-size: 23px;
+            margin-bottom: 20px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            background-color: #ecf0f1;
+        }
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+        .table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .table tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        .table tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .table td {
+            font-size: 14px;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-around;
+        }
+        .actions i {
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .actions i:hover {
+            color: #2980b9;
+        }
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .buttons button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+        }
+        .buttons button:hover {
+            background-color: #2980b9;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .form-group > div {
+            width: 48%;
+        }
+    </style>
+</head>
+<body>
+<div class="nav-bar">
+    <div class="menu-items">
+        <a href="/Clientes/GestorComercial">Clientes</a>
+        <a href="/Cotacao/GestorComercial">Cotação</a>
+        <a href="/Servicos/GestorComercial">Serviços</a>
+        <a href="/Fornecedores/GestorComercial">Fornecedores</a>
+    </div>
+    <div class="user-info">
+        <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
+        <a href="/logout" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </a>
+    </div>
+</div>
+<div class="main-content">
+    <div class="main-panel">
+        <h1>Serviços</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Descrição</th>
+                <th>Fornecedor</th>
+                <th>Comissão</th>
+                <th>Preço</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="servico : ${servicos}">
+                <td th:text="${servico.id}"></td>
+                <td th:text="${servico.descricao}"></td>
+                <td th:text="${servico.fornecedorByIdFornecedor.nome}"></td>
+                <td th:text="${servico.comissao}"></td>
+                <td th:text="${servico.preco}"></td>
+                <td class="actions">
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarServicoModal(${servico.id}, '${servico.descricao}', ${servico.preco}, ${servico.comissao}, ${servico.idFornecedor})|"></i>
+                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverServico(${servico.id})|"></i>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="buttons">
+            <button onclick="showInserirServicoModal()">Criar Serviço</button>
+        </div>
+    </div>
+</div>
+
+<!-- Inserir Modal -->
+<div id="insertModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('insertModal')">&times;</span>
+        <h1>Inserir Serviço</h1>
+        <form id="formInserirServico" action="/Servicos/Inserir/Admin" method="post">
+            <div class="form-group">
+                <div>
+                    <label for="DescServico">Descrição</label>
+                    <input type="text" id="DescServico" name="descricao" placeholder="Descrição" required>
+                </div>
+                <div>
+                    <label for="PrecoServico">Preço</label>
+                    <input type="text" id="PrecoServico" name="preco" placeholder="Preço" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="ComissServico">Comissão</label>
+                    <input type="text" id="ComissServico" name="comissao" placeholder="Comissão" required>
+                </div>
+                <div>
+                    <label for="FornecedorCombo">Fornecedor</label>
+                    <select id="FornecedorCombo" name="idFornecedor" required>
+                        <option th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.id}" th:text="${fornecedor.nome}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Inserir Serviço</button>
+                <button type="button" onclick="closeModal('insertModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Editar Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editModal')">&times;</span>
+        <h1>Editar Serviço</h1>
+        <form id="editForm" action="/Servicos/Editar/Admin" method="post">
+            <input type="hidden" id="editId" name="id">
+            <div class="form-group">
+                <div>
+                    <label for="editDescServico">Descrição</label>
+                    <input type="text" id="editDescServico" name="descricao" placeholder="Descrição" required>
+                </div>
+                <div>
+                    <label for="editPrecoServico">Preço</label>
+                    <input type="text" id="editPrecoServico" name="preco" placeholder="Preço" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="editComissServico">Comissão</label>
+                    <input type="text" id="editComissServico" name="comissao" placeholder="Comissão" required>
+                </div>
+                <div>
+                    <label for="editFornecedorCombo">Fornecedor</label>
+                    <select id="editFornecedorCombo" name="idFornecedor" required>
+                        <option th:each="fornecedor : ${fornecedores}" th:value="${fornecedor.id}" th:text="${fornecedor.nome}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Guardar Alterações</button>
+                <button type="button" onclick="closeModal('editModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmar Remover Modal -->
+<div id="confirmRemoveModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
+        <h1>Remover Serviço</h1>
+        <p>Tem certeza que deseja remover este serviço?</p>
+        <form id="removeForm" action="/Servicos/Remover/Admin" method="post">
+            <input type="hidden" id="removeId" name="id">
+            <div class="buttons">
+                <button type="submit">Remover</button>
+                <button type="button" onclick="closeModal('confirmRemoveModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function showInserirServicoModal() {
+        document.getElementById('insertModal').style.display = "flex";
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+
+    function showEditarServicoModal(id, descricao, preco, comissao, idFornecedor) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editDescServico').value = descricao;
+        document.getElementById('editPrecoServico').value = preco;
+        document.getElementById('editComissServico').value = comissao;
+        document.getElementById('editFornecedorCombo').value = idFornecedor;
+        document.getElementById('editModal').style.display = "flex";
+    }
+
+    function confirmarRemoverServico(id) {
+        document.getElementById('removeId').value = id;
+        document.getElementById('confirmRemoveModal').style.display = "flex";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('insertModal')) {
+            closeModal('insertModal');
+        } else if (event.target == document.getElementById('editModal')) {
+            closeModal('editModal');
+        } else if (event.target == document.getElementById('confirmRemoveModal')) {
+            closeModal('confirmRemoveModal');
+        }
+    }
+</script>
+</body>
+</html>

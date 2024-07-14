@@ -26,6 +26,7 @@ public class ReservaController {
     private final TransportemaritimoRepository repo_transporte;
     private final LinhaCotacaoRepository linhaCotacaoRepository;
     private final ServicoRepository repo_servico;
+    private final CargaRepository repo_carga;
 
     public ReservaController(
             ReservaRepository repo_reserva,
@@ -35,7 +36,8 @@ public class ReservaController {
             CotacaoRepository repo_cotacao,
             TransportemaritimoRepository repo_transporte,
             LinhaCotacaoRepository linhaCotacaoRepository,
-            ServicoRepository repo_servico
+            ServicoRepository repo_servico,
+            CargaRepository repo_carga
     ) {
         this.repo_reserva = repo_reserva;
         this.reserva_estado_repo = reserva_estado_repo;
@@ -45,6 +47,7 @@ public class ReservaController {
         this.repo_transporte = repo_transporte;
         this.linhaCotacaoRepository = linhaCotacaoRepository;
         this.repo_servico = repo_servico;
+        this.repo_carga = repo_carga;
     }
 
     //Admin
@@ -351,6 +354,12 @@ public class ReservaController {
 
         repo_reserva.save(reserva);
 
+        List<CargaEntity> cargas  = repo_carga.findByIdCotacao(cotacaoId);
+        for (CargaEntity carga : cargas) {
+            carga.setIdReserva(reserva.getId());
+            carga.setReservaByIdReserva(reserva);
+            repo_carga.save(carga);
+        }
 
         return "redirect:/Reservas/GestorOperacional";
     }

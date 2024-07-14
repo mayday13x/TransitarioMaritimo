@@ -20,4 +20,9 @@ public interface LinhaCotacaoRepository extends JpaRepository<LinhaCotacaoEntity
 
     @Query("SELECT l FROM LinhaCotacaoEntity l WHERE l.idCotacao = :cotacaoId")
     List<LinhaCotacaoEntity> findByIdCotacao(@Param("cotacaoId") int cotacaoId);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM LinhaCotacaoEntity l WHERE l.idCotacao = :cotacaoId")
+    void deleteLinhaCotacaoEntitiesByIdCotacao(@Param("cotacaoId") int cotacaoId);
 }

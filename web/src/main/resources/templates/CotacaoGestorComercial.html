@@ -219,16 +219,10 @@
 <body>
 <div class="nav-bar">
     <div class="menu-items">
-        <a href="/Armazem/Admin">Armazem</a>
-        <a href="/Carga/Admin">Cargas</a>
-        <a href="/Clientes/Admin">Clientes</a>
-        <a href="/Contentores/Admin">Contentores</a>
-        <a href="/Cotacao/Admin">Cotação</a>
-        <a href="/Fornecedores/Admin">Fornecedores</a>
-        <a href="/Funcionarios/Admin">Funcionários</a>
-        <a href="/Reservas/Admin">Reservas</a>
-        <a href="/Servicos/Admin">Serviços</a>
-        <a href="/Transportes/Admin">Transportes</a>
+        <a href="/Clientes/GestorComercial">Clientes</a>
+        <a href="/Cotacao/GestorComercial">Cotação</a>
+        <a href="/Servicos/GestorComercial">Serviços</a>
+        <a href="/Fornecedores/GestorComercial">Fornecedores</a>
     </div>
     <div class="user-info">
         <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
@@ -267,7 +261,7 @@
             </tbody>
         </table>
         <div class="buttons">
-            <button onclick="window.location.href='/Cotacao/Inserir/Admin'">Criar Cotação</button>
+            <button onclick="window.location.href='/Cotacao/Inserir/GestorComercial'">Criar Cotação</button>
         </div>
     </div>
 </div>
@@ -277,7 +271,7 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal('editModal')">&times;</span>
         <h1>Editar Cotação</h1>
-        <form id="editForm" action="/Cotacao/Editar/Admin" method="post">
+        <form id="editForm" action="/Cotacao/Editar/GestorComercial" method="post">
             <input type="hidden" name="idCotacao" id="editIdCotacao">
             <div class="form-group">
                 <label for="idCliente">Cliente</label>
@@ -347,7 +341,7 @@
         <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
         <h1>Remover Cotação</h1>
         <p>Tem certeza que deseja remover esta cotação?</p>
-        <form id="removeForm" action="/Cotacao/Remover/Admin" method="post">
+        <form id="removeForm" action="/Cotacao/Remover/GestorComercial" method="post">
             <input type="hidden" id="removeId" name="id">
             <div class="buttons">
                 <button type="submit">Remover</button>

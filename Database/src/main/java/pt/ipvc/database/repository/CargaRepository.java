@@ -39,4 +39,5 @@ public interface CargaRepository extends JpaRepository<CargaEntity, Integer> {
     List<CargaEntity> findByIdArmazemNull();
 
 
+
 }

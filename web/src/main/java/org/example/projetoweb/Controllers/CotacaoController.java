@@ -55,6 +55,9 @@ public class CotacaoController {
     public String listarCotacoes(Model model, HttpSession session) {
         List<CotacaoEntity> cotacoes = repo_cotacao.findAll();
         model.addAttribute("cotacoes", cotacoes);
+        model.addAttribute("servicos", repo_servico.findAll());
+        model.addAttribute("linhaCotacao", repo_linhaCotacao.findAll());
+        model.addAttribute("clientes", repo_cliente.findAll());
 
         String loggedInUser = (String) session.getAttribute("username");
         model.addAttribute("loggedInUser", loggedInUser);
@@ -142,6 +145,57 @@ public class CotacaoController {
         return "redirect:/Cotacao/Admin";
     }
 
+
+    @PostMapping("/Cotacao/Editar/Admin")
+    public String editarCotacaoAdmin(
+            @RequestParam("idCotacao") int idCotacao,
+            @RequestParam("idCliente") Integer idCliente,
+            @RequestParam("data") Date data,
+            @RequestParam("dataPrevistaInicio") Date dataPrevistaInicio,
+            @RequestParam("dataPrevistaFim") Date dataPrevistaFim,
+            @RequestParam(value = "servicosSelecionados", required = false) List<Integer> servicosSelecionados
+    ) {
+        CotacaoEntity cotacao = repo_cotacao.findById(idCotacao).orElse(null);
+        if (cotacao != null) {
+            cotacao.setIdCliente(idCliente);
+            cotacao.setData(data);
+
+            repo_linhaCotacao.deleteLinhaCotacaoEntitiesByIdCotacao(cotacao.getId());
+
+            double valorTotal = 0;
+            if (servicosSelecionados != null) {
+                for (Integer idServico : servicosSelecionados) {
+                    ServicoEntity servico = repo_servico.findById(idServico).orElse(null);
+                    if (servico != null) {
+                        valorTotal += servico.getPreco() + (servico.getComissao() * servico.getPreco());
+
+                        LinhaCotacaoEntity linha = new LinhaCotacaoEntity();
+                        linha.setIdCotacao(cotacao.getId());
+                        linha.setIdServico(servico.getId());
+                        linha.setCotacaoByIdCotacao(cotacao);
+                        linha.setServicoByIdServico(servico);
+                        linha.setDataPrevInicio(dataPrevistaInicio);
+                        linha.setDataPrevFim(dataPrevistaFim);
+                        repo_linhaCotacao.save(linha);
+                    }
+                }
+            }
+            cotacao.setValorTotal(valorTotal);
+            repo_cotacao.save(cotacao);
+        }
+
+        return "redirect:/Cotacao/Admin";
+    }
+
+    @GetMapping("/Cotacao/VerServicos/Admin")
+    @ResponseBody
+    public List<ServicoDto> verServicos(@RequestParam int id) {
+        List<ServicoEntity> servicos = repo_servico.findByIdCotacao(id);
+        return servicos.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+
+
     @PostMapping("/Cotacao/Remover/Admin")
     public String removerCotacao(@RequestParam("id") Integer id) {
         repo_cotacao.deleteById(id);
@@ -197,6 +251,7 @@ public class CotacaoController {
         dto.setId(servico.getId());
         dto.setDescricao(servico.getDescricao());
         dto.setPreco(servico.getPreco());
+        dto.setComissao(servico.getComissao());
         return dto;
     }
 
@@ -236,5 +291,157 @@ public class CotacaoController {
         return "inserirReservaGestorOperacional";
     }
 
+    // Gestor Comercial
+
+    @GetMapping("/Cotacao/GestorComercial")
+    public String listarCotacoesGestorComercial(Model model, HttpSession session) {
+        List<CotacaoEntity> cotacoes = repo_cotacao.findAll();
+        model.addAttribute("cotacoes", cotacoes);
+        model.addAttribute("servicos", repo_servico.findAll());
+        model.addAttribute("linhaCotacao", repo_linhaCotacao.findAll());
+        model.addAttribute("clientes", repo_cliente.findAll());
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+        return "CotacaoGestorComercial";
+    }
+
+    @GetMapping("/Cotacao/Inserir/GestorComercial")
+    public String showInserirCotacaoFormGestorComercial(Model model, HttpSession session) {
+        model.addAttribute("fornecedores", repo_fornecedor.findAll());
+        model.addAttribute("clientes", repo_cliente.findAll());
+        model.addAttribute("cargas", repo_carga.findAll());
+        model.addAttribute("tipoCargas", repo_tipoCarga.findAll());
+        model.addAttribute("servicos", repo_servico.findAll());
+
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
+        return "InserirCotacaoGestorComercial";
+    }
+
+    @PostMapping("/Cotacao/Inserir/GestorComercial")
+    public String inserirCotacaoGestorComercial(
+            @RequestParam("idCliente") Integer idCliente,
+            @RequestParam("nomeCarga") String nomeCarga,
+            @RequestParam("quantidadeCarga") int quantidadeCarga,
+            @RequestParam("alturaCarga") double alturaCarga,
+            @RequestParam("compCarga") double compCarga,
+            @RequestParam("larguraCarga") double larguraCarga,
+            @RequestParam("pesoCarga") double pesoCarga,
+            @RequestParam("observacoesCarga") String observacoesCarga,
+            @RequestParam("idTipoCarga") Integer idTipoCarga,
+            @RequestParam(value = "servicosSelecionados", required = false) List<Integer> servicosSelecionados
+    ) {
+        EstadoCotacaoEntity estadoCotacao = repo_estadoCotacao.findByDescricaoLike("Em análise");
+        ClienteEntity cliente = repo_cliente.findById(idCliente).orElse(null);
+        TipoCargaEntity tipoCarga = repo_tipoCarga.findById(idTipoCarga).orElse(null);
+
+        if (estadoCotacao != null && cliente != null && tipoCarga != null) {
+            CotacaoEntity novaCotacao = new CotacaoEntity();
+            novaCotacao.setIdCliente(idCliente);
+            novaCotacao.setIdEstadoCotacao(estadoCotacao.getId());
+            novaCotacao.setEstadoCotacaoByIdEstadoCotacao(estadoCotacao);
+            novaCotacao.setData(Date.valueOf(LocalDate.now()));
+            novaCotacao.setClienteByIdCliente(cliente);
+
+            repo_cotacao.save(novaCotacao);
+
+            CargaEntity carga = new CargaEntity();
+            carga.setIdCotacao(novaCotacao.getId());
+            carga.setNome(nomeCarga);
+            carga.setQuantidade(quantidadeCarga);
+            carga.setVolume(alturaCarga * compCarga * larguraCarga);
+            carga.setPeso(pesoCarga);
+            carga.setIdTipoCarga(tipoCarga.getId());
+            carga.setTipoCargaByIdTipoCarga(tipoCarga);
+            carga.setObservacoes(observacoesCarga);
+            carga.setCotacaoByIdCotacao(novaCotacao);
+
+            repo_carga.save(carga);
+
+            double valorTotal = 0;
+
+            if (servicosSelecionados != null) {
+                for (Integer idServico : servicosSelecionados) {
+                    ServicoEntity servico = repo_servico.findById(idServico).orElse(null);
+                    if (servico != null) {
+                        valorTotal += servico.getPreco() + (servico.getComissao() * servico.getPreco());
+
+                        LinhaCotacaoEntity linha = new LinhaCotacaoEntity();
+                        linha.setIdCotacao(novaCotacao.getId());
+                        linha.setIdServico(servico.getId());
+                        linha.setCotacaoByIdCotacao(novaCotacao);
+                        linha.setServicoByIdServico(servico);
+
+                        repo_linhaCotacao.save(linha);
+                    }
+                }
+            }
+
+            novaCotacao.setValorTotal(valorTotal);
+            repo_cotacao.save(novaCotacao);
+        }
+
+        return "redirect:/Cotacao/GestorComercial";
+    }
+
+    @PostMapping("/Cotacao/Editar/GestorComercial")
+    public String editarCotacaoAdminGestorComercial(
+            @RequestParam("idCotacao") int idCotacao,
+            @RequestParam("idCliente") Integer idCliente,
+            @RequestParam("data") Date data,
+            @RequestParam("dataPrevistaInicio") Date dataPrevistaInicio,
+            @RequestParam("dataPrevistaFim") Date dataPrevistaFim,
+            @RequestParam(value = "servicosSelecionados", required = false) List<Integer> servicosSelecionados
+    ) {
+        CotacaoEntity cotacao = repo_cotacao.findById(idCotacao).orElse(null);
+        if (cotacao != null) {
+            cotacao.setIdCliente(idCliente);
+            cotacao.setData(data);
+
+
+            repo_linhaCotacao.deleteByIdCotacao(cotacao.getId());
+            double valorTotal = 0;
+            if (servicosSelecionados != null) {
+                for (Integer idServico : servicosSelecionados) {
+                    ServicoEntity servico = repo_servico.findById(idServico).orElse(null);
+                    if (servico != null) {
+                        valorTotal += servico.getPreco() + (servico.getComissao() * servico.getPreco());
+
+                        LinhaCotacaoEntity linha = new LinhaCotacaoEntity();
+                        linha.setIdCotacao(cotacao.getId());
+                        linha.setIdServico(servico.getId());
+                        linha.setCotacaoByIdCotacao(cotacao);
+                        linha.setServicoByIdServico(servico);
+                        linha.setDataPrevInicio(dataPrevistaInicio);
+                        linha.setDataPrevFim(dataPrevistaFim);
+                        repo_linhaCotacao.save(linha);
+                    }
+                }
+            }
+            cotacao.setValorTotal(valorTotal);
+            repo_cotacao.save(cotacao);
+        }
+
+        return "redirect:/Cotacao/GestorComercial";
+    }
+
+    @GetMapping("/Cotacao/VerServicos/GestorComercial")
+    @ResponseBody
+    public List<ServicoDto> verServicosGestorComercial(@RequestParam int id) {
+        List<ServicoEntity> servicos = repo_servico.findByIdCotacao(id);
+        return servicos.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+
+    @PostMapping("/Cotacao/Remover/GestorComercial")
+    public String removerCotacaoGestorComercial(@RequestParam("id") Integer id) {
+        repo_cotacao.deleteById(id);
+        return "redirect:/Cotacao/GestorComercial";
+    }
+
+
 
 }
+

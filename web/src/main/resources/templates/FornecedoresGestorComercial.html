@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Fornecedores</title>
+    <link rel="stylesheet" href="css/nord-light.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .nav-bar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: fixed;
+            padding-top: 20px;
+        }
+        .nav-bar a {
+            display: block;
+            color: #ecf0f1;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .nav-bar a:hover {
+            background-color: #34495e;
+        }
+        .nav-bar .menu-items {
+            flex-grow: 1;
+        }
+        .user-info {
+            padding: 15px;
+            background-color: #34495e;
+            text-align: center;
+            border-top: 1px solid #34495e;
+        }
+        .user-info p {
+            margin: 0;
+            color: #ecf0f1;
+            font-size: 16px;
+        }
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #e74c3c;
+            color: #ecf0f1;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        .logout-btn i {
+            margin-right: 8px;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+        .main-panel {
+            background-color: #FFFFFF;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .main-panel h1 {
+            text-align: center;
+            font-size: 23px;
+            margin-bottom: 20px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            background-color: #ecf0f1;
+        }
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+        .table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .table tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        .table tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .table td {
+            font-size: 14px;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-around;
+        }
+        .actions i {
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .actions i:hover {
+            color: #2980b9;
+        }
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .buttons button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+        }
+        .buttons button:hover {
+            background-color: #2980b9;
+        }
+        .hidden {
+            display: none;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group label {
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+<div class="nav-bar">
+    <div class="menu-items">
+        <a href="/Clientes/GestorComercial">Clientes</a>
+        <a href="/Cotacao/GestorComercial">Cotação</a>
+        <a href="/Servicos/GestorComercial">Serviços</a>
+        <a href="/Fornecedores/GestorComercial">Fornecedores</a>
+    </div>
+    <div class="user-info">
+        <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
+        <a href="/logout" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </a>
+    </div>
+</div>
+<div class="main-content">
+    <div class="main-panel">
+        <h1>Fornecedores</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Nif</th>
+                <th>Rua</th>
+                <th>Localidade</th>
+                <th>Telefone</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="fornecedor : ${fornecedores}">
+                <td th:text="${fornecedor.id}"></td>
+                <td th:text="${fornecedor.nome}"></td>
+                <td th:text="${fornecedor.nif}"></td>
+                <td th:text="${fornecedor.rua}"></td>
+                <td th:text="${fornecedor.codPostalByIdCodPostal.localidade}"></td>
+                <td th:text="${fornecedor.telefone}"></td>
+                <td class="actions">
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarFornecedorModal(${fornecedor.id}, '${fornecedor.nome}', '${fornecedor.nif}', '${fornecedor.rua}', '${fornecedor.porta}', '${fornecedor.codPostalByIdCodPostal.idCodPostal}', '${fornecedor.telefone}')|"></i>
+                    <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverFornecedor(${fornecedor.id})|"></i>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="buttons">
+            <button onclick="showInserirFornecedorModal()">Inserir Fornecedor</button>
+        </div>
+    </div>
+</div>
+
+<!-- Inserir Modal -->
+<div id="insertModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('insertModal')">&times;</span>
+        <h1>Inserir Fornecedor</h1>
+        <form action="/Fornecedores/Inserir/GestorComercial" method="post">
+            <div class="form-group">
+                <label for="NomeText">Nome</label>
+                <input type="text" id="NomeText" name="nome" placeholder="Nome" required>
+            </div>
+            <div class="form-group">
+                <label for="NifText">NIF</label>
+                <input type="text" id="NifText" name="nif" placeholder="NIF" required>
+            </div>
+            <div class="form-group">
+                <label for="RuaText">Rua</label>
+                <input type="text" id="RuaText" name="rua" placeholder="Rua" required>
+            </div>
+            <div class="form-group">
+                <label for="PortaText">Porta</label>
+                <input type="text" id="PortaText" name="porta" placeholder="Porta" required>
+            </div>
+            <div class="form-group">
+                <label for="CodPostalCombo">Código Postal</label>
+                <select id="CodPostalCombo" name="idCodPostal" required>
+                    <option th:each="codPostal : ${codPostais}" th:value="${codPostal.idCodPostal}" th:text="${codPostal.localidade}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="TelefoneText">Telefone</label>
+                <input type="text" id="TelefoneText" name="telefone" placeholder="Telefone" required>
+            </div>
+            <div class="buttons">
+                <button type="submit">Inserir Fornecedor</button>
+                <button type="button" onclick="closeModal('insertModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Editar Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editModal')">&times;</span>
+        <h1>Editar Fornecedor</h1>
+        <form id="editForm" action="/Fornecedores/Editar/GestorComercial" method="post">
+            <input type="hidden" id="editId" name="id">
+            <div class="form-group">
+                <label for="editNomeText">Nome</label>
+                <input type="text" id="editNomeText" name="nome" placeholder="Nome" required>
+            </div>
+            <div class="form-group">
+                <label for="editNifText">NIF</label>
+                <input type="text" id="editNifText" name="nif" placeholder="NIF" required>
+            </div>
+            <div class="form-group">
+                <label for="editRuaText">Rua</label>
+                <input type="text" id="editRuaText" name="rua" placeholder="Rua" required>
+            </div>
+            <div class="form-group">
+                <label for="editPortaText">Porta</label>
+                <input type="text" id="editPortaText" name="porta" placeholder="Porta" required>
+            </div>
+            <div class="form-group">
+                <label for="editCodPostalCombo">Código Postal</label>
+                <select id="editCodPostalCombo" name="idCodPostal" required>
+                    <option th:each="codPostal : ${codPostais}" th:value="${codPostal.idCodPostal}" th:text="${codPostal.localidade}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="editTelefoneText">Telefone</label>
+                <input type="text" id="editTelefoneText" name="telefone" placeholder="Telefone" required>
+            </div>
+            <div class="buttons">
+                <button type="submit">Guardar Alterações</button>
+                <button type="button" onclick="closeModal('editModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmar Remover Modal -->
+<div id="confirmRemoveModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmRemoveModal')">&times;</span>
+        <h1>Remover Fornecedor</h1>
+        <p>Tem certeza que deseja remover este fornecedor?</p>
+        <form id="removeForm" action="/Fornecedores/Remover/GestorComercial" method="post">
+            <input type="hidden" id="removeId" name="id">
+            <div class="buttons">
+                <button type="submit">Remover</button>
+                <button type="button" onclick="closeModal('confirmRemoveModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function showInserirFornecedorModal() {
+        document.getElementById('insertModal').style.display = "block";
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+
+    function showEditarFornecedorModal(id, nome, nif, rua, porta, idCodPostal, telefone) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editNomeText').value = nome;
+        document.getElementById('editNifText').value = nif;
+        document.getElementById('editRuaText').value = rua;
+        document.getElementById('editPortaText').value = porta;
+        document.getElementById('editCodPostalCombo').value = idCodPostal;
+        document.getElementById('editTelefoneText').value = telefone;
+        document.getElementById('editModal').style.display = "block";
+    }
+
+    function confirmarRemoverFornecedor(id) {
+        document.getElementById('removeId').value = id;
+        document.getElementById('confirmRemoveModal').style.display = "block";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('insertModal')) {
+            closeModal('insertModal');
+        } else if (event.target == document.getElementById('editModal')) {
+            closeModal('editModal');
+        } else if (event.target == document.getElementById('confirmRemoveModal')) {
+            closeModal('confirmRemoveModal');
+        }
+    }
+</script>
+</body>
+</html>

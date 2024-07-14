@@ -54,14 +54,17 @@ public class LoginController {
                 session.setAttribute("userId", funcionario.getId());
 
                 int tipoFuncionario = funcionario.getIdTipoFuncionario();
-                if (tipoFuncionario == 4) {
-                    return "redirect:/Armazem/GestorLogistico";
-                } else if (tipoFuncionario == 1)  {
+                if (tipoFuncionario == 1) {
                     return "redirect:/Armazem/Admin";
-                } else if (tipoFuncionario == 5) {
-                    return "redirect:/Contentores/FuncionarioArmazem";
+                } else if (tipoFuncionario == 2) {
+                    return "redirect:/Clientes/GestorComercial";
                 } else if (tipoFuncionario == 3) {
                     return "redirect:/Reservas/GestorOperacional";
+                } else if (tipoFuncionario == 4) {
+                    return "redirect:/Armazem/GestorLogistico";
+                } else if (tipoFuncionario == 5) {
+                    return "redirect:/Contentores/FuncionarioArmazem";
+
                 }
             }
         }
