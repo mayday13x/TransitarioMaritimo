@@ -11,4 +11,8 @@ public interface ArmazemRepository extends JpaRepository<ArmazemEntity,Integer> 
 
     @Query("SELECT a FROM ArmazemEntity a WHERE a.id = :id")
     ArmazemEntity findByIdLike(@Param("id") Integer id);
+
+    //somar os volumes das cargas presentes no armazem
+    @Query("SELECT SUM(c.volume) FROM CargaEntity c WHERE c.idArmazem = :idArmazem")
+    Double sumVolumes(@Param("idArmazem") Integer idArmazem);
 }

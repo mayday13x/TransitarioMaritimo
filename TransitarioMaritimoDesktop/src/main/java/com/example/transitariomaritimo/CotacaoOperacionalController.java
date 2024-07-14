@@ -475,15 +475,17 @@ public class CotacaoOperacionalController implements Initializable {
 
             //atualizar id_reserva em carga
 
-          //  List<CargaEntity> cargas = carga_repo.findByIdCotacao(cotacao.getId());
-
             try {
                 reserva_repo.save(novareserva);
+                //atualizar id_reserva em carga
 
-              /*  for (CargaEntity carga : cargas) {
+                List<CargaEntity> cargas = carga_repo.findByIdCotacao(cotacao.getId());
+                for (CargaEntity carga : cargas) {
+                    System.out.println(carga.getId());
                     carga.setIdReserva(novareserva.getId());
+                    carga.setReservaByIdReserva(novareserva);
                     carga_repo.save(carga);
-                }*/
+                }
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Sucesso!");
