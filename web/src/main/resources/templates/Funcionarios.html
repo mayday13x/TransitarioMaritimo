@@ -195,16 +195,16 @@
 <body>
 <div class="nav-bar">
     <div class="menu-items">
-        <a href="/Armazem">Armazem</a>
-        <a href="/CargaArmazem">Cargas</a>
-        <a href="/Clientes">Clientes</a>
-        <a href="/Contentores">Contentores</a>
-        <a href="/Cotacao">Cotação</a>
-        <a href="/Fornecedores">Fornecedores</a>
-        <a href="/Funcionarios">Funcionários</a>
-        <a href="/Reservas">Reservas</a>
-        <a href="/Servicos">Serviços</a>
-        <a href="/Transportes">Transportes</a>
+        <a href="/Armazem/Admin">Armazem</a>
+        <a href="/Carga/Admin">Cargas</a>
+        <a href="/Clientes/Admin">Clientes</a>
+        <a href="/Contentores/Admin">Contentores</a>
+        <a href="/Cotacao/Admin">Cotação</a>
+        <a href="/Fornecedores/Admin">Fornecedores</a>
+        <a href="/Funcionarios/Admin">Funcionários</a>
+        <a href="/Reservas/Admin">Reservas</a>
+        <a href="/Servicos/Admin">Serviços</a>
+        <a href="/Transportes/Admin">Transportes</a>
     </div>
     <div class="user-info">
         <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
@@ -245,7 +245,7 @@
             </tbody>
         </table>
         <div class="buttons">
-            <a href="/inserirFuncionario">Inserir Funcionário</a>
+            <a href="/Funcionarios/Inserir/Admin">Inserir Funcionário</a>
         </div>
     </div>
 </div>
@@ -255,7 +255,7 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal('insertModal')">&times;</span>
         <h1>Inserir Funcionário</h1>
-        <form id="formInserirFuncionario" action="/inserirFuncionario" method="post">
+        <form id="formInserirFuncionario" action="/Funcionarios/Inserir/Admin" method="post">
             <div class="form-group">
                 <div>
                     <label for="NomeText">Nome</label>
@@ -312,7 +312,7 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal('editModal')">&times;</span>
         <h1>Editar Funcionário</h1>
-        <form id="formEditarFuncionario" action="/editarFuncionario" method="post">
+        <form id="formEditarFuncionario" action="/Funcionarios/Editar/Admin" method="post">
             <input type="hidden" id="editId" name="id">
             <div class="form-group">
                 <div>
@@ -407,7 +407,7 @@
     }
 
     function removerFuncionario(id) {
-        fetch(`/removerFuncionario?id=${id}`, {
+        fetch(`/Funcionarios/Remover/Admin?id=${id}`, {
             method: 'DELETE'
         }).then(response => {
             if (response.ok) {

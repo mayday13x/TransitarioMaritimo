@@ -21,7 +21,9 @@ public class ArmazemController {
         this.repo_armazem = repo_armazem;
     }
 
-    @GetMapping("/Armazem")
+    // Admin
+
+    @GetMapping("/Armazem/Admin")
     public String listarArmazens(Model model, HttpSession session){
         List<ArmazemEntity> armazens = repo_armazem.findAll();
         model.addAttribute("armazens", armazens);
@@ -32,7 +34,7 @@ public class ArmazemController {
         return "Armazem";
     }
 
-    @PostMapping("/inserirArmazem")
+    @PostMapping("/Armazem/Inserir/Admin")
     public String inserirArmazem(
             @RequestParam("descricao") String descricao,
             @RequestParam("capacidadeMaxima") int capacidadeMaxima
@@ -43,10 +45,10 @@ public class ArmazemController {
 
         repo_armazem.save(novoArmazem);
 
-        return "redirect:/Armazem";
+        return "redirect:/Armazem/Admin";
     }
 
-    @PostMapping("/editarArmazem")
+    @PostMapping("/Armazem/Editar/Admin")
     public String editarArmazem(
             @RequestParam("id") int id,
             @RequestParam("descricao") String descricao,
@@ -60,16 +62,18 @@ public class ArmazemController {
             repo_armazem.save(armazem);
         }
 
-        return "redirect:/Armazem";
+        return "redirect:/Armazem/Admin";
     }
 
-    @PostMapping("/removerArmazem")
+    @PostMapping("/Armazem/Remover/Admin")
     public String removerArmazem(@RequestParam("id") int id) {
         repo_armazem.deleteById(id);
         return "redirect:/Armazem";
     }
 
-    @GetMapping("/ArmazemGestorLogistico")
+    // Gestor Logistico
+
+    @GetMapping("/Armazem/GestorLogistico")
     public String listarArmazensGestorLogistico(Model model, HttpSession session) {
         List<ArmazemEntity> armazens = repo_armazem.findAll();
         model.addAttribute("armazens", armazens);
@@ -80,7 +84,7 @@ public class ArmazemController {
         return "ArmazemGestorLogisticoArmazem";
     }
 
-    @PostMapping("/inserirArmazemGestorLogistico")
+    @PostMapping("/Armazem/Inserir/GestorLogistico")
     public String inserirArmazemGestorLogistico(
             @RequestParam("descricao") String descricao,
             @RequestParam("capacidadeMaxima") int capacidadeMaxima
@@ -91,10 +95,10 @@ public class ArmazemController {
 
         repo_armazem.save(novoArmazem);
 
-        return "redirect:/ArmazemGestorLogistico";
+        return "redirect:/Armazem/GestorLogistico";
     }
 
-    @PostMapping("/editarArmazemGestorLogistico")
+    @PostMapping("/Armazem/Editar/GestorLogistico")
     public String editarArmazemGestorLogistico(
             @RequestParam("id") int id,
             @RequestParam("descricao") String descricao,
@@ -108,12 +112,12 @@ public class ArmazemController {
             repo_armazem.save(armazem);
         }
 
-        return "redirect:/ArmazemGestorLogistico";
+        return "redirect:/Armazem/GestorLogistico";
     }
 
-    @PostMapping("/removerArmazemGestorLogistico")
+    @PostMapping("/Armazem/Remover/GestorLogistico")
     public String removerArmazemGestorLogistico(@RequestParam("id") int id) {
         repo_armazem.deleteById(id);
-        return "redirect:/ArmazemGestorLogistico";
+        return "redirect:/Armazem/GestorLogistico";
     }
 }

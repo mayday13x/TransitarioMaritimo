@@ -25,7 +25,9 @@ public class ServicoController {
         this.fornecedor_repo = fornecedor_repo;
     }
 
-    @GetMapping("/Servicos")
+    //Admin
+
+    @GetMapping("/Servicos/Admin")
     public String listarServicos(Model model, HttpSession session){
         List<ServicoEntity> servicos = repo_servico.findAll();
         List<FornecedorEntity> fornecedores = fornecedor_repo.findAll();
@@ -38,7 +40,7 @@ public class ServicoController {
         return "Servicos";
     }
 
-    @PostMapping("/inserirServico")
+    @PostMapping("/Servicos/Inserir/Admin")
     public String adicionarServico(@RequestParam String descricao, @RequestParam double preco, @RequestParam double comissao, @RequestParam int idFornecedor, Model model) {
 
         if (Objects.equals(descricao, "") || preco <= 0 || comissao < 0 || idFornecedor == 0) {
@@ -61,11 +63,11 @@ public class ServicoController {
                 model.addAttribute("error", e.getMessage());
             }
 
-            return "redirect:/Servicos";
+            return "redirect:/Servicos/Admin";
         }
     }
 
-    @PostMapping("/editarServico")
+    @PostMapping("/Servicos/Editar/Admin")
     public String editarServico(
             @RequestParam int id,
             @RequestParam String descricao,
@@ -92,10 +94,10 @@ public class ServicoController {
             }
         }
 
-        return "redirect:/Servicos";
+        return "redirect:/Servicos/Admin";
     }
 
-    @PostMapping("/removerServico")
+    @PostMapping("/Servicos/Remover/Admin")
     public String removerServico(@RequestParam int id, Model model) {
         try {
             repo_servico.deleteById(id);
@@ -103,6 +105,6 @@ public class ServicoController {
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
-        return "redirect:/Servicos";
+        return "redirect:/Servicos/Admin";
     }
 }

@@ -177,8 +177,8 @@
 <body>
 <div class="nav-bar">
     <div class="menu-items">
-        <a href="/CotacaoCliente">Cotação</a>
-        <a href="/ReservasCliente">Reservas</a>
+        <a href="/Cotacao/Cliente">Cotação</a>
+        <a href="/Reservas/Cliente">Reservas</a>
     </div>
     <div class="user-info">
         <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
@@ -238,7 +238,7 @@
 
 <script>
     function confirmarCotacao(id) {
-        fetch(`/confirmarCotacao?id=${id}`, {
+        fetch(`/Cotacao/ConfirmarCotacao/Cliente?id=${id}`, {
             method: 'POST'
         }).then(response => {
             if (response.ok) {
@@ -250,7 +250,7 @@
     }
 
     function rejeitarCotacao(id) {
-        fetch(`/rejeitarCotacao?id=${id}`, {
+        fetch(`/Cotacao/RejeitarCotacao/Cliente?id=${id}`, {
             method: 'POST'
         }).then(response => {
             if (response.ok) {
@@ -262,7 +262,7 @@
     }
 
     function verServicos(id) {
-        fetch(`/verServicosCotacao?id=${id}`)
+        fetch(`/Cotacao/VerServicos/Cliente?id=${id}`)
             .then(response => response.json())
             .then(data => {
                 var servicosTableBody = document.getElementById("servicosTableBody");

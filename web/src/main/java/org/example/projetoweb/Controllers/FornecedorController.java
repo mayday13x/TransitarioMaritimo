@@ -25,7 +25,9 @@ public class FornecedorController {
         this.repo_codPostal = repo_codPostal;
     }
 
-    @GetMapping("/Fornecedores")
+    //Admin
+
+    @GetMapping("/Fornecedores/Admin")
     public String listarFornecedores(Model model, HttpSession session){
         List<FornecedorEntity> fornecedores = repo_fornecedor.findAll();
         List<CodPostalEntity> codPostais = repo_codPostal.findAll();
@@ -38,7 +40,7 @@ public class FornecedorController {
         return "Fornecedores";
     }
 
-    @PostMapping("/inserirFornecedor")
+    @PostMapping("/Fornecedores/Inserir/Admin")
     public String inserirFornecedor(
             @RequestParam("nome") String nome,
             @RequestParam("nif") String nif,
@@ -62,10 +64,10 @@ public class FornecedorController {
             repo_fornecedor.save(novoFornecedor);
         }
 
-        return "redirect:/Fornecedores";
+        return "redirect:/Fornecedores/Admin";
     }
 
-    @PostMapping("/editarFornecedor")
+    @PostMapping("/Fornecedores/Editar/Admin")
     public String editarFornecedor(
             @RequestParam("id") Integer id,
             @RequestParam("nome") String nome,
@@ -91,12 +93,12 @@ public class FornecedorController {
             repo_fornecedor.save(fornecedor);
         }
 
-        return "redirect:/Fornecedores";
+        return "redirect:/Fornecedores/Admin";
     }
 
-    @PostMapping("/removerFornecedor")
+    @PostMapping("/Fornecedores/Remover/Admin")
     public String removerFornecedor(@RequestParam("id") Integer id) {
         repo_fornecedor.deleteById(id);
-        return "redirect:/Fornecedores";
+        return "redirect:/Fornecedores/Admin";
     }
 }

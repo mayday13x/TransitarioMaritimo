@@ -42,7 +42,9 @@ public class ContentorController {
         this.repo_armazem = repo_armazem;
     }
 
-    @GetMapping("/Contentores")
+    // Admin
+
+    @GetMapping("/Contentores/Admin")
     public String listarContentores(Model model, HttpSession session){
         List<ContentorEntity> contentores = repo_contentor.findAll();
         List<TipoContentorEntity> tiposContentor = repo_tipoContentor.findAll();
@@ -59,7 +61,7 @@ public class ContentorController {
         return "Contentores";
     }
 
-    @PostMapping("/inserirContentor")
+    @PostMapping("/Contentores/Inserir/Admin")
     public String inserirContentor(
             @RequestParam("capacidade") double capacidade,
             @RequestParam("localAtual") String localAtual,
@@ -91,7 +93,7 @@ public class ContentorController {
         return "redirect:/Contentores";
     }
 
-    @PostMapping("/editarContentor")
+    @PostMapping("/Contentores/Editar/Admin")
     public String editarContentor(
             @RequestParam("cin") Integer cin,
             @RequestParam("capacidade") double capacidade,
@@ -124,16 +126,18 @@ public class ContentorController {
             repo_contentor.save(contentor);
         }
 
-        return "redirect:/Contentores";
+        return "redirect:/Contentores/Admin";
     }
 
-    @PostMapping("/removerContentor")
+    @PostMapping("/Contentores/Remover/Admin")
     public String removerContentor(@RequestParam("cin") Integer cin) {
         repo_contentor.deleteById(cin);
-        return "redirect:/Contentores";
+        return "redirect:/Contentores/Admin";
     }
 
-    @GetMapping("/ContentoresGestorLogistico")
+    // Gestor Logístico
+
+    @GetMapping("/Contentores/GestorLogistico")
     public String listarContentoresGestorLogistico(Model model, HttpSession session) {
         List<ContentorEntity> contentores = repo_contentor.findAll();
         List<TipoContentorEntity> tiposContentor = repo_tipoContentor.findAll();
@@ -148,7 +152,9 @@ public class ContentorController {
         return "ContentorGestorLogisticoArmazem";
     }
 
-    @GetMapping("/ContentoresArmazem")
+    // Funcionário Armazém
+
+    @GetMapping("/Contentores/FuncionarioArmazem")
     public String listarContentoresFuncionario(Model model, HttpSession session) {
 
         String loggedInUser = (String) session.getAttribute("username");
@@ -170,7 +176,7 @@ public class ContentorController {
         return "ContentoresArmazem";
     }
 
-    @PostMapping("/inserirContentorFuncionario")
+    @PostMapping("/Contentores/Inserir/FuncionarioArmazem")
     public String adicionarContentor(
             @RequestParam double capacidade,
             @RequestParam double pesoMaximo,
@@ -205,10 +211,10 @@ public class ContentorController {
             repo_contentor.save(novoContentor);
         }
 
-        return "redirect:/ContentoresArmazem";
+        return "redirect:/Contentores/FuncionarioArmazem";
     }
 
-    @PostMapping("/editarContentorArmazem")
+    @PostMapping("/Contentores/Editar/FuncionarioArmazem")
     public String editarContentorArmazem(
             @RequestParam("cin") Integer cin,
             @RequestParam("capacidade") double capacidade,
@@ -237,16 +243,16 @@ public class ContentorController {
             repo_contentor.save(contentor);
         }
 
-        return "redirect:/ContentoresArmazem";
+        return "redirect:/Contentores/FuncionarioArmazem";
     }
 
-    @PostMapping("/removerContentorArmazem")
+    @PostMapping("/Contentores/Remover/FuncionarioArmazem")
     public String removerContentorArmazem(@RequestParam("cin") Integer cin) {
         repo_contentor.deleteById(cin);
-        return "redirect:/ContentoresArmazem";
+        return "redirect:/Contentores/FuncionarioArmazem";
     }
 
-    @PostMapping("/registrarSaidaContentor")
+    @PostMapping("/Contentores/RegistarSaida/FuncionarioArmazem")
     @Transactional
     public String registrarSaidaContentor(@RequestParam int cin) {
         ContentorEntity contentor = repo_contentor.findById(cin).orElse(null);
@@ -258,10 +264,10 @@ public class ContentorController {
             repo_carga.updateArmazemIdByContentorId(cin);
         }
 
-        return "redirect:/ContentoresArmazem";
+        return "redirect:/Contentores/FuncionarioArmazem";
     }
 
-    @GetMapping("/verCargasContentor")
+    @GetMapping("/Contentores/VerCargas/FuncionarioArmazem")
     @ResponseBody
     public List<CargaDto> verCargasContentor(@RequestParam int cin) {
         List<CargaEntity> cargas = repo_carga.findByContentorCin(cin);
