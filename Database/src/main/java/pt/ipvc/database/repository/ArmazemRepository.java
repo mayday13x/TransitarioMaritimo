@@ -15,4 +15,8 @@ public interface ArmazemRepository extends JpaRepository<ArmazemEntity,Integer> 
     //somar os volumes das cargas presentes no armazem
     @Query("SELECT SUM(c.volume) FROM CargaEntity c WHERE c.idArmazem = :idArmazem")
     Double sumVolumes(@Param("idArmazem") Integer idArmazem);
+
+    //contar quantas cargas estao em armazem
+    @Query("SELECT COUNT(c.id) FROM CargaEntity c WHERE c.idArmazem = :idArmazem")
+    Long countCargasInArmazem(@Param("idArmazem") Integer idArmazem);
 }

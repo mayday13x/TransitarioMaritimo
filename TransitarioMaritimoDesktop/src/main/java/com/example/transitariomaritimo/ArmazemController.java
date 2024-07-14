@@ -73,6 +73,9 @@ public class ArmazemController implements Initializable {
     private Pane PaneInserir;
 
     @FXML
+    private Pane PaneInserirArmazem;
+
+    @FXML
     private Pane mainPanel;
 
     @FXML
@@ -140,6 +143,16 @@ public class ArmazemController implements Initializable {
 
     @FXML
     private Button removeCargaButton;
+
+    // Editar Armazem elements
+    @FXML
+    private Pane PaneEditarArmazem;
+
+    @FXML
+    private TextField descricaoTextEdit;
+
+    @FXML
+    private TextField CapacidadeMaximaTextEdit;
 
 
 
@@ -250,22 +263,6 @@ public class ArmazemController implements Initializable {
 
         TCargas.setItems(cargas);
 
-    }
-
-
-    @FXML
-    public void VoltarAtras(ActionEvent event) {
-
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("MenuAdminView.fxml"));
-            Scene regCena = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(regCena);
-            stage.setTitle("Menu");
-            stage.show();
-        }catch (IOException ex){
-            System.out.println("Erro ao acessar menu cliente: " + ex.getMessage());
-        }
     }
 
     @FXML
@@ -387,6 +384,144 @@ public class ArmazemController implements Initializable {
 
     }
 
+
+    // Armazens
+
+    @FXML
+    public void InserirArmazem(ActionEvent event) {
+        PaneInserirArmazem.setVisible(true);
+        mainPanel.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        mainPanel.setDisable(true);
+    }
+
+    @FXML
+    public void closeInserirArmazem(ActionEvent event) {
+
+        PaneInserirArmazem.setVisible(false);
+        mainPanel.setEffect(null);
+        mainPanel.setDisable(false);
+    }
+
+    @FXML
+    public void RegistarArmazem(ActionEvent event) {
+
+        if(Objects.equals(descricaoText.getText(), "") || Objects.equals(CapacidadeMaximaText.getText(), "")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro!");
+            alert.setHeaderText("Todos os campos devem estar preenchidos!");
+            alert.setContentText("Por favor preencha todos os campos.");
+            alert.showAndWait();
+        } else {
+
+            ArmazemEntity novoArmazem = new ArmazemEntity();
+            novoArmazem.setCapacidadeMax(Double.parseDouble(CapacidadeMaximaText.getText()));
+            novoArmazem.setDescricao(descricaoText.getText());
+
+            //List<CargaEntity> cargas = carga_repo.findByArmazemID(novoArmazem.getId());
+            //novoArmazem.setCargasById(cargas);
+
+            armazem_repo.save(novoArmazem);
+
+            CapacidadeMaximaText.clear();
+            descricaoText.clear();
+            closeInserirArmazem(null);
+
+            ObservableList<ArmazemEntity> armazensAtualizados = FXCollections.observableArrayList(armazem_repo.findAll());
+            //table.setItems(armazensAtualizados);
+            ArmazemCombo.setItems(armazensAtualizados);
+        }
+    }
+
+    @FXML
+    public void RemoverArmazem(ActionEvent event) {
+
+        ArmazemEntity armazemSelecionado = ArmazemCombo.getSelectionModel().getSelectedItem();
+        long countCargas = armazem_repo.countCargasInArmazem(armazemSelecionado.getId());
+
+        if (countCargas > 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro!");
+            alert.setHeaderText("Não é possível remover o armazém!");
+            alert.setContentText("O armazém possui cargas associadas.");
+            alert.showAndWait();
+            return;
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Remover armazem \"" + armazemSelecionado.getDescricao() + "\" ?");
+            alert.setHeaderText("Pretende remover o armazém \" " + armazemSelecionado.getDescricao() + "\" ?");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                armazem_repo.deleteById(armazemSelecionado.getId());
+            }
+
+        }
+
+        ObservableList<ArmazemEntity> armazensAtualizados = FXCollections.observableArrayList(armazem_repo.findAll());
+        //table.setItems(armazensAtualizados);
+        ArmazemCombo.setItems(armazensAtualizados);
+
+    }
+
+    @FXML
+    public void showEditarArmazem(ActionEvent event) {
+        PaneEditarArmazem.setVisible(true);
+        mainPanel.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        mainPanel.setDisable(true);
+
+        ArmazemEntity armazemSelecionado = ArmazemCombo.getSelectionModel().getSelectedItem();
+        descricaoTextEdit.setText(armazemSelecionado.getDescricao());
+        CapacidadeMaximaTextEdit.setText(String.valueOf(armazemSelecionado.getCapacidadeMax()));
+    }
+
+    @FXML
+    public void closeEditarArmazem(ActionEvent event) {
+
+        PaneEditarArmazem.setVisible(false);
+        mainPanel.setEffect(null);
+        mainPanel.setDisable(false);
+    }
+
+    public void EditarArmazem(ActionEvent event) {
+        ArmazemEntity armazemSelecionado = ArmazemCombo.getSelectionModel().getSelectedItem();
+
+        if(Objects.equals(descricaoTextEdit.getText(), "") || Objects.equals(CapacidadeMaximaTextEdit.getText(), "")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro!");
+            alert.setHeaderText("Todos os campos devem estar preenchidos!");
+            alert.setContentText("Por favor preencha todos os campos.");
+            alert.showAndWait();
+        } else {
+
+            if((armazem_repo.sumVolumes(armazemSelecionado.getId()) > Double.parseDouble(CapacidadeMaximaText.getText()))){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro!");
+                alert.setHeaderText("Capacidade insuficiente para as cargas existentes!");
+                alert.setContentText("Capacidade minima necessaria: " + armazem_repo.sumVolumes(armazemSelecionado.getId()));
+                alert.showAndWait();
+            } else {
+
+                try {
+                    armazem_repo.save(armazemSelecionado);
+                    armazemSelecionado.setDescricao(descricaoTextEdit.getText());
+                    armazemSelecionado.setCapacidadeMax(Double.parseDouble(CapacidadeMaximaTextEdit.getText()));
+                } catch (Exception e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erro!");
+                    alert.setHeaderText("Erro ao editar o armazém!");
+                    alert.showAndWait();
+                    return;
+                }
+
+                closeEditarArmazem(null);
+
+                ObservableList<ArmazemEntity> armazensAtualizados = FXCollections.observableArrayList(armazem_repo.findAll());
+                //table.setItems(armazensAtualizados);
+                ArmazemCombo.setItems(armazensAtualizados);
+            }
+        }
+
+    }
 
     @FXML
     public void VisualizarCargas(ActionEvent event)  throws IOException{
