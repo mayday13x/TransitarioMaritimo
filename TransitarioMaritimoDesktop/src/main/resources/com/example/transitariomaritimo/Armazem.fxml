@@ -20,17 +20,17 @@
                   <Font size="23.0" />
                </font>
             </Label>
-            <ComboBox fx:id="ArmazemCombo" layoutX="112.0" layoutY="87.0" onAction="#atualizarInfo" prefHeight="36.0" prefWidth="181.0" />
-            <Label layoutX="37.0" layoutY="95.0" text="Armazém:">
+            <ComboBox fx:id="ArmazemCombo" layoutX="114.0" layoutY="77.0" onAction="#atualizarInfo" prefHeight="36.0" prefWidth="181.0" />
+            <Label layoutX="39.0" layoutY="85.0" text="Armazém:">
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <Label layoutX="401.0" layoutY="95.0" text="Capacidade:">
+            <Label layoutX="615.0" layoutY="85.0" text="Capacidade:">
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <Label fx:id="capacidadeLabel" layoutX="489.0" layoutY="96.0" text="." />
-            <TableView fx:id="TCargas" layoutX="37.0" layoutY="193.0" prefHeight="365.0" prefWidth="827.0" tableMenuButtonVisible="true">
+            <Label fx:id="capacidadeLabel" layoutX="703.0" layoutY="86.0" text="." />
+            <TableView fx:id="TCargas" layoutX="37.0" layoutY="169.0" prefHeight="389.0" prefWidth="827.0" tableMenuButtonVisible="true">
               <columns>
                   <TableColumn fx:id="IdCarga" prefWidth="54.4000244140625" text="ID" />
                   <TableColumn fx:id="IdReservaCarga" prefWidth="97.5999984741211" text="ID_Reserva" />
@@ -41,9 +41,9 @@
                   <TableColumn fx:id="tipoCarga" prefWidth="152.0" text="Tipo Carga" />
               </columns>
             </TableView>
-            <Label layoutX="37.0" layoutY="158.0" text="Cargas">
+            <Label layoutX="39.0" layoutY="142.0" text="Cargas em Armazém">
                <font>
-                  <Font size="18.0" />
+                  <Font size="14.0" />
                </font>
             </Label>
             <Button defaultButton="true" layoutX="37.0" layoutY="569.0" mnemonicParsing="false" onAction="#showAdicionarCarga" prefHeight="36.0" prefWidth="152.0" text="Adicionar Carga" />
