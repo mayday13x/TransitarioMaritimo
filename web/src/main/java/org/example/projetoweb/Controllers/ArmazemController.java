@@ -32,7 +32,7 @@ public class ArmazemController {
     @GetMapping("/Armazem/Admin")
     public String listarArmazens(Model model, HttpSession session){
         List<ArmazemEntity> armazens = repo_armazem.findAll();
-        List<CargaEntity> cargasDisponiveis = repo_carga.findByIdArmazemNull();
+        List<CargaEntity> cargasDisponiveis = repo_carga.findByIdArmazemNullAndReservaPago();
         model.addAttribute("armazens", armazens);
         model.addAttribute("cargasDisponiveis", cargasDisponiveis);
 
@@ -127,7 +127,7 @@ public class ArmazemController {
     @GetMapping("/Armazem/GestorLogistico")
     public String listarArmazensGestorLogistico(Model model, HttpSession session) {
         List<ArmazemEntity> armazens = repo_armazem.findAll();
-        List<CargaEntity> cargasDisponiveis = repo_carga.findByIdArmazemNull();
+        List<CargaEntity> cargasDisponiveis = repo_carga.findByIdArmazemNullAndReservaPago();
         model.addAttribute("armazens", armazens);
         model.addAttribute("cargasDisponiveis", cargasDisponiveis);
 
