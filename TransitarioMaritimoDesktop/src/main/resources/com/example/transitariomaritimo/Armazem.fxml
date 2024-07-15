@@ -29,7 +29,7 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <Label fx:id="capacidadeLabel" layoutX="539.0" layoutY="96.0" text="." />
+            <Label fx:id="capacidadeLabel" layoutX="489.0" layoutY="96.0" text="." />
             <TableView fx:id="TCargas" layoutX="37.0" layoutY="193.0" prefHeight="365.0" prefWidth="827.0" tableMenuButtonVisible="true">
               <columns>
                   <TableColumn fx:id="IdCarga" prefWidth="54.4000244140625" text="ID" />

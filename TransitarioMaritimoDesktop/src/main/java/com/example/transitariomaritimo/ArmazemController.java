@@ -284,7 +284,7 @@ public class ArmazemController implements Initializable {
 
         ArmazemEntity armazemSelecionado = ArmazemCombo.getSelectionModel().getSelectedItem();
 
-        ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(carga_repo.findByIdArmazemNull());
+        ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(carga_repo.findByIdArmazemNullAndReservaPago());
 
         IdCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
         IdReservaCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIdReserva().toString()));
@@ -349,7 +349,7 @@ public class ArmazemController implements Initializable {
             }
         }
 
-        ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(carga_repo.findByIdArmazemNull());
+        ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(carga_repo.findByIdArmazemNullAndReservaPago());
         TCargasAdd.setItems(cargas);
         atualizarInfo(null);
 
@@ -385,7 +385,7 @@ public class ArmazemController implements Initializable {
         }
 
 
-        ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(carga_repo.findByIdArmazemNull());
+        ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(carga_repo.findByIdArmazemNullAndReservaPago());
         TCargasAdd.setItems(cargas);
         atualizarInfo(null);
 
