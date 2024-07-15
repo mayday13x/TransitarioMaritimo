@@ -2,15 +2,15 @@ package org.example.projetoweb.Dto;
 
 public class CargaDto {
     private int id;
-    private String descricao;
+    private String observacoes;
     private double peso;
     private double volume;
 
     // Construtores, getters e setters
 
-    public CargaDto(int id, String descricao, double peso, double volume) {
+    public CargaDto(int id, String observacoes, double peso, double volume) {
         this.id = id;
-        this.descricao = descricao;
+        this.observacoes =observacoes;
         this.peso = peso;
         this.volume = volume;
     }
@@ -23,12 +23,12 @@ public class CargaDto {
         this.id = id;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getObservacoes() {
+        return observacoes;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setObservacoes(String descricao) {
+        this.observacoes = descricao;
     }
 
     public double getPeso() {

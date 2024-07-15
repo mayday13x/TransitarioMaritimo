@@ -1,7 +1,7 @@
 package org.example.projetoweb.Controllers;
 
 import org.example.projetoweb.Dto.CargaDto;
-import org.example.projetoweb.Dto.ServicoDto;
+import org.example.projetoweb.Dto.ContentorDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -86,11 +86,10 @@ public class ContentorController {
             novoContentor.setIdArmazem(armazemId);
             novoContentor.setArmazemByIdArmazem(repo_armazem.findById(armazemId).orElse(null));
 
-
             repo_contentor.save(novoContentor);
         }
 
-        return "redirect:/Contentores";
+        return "redirect:/Contentores/Admin";
     }
 
     @PostMapping("/Contentores/Editar/Admin")
@@ -132,6 +131,65 @@ public class ContentorController {
     @PostMapping("/Contentores/Remover/Admin")
     public String removerContentor(@RequestParam("cin") Integer cin) {
         repo_contentor.deleteById(cin);
+        return "redirect:/Contentores/Admin";
+    }
+
+    @GetMapping("/Cargas/Disponiveis/Admin")
+    @ResponseBody
+    public List<CargaDto> listarCargasDisponiveis(HttpSession session) {
+        List<CargaEntity> cargas = repo_carga.findByIdContentorNullAndReservaPago();
+        return cargas.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    @GetMapping("/Contentores/Disponiveis/Admin")
+    @ResponseBody
+    public List<ContentorDto> listarContentoresDisponiveis(@RequestParam("cargaId") int cargaId) {
+        CargaEntity carga = repo_carga.findById(cargaId).orElse(null);
+        if (carga == null) return null;
+
+        return repo_contentor.findAll().stream()
+                .filter(contentor -> {
+                    double cargaTotal = repo_carga.findByContentorCin(contentor.getCin()).stream()
+                            .mapToDouble(CargaEntity::getPeso)
+                            .sum();
+                    return (cargaTotal + carga.getPeso() <= contentor.getPesoMax())
+                            && (contentor.getCapacidade() >= carga.getVolume());
+                })
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @PostMapping("/Contentores/AdicionarCarga/Admin")
+    @Transactional
+    public String adicionarCargaContentor(
+            @RequestParam("contentorCin") Integer contentorCin,
+            @RequestParam("cargaId") Integer cargaId
+    ) {
+        ContentorEntity contentor = repo_contentor.findById(contentorCin).orElse(null);
+        CargaEntity carga = repo_carga.findById(cargaId).orElse(null);
+
+        if (contentor != null && carga != null) {
+            carga.setIdContentor(contentorCin);
+            carga.setContentorByIdContentor(contentor);
+            carga.setLocalAtual(contentor.getLocalAtual());
+            repo_carga.save(carga);
+
+        }
+
+        return "redirect:/Contentores/Admin";
+    }
+
+    @PostMapping("/Contentores/RegistarSaida/Admin")
+    @Transactional
+    public String registrarSaidaContentor(@RequestParam("cin") int cin) {
+        ContentorEntity contentor = repo_contentor.findById(cin).orElse(null);
+        if (contentor != null) {
+            contentor.setIdArmazem(null);
+            repo_contentor.save(contentor);
+
+            repo_carga.updateArmazemIdByContentorId(cin);
+        }
+
         return "redirect:/Contentores/Admin";
     }
 
@@ -254,10 +312,9 @@ public class ContentorController {
 
     @PostMapping("/Contentores/RegistarSaida/FuncionarioArmazem")
     @Transactional
-    public String registrarSaidaContentor(@RequestParam int cin) {
+    public String registrarSaidaContentorFuncionarioArmazem(@RequestParam("cin") int cin) {
         ContentorEntity contentor = repo_contentor.findById(cin).orElse(null);
         if (contentor != null) {
-            // Atualiza o armazém do contentor para null
             contentor.setIdArmazem(null);
             repo_contentor.save(contentor);
 
@@ -275,8 +332,112 @@ public class ContentorController {
     }
 
     private CargaDto convertToDTO(CargaEntity carga) {
-        CargaDto dto = new CargaDto(carga.getId(), carga.getObservacoes(), carga.getPeso(), carga.getVolume());
-        return dto;
+        return new CargaDto(carga.getId(), carga.getObservacoes(), carga.getPeso(), carga.getVolume());
     }
 
+    private ContentorDto convertToDTO(ContentorEntity contentor) {
+        return new ContentorDto(contentor.getCin(), contentor.getCapacidade(), contentor.getPesoMax(), contentor.getLocalAtual());
+    }
+
+    @GetMapping("/Cargas/Disponiveis/FuncionarioArmazem")
+    @ResponseBody
+    public List<CargaDto> listarCargasDisponiveisFuncionarioArmazem(HttpSession session) {
+        int funcionarioId = (int) session.getAttribute("userId");
+        FuncionarioEntity funcionario = repo_funcionario.findById(funcionarioId).orElse(null);
+        if (funcionario != null) {
+            int armazemId = funcionario.getIdArmazem();
+            List<CargaEntity> cargas = repo_carga.findByIdArmazemAndIdContentorNullAndReservaPago(armazemId);
+            return cargas.stream().map(this::convertToDTO).collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    @GetMapping("/Contentores/Disponiveis/FuncionarioArmazem")
+    @ResponseBody
+    public List<ContentorDto> listarContentoresDisponiveisFuncionarioArmazem(@RequestParam("cargaId") int cargaId, HttpSession session) {
+        CargaEntity carga = repo_carga.findById(cargaId).orElse(null);
+        if (carga == null) return null;
+
+        int funcionarioId = (int) session.getAttribute("userId");
+        FuncionarioEntity funcionario = repo_funcionario.findById(funcionarioId).orElse(null);
+
+        if (funcionario != null) {
+            int armazemId = funcionario.getIdArmazem();
+
+            return repo_contentor.findByIdArmazem(armazemId).stream()
+                    .filter(contentor -> {
+                        double cargaTotal = repo_carga.findByContentorCin(contentor.getCin()).stream()
+                                .mapToDouble(CargaEntity::getPeso)
+                                .sum();
+                        return (cargaTotal + carga.getPeso() <= contentor.getPesoMax())
+                                && (contentor.getCapacidade() >= carga.getVolume());
+                    })
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+
+        } else {
+            return null;
+        }
+
+    }
+
+    @PostMapping("/Contentores/AdicionarCarga/FuncionarioArmazem")
+    @Transactional
+    public String adicionarCargaContentorFuncionarioArmazem(
+            @RequestParam("contentorCin") Integer contentorCin,
+            @RequestParam("cargaId") Integer cargaId,
+            HttpSession session
+    ) {
+        int funcionarioId = (int) session.getAttribute("userId");
+        FuncionarioEntity funcionario = repo_funcionario.findById(funcionarioId).orElse(null);
+        if (funcionario != null) {
+            ContentorEntity contentor = repo_contentor.findById(contentorCin).orElse(null);
+            CargaEntity carga = repo_carga.findById(cargaId).orElse(null);
+
+            if (contentor != null && carga != null && contentor.getIdArmazem() == funcionario.getIdArmazem()) {
+                carga.setIdContentor(contentorCin);
+                carga.setContentorByIdContentor(contentor);
+                carga.setLocalAtual(contentor.getLocalAtual());
+                repo_carga.save(carga);
+            }
+        }
+        return "redirect:/Contentores/FuncionarioArmazem";
+    }
+
+    // Funcionário Transporte
+
+    @GetMapping("/Contentores/FuncionarioTransporte")
+    public String listarContentoresFuncionarioTransporte(Model model, HttpSession session) {
+        String loggedInUser = (String) session.getAttribute("username");
+        model.addAttribute("loggedInUser", loggedInUser);
+
+        int funcionarioId = (int) session.getAttribute("userId");
+        FuncionarioEntity funcionario = repo_funcionario.findById(funcionarioId).orElse(null);
+        if (funcionario != null) {
+            List<ContentorEntity> contentores = repo_contentor.findByEstado();
+            model.addAttribute("contentores", contentores);
+        }
+        List<TipoContentorEntity> tiposContentor = repo_tipoContentor.findAll();
+        List<EstadoContentorEntity> estadosContentor = repo_estadoContentor.findAll();
+        List<ArmazemEntity> armazens = repo_armazem.findAll();
+        model.addAttribute("tiposContentor", tiposContentor);
+        model.addAttribute("estadosContentor", estadosContentor);
+        model.addAttribute("armazens", armazens);
+        return "ContentoresFuncionarioTransporte";
+    }
+
+    @PostMapping("/Contentores/Editar/FuncionarioTransporte")
+    public String editarLocalAtualContentorFuncionarioTransporte(
+            @RequestParam("cin") Integer cin,
+            @RequestParam("localAtual") String localAtual
+    ) {
+        Optional<ContentorEntity> contentorOptional = repo_contentor.findById(cin);
+        if (contentorOptional.isPresent()) {
+            ContentorEntity contentor = contentorOptional.get();
+            contentor.setLocalAtual(localAtual);
+            repo_contentor.save(contentor);
+        }
+
+        return "redirect:/Contentores/FuncionarioTransporte";
+    }
 }

@@ -64,7 +64,8 @@ public class LoginController {
                     return "redirect:/Armazem/GestorLogistico";
                 } else if (tipoFuncionario == 5) {
                     return "redirect:/Contentores/FuncionarioArmazem";
-
+                } else if (tipoFuncionario == 6) {
+                    return "redirect:/Contentores/FuncionarioTransporte";
                 }
             }
         }
