@@ -1,0 +1,20 @@
+<div class="table-container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Descrição</th>
+            <th>Capacidade Máxima</th>
+            <th>Selecionar</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="armazem : ${armazens}">
+            <td th:text="${armazem.id}"></td>
+            <td th:text="${armazem.descricao}"></td>
+            <td th:text="${armazem.capacidadeMax}"></td>
+            <td><input type="radio" name="armazemId" th:value="${armazem.id}" required></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

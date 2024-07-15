@@ -153,7 +153,7 @@ public class CotacaoController {
             @RequestParam("data") Date data,
             @RequestParam("dataPrevistaInicio") Date dataPrevistaInicio,
             @RequestParam("dataPrevistaFim") Date dataPrevistaFim,
-            @RequestParam(value = "servicosSelecionados", required = false) List<Integer> servicosSelecionados
+            @RequestParam(value = "servicosSelecionados", required = false) String servicosSelecionados
     ) {
         CotacaoEntity cotacao = repo_cotacao.findById(idCotacao).orElse(null);
         if (cotacao != null) {
@@ -163,8 +163,10 @@ public class CotacaoController {
             repo_linhaCotacao.deleteLinhaCotacaoEntitiesByIdCotacao(cotacao.getId());
 
             double valorTotal = 0;
-            if (servicosSelecionados != null) {
-                for (Integer idServico : servicosSelecionados) {
+            if (servicosSelecionados != null && !servicosSelecionados.isEmpty()) {
+                String[] servicosArray = servicosSelecionados.split(",");
+                for (String idServicoStr : servicosArray) {
+                    Integer idServico = Integer.parseInt(idServicoStr);
                     ServicoEntity servico = repo_servico.findById(idServico).orElse(null);
                     if (servico != null) {
                         valorTotal += servico.getPreco() + (servico.getComissao() * servico.getPreco());
@@ -386,25 +388,28 @@ public class CotacaoController {
         return "redirect:/Cotacao/GestorComercial";
     }
 
+
     @PostMapping("/Cotacao/Editar/GestorComercial")
-    public String editarCotacaoAdminGestorComercial(
+    public String editarCotacaoGestorComercial(
             @RequestParam("idCotacao") int idCotacao,
             @RequestParam("idCliente") Integer idCliente,
             @RequestParam("data") Date data,
             @RequestParam("dataPrevistaInicio") Date dataPrevistaInicio,
             @RequestParam("dataPrevistaFim") Date dataPrevistaFim,
-            @RequestParam(value = "servicosSelecionados", required = false) List<Integer> servicosSelecionados
+            @RequestParam(value = "servicosSelecionados", required = false) String servicosSelecionados
     ) {
         CotacaoEntity cotacao = repo_cotacao.findById(idCotacao).orElse(null);
         if (cotacao != null) {
             cotacao.setIdCliente(idCliente);
             cotacao.setData(data);
 
+            repo_linhaCotacao.deleteLinhaCotacaoEntitiesByIdCotacao(cotacao.getId());
 
-            repo_linhaCotacao.deleteByIdCotacao(cotacao.getId());
             double valorTotal = 0;
-            if (servicosSelecionados != null) {
-                for (Integer idServico : servicosSelecionados) {
+            if (servicosSelecionados != null && !servicosSelecionados.isEmpty()) {
+                String[] servicosArray = servicosSelecionados.split(",");
+                for (String idServicoStr : servicosArray) {
+                    Integer idServico = Integer.parseInt(idServicoStr);
                     ServicoEntity servico = repo_servico.findById(idServico).orElse(null);
                     if (servico != null) {
                         valorTotal += servico.getPreco() + (servico.getComissao() * servico.getPreco());

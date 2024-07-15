@@ -436,6 +436,15 @@
         });
     });
 
+    document.getElementById('editForm').addEventListener('submit', function(e) {
+        const selectedServiceIds = Array.from(document.querySelectorAll('#selectedServicesBody .remove-service-btn')).map(btn => btn.getAttribute('data-id'));
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'servicosSelecionados';
+        hiddenInput.value = selectedServiceIds.join(',');
+        this.appendChild(hiddenInput);
+    });
+
     function confirmarRemoverCotacao(id) {
         document.getElementById('removeId').value = id;
         document.getElementById('confirmRemoveModal').style.display = "flex";
