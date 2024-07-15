@@ -11,4 +11,8 @@ public interface EstadoContentorRepository extends JpaRepository<EstadoContentor
 
     @Query("SELECT ec FROM EstadoContentorEntity ec WHERE ec.descricao LIKE :descricao")
     EstadoContentorEntity findByNameLike(@Param("descricao") String descricao);
+
+    // selecionar estado pelo ID
+    @Query("SELECT ec FROM EstadoContentorEntity ec WHERE ec.id = :id")
+    EstadoContentorEntity findEstadoContentorById(@Param("id") Integer id);
 }
