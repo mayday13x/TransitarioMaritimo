@@ -35,8 +35,12 @@ public interface CargaRepository extends JpaRepository<CargaEntity, Integer> {
     void updateArmazemIdByContentorId(int contentorId);
 
     // selecionar as cargas que não têm id_armazem
-    @Query("SELECT c FROM CargaEntity c WHERE c.idArmazem IS NULL")
-    List<CargaEntity> findByIdArmazemNull();
+    // e que o id_estado_reserva corresponde a 'Pago' fazendo o join com a tabela estado_cotacao
+    @Query("SELECT c FROM CargaEntity c JOIN ReservaEntity r ON c.idReserva = r.id JOIN EstadoReservaEntity er " +
+            "ON r.idEstadoReserva = er.id WHERE c.idArmazem IS NULL AND er.descricao LIKE 'Pago'")
+    List<CargaEntity> findByIdArmazemNullAndReservaPago();
+
+
 
 
 
