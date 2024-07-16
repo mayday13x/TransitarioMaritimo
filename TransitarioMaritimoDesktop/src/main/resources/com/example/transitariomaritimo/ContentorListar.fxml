@@ -54,7 +54,6 @@
                   <Font size="17.0" />
                </font></Label>
             <Button defaultButton="true" layoutX="42.0" layoutY="353.0" mnemonicParsing="false" onAction="#showInserirContentor" prefHeight="36.0" prefWidth="135.0" text="Inserir Contentor" />
-            <Button layoutX="643.0" layoutY="353.0" mnemonicParsing="false" onAction="#RegistarSaida" text="Registar Saída do Contentor" />
             <Button fx:id="removerContentorButton" disable="true" layoutX="195.0" layoutY="353.0" mnemonicParsing="false" onAction="#RemoverContentor" prefHeight="36.0" prefWidth="148.0" text="Remover Contentor" />
             <TableView fx:id="TCargaContentores" layoutX="42.0" layoutY="399.0" prefHeight="241.0" prefWidth="801.0">
                <columns>
@@ -69,6 +68,9 @@
             </TableView>
             <Button fx:id="adicionarCargaButton" defaultButton="true" layoutX="42.0" layoutY="650.0" mnemonicParsing="false" onAction="#showAdicionarCarga" prefHeight="36.0" prefWidth="135.0" text="Adicionar Carga" />
             <Button fx:id="removerCargaButton" disable="true" layoutX="187.0" layoutY="650.0" mnemonicParsing="false" onAction="#RemoverCarga" prefHeight="36.0" prefWidth="148.0" text="Remover Carga" />
+            <ComboBox fx:id="mudarEstadoCombo" disable="true" layoutX="603.0" layoutY="353.0" prefHeight="36.0" prefWidth="195.0" />
+            <Label fx:id="mudarEstadoLabel" disable="true" layoutX="554.0" layoutY="361.0" text="Estado:" />
+            <Button fx:id="mudarEstadoButton" defaultButton="true" disable="true" layoutX="798.0" layoutY="353.0" mnemonicParsing="false" onAction="#editarEstadoContentor" text="OK" />
          </children>
       </Pane>
 

@@ -65,6 +65,15 @@ public class Contentor2Controller implements Initializable {
     @FXML
     private Label pesoLabel;
 
+    @FXML
+    private ComboBox<EstadoContentorEntity> mudarEstadoCombo;
+
+    @FXML
+    private Button mudarEstadoButton;
+
+    @FXML
+    private Label mudarEstadoLabel;
+
     // Cargas elements
 
     @FXML
@@ -198,20 +207,54 @@ public class Contentor2Controller implements Initializable {
             }
         });
 
+        ObservableList<EstadoContentorEntity> estadosContentor = FXCollections.observableArrayList(estado_contentor_repo.findAll());
+        mudarEstadoCombo.setItems(estadosContentor);
+        mudarEstadoCombo.setConverter(new StringConverter<EstadoContentorEntity>() {
+            @Override
+            public String toString(EstadoContentorEntity estadoContentor) {
+                return estadoContentor != null ? estadoContentor.getDescricao() : "";
+            }
 
+            @Override
+            public EstadoContentorEntity fromString(String string) {
+                return mudarEstadoCombo.getItems().stream().filter(estadoContentor ->
+                        estadoContentor.getDescricao().equals(string)).findFirst().orElse(null);
+            }
+        });
+
+
+        // Atualiza o estado do botão mudarEstadoButton com base na seleção da ComboBox e TableView
+        mudarEstadoCombo.valueProperty().addListener((obs, oldSelection, newSelection) -> {
+            ContentorEntity selectedContentor = TContentores.getSelectionModel().getSelectedItem();
+            if (selectedContentor != null && newSelection != null) {
+                mudarEstadoButton.setDisable(newSelection.equals(selectedContentor.getEstadoContentorByIdEstadoContentor()));
+            }
+        });
 
         ObservableList<ArmazemEntity> armazensDesc = FXCollections.observableArrayList(armazem_repo.findAll());
         ArmazemCombo.setItems(armazensDesc);
         ArmazemCombo.getSelectionModel().selectFirst();
 
+        atualizarInfoContentores();
+
         // Adicionando listener na seleção da TableView TContentores
             TContentores.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+
+
+
                 if (newSelection != null) {
+
+                    adicionarCargaButton.setDisable(newSelection.getIdEstadoContentor() != 2);
+
                     atualizarInfoCargas();
 
                     removerContentorButton.setDisable(false);
-                    adicionarCargaButton.setDisable(false);
-                    //removerCargaButton.setDisable(false);
+                   // adicionarCargaButton.setDisable(false);
+                    mudarEstadoCombo.setDisable(false);
+                    mudarEstadoLabel.setDisable(false);
+                    //mudarEstadoButton.setDisable(false);
+
+                    mudarEstadoCombo.setValue(TContentores.getSelectionModel().getSelectedItem().getEstadoContentorByIdEstadoContentor());
 
                     Double totalVolumes = contentor_repo.sumVolumes(newSelection.getCin());
                     Double totalPesos = contentor_repo.sumPesos(newSelection.getCin());
@@ -223,8 +266,13 @@ public class Contentor2Controller implements Initializable {
                     capacidadeLabel.setText("0 m³");
                     pesoLabel.setText("0 Kg");
                     removerContentorButton.setDisable(true);
-                    adicionarCargaButton.setDisable(true);
-                    //removerCargaButton.setDisable(true);
+                    //adicionarCargaButton.setDisable(true);
+                    mudarEstadoCombo.setDisable(true);
+                    mudarEstadoLabel.setDisable(true);
+
+                    mudarEstadoCombo.getSelectionModel().clearSelection();
+                    //mudarEstadoButton.setDisable(true);
+
                 }
             });
 
@@ -582,8 +630,43 @@ public class Contentor2Controller implements Initializable {
     }
 
     @FXML
-    void RegistarSaida(ActionEvent event) {
+    public void editarEstadoContentor(){
 
+        ArmazemEntity armazemSelecionado = ArmazemCombo.getSelectionModel().getSelectedItem();
+        ContentorEntity contentorSelecionado = TContentores.getSelectionModel().getSelectedItem();
+        EstadoContentorEntity estadoSelecionado = mudarEstadoCombo.getSelectionModel().getSelectedItem();
+
+        Long countCargas = contentor_repo.countByIdContentor(contentorSelecionado.getCin());
+
+        if(countCargas > 0) {
+
+            try {
+
+                contentorSelecionado.setIdEstadoContentor(estadoSelecionado.getId());
+                contentorSelecionado.setEstadoContentorByIdEstadoContentor(estadoSelecionado);
+                contentor_repo.save(contentorSelecionado);
+
+
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Erro!");
+                alert.setHeaderText("Ocorreu um erro ao mudar o estado do contentor!");
+                alert.setContentText("Ocorreu um erro ao mudar o estado do contentor, tente novamente!");
+                alert.showAndWait();
+            }
+
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Contentor vazio!");
+            alert.setHeaderText("O contentor selecionado encontra-se vazio!");
+            alert.setContentText("Não é possível realizar a operação pois o contentor selecionado encontra-se vazio!");
+            alert.showAndWait();
+        }
+
+        TContentores.getItems().clear();
+        ObservableList<ContentorEntity> contentores = FXCollections.observableArrayList(contentor_repo.findByIdArmazem(armazemSelecionado.getId()));
+        TContentores.setItems(contentores);
+        TContentores.getSelectionModel().select(contentorSelecionado);
     }
 
 
