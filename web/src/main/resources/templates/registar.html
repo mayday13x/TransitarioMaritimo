@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro</title>
+    <link rel="stylesheet" href="css/nord-light.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .register-container {
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+        .register-container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .buttons button {
+            padding: 10px 15px;
+            width: 100%;
+            cursor: pointer;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+        }
+        .buttons button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+<div class="register-container">
+    <h1>Registar</h1>
+    <form action="/registar" method="post">
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" required>
+        </div>
+        <div class="form-group">
+            <label for="nif">NIF</label>
+            <input type="number" id="nif" name="nif" required>
+        </div>
+        <div class="form-group">
+            <label for="rua">Rua</label>
+            <input type="text" id="rua" name="rua" required>
+        </div>
+        <div class="form-group">
+            <label for="porta">Porta</label>
+            <input type="number" id="porta" name="porta" required>
+        </div>
+        <div class="form-group">
+            <label for="codPostal">Código Postal</label>
+            <select id="codPostal" name="codPostalId" required>
+                <option th:each="codPostal : ${codPostais}" th:value="${codPostal.idCodPostal}" th:text="${codPostal.localidade}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <input type="text" id="telefone" name="telefone" required>
+        </div>
+        <div class="form-group">
+            <label for="userType">Tipo de Utilizador</label>
+            <select id="userType" name="userType" required onchange="toggleFuncionarioTipo(this.value)">
+                <option value="cliente">Cliente</option>
+                <option value="funcionario">Funcionário</option>
+            </select>
+        </div>
+        <div id="funcionarioTipo" class="form-group" style="display: none;">
+            <label for="tipoFuncionario">Tipo de Funcionário</label>
+            <select id="tipoFuncionario" name="tipoFuncionario" onchange="toggleArmazem(this.value)">
+                <option value="1">Admin</option>
+                <option value="2">Gestor Comercial</option>
+                <option value="3">Gestor Operacional</option>
+                <option value="4">Gestor Logístico</option>
+                <option value="5">Funcionário Armazém</option>
+                <option value="6">Funcionário Transporte</option>
+            </select>
+        </div>
+        <div id="armazem" class="form-group" style="display: none;">
+            <label for="armazemId">Armazém</label>
+            <select id="armazemId" name="armazemId">
+                <option th:each="armazem : ${armazens}" th:value="${armazem.id}" th:text="${armazem.descricao}"></option>
+            </select>
+        </div>
+        <div class="buttons">
+            <button type="submit">Registar</button>
+        </div>
+    </form>
+</div>
+<script>
+    function toggleFuncionarioTipo(value) {
+        const tipoFuncionario = document.getElementById('funcionarioTipo');
+        if (value === 'funcionario') {
+            tipoFuncionario.style.display = 'block';
+        } else {
+            tipoFuncionario.style.display = 'none';
+        }
+        document.getElementById('armazem').style.display = 'none';
+    }
+
+    function toggleArmazem(value) {
+        const armazem = document.getElementById('armazem');
+        if (value === '5') { // Funcionário Armazém
+            armazem.style.display = 'block';
+        } else {
+            armazem.style.display = 'none';
+        }
+    }
+</script>
+</body>
+</html>

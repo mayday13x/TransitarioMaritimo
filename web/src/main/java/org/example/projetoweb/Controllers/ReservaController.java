@@ -203,9 +203,28 @@ public class ReservaController {
     public String pagarReserva(@RequestParam int id) {
         ReservaEntity reserva = repo_reserva.findById(id).orElse(null);
         if (reserva != null) {
-            EstadoReservaEntity estadoReserva = reserva_estado_repo.findById(1).orElse(null); // Assume 2 is the paid state
-            reserva.setEstadoReservaByIdEstadoReserva(estadoReserva);
-            repo_reserva.save(reserva);
+            EstadoReservaEntity estadoReserva = reserva_estado_repo.findById(1).orElse(null);
+            if (estadoReserva != null) {
+                reserva.setIdEstadoReserva(estadoReserva.getId());
+                reserva.setEstadoReservaByIdEstadoReserva(estadoReserva);
+                repo_reserva.save(reserva);
+            }
+        }
+
+        return "redirect:/Reservas/Cliente";
+    }
+
+    @PostMapping("/Reservas/Cancelar/Cliente")
+    @Transactional
+    public String cancelarReserva(@RequestParam int id) {
+        ReservaEntity reserva = repo_reserva.findById(id).orElse(null);
+        if (reserva != null) {
+            EstadoReservaEntity estadoReserva = reserva_estado_repo.findById(3).orElse(null);
+            if (estadoReserva != null) {
+                reserva.setIdEstadoReserva(estadoReserva.getId());
+                reserva.setEstadoReservaByIdEstadoReserva(estadoReserva);
+                repo_reserva.save(reserva);
+            }
         }
         return "redirect:/Reservas/Cliente";
     }

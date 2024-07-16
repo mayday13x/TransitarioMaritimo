@@ -111,6 +111,18 @@
         .table td {
             font-size: 14px;
         }
+        .progress {
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 20px;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            background-color: #3498db;
+            height: 100%;
+            transition: width 0.6s ease;
+        }
         .actions {
             display: flex;
             justify-content: space-around;
@@ -208,6 +220,7 @@
                 <th>Cin</th>
                 <th>Capacidade</th>
                 <th>Peso Máximo</th>
+                <th>Capacidade Atual</th>
                 <th>Local Atual</th>
                 <th>Estado</th>
                 <th>Ações</th>
@@ -218,6 +231,11 @@
                 <td th:text="${contentor.cin}"></td>
                 <td th:text="${contentor.capacidade}"></td>
                 <td th:text="${contentor.pesoMax}"></td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar" th:style="'width:' + (${capacidadeAtualMap[contentor.cin]} / ${contentor.capacidade}) * 100 + '%'"></div>
+                    </div>
+                </td>
                 <td th:text="${contentor.localAtual}"></td>
                 <td th:text="${contentor.estadoContentorByIdEstadoContentor.descricao}"></td>
                 <td class="actions">
@@ -386,42 +404,6 @@
     </div>
 </div>
 
-<!-- Confirmar Saída Modal -->
-<div id="confirmSaidaModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('confirmSaidaModal')">&times;</span>
-        <h1>Registrar Saída do Contentor</h1>
-        <p>Tem certeza que deseja registrar a saída deste contentor?</p>
-        <form id="saidaForm" action="/Contentores/RegistarSaida/FuncionarioArmazem" method="post">
-            <input type="hidden" id="saidaCin" name="cin">
-            <div class="buttons">
-                <button type="submit">Registrar Saída</button>
-                <button type="button" onclick="closeModal('confirmSaidaModal')">Cancelar</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Ver Cargas Modal -->
-<div id="cargasModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('cargasModal')">&times;</span>
-        <h1>Cargas</h1>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Descrição</th>
-                <th>Peso</th>
-                <th>Volume</th>
-            </tr>
-            </thead>
-            <tbody id="cargasTableBody">
-            </tbody>
-        </table>
-    </div>
-</div>
-
 <!-- Confirmar Estado Pronto Modal -->
 <div id="confirmEstadoProntoModal" class="modal">
     <div class="modal-content">
@@ -437,8 +419,6 @@
         </form>
     </div>
 </div>
-
-
 
 <script>
     function showInserirContentorModal() {
@@ -463,11 +443,6 @@
     function confirmarRemoverContentor(cin) {
         document.getElementById('removeCin').value = cin;
         document.getElementById('confirmRemoveModal').style.display = "flex";
-    }
-
-    function registrarSaidaContentor(cin) {
-        document.getElementById('saidaCin').value = cin;
-        document.getElementById('confirmSaidaModal').style.display = "flex";
     }
 
     function showAdicionarCargaContentorModal() {
@@ -519,7 +494,7 @@
                 cargasTableBody.innerHTML = "";
                 data.forEach(carga => {
                     var row = document.createElement("tr");
-                    row.innerHTML = `<td>${carga.id}</td><td>${carga.descricao}</td><td>${carga.peso}</td><td>${carga.volume}</td>`;
+                    row.innerHTML = `<td>${carga.id}</td><td>${carga.observacoes}</td><td>${carga.peso}</td><td>${carga.volume}</td>`;
                     cargasTableBody.appendChild(row);
                 });
                 document.getElementById("cargasModal").style.display = "flex";
@@ -528,7 +503,7 @@
 
     function confirmarEstadoProntoContentor(cin) {
         document.getElementById('estadoProntoCin').value = cin;
-        document.getElementById('confirmEstadoProntoModal').style.display = "block";
+        document.getElementById('confirmEstadoProntoModal').style.display = "flex";
     }
 
     window.onclick = function(event) {
@@ -538,12 +513,12 @@
             closeModal('editModal');
         } else if (event.target === document.getElementById('confirmRemoveModal')) {
             closeModal('confirmRemoveModal');
-        } else if (event.target === document.getElementById('cargasModal')) {
-            closeModal('cargasModal');
-        }  else if (event.target === document.getElementById('adicionarCargaModal')) {
+        } else if (event.target === document.getElementById('adicionarCargaModal')) {
             closeModal('adicionarCargaModal');
         } else if (event.target === document.getElementById('confirmEstadoProntoModal')) {
             closeModal('confirmEstadoProntoModal');
+        } else if (event.target === document.getElementById('cargasModal')) {
+            closeModal('cargasModal');
         }
     }
 </script>

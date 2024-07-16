@@ -182,6 +182,18 @@
             margin-bottom: 10px;
             box-sizing: border-box;
         }
+        .progress {
+            background-color: #e0e0e0;
+            border-radius: 13px;
+            padding: 3px;
+            margin-bottom: 10px;
+        }
+        .progress-bar {
+            background-color: #3498db;
+            width: 0%;
+            height: 20px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -215,6 +227,7 @@
                 <th>Cin</th>
                 <th>Capacidade</th>
                 <th>Peso Máximo</th>
+                <th>Capacidade Atual</th>
                 <th>Local Atual</th>
                 <th>Estado</th>
                 <th>Ações</th>
@@ -225,6 +238,11 @@
                 <td th:text="${contentor.cin}"></td>
                 <td th:text="${contentor.capacidade}"></td>
                 <td th:text="${contentor.pesoMax}"></td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar" th:style="'width:' + (${capacidadeAtualMap[contentor.cin]} / ${contentor.capacidade}) * 100 + '%'"></div>
+                    </div>
+                </td>
                 <td th:text="${contentor.localAtual}"></td>
                 <td th:text="${contentor.estadoContentorByIdEstadoContentor.descricao}"></td>
                 <td class="actions">
