@@ -22,6 +22,7 @@ public interface ContentorRepository extends JpaRepository<ContentorEntity,Integ
     @Query("SELECT c FROM ContentorEntity c JOIN ArmazemEntity a ON c.idArmazem = a.id WHERE a.id = :armazemId")
     List<ContentorEntity> findByIdArmazem(@Param("armazemId") Integer armazemId);
 
+
     // somar os volumes das cargas de um contentor
     @Query("SELECT SUM(c.volume) FROM CargaEntity c WHERE c.idContentor = :idContentor")
     Double sumVolumes(@Param("idContentor") Integer idContentor);
@@ -37,5 +38,10 @@ public interface ContentorRepository extends JpaRepository<ContentorEntity,Integ
     // contar as cargas de um contentor
     @Query("SELECT COUNT(c) FROM CargaEntity c WHERE c.idContentor = :idContentor")
     Long countByIdContentor(@Param("idContentor") Integer idContentor);
+
+    // selecionar contentores de um armazem
+    @Query("SELECT c FROM ContentorEntity c where c.idEstadoContentor = 3")
+    List<ContentorEntity> findByEstado();
+
 
 }

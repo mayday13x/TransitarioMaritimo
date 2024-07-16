@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            background-color: #f4f9fc;
             margin: 0;
             padding: 0;
             display: flex;
@@ -158,7 +158,7 @@
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 40%;
+            width: 70%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .close {
@@ -228,12 +228,15 @@
                 <td class="actions">
                     <i class="fas fa-edit" th:attr="onclick=|showEditarContentorModal(${contentor.cin}, '${contentor.capacidade}', '${contentor.pesoMax}', '${contentor.localAtual}', ${contentor.tipoContentor}, ${contentor.idEstadoContentor}, ${contentor.idArmazem})|"></i>
                     <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverContentor(${contentor.cin})|"></i>
+                    <i class="fas fa-truck" th:attr="onclick=|confirmarSaidaContentor(${contentor.cin})|"></i>
+                    <i class="fas fa-eye" th:attr="onclick=|showVerCargasModal(${contentor.cin})|"></i>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="buttons">
             <button onclick="showInserirContentorModal()">Inserir Contentor</button>
+            <button onclick="showAdicionarCargaContentorModal()">Adicionar Carga ao Contentor</button>
         </div>
     </div>
 </div>
@@ -342,6 +345,81 @@
     </div>
 </div>
 
+<!-- Ver Cargas Modal -->
+<div id="verCargasModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('verCargasModal')">&times;</span>
+        <h1>Cargas no Contentor</h1>
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Descrição</th>
+                    <th>Peso</th>
+                    <th>Volume</th>
+                </tr>
+                </thead>
+                <tbody id="cargasContentor">
+                <!-- Carregado dinamicamente via AJAX -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Adicionar Carga Modal -->
+<div id="adicionarCargaModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('adicionarCargaModal')">&times;</span>
+        <h1>Adicionar Carga ao Contentor</h1>
+        <form action="/Contentores/AdicionarCarga/Admin" method="post">
+            <div class="form-group">
+                <label>Selecione a Carga</label>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Descrição</th>
+                            <th>Peso</th>
+                            <th>Volume</th>
+                            <th>Selecionar</th>
+                        </tr>
+                        </thead>
+                        <tbody id="cargasDisponiveis">
+                        <!-- Carregado dinamicamente via AJAX -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Selecione o Contentor</label>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Capacidade</th>
+                            <th>Peso Máximo</th>
+                            <th>Local Atual</th>
+                            <th>Selecionar</th>
+                        </tr>
+                        </thead>
+                        <tbody id="contentoresDisponiveis">
+                        <!-- Carregado dinamicamente via AJAX -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Adicionar Carga</button>
+                <button type="button" onclick="closeModal('adicionarCargaModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     function showInserirContentorModal() {
         document.getElementById('insertModal').style.display = "block";
@@ -367,13 +445,92 @@
         document.getElementById('confirmRemoveModal').style.display = "block";
     }
 
+    function showVerCargasModal(cin) {
+        fetch(`/Contentores/VerCargas/FuncionarioArmazem?cin=${cin}`)
+            .then(response => response.json())
+            .then(data => {
+                const cargasContentor = document.getElementById('cargasContentor');
+                cargasContentor.innerHTML = '';
+                data.forEach(carga => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${carga.id}</td>
+                        <td>${carga.observacoes}</td>
+                        <td>${carga.peso}</td>
+                        <td>${carga.volume}</td>
+                    `;
+                    cargasContentor.appendChild(row);
+                });
+            });
+        document.getElementById('verCargasModal').style.display = "block";
+    }
+
+    function showAdicionarCargaContentorModal() {
+        fetch(`/Cargas/Disponiveis/Admin`)
+            .then(response => response.json())
+            .then(data => {
+                const cargasDisponiveis = document.getElementById('cargasDisponiveis');
+                cargasDisponiveis.innerHTML = '';
+                data.forEach(carga => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${carga.id}</td>
+                        <td>${carga.observacoes}</td>
+                        <td>${carga.peso}</td>
+                        <td>${carga.volume}</td>
+                        <td><input type="radio" name="cargaId" value="${carga.id}" required onchange="loadContentoresDisponiveis(${carga.id})"></td>
+                    `;
+                    cargasDisponiveis.appendChild(row);
+                });
+            });
+        document.getElementById('adicionarCargaModal').style.display = "block";
+    }
+
+    function loadContentoresDisponiveis(cargaId) {
+        fetch(`/Contentores/Disponiveis/Admin?cargaId=${cargaId}`)
+            .then(response => response.json())
+            .then(data => {
+                const contentoresDisponiveis = document.getElementById('contentoresDisponiveis');
+                contentoresDisponiveis.innerHTML = '';
+                data.forEach(contentor => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${contentor.cin}</td>
+                        <td>${contentor.capacidade}</td>
+                        <td>${contentor.pesoMax}</td>
+                        <td>${contentor.localAtual}</td>
+                        <td><input type="radio" name="contentorCin" value="${contentor.cin}" required></td>
+                    `;
+                    contentoresDisponiveis.appendChild(row);
+                });
+            });
+    }
+
+    function confirmarSaidaContentor(cin) {
+        if (confirm("Tem certeza que deseja registrar a saída deste contentor?")) {
+            fetch(`/Contentores/RegistarSaida/Admin`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `cin=${cin}`
+            }).then(() => {
+                location.reload();
+            });
+        }
+    }
+
     window.onclick = function(event) {
-        if (event.target == document.getElementById('insertModal')) {
+        if (event.target === document.getElementById('insertModal')) {
             closeModal('insertModal');
-        } else if (event.target == document.getElementById('editModal')) {
+        } else if (event.target === document.getElementById('editModal')) {
             closeModal('editModal');
-        } else if (event.target == document.getElementById('confirmRemoveModal')) {
+        } else if (event.target === document.getElementById('confirmRemoveModal')) {
             closeModal('confirmRemoveModal');
+        } else if (event.target === document.getElementById('verCargasModal')) {
+            closeModal('verCargasModal');
+        } else if (event.target === document.getElementById('adicionarCargaModal')) {
+            closeModal('adicionarCargaModal');
         }
     }
 </script>

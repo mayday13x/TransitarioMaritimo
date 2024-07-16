@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Contentores Logístico</title>
+    <link rel="stylesheet" href="css/nord-light.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .nav-bar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: fixed;
+            padding-top: 20px;
+        }
+        .nav-bar a {
+            display: block;
+            color: #ecf0f1;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .nav-bar a:hover {
+            background-color: #34495e;
+        }
+        .nav-bar .menu-items {
+            flex-grow: 1;
+        }
+        .user-info {
+            padding: 15px;
+            background-color: #34495e;
+            text-align: center;
+            border-top: 1px solid #34495e;
+        }
+        .user-info p {
+            margin: 0;
+            color: #ecf0f1;
+            font-size: 16px;
+        }
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #e74c3c;
+            color: #ecf0f1;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        .logout-btn i {
+            margin-right: 8px;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+        .main-panel {
+            background-color: #FFFFFF;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .main-panel h1 {
+            text-align: center;
+            font-size: 23px;
+            margin-bottom: 20px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            background-color: #ecf0f1;
+        }
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+        .table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .table tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        .table tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .table td {
+            font-size: 14px;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-around;
+        }
+        .actions i {
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .actions i:hover {
+            color: #2980b9;
+        }
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .buttons button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+        }
+        .buttons button:hover {
+            background-color: #2980b9;
+        }
+        .form-group label {
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="nav-bar">
+    <div class="menu-items">
+        <a href="/Contentores/FuncionarioTransporte">Contentores</a>
+    </div>
+    <div class="user-info">
+        <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
+        <a href="/logout" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </a>
+    </div>
+</div>
+<div class="main-content">
+    <div class="main-panel">
+        <h1>Contentores Logístico</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Cin</th>
+                <th>Capacidade</th>
+                <th>Peso Máximo</th>
+                <th>Local Atual</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="contentor : ${contentores}">
+                <td th:text="${contentor.cin}"></td>
+                <td th:text="${contentor.capacidade}"></td>
+                <td th:text="${contentor.pesoMax}"></td>
+                <td th:text="${contentor.localAtual}"></td>
+                <td class="actions">
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarLocalAtualModal(${contentor.cin}, '${contentor.localAtual}')|"></i>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Editar Local Atual Modal -->
+<div id="editLocalAtualModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editLocalAtualModal')">&times;</span>
+        <h1>Editar Local Atual</h1>
+        <form id="editLocalAtualForm" action="/Contentores/Editar/FuncionarioTransporte" method="post">
+            <input type="hidden" id="editCin" name="cin">
+            <div class="form-group">
+                <label for="editLocalAtualText">Local Atual</label>
+                <input type="text" id="editLocalAtualText" name="localAtual" placeholder="Local Atual" required>
+            </div>
+            <div class="buttons">
+                <button type="submit">Guardar Alterações</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function showEditarLocalAtualModal(cin, localAtual) {
+        document.getElementById('editCin').value = cin;
+        document.getElementById('editLocalAtualText').value = localAtual;
+        document.getElementById('editLocalAtualModal').style.display = "flex";
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target === document.getElementById('editLocalAtualModal')) {
+            closeModal('editLocalAtualModal');
+        }
+    }
+</script>
+</body>
+</html>

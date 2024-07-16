@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Armazém Logístico</title>
+    <title>Armazem</title>
     <link rel="stylesheet" href="css/nord-light.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -149,14 +149,18 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
         }
         .modal-content {
             background-color: #fefefe;
-            margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 40%;
+            width: auto;
+            min-width: 70%;
+            max-width: 90%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
         .close {
             color: #aaa;
@@ -179,13 +183,16 @@
             margin-bottom: 10px;
             box-sizing: border-box;
         }
+        .table-container {
+            overflow-x: auto;
+        }
     </style>
 </head>
 <body>
 <div class="nav-bar">
     <div class="menu-items">
-    <a href="/Armazem/GestorLogistico">Armazéns</a>
-    <a href="/Contentores/GestorLogistico">Contentores</a>
+        <a href="/Armazem/GestorLogistico">Armazéns</a>
+        <a href="/Contentores/GestorLogistico">Contentores</a>
     </div>
     <div class="user-info">
         <p>Olá, <span th:text="${loggedInUser}">Usuário</span></p>
@@ -197,7 +204,7 @@
 </div>
 <div class="main-content">
     <div class="main-panel">
-        <h1>Armazém Logístico</h1>
+        <h1>Armazem</h1>
         <table class="table">
             <thead>
             <tr>
@@ -221,6 +228,7 @@
         </table>
         <div class="buttons">
             <button onclick="showInserirArmazemModal()">Inserir Armazém</button>
+            <button onclick="showAdicionarCargaModal()">Adicionar Carga</button>
         </div>
     </div>
 </div>
@@ -285,9 +293,68 @@
     </div>
 </div>
 
+<!-- Adicionar Carga Modal -->
+<div id="adicionarCargaModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('adicionarCargaModal')">&times;</span>
+        <h1>Adicionar Carga ao Armazém</h1>
+        <form action="/Armazem/AdicionarCarga/GestorLogistico" method="post">
+            <div class="form-group">
+                <label>Selecione a Carga</label>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Descrição</th>
+                            <th>Volume</th>
+                            <th>Selecionar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="carga : ${cargasDisponiveis}">
+                            <td th:text="${carga.id}"></td>
+                            <td th:text="${carga.nome}"></td>
+                            <td th:text="${carga.volume}"></td>
+                            <td><input type="radio" name="cargaId" th:value="${carga.id}" required onchange="loadArmazensDisponiveis(this.value)"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Selecione o Armazém</label>
+                <div class="table-container" id="armazemSelect">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Descrição</th>
+                            <th>Capacidade Máxima</th>
+                            <th>Selecionar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="armazem : ${armazens}">
+                            <td th:text="${armazem.id}"></td>
+                            <td th:text="${armazem.descricao}"></td>
+                            <td th:text="${armazem.capacidadeMax}"></td>
+                            <td><input type="radio" name="armazemId" th:value="${armazem.id}" required></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Adicionar Carga</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     function showInserirArmazemModal() {
-        document.getElementById('insertModal').style.display = "block";
+        document.getElementById('insertModal').style.display = "flex";
     }
 
     function closeModal(modalId) {
@@ -298,21 +365,35 @@
         document.getElementById('editId').value = id;
         document.getElementById('editDescricaoText').value = descricao;
         document.getElementById('editCapacidadeMaximaText').value = capacidadeMaxima;
-        document.getElementById('editModal').style.display = "block";
+        document.getElementById('editModal').style.display = "flex";
     }
 
     function confirmarRemoverArmazem(id) {
         document.getElementById('removeId').value = id;
-        document.getElementById('confirmRemoveModal').style.display = "block";
+        document.getElementById('confirmRemoveModal').style.display = "flex";
+    }
+
+    function showAdicionarCargaModal() {
+        document.getElementById('adicionarCargaModal').style.display = "flex";
+    }
+
+    function loadArmazensDisponiveis(cargaId) {
+        fetch(`/Armazem/ArmazensDisponiveis/GestorLogistico?cargaId=${cargaId}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('armazemSelect').innerHTML = html;
+            });
     }
 
     window.onclick = function(event) {
-        if (event.target == document.getElementById('insertModal')) {
+        if (event.target === document.getElementById('insertModal')) {
             closeModal('insertModal');
-        } else if (event.target == document.getElementById('editModal')) {
+        } else if (event.target === document.getElementById('editModal')) {
             closeModal('editModal');
-        } else if (event.target == document.getElementById('confirmRemoveModal')) {
+        } else if (event.target === document.getElementById('confirmRemoveModal')) {
             closeModal('confirmRemoveModal');
+        } else if (event.target === document.getElementById('adicionarCargaModal')) {
+            closeModal('adicionarCargaModal');
         }
     }
 </script>
