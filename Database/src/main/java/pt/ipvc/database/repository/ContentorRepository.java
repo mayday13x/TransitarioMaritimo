@@ -23,6 +23,10 @@ public interface ContentorRepository extends JpaRepository<ContentorEntity,Integ
     List<ContentorEntity> findByIdArmazem(@Param("armazemId") Integer armazemId);
 
 
+    // selecionar contentores de um armazem em que o id_estado_contentor não é "Contentor Fora"
+    @Query("SELECT c FROM ContentorEntity c WHERE c.idArmazem = :armazemId AND c.idEstadoContentor!= 3")
+    List<ContentorEntity> findByIdArmazemNotFora(@Param("armazemId") Integer armazemId);
+
     // somar os volumes das cargas de um contentor
     @Query("SELECT SUM(c.volume) FROM CargaEntity c WHERE c.idContentor = :idContentor")
     Double sumVolumes(@Param("idContentor") Integer idContentor);
@@ -43,5 +47,8 @@ public interface ContentorRepository extends JpaRepository<ContentorEntity,Integ
     @Query("SELECT c FROM ContentorEntity c where c.idEstadoContentor = 3")
     List<ContentorEntity> findByEstado();
 
+    // selecionar contentores cujo o id_estado_contentor não corresponda a "Em consolidação"
+    @Query("SELECT c FROM ContentorEntity c WHERE c.idEstadoContentor!= 2")
+    List<ContentorEntity> findByNotEmConsolidacao();
 
 }

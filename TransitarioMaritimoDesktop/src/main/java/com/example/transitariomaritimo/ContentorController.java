@@ -323,7 +323,7 @@ public class ContentorController implements Initializable {
         }
 
         assert armazemSelecionado != null;
-        ObservableList<ContentorEntity> contentores = FXCollections.observableArrayList(contentor_repo.findByIdArmazem(armazemSelecionado.getId()));
+        ObservableList<ContentorEntity> contentores = FXCollections.observableArrayList(contentor_repo.findByIdArmazemNotFora(armazemSelecionado.getId()));
 
         Cin.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCin().toString()));
         Capacidade.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCapacidade().toString()));
@@ -667,7 +667,7 @@ public class ContentorController implements Initializable {
         }
 
         TContentores.getItems().clear();
-        ObservableList<ContentorEntity> contentores = FXCollections.observableArrayList(contentor_repo.findByIdArmazem(armazemSelecionado.getId()));
+        ObservableList<ContentorEntity> contentores = FXCollections.observableArrayList(contentor_repo.findByIdArmazemNotFora(armazemSelecionado.getId()));
         TContentores.setItems(contentores);
         TContentores.getSelectionModel().select(contentorSelecionado);
     }

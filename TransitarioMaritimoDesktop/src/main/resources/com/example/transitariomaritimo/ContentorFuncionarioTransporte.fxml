@@ -5,61 +5,68 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="480.0" prefWidth="720.0" stylesheets="@css/nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ContentorController">
+<AnchorPane prefHeight="480.0" prefWidth="720.0" stylesheets="@css/nord-light.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transitariomaritimo.ContentorTransporteController">
    <children>
-
-                                                <Pane fx:id="PaneInserir" layoutX="58.0" layoutY="16.0" prefHeight="448.0" prefWidth="592.0" style="-fx-background-color: #FFFFFF;" visible="false">
+      <Pane fx:id="mainPanel" prefHeight="715.0" prefWidth="883.0">
          <children>
-             <Label layoutX="265.0" layoutY="1.0" text="Inserir Contentor">
-                 <font>
-                     <Font size="18.0" />
-                 </font>
-             </Label>
-             <Button layoutX="524.0" layoutY="10.0" mnemonicParsing="false" onAction="#VoltarAtrasInserirContentor" text="x" />
-             <Button layoutX="411.0" layoutY="389.0" mnemonicParsing="false" onAction="#RegistarContentor" text="Inserir Contentor" />
-             <TextField fx:id="CapacidadeText" layoutX="43.0" layoutY="74.0" prefHeight="26.0" prefWidth="202.0" />
-             <TextField fx:id="PesoMaximoText" layoutX="358.0" layoutY="74.0" prefHeight="26.0" prefWidth="202.0" />
-             <TextField fx:id="LocalAtualText" layoutX="43.0" layoutY="146.0" prefHeight="26.0" prefWidth="202.0" />
-             <Label layoutX="43.0" layoutY="57.0" text="Capacidade" />
-             <Label layoutX="358.0" layoutY="57.0" text="Peso Maxímo" />
-             <Label layoutX="43.0" layoutY="128.0" text="Local Atual" />
-             <Label layoutX="358.0" layoutY="128.0" text="Tipo de Contentor" />
-             <Label layoutX="43.0" layoutY="200.0" text="EstadoContentor" />
-             <ComboBox fx:id="TipoContentorCombo" layoutX="358.0" layoutY="147.0" prefHeight="26.0" prefWidth="202.0" />
-             <ComboBox fx:id="EstadoContentorCombo" layoutX="42.0" layoutY="218.0" prefHeight="26.0" prefWidth="202.0" />
-         </children>
-         <effect>
-            <DropShadow />
-         </effect>
-      </Pane>
-      <Pane fx:id="mainPanel" prefHeight="480.0" prefWidth="720.0" style="-fx-background-color: #FFFFFF;">
-         <children>
-            <Label layoutX="311.0" layoutY="14.0" text="Contentores">
+            <Label layoutX="375.0" layoutY="29.0" text="Contentores">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <TableView fx:id="TContentores" layoutX="40.0" layoutY="100.0" prefHeight="241.0" prefWidth="801.0">
+               <columns>
+                  <TableColumn fx:id="Cin" prefWidth="120.80001068115234" text="Cin" />
+                  <TableColumn fx:id="Capacidade" minWidth="0.0" prefWidth="150.39999389648438" text="Capacidade" />
+                  <TableColumn fx:id="PesoMaximo" minWidth="0.0" prefWidth="172.0" text="Peso Maximo" />
+                  <TableColumn fx:id="Tipo" minWidth="0.0" prefWidth="122.40005493164062" text="Tipo" />
+                  <TableColumn fx:id="Estado" minWidth="0.0" prefWidth="133.59991455078125" text="Estado" />
+               </columns>
+            </TableView>
+            <Label layoutX="592.0" layoutY="31.0" text="Capacidade:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="capacidadeLabel" layoutX="694.0" layoutY="30.0" text="0 / 0  m³">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Label layoutX="641.0" layoutY="59.0" text="Peso:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="pesoLabel" layoutX="694.0" layoutY="58.0" text="0 / 0 Kg">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <TableView fx:id="TCargaContentores" layoutX="42.0" layoutY="399.0" prefHeight="273.0" prefWidth="801.0">
+               <columns>
+                  <TableColumn fx:id="Id" prefWidth="57.600006103515625" text="ID" />
+                  <TableColumn fx:id="IdReserva" minWidth="0.0" prefWidth="93.5999984741211" text="ID_Reserva" />
+                  <TableColumn fx:id="Designacao" minWidth="0.0" prefWidth="135.199951171875" text="Designacao" />
+                  <TableColumn fx:id="Quantidade" minWidth="0.0" prefWidth="66.39996337890625" text="Qtd." />
+                  <TableColumn fx:id="Volume" minWidth="0.0" prefWidth="108.7999267578125" text="Volume" />
+                  <TableColumn fx:id="Peso" minWidth="0.0" prefWidth="108.7999267578125" text="Peso" />
+                  <TableColumn fx:id="TipoCarga" minWidth="0.0" prefWidth="108.7999267578125" text="Tipo Carga" />
+               </columns>
+            </TableView>
+            <ComboBox fx:id="mudarEstadoCombo" disable="true" layoutX="603.0" layoutY="353.0" prefHeight="36.0" prefWidth="195.0" />
+            <Label fx:id="mudarEstadoLabel" disable="true" layoutX="554.0" layoutY="361.0" text="Estado:" />
+            <Button fx:id="mudarEstadoButton" defaultButton="true" disable="true" layoutX="798.0" layoutY="353.0" mnemonicParsing="false" onAction="#editarEstadoContentor" text="OK" />
+            <Label layoutX="43.0" layoutY="368.0" text="Cargas do contenor:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-             <TableView fx:id="table" layoutX="37.0" layoutY="56.0" prefHeight="180.0" prefWidth="624.0">
-             <columns>
-                 <TableColumn fx:id="Cin" prefWidth="148.0" text="Cin" />
-                 <TableColumn fx:id="Capacidade" minWidth="0.0" prefWidth="168.79998779296875" text="Capacidade" />
-                 <TableColumn fx:id="PesoMaximo" minWidth="0.0" prefWidth="135.99993896484375" text="Peso Maximo" />
-                 <TableColumn fx:id="LocalAtual" minWidth="0.0" prefWidth="172.00006103515625" text="Local Atual" />
-             </columns>
-         </TableView>
-       <TextField fx:id="IdEstadoContentor" layoutX="38.0" layoutY="284.0" prefHeight="26.0" prefWidth="624.0" />
-       <Button layoutX="38.0" layoutY="430.0" mnemonicParsing="false" onAction="#VisualizarCargasFuncionarioTransporte" text="Visualizar Cargas" />
-       <Label layoutX="38.0" layoutY="260.0" text="EstadoContentor" />
-       <TextField fx:id="TipoContentor" layoutX="38.0" layoutY="350.0" prefHeight="26.0" prefWidth="624.0" />
-       <Label layoutX="36.0" layoutY="333.0" text="TipoContentor" />
          </children>
       </Pane>
-
    </children>
 </AnchorPane>

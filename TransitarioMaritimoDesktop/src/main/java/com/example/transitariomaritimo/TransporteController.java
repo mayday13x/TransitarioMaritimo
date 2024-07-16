@@ -245,8 +245,17 @@ public class TransporteController implements Initializable {
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                transportemaritim_repo.deleteById(Table.getSelectionModel().getSelectedItem().getId());
-                atualizarTableTransportes();
+                try {
+                    transportemaritim_repo.deleteById(Table.getSelectionModel().getSelectedItem().getId());
+                    atualizarTableTransportes();
+                } catch (Exception e) {
+                    Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+                    alert2.setTitle("Erro!");
+                    alert2.setHeaderText("Erro ao remover transporte!");
+                    alert2.setContentText("O transporte que tentou remover está em uso!");
+                    alert2.showAndWait();
+                }
+
             }
         }
     }
