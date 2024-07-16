@@ -68,7 +68,7 @@
                   <TableColumn fx:id="TipoCarga" minWidth="0.0" prefWidth="108.7999267578125" text="Tipo Carga" />
                </columns>
             </TableView>
-            <Button fx:id="adicionarCargaButton" defaultButton="true" layoutX="42.0" layoutY="650.0" mnemonicParsing="false" onAction="#showAdicionarCarga" prefHeight="36.0" prefWidth="135.0" text="Adicionar Carga" />
+            <Button fx:id="adicionarCargaButton" defaultButton="true" disable="true" layoutX="42.0" layoutY="650.0" mnemonicParsing="false" onAction="#showAdicionarCarga" prefHeight="36.0" prefWidth="135.0" text="Adicionar Carga" />
             <Button fx:id="removerCargaButton" disable="true" layoutX="187.0" layoutY="650.0" mnemonicParsing="false" onAction="#RemoverCarga" prefHeight="36.0" prefWidth="148.0" text="Remover Carga" />
             <ComboBox fx:id="mudarEstadoCombo" disable="true" layoutX="603.0" layoutY="353.0" prefHeight="36.0" prefWidth="195.0" />
             <Label fx:id="mudarEstadoLabel" disable="true" layoutX="554.0" layoutY="361.0" text="Estado:" />

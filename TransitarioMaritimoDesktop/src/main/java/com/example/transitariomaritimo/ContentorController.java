@@ -247,7 +247,16 @@ public class ContentorController implements Initializable {
 
             if (newSelection != null) {
 
-                adicionarCargaButton.setDisable(newSelection.getIdEstadoContentor() != 2);
+                // adicionarCargaButton.setDisable(newSelection.getIdEstadoContentor() != 2);
+                if (newSelection.getIdEstadoContentor() != 2) {
+                    adicionarCargaButton.setDisable(true);
+                    removerCargaButton.setDisable(true);
+                    TCargaContentores.setDisable(true);
+                    TCargaContentores.getSelectionModel().clearSelection();
+                } else {
+                    TCargaContentores.setDisable(false);
+                    adicionarCargaButton.setDisable(false);
+                }
 
                 atualizarInfoCargas();
 
@@ -269,7 +278,7 @@ public class ContentorController implements Initializable {
                 capacidadeLabel.setText("0 m³");
                 pesoLabel.setText("0 Kg");
                 removerContentorButton.setDisable(true);
-                //adicionarCargaButton.setDisable(true);
+                adicionarCargaButton.setDisable(true);
                 mudarEstadoCombo.setDisable(true);
                 mudarEstadoLabel.setDisable(true);
 
