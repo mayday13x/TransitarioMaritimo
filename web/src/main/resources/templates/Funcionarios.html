@@ -190,6 +190,9 @@
         .form-group > div {
             width: 48%;
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -238,14 +241,14 @@
                 <td th:text="${funcionario.telefone}"></td>
                 <td th:text="${funcionario.email}"></td>
                 <td class="actions">
-                    <i class="fas fa-edit" th:attr="onclick=|showEditarFuncionarioModal(${funcionario.id}, '${funcionario.nome}', '${funcionario.nif}', '${funcionario.codPostalByIdCodPostal.localidade}', '${funcionario.rua}', '${funcionario.porta}', '${funcionario.email}', '${funcionario.telefone}')|"></i>
+                    <i class="fas fa-edit" th:attr="onclick=|showEditarFuncionarioModal(${funcionario.id}, '${funcionario.nome}', '${funcionario.nif}', '${funcionario.codPostalByIdCodPostal.localidade}', '${funcionario.rua}', '${funcionario.porta}', '${funcionario.email}', '${funcionario.telefone}', '${funcionario.tipoFuncionarioByIdTipoFuncionario.id}', '${funcionario.idArmazem}')|"></i>
                     <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverFuncionario(${funcionario.id})|"></i>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="buttons">
-            <a href="/Funcionarios/Inserir/Admin">Inserir Funcionário</a>
+            <a href="#" onclick="showInserirFuncionarioModal()">Inserir Funcionário</a>
         </div>
     </div>
 </div>
@@ -295,10 +298,16 @@
                 </div>
                 <div>
                     <label for="TipoFuncionarioCombo">Tipo de Funcionário</label>
-                    <select id="TipoFuncionarioCombo" name="tipoFuncionario" required>
+                    <select id="TipoFuncionarioCombo" name="tipoFuncionario" required onchange="checkTipoFuncionario(this)">
                         <option th:each="tipo : ${tiposFuncionario}" th:value="${tipo.id}" th:text="${tipo.descricao}"></option>
                     </select>
                 </div>
+            </div>
+            <div class="form-group hidden" id="armazemGroup">
+                <label for="ArmazemCombo">Armazém</label>
+                <select id="ArmazemCombo" name="idArmazem">
+                    <option th:each="armazem : ${armazens}" th:value="${armazem.id}" th:text="${armazem.descricao}"></option>
+                </select>
             </div>
             <div class="buttons">
                 <button type="submit">Inserir Funcionário</button>
@@ -353,10 +362,16 @@
                 </div>
                 <div>
                     <label for="editTipoFuncionarioCombo">Tipo de Funcionário</label>
-                    <select id="editTipoFuncionarioCombo" name="tipoFuncionario" required>
-                        <option th:each="tipo : ${tiposFuncionario}" th:value="${tipo.descricao}" th:text="${tipo.descricao}"></option>
+                    <select id="editTipoFuncionarioCombo" name="tipoFuncionario" required onchange="checkEditTipoFuncionario(this)">
+                        <option th:each="tipo : ${tiposFuncionario}" th:value="${tipo.id}" th:text="${tipo.descricao}"></option>
                     </select>
                 </div>
+            </div>
+            <div class="form-group hidden" id="editArmazemGroup">
+                <label for="editArmazemCombo">Armazém</label>
+                <select id="editArmazemCombo" name="idArmazem">
+                    <option th:each="armazem : ${armazens}" th:value="${armazem.id}" th:text="${armazem.descricao}"></option>
+                </select>
             </div>
             <div class="buttons">
                 <button type="submit">Guardar Alterações</button>
@@ -387,7 +402,7 @@
         document.getElementById(modalId).style.display = "none";
     }
 
-    function showEditarFuncionarioModal(id, nome, nif, codPostal, rua, porta, email, telefone) {
+    function showEditarFuncionarioModal(id, nome, nif, codPostal, rua, porta, email, telefone, tipoFuncionario, idArmazem) {
         document.getElementById('editId').value = id;
         document.getElementById('editNomeText').value = nome;
         document.getElementById('editNifText').value = nif;
@@ -396,6 +411,13 @@
         document.getElementById('editCodPostalCombo').value = codPostal;
         document.getElementById('editEmailText').value = email;
         document.getElementById('editTelefoneText').value = telefone;
+        document.getElementById('editTipoFuncionarioCombo').value = tipoFuncionario;
+        if (tipoFuncionario === '5') {
+            document.getElementById('editArmazemCombo').value = idArmazem;
+            document.getElementById('editArmazemGroup').classList.remove('hidden');
+        } else {
+            document.getElementById('editArmazemGroup').classList.add('hidden');
+        }
         document.getElementById('editModal').style.display = "flex";
     }
 
@@ -416,6 +438,24 @@
                 alert("Erro ao remover funcionário.");
             }
         });
+    }
+
+    function checkTipoFuncionario(select) {
+        const armazemGroup = document.getElementById('armazemGroup');
+        if (select.value === '5') {
+            armazemGroup.classList.remove('hidden');
+        } else {
+            armazemGroup.classList.add('hidden');
+        }
+    }
+
+    function checkEditTipoFuncionario(select) {
+        const editArmazemGroup = document.getElementById('editArmazemGroup');
+        if (select.value === '5') {
+            editArmazemGroup.classList.remove('hidden');
+        } else {
+            editArmazemGroup.classList.add('hidden');
+        }
     }
 
     window.onclick = function(event) {
