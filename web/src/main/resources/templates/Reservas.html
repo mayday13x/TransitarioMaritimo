@@ -223,6 +223,7 @@
                 <th>Data</th>
                 <th>Origem</th>
                 <th>Destino</th>
+                <th>Estado</th>
                 <th>Ações</th>
             </tr>
             </thead>
@@ -232,6 +233,7 @@
                 <td th:text="${reserva.data}"></td>
                 <td th:text="${reserva.origem}"></td>
                 <td th:text="${reserva.destino}"></td>
+                <td th:text="${reserva.getEstadoReservaByIdEstadoReserva().descricao}"></td>
                 <td class="actions">
                     <i class="fas fa-edit" th:attr="onclick=|showEditarReservaModal(${reserva.id}, '${reserva.origem}', '${reserva.destino}', '${reserva.data}', ${reserva.idCliente}, ${reserva.idEstadoReserva}, ${reserva.idFuncionario})|"></i>
                     <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverReserva(${reserva.id})|"></i>

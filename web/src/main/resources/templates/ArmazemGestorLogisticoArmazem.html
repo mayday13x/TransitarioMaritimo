@@ -420,10 +420,27 @@
     }
 
     function loadArmazensDisponiveis(cargaId) {
-        fetch(`/Armazem/ArmazensDisponiveis/GestorLogistico?cargaId=${cargaId}`)
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('armazemSelect').innerHTML = html;
+        fetch(`/Armazem/ArmazensDisponiveis/Admin?cargaId=${cargaId}`)
+            .then(response => response.json())
+            .then(data => {
+                const armazemSelect = document.getElementById('armazemSelect').querySelector('tbody');
+                armazemSelect.innerHTML = '';
+                data.forEach(armazem => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${armazem.id}</td>
+                        <td>${armazem.descricao}</td>
+                        <td>${armazem.capacidadeMax}</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: ${(armazem.capacidadeAtual / armazem.capacidadeMax) * 100}%;">
+                                </div>
+                            </div>
+                        </td>
+                        <td><input type="radio" name="armazemId" value="${armazem.id}" required></td>
+                    `;
+                    armazemSelect.appendChild(row);
+                });
             });
     }
 

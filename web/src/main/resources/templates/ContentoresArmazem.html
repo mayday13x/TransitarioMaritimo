@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            background-color: #f4f9fc;
             margin: 0;
             padding: 0;
             display: flex;
@@ -111,18 +111,6 @@
         .table td {
             font-size: 14px;
         }
-        .progress {
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            overflow: hidden;
-            height: 20px;
-            margin: 10px 0;
-        }
-        .progress-bar {
-            background-color: #3498db;
-            height: 100%;
-            transition: width 0.6s ease;
-        }
         .actions {
             display: flex;
             justify-content: space-around;
@@ -164,15 +152,13 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0,0,0,0.4);
-            justify-content: center;
-            align-items: center;
         }
         .modal-content {
             background-color: #fefefe;
-            margin: auto;
+            margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 40%;
+            width: 70%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .close {
@@ -195,6 +181,18 @@
             padding: 10px;
             margin-bottom: 10px;
             box-sizing: border-box;
+        }
+        .progress {
+            background-color: #e0e0e0;
+            border-radius: 13px;
+            padding: 3px;
+            margin-bottom: 10px;
+        }
+        .progress-bar {
+            background-color: #3498db;
+            width: 0%;
+            height: 20px;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -241,7 +239,7 @@
                 <td class="actions">
                     <i class="fas fa-edit" th:attr="onclick=|showEditarContentorModal(${contentor.cin}, '${contentor.capacidade}', '${contentor.pesoMax}', '${contentor.localAtual}', ${contentor.tipoContentor}, ${contentor.idEstadoContentor}, ${contentor.idArmazem})|"></i>
                     <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverContentor(${contentor.cin})|"></i>
-                    <i class="fas fa-eye" th:attr="onclick=|verCargas(${contentor.cin})|"></i>
+                    <i class="fas fa-eye" th:attr="onclick=|showVerCargasModal(${contentor.cin})|"></i>
                     <i th:if="${contentor.idEstadoContentor == 2}" class="fas fa-check" th:attr="onclick=|confirmarEstadoProntoContentor(${contentor.cin})|"></i>
                 </td>
             </tr>
@@ -274,7 +272,7 @@
             </div>
             <div class="form-group">
                 <label for="TipoContentorCombo">Tipo de Contentor</label>
-                <select id="TipoContentorCombo" name="tipoContentorId" required>
+                <select id="TipoContentorCombo" name="tipoContentor" required>
                     <option th:each="tipo : ${tiposContentor}" th:value="${tipo.id}" th:text="${tipo.descricao}"></option>
                 </select>
             </div>
@@ -352,6 +350,30 @@
     </div>
 </div>
 
+<!-- Ver Cargas Modal -->
+<div id="verCargasModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('verCargasModal')">&times;</span>
+        <h1>Cargas no Contentor</h1>
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Descrição</th>
+                    <th>Peso</th>
+                    <th>Volume</th>
+                    <th>Estado</th>
+                </tr>
+                </thead>
+                <tbody id="cargasContentor">
+                <!-- Carregado dinamicamente via AJAX -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <!-- Adicionar Carga Modal -->
 <div id="adicionarCargaModal" class="modal">
     <div class="modal-content">
@@ -422,22 +444,22 @@
 
 <script>
     function showInserirContentorModal() {
-        document.getElementById('insertModal').style.display = "flex";
+        document.getElementById('insertModal').style.display = "block";
     }
 
     function closeModal(modalId) {
         document.getElementById(modalId).style.display = "none";
     }
 
-    function showEditarContentorModal(cin, capacidade, pesoMaximo, localAtual, tipoContentor, estadoContentor, idArmazem) {
+    function showEditarContentorModal(cin, capacidade, pesoMaximo, localAtual, tipoContentor, estadoContentor, armazemId) {
         document.getElementById('editCin').value = cin;
         document.getElementById('editCapacidadeText').value = capacidade;
         document.getElementById('editPesoMaximoText').value = pesoMaximo;
         document.getElementById('editLocalAtualText').value = localAtual;
         document.getElementById('editTipoContentorCombo').value = tipoContentor;
         document.getElementById('editEstadoContentorCombo').value = estadoContentor;
-        document.getElementById('editArmazemCombo').value = idArmazem;
-        document.getElementById('editModal').style.display = "flex";
+        document.getElementById('editArmazemIdCombo').value = armazemId;
+        document.getElementById('editModal').style.display = "block";
     }
 
     function confirmarRemoverContentor(cin) {
@@ -486,19 +508,25 @@
             });
     }
 
-    function verCargas(cin) {
+    function showVerCargasModal(cin) {
         fetch(`/Contentores/VerCargas/FuncionarioArmazem?cin=${cin}`)
             .then(response => response.json())
             .then(data => {
-                var cargasTableBody = document.getElementById("cargasTableBody");
-                cargasTableBody.innerHTML = "";
+                const cargasContentor = document.getElementById('cargasContentor');
+                cargasContentor.innerHTML = '';
                 data.forEach(carga => {
-                    var row = document.createElement("tr");
-                    row.innerHTML = `<td>${carga.id}</td><td>${carga.observacoes}</td><td>${carga.peso}</td><td>${carga.volume}</td>`;
-                    cargasTableBody.appendChild(row);
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${carga.id}</td>
+                        <td>${carga.observacoes}</td>
+                        <td>${carga.peso}</td>
+                        <td>${carga.volume}</td>
+                        <td>${carga.estado}</td>
+                    `;
+                    cargasContentor.appendChild(row);
                 });
-                document.getElementById("cargasModal").style.display = "flex";
             });
+        document.getElementById('verCargasModal').style.display = "block";
     }
 
     function confirmarEstadoProntoContentor(cin) {
@@ -513,12 +541,12 @@
             closeModal('editModal');
         } else if (event.target === document.getElementById('confirmRemoveModal')) {
             closeModal('confirmRemoveModal');
+        } else if (event.target === document.getElementById('verCargasModal')) {
+            closeModal('verCargasModal');
         } else if (event.target === document.getElementById('adicionarCargaModal')) {
             closeModal('adicionarCargaModal');
         } else if (event.target === document.getElementById('confirmEstadoProntoModal')) {
             closeModal('confirmEstadoProntoModal');
-        } else if (event.target === document.getElementById('cargasModal')) {
-            closeModal('cargasModal');
         }
     }
 </script>

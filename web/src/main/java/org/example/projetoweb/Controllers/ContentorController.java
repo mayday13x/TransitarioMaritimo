@@ -229,7 +229,8 @@ public class ContentorController {
     // Funcionário Armazém
 
     private double calcularCapacidadeAtual(ContentorEntity contentor) {
-        return repo_contentor.sumVolumes(contentor.getCin());
+        Double capacidadeAtual = repo_contentor.sumVolumes(contentor.getCin());
+        return capacidadeAtual != null ? capacidadeAtual : 0.0;
     }
 
     @GetMapping("/Contentores/FuncionarioArmazem")
@@ -355,7 +356,7 @@ public class ContentorController {
     }
 
     private CargaDto convertToDTO(CargaEntity carga) {
-        return new CargaDto(carga.getId(), carga.getObservacoes(), carga.getPeso(), carga.getVolume());
+        return new CargaDto(carga.getId(), carga.getObservacoes(), carga.getPeso(), carga.getVolume(), carga.getEstadoCargaByIdEstadoCarga().getDescricao());
     }
 
     private ContentorDto convertToDTO(ContentorEntity contentor) {
@@ -418,7 +419,10 @@ public class ContentorController {
             CargaEntity carga = repo_carga.findById(cargaId).orElse(null);
 
             if (contentor != null && carga != null && contentor.getIdArmazem() == funcionario.getIdArmazem()) {
-                double cargaTotal = repo_contentor.sumPesos(contentorCin);
+                Double cargaTotal = repo_contentor.sumPesos(contentorCin);
+                if (cargaTotal == null) {
+                    cargaTotal = 0.0;
+                }
                 if ((cargaTotal + carga.getPeso() <= contentor.getPesoMax()) &&
                         (carga.getVolume() <= contentor.getCapacidade())) {
 
