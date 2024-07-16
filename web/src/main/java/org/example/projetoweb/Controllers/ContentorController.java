@@ -67,12 +67,11 @@ public class ContentorController {
             @RequestParam("localAtual") String localAtual,
             @RequestParam("pesoMaximo") double pesoMaximo,
             @RequestParam("tipoContentor") Integer tipoContentorId,
-            @RequestParam("estadoContentor") Integer estadoContentorId,
             @RequestParam("armazemId") int armazemId
 
     ) {
         TipoContentorEntity tipoContentor = repo_tipoContentor.findById(tipoContentorId).orElse(null);
-        EstadoContentorEntity estadoContentor = repo_estadoContentor.findById(estadoContentorId).orElse(null);
+        EstadoContentorEntity estadoContentor = repo_estadoContentor.findById(2).orElse(null);
 
         if (tipoContentor != null && estadoContentor != null) {
             ContentorEntity novoContentor = new ContentorEntity();
@@ -179,17 +178,18 @@ public class ContentorController {
         return "redirect:/Contentores/Admin";
     }
 
-    @PostMapping("/Contentores/RegistarSaida/Admin")
+    @PostMapping("/Contentores/AlterarEstado/Admin")
     @Transactional
-    public String registrarSaidaContentor(@RequestParam("cin") int cin) {
+    public String alterarEstadoParaPronto(@RequestParam("cin") int cin) {
         ContentorEntity contentor = repo_contentor.findById(cin).orElse(null);
         if (contentor != null) {
-            contentor.setIdArmazem(null);
-            repo_contentor.save(contentor);
-
-            repo_carga.updateArmazemIdByContentorId(cin);
+            EstadoContentorEntity estadoPronto = repo_estadoContentor.findById(1).orElse(null);
+            if (estadoPronto != null) {
+                contentor.setIdEstadoContentor(estadoPronto.getId());
+                contentor.setEstadoContentorByIdEstadoContentor(estadoPronto);
+                repo_contentor.save(contentor);
+            }
         }
-
         return "redirect:/Contentores/Admin";
     }
 
@@ -240,7 +240,6 @@ public class ContentorController {
             @RequestParam double pesoMaximo,
             @RequestParam String localAtual,
             @RequestParam int tipoContentorId,
-            @RequestParam int estadoContentorId,
             @RequestParam int armazemId,
             HttpSession session) {
 
@@ -256,7 +255,7 @@ public class ContentorController {
             novoContentor.setArmazemByIdArmazem(repo_armazem.findById(armazemId).orElse(null));
 
             TipoContentorEntity tipoContentor = repo_tipoContentor.findById(tipoContentorId).orElse(null);
-            EstadoContentorEntity estadoContentor = repo_estadoContentor.findById(estadoContentorId).orElse(null);
+            EstadoContentorEntity estadoContentor = repo_estadoContentor.findById(2).orElse(null);
 
 
             if (tipoContentor != null && estadoContentor != null) {
@@ -310,17 +309,18 @@ public class ContentorController {
         return "redirect:/Contentores/FuncionarioArmazem";
     }
 
-    @PostMapping("/Contentores/RegistarSaida/FuncionarioArmazem")
+    @PostMapping("/Contentores/AlterarEstado/FuncionarioArmazem")
     @Transactional
-    public String registrarSaidaContentorFuncionarioArmazem(@RequestParam("cin") int cin) {
+    public String alterarEstadoParaProntoFuncionarioArmazem(@RequestParam("cin") int cin) {
         ContentorEntity contentor = repo_contentor.findById(cin).orElse(null);
         if (contentor != null) {
-            contentor.setIdArmazem(null);
-            repo_contentor.save(contentor);
-
-            repo_carga.updateArmazemIdByContentorId(cin);
+            EstadoContentorEntity estadoPronto = repo_estadoContentor.findById(1).orElse(null);
+            if (estadoPronto != null) {
+                contentor.setIdEstadoContentor(estadoPronto.getId());
+                contentor.setEstadoContentorByIdEstadoContentor(estadoPronto);
+                repo_contentor.save(contentor);
+            }
         }
-
         return "redirect:/Contentores/FuncionarioArmazem";
     }
 

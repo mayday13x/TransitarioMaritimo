@@ -97,8 +97,7 @@ public class CotacaoEntity {
         result = 31 * result + (valorTotal != null ? valorTotal.hashCode() : 0);
         return result;
     }
-
-    @OneToMany(mappedBy = "cotacaoByIdCotacao")
+    @OneToMany(mappedBy = "cotacaoByIdCotacao", cascade = CascadeType.REMOVE)
     public Collection<CargaEntity> getCargasById() {
         return cargasById;
     }
@@ -136,7 +135,7 @@ public class CotacaoEntity {
         this.faturasById = faturasById;
     }
 
-    @OneToMany(mappedBy = "cotacaoByIdCotacao")
+    @OneToMany(mappedBy = "cotacaoByIdCotacao", cascade = CascadeType.REMOVE)
     public Collection<LinhaCotacaoEntity> getLinhaCotacaosById() {
         return linhaCotacaosById;
     }

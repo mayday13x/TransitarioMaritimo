@@ -209,6 +209,7 @@
                 <th>Capacidade</th>
                 <th>Peso Máximo</th>
                 <th>Local Atual</th>
+                <th>Estado</th>
                 <th>Ações</th>
             </tr>
             </thead>
@@ -218,11 +219,12 @@
                 <td th:text="${contentor.capacidade}"></td>
                 <td th:text="${contentor.pesoMax}"></td>
                 <td th:text="${contentor.localAtual}"></td>
+                <td th:text="${contentor.estadoContentorByIdEstadoContentor.descricao}"></td>
                 <td class="actions">
                     <i class="fas fa-edit" th:attr="onclick=|showEditarContentorModal(${contentor.cin}, '${contentor.capacidade}', '${contentor.pesoMax}', '${contentor.localAtual}', ${contentor.tipoContentor}, ${contentor.idEstadoContentor}, ${contentor.idArmazem})|"></i>
                     <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverContentor(${contentor.cin})|"></i>
-                    <i class="fas fa-truck" th:attr="onclick=|registrarSaidaContentor(${contentor.cin})|"></i>
                     <i class="fas fa-eye" th:attr="onclick=|verCargas(${contentor.cin})|"></i>
+                    <i th:if="${contentor.idEstadoContentor == 2}" class="fas fa-check" th:attr="onclick=|confirmarEstadoProntoContentor(${contentor.cin})|"></i>
                 </td>
             </tr>
             </tbody>
@@ -256,12 +258,6 @@
                 <label for="TipoContentorCombo">Tipo de Contentor</label>
                 <select id="TipoContentorCombo" name="tipoContentorId" required>
                     <option th:each="tipo : ${tiposContentor}" th:value="${tipo.id}" th:text="${tipo.descricao}"></option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="EstadoContentorCombo">Estado Contentor</label>
-                <select id="EstadoContentorCombo" name="estadoContentorId" required>
-                    <option th:each="estado : ${estadosContentor}" th:value="${estado.id}" th:text="${estado.descricao}"></option>
                 </select>
             </div>
             <div class="form-group">
@@ -426,6 +422,24 @@
     </div>
 </div>
 
+<!-- Confirmar Estado Pronto Modal -->
+<div id="confirmEstadoProntoModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmEstadoProntoModal')">&times;</span>
+        <h1>Alterar Estado do Contentor</h1>
+        <p>Tem certeza que deseja alterar o estado deste contentor para Pronto?</p>
+        <form id="estadoProntoForm" action="/Contentores/AlterarEstado/FuncionarioArmazem" method="post">
+            <input type="hidden" id="estadoProntoCin" name="cin">
+            <div class="buttons">
+                <button type="submit">Alterar</button>
+                <button type="button" onclick="closeModal('confirmEstadoProntoModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
 <script>
     function showInserirContentorModal() {
         document.getElementById('insertModal').style.display = "flex";
@@ -512,6 +526,11 @@
             });
     }
 
+    function confirmarEstadoProntoContentor(cin) {
+        document.getElementById('estadoProntoCin').value = cin;
+        document.getElementById('confirmEstadoProntoModal').style.display = "block";
+    }
+
     window.onclick = function(event) {
         if (event.target === document.getElementById('insertModal')) {
             closeModal('insertModal');
@@ -521,11 +540,10 @@
             closeModal('confirmRemoveModal');
         } else if (event.target === document.getElementById('cargasModal')) {
             closeModal('cargasModal');
-        } else if (event.target === document.getElementById('confirmSaidaModal')) {
-            closeModal('confirmSaidaModal');
-        }
-        if (event.target === document.getElementById('adicionarCargaModal')) {
+        }  else if (event.target === document.getElementById('adicionarCargaModal')) {
             closeModal('adicionarCargaModal');
+        } else if (event.target === document.getElementById('confirmEstadoProntoModal')) {
+            closeModal('confirmEstadoProntoModal');
         }
     }
 </script>

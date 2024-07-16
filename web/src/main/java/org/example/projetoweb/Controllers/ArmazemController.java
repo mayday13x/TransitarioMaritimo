@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pt.ipvc.database.entity.ArmazemEntity;
 import pt.ipvc.database.entity.CargaEntity;
+import pt.ipvc.database.entity.EstadoCargaEntity;
 import pt.ipvc.database.repository.ArmazemRepository;
 
 import jakarta.servlet.http.HttpSession;
 import pt.ipvc.database.repository.CargaRepository;
+import pt.ipvc.database.repository.EstadoCargaRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +23,13 @@ public class ArmazemController {
 
     public final ArmazemRepository repo_armazem;
     public final CargaRepository repo_carga;
+    public final EstadoCargaRepository repo_estadoCarga;
 
-    public ArmazemController(ArmazemRepository repo_armazem, CargaRepository repo_carga) {
+    public ArmazemController(ArmazemRepository repo_armazem, CargaRepository repo_carga, EstadoCargaRepository repo_estadoCarga) {
         this.repo_armazem = repo_armazem;
         this.repo_carga = repo_carga;
+        this.repo_estadoCarga = repo_estadoCarga;
+
     }
 
     // Admin
@@ -84,16 +89,19 @@ public class ArmazemController {
             @RequestParam("cargaId") int cargaId,
             @RequestParam("armazemId") int armazemId
     ) {
-        Optional<CargaEntity> cargaOptional = repo_carga.findById(cargaId);
-        Optional<ArmazemEntity> armazemOptional = repo_armazem.findById(armazemId);
 
-        if (cargaOptional.isPresent() && armazemOptional.isPresent()) {
-            CargaEntity carga = cargaOptional.get();
-            ArmazemEntity armazem = armazemOptional.get();
+       CargaEntity carga = repo_carga.findById(cargaId).orElse(null);
+       ArmazemEntity armazem = repo_armazem.findById(armazemId).orElse(null);
+       EstadoCargaEntity estadoCarga = repo_estadoCarga.findById(2).orElse(null);
+
+
+        if (carga != null && armazem != null && estadoCarga != null) {
 
             if (carga.getVolume() <= armazem.getCapacidadeMax() - calcularCapacidadeAtual(armazem)) {
                 carga.setArmazemByIdArmazem(armazem);
                 carga.setIdArmazem(armazem.getId());
+                carga.setIdEstadoCarga(estadoCarga.getId());
+                carga.setEstadoCargaByIdEstadoCarga(estadoCarga);
                 repo_carga.save(carga);
             }
         }
@@ -103,10 +111,10 @@ public class ArmazemController {
 
     @GetMapping("/Armazem/ArmazensDisponiveis/Admin")
     public String getArmazensDisponiveis(@RequestParam("cargaId") int cargaId, Model model) {
-        Optional<CargaEntity> cargaOptional = repo_carga.findById(cargaId);
+        CargaEntity carga = repo_carga.findById(cargaId).orElse(null);
 
-        if (cargaOptional.isPresent()) {
-            CargaEntity carga = cargaOptional.get();
+        if (carga != null) {
+
             List<ArmazemEntity> armazens = repo_armazem.findAll().stream()
                     .filter(armazem -> carga.getVolume() <= armazem.getCapacidadeMax() - calcularCapacidadeAtual(armazem))
                     .collect(Collectors.toList());
@@ -158,9 +166,8 @@ public class ArmazemController {
             @RequestParam("descricao") String descricao,
             @RequestParam("capacidadeMaxima") int capacidadeMaxima
     ) {
-        Optional<ArmazemEntity> armazemOptional = repo_armazem.findById(id);
-        if (armazemOptional.isPresent()) {
-            ArmazemEntity armazem = armazemOptional.get();
+      ArmazemEntity armazem = repo_armazem.findById(id).orElse(null);
+        if (armazem != null)  {
             armazem.setDescricao(descricao);
             armazem.setCapacidadeMax(capacidadeMaxima);
             repo_armazem.save(armazem);
@@ -180,16 +187,19 @@ public class ArmazemController {
             @RequestParam("cargaId") int cargaId,
             @RequestParam("armazemId") int armazemId
     ) {
-        Optional<CargaEntity> cargaOptional = repo_carga.findById(cargaId);
-        Optional<ArmazemEntity> armazemOptional = repo_armazem.findById(armazemId);
 
-        if (cargaOptional.isPresent() && armazemOptional.isPresent()) {
-            CargaEntity carga = cargaOptional.get();
-            ArmazemEntity armazem = armazemOptional.get();
+        CargaEntity carga = repo_carga.findById(cargaId).orElse(null);
+        ArmazemEntity armazem = repo_armazem.findById(armazemId).orElse(null);
+        EstadoCargaEntity estadoCarga = repo_estadoCarga.findById(2).orElse(null);
+
+        if (carga != null && armazem != null && estadoCarga != null) {
+
 
             if (carga.getVolume() <= armazem.getCapacidadeMax() - calcularCapacidadeAtual(armazem)) {
                 carga.setArmazemByIdArmazem(armazem);
                 carga.setIdArmazem(armazem.getId());
+                carga.setIdEstadoCarga(estadoCarga.getId());
+                carga.setEstadoCargaByIdEstadoCarga(estadoCarga);
                 repo_carga.save(carga);
             }
         }
@@ -199,10 +209,9 @@ public class ArmazemController {
 
     @GetMapping("/Armazem/ArmazensDisponiveis/GestorLogistico")
     public String getArmazensDisponiveisGestorLogistico(@RequestParam("cargaId") int cargaId, Model model) {
-        Optional<CargaEntity> cargaOptional = repo_carga.findById(cargaId);
+      CargaEntity carga = repo_carga.findById(cargaId).orElse(null);
 
-        if (cargaOptional.isPresent()) {
-            CargaEntity carga = cargaOptional.get();
+        if (carga != null)  {
             List<ArmazemEntity> armazens = repo_armazem.findAll().stream()
                     .filter(armazem -> carga.getVolume() <= armazem.getCapacidadeMax() - calcularCapacidadeAtual(armazem))
                     .collect(Collectors.toList());
