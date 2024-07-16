@@ -206,6 +206,7 @@
                 <th>Capacidade</th>
                 <th>Peso Máximo</th>
                 <th>Local Atual</th>
+                <th>Estado</th>
                 <th>Ações</th>
             </tr>
             </thead>
@@ -215,8 +216,11 @@
                 <td th:text="${contentor.capacidade}"></td>
                 <td th:text="${contentor.pesoMax}"></td>
                 <td th:text="${contentor.localAtual}"></td>
+                <td th:text="${contentor.estadoContentorByIdEstadoContentor.descricao}"></td>
                 <td class="actions">
                     <i class="fas fa-edit" th:attr="onclick=|showEditarLocalAtualModal(${contentor.cin}, '${contentor.localAtual}')|"></i>
+                    <i class="fas fa-truck" th:attr="onclick=|confirmarEstadoForaContentor(${contentor.cin})|"></i>
+                    <i th:if="${contentor.idEstadoContentor == 3}" class="fas fa-check" th:attr="onclick=|confirmarSimularEntrega(${contentor.cin})|"></i>
                 </td>
             </tr>
             </tbody>
@@ -242,11 +246,53 @@
     </div>
 </div>
 
+<!-- Confirmar Estado Fora Modal -->
+<div id="confirmEstadoForaModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmEstadoForaModal')">&times;</span>
+        <h1>Confirmar Estado Fora</h1>
+        <p>Tem certeza que deseja alterar o estado deste contentor para Fora?</p>
+        <form id="estadoForaForm" action="/Contentores/AlterarEstadoParaFora/FuncionarioTransporte" method="post">
+            <input type="hidden" id="estadoForaCin" name="cin">
+            <div class="buttons">
+                <button type="submit">Confirmar</button>
+                <button type="button" onclick="closeModal('confirmEstadoForaModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmar Simular Entrega Modal -->
+<div id="confirmSimularEntregaModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmSimularEntregaModal')">&times;</span>
+        <h1>Confirmar Simulação de Entrega</h1>
+        <p>Tem certeza que deseja simular a entrega deste contentor e das suas cargas?</p>
+        <form id="simularEntregaForm" action="/Contentores/SimularEntrega/FuncionarioTransporte" method="post">
+            <input type="hidden" id="simularEntregaCin" name="cin">
+            <div class="buttons">
+                <button type="submit">Confirmar</button>
+                <button type="button" onclick="closeModal('confirmSimularEntregaModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     function showEditarLocalAtualModal(cin, localAtual) {
         document.getElementById('editCin').value = cin;
         document.getElementById('editLocalAtualText').value = localAtual;
         document.getElementById('editLocalAtualModal').style.display = "flex";
+    }
+
+    function confirmarEstadoForaContentor(cin) {
+        document.getElementById('estadoForaCin').value = cin;
+        document.getElementById('confirmEstadoForaModal').style.display = "flex";
+    }
+
+    function confirmarSimularEntrega(cin) {
+        document.getElementById('simularEntregaCin').value = cin;
+        document.getElementById('confirmSimularEntregaModal').style.display = "flex";
     }
 
     function closeModal(modalId) {
@@ -256,6 +302,10 @@
     window.onclick = function(event) {
         if (event.target === document.getElementById('editLocalAtualModal')) {
             closeModal('editLocalAtualModal');
+        } else if (event.target === document.getElementById('confirmEstadoForaModal')) {
+            closeModal('confirmEstadoForaModal');
+        } else if (event.target === document.getElementById('simularEntregaCargaModal')) {
+            closeModal('simularEntregaCargaModal');
         }
     }
 </script>

@@ -190,6 +190,7 @@
                 <td th:text="${reserva.estadoReservaByIdEstadoReserva.descricao}"></td>
                 <td class="actions">
                     <i class="fas fa-dollar-sign" th:if="${reserva.estadoReservaByIdEstadoReserva.id == 2}" th:attr="onclick=|pagarReserva(${reserva.id})|"></i>
+                    <i class="fas fa-times" th:if="${reserva.estadoReservaByIdEstadoReserva.id == 2}" th:attr="onclick=|cancelarReserva(${reserva.id})|"></i>
                 </td>
             </tr>
             </tbody>
@@ -225,6 +226,18 @@
                 window.location.reload();
             } else {
                 alert("Erro ao pagar a reserva.");
+            }
+        });
+    }
+
+    function cancelarReserva(id) {
+        fetch(`/Reservas/Cancelar/Cliente?id=${id}`, {
+            method: 'POST'
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert("Erro ao cancelar a reserva.");
             }
         });
     }

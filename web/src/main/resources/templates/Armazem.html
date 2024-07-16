@@ -186,6 +186,19 @@
         .table-container {
             overflow-x: auto;
         }
+        .progress {
+            height: 20px;
+            border: 1px solid #3498db;
+            background-color: #e0e0e0;
+            position: relative;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #3498db;
+            text-align: center;
+            color: white;
+            line-height: 20px; /* same as height to center the text vertically */
+        }
     </style>
 </head>
 <body>
@@ -219,6 +232,7 @@
                 <th>Id</th>
                 <th>Capacidade Máxima</th>
                 <th>Descrição</th>
+                <th>Capacidade Atual</th>
                 <th>Ações</th>
             </tr>
             </thead>
@@ -227,6 +241,12 @@
                 <td th:text="${armazem.id}"></td>
                 <td th:text="${armazem.capacidadeMax}"></td>
                 <td th:text="${armazem.descricao}"></td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar" th:style="'width:' + (${capacidadeAtualMap[armazem.id]} / ${armazem.capacidadeMax}) * 100 + '%'">
+                        </div>
+                    </div>
+                </td>
                 <td class="actions">
                     <i class="fas fa-edit" th:attr="onclick=|showEditarArmazemModal(${armazem.id}, '${armazem.descricao}', ${armazem.capacidadeMax})|"></i>
                     <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverArmazem(${armazem.id})|"></i>
@@ -339,6 +359,7 @@
                             <th>Id</th>
                             <th>Descrição</th>
                             <th>Capacidade Máxima</th>
+                            <th>Capacidade Atual</th>
                             <th>Selecionar</th>
                         </tr>
                         </thead>
@@ -347,6 +368,12 @@
                             <td th:text="${armazem.id}"></td>
                             <td th:text="${armazem.descricao}"></td>
                             <td th:text="${armazem.capacidadeMax}"></td>
+                            <td>
+                                <div class="progress">
+                                    <div class="progress-bar" th:style="'width:' + (${capacidadeAtualMap[armazem.id]} / ${armazem.capacidadeMax}) * 100 + '%'">
+                                    </div>
+                                </div>
+                            </td>
                             <td><input type="radio" name="armazemId" th:value="${armazem.id}" required></td>
                         </tr>
                         </tbody>
@@ -387,9 +414,27 @@
 
     function loadArmazensDisponiveis(cargaId) {
         fetch(`/Armazem/ArmazensDisponiveis/Admin?cargaId=${cargaId}`)
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('armazemSelect').innerHTML = html;
+            .then(response => response.json())
+            .then(data => {
+                const armazemSelect = document.getElementById('armazemSelect').querySelector('tbody');
+                armazemSelect.innerHTML = '';
+                data.forEach(armazem => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${armazem.id}</td>
+                        <td>${armazem.descricao}</td>
+                        <td>${armazem.capacidadeMax}</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: ${(armazem.capacidadeAtual / armazem.capacidadeMax) * 100}%;">
+                                    <span>${armazem.capacidadeAtual} / ${armazem.capacidadeMax}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td><input type="radio" name="armazemId" value="${armazem.id}" required></td>
+                    `;
+                    armazemSelect.appendChild(row);
+                });
             });
     }
 

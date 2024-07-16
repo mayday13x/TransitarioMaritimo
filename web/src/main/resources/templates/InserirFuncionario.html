@@ -121,6 +121,9 @@
         .buttons button:hover {
             background-color: #2980b9;
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -192,6 +195,12 @@
                         <option th:each="tipo : ${tiposFuncionario}" th:value="${tipo.descricao}" th:text="${tipo.descricao}"></option>
                     </select>
                 </div>
+                <div class="form-group hidden" id="armazemGroup">
+                    <label for="ArmazemCombo">Armazém</label>
+                    <select id="ArmazemCombo" name="idArmazem">
+                        <option th:each="armazem : ${armazens}" th:value="${armazem.id}" th:text="${armazem.descricao}"></option>
+                    </select>
+                </div>
             </div>
             <div class="buttons">
                 <button type="submit">Adicionar Funcionário</button>
@@ -199,5 +208,14 @@
         </form>
     </div>
 </div>
+<script>
+    document.getElementById('TipoFuncionarioCombo').addEventListener('change', function() {
+        var armazemGroup = document.getElementById('armazemGroup');
+        if (this.value === 'Armazem') {
+            armazemGroup.classList.remove('hidden');
+        } else {
+            armazemGroup.classList.add('hidden');
+        }
+    });
 </body>
 </html>

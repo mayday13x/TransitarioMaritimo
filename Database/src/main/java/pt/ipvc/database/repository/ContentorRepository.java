@@ -47,8 +47,16 @@ public interface ContentorRepository extends JpaRepository<ContentorEntity,Integ
     @Query("SELECT c FROM ContentorEntity c where c.idEstadoContentor = 3")
     List<ContentorEntity> findByEstado();
 
+<<<<<<< HEAD
     // selecionar contentores cujo o id_estado_contentor não corresponda a "Em consolidação"
     @Query("SELECT c FROM ContentorEntity c WHERE c.idEstadoContentor!= 2")
     List<ContentorEntity> findByNotEmConsolidacao();
+=======
+    // selecionar contentores de um armazem
+    @Query("SELECT c FROM ContentorEntity c where c.idEstadoContentor = 1 or c.idEstadoContentor = 3")
+    List<ContentorEntity> findByEstadoProntoAndFora();
+
+
+>>>>>>> 76cbadc1b1e0bcf21b572cd74962038565c63bd1
 
 }

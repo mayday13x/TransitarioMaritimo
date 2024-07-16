@@ -182,6 +182,18 @@
             margin-bottom: 10px;
             box-sizing: border-box;
         }
+        .progress {
+            background-color: #e0e0e0;
+            border-radius: 13px;
+            padding: 3px;
+            margin-bottom: 10px;
+        }
+        .progress-bar {
+            background-color: #3498db;
+            width: 0%;
+            height: 20px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -215,7 +227,9 @@
                 <th>Cin</th>
                 <th>Capacidade</th>
                 <th>Peso Máximo</th>
+                <th>Capacidade Atual</th>
                 <th>Local Atual</th>
+                <th>Estado</th>
                 <th>Ações</th>
             </tr>
             </thead>
@@ -224,12 +238,18 @@
                 <td th:text="${contentor.cin}"></td>
                 <td th:text="${contentor.capacidade}"></td>
                 <td th:text="${contentor.pesoMax}"></td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar" th:style="'width:' + (${capacidadeAtualMap[contentor.cin]} / ${contentor.capacidade}) * 100 + '%'"></div>
+                    </div>
+                </td>
                 <td th:text="${contentor.localAtual}"></td>
+                <td th:text="${contentor.estadoContentorByIdEstadoContentor.descricao}"></td>
                 <td class="actions">
                     <i class="fas fa-edit" th:attr="onclick=|showEditarContentorModal(${contentor.cin}, '${contentor.capacidade}', '${contentor.pesoMax}', '${contentor.localAtual}', ${contentor.tipoContentor}, ${contentor.idEstadoContentor}, ${contentor.idArmazem})|"></i>
                     <i class="fas fa-trash" th:attr="onclick=|confirmarRemoverContentor(${contentor.cin})|"></i>
-                    <i class="fas fa-truck" th:attr="onclick=|confirmarSaidaContentor(${contentor.cin})|"></i>
                     <i class="fas fa-eye" th:attr="onclick=|showVerCargasModal(${contentor.cin})|"></i>
+                    <i th:if="${contentor.idEstadoContentor == 2}" class="fas fa-check" th:attr="onclick=|confirmarEstadoProntoContentor(${contentor.cin})|"></i>
                 </td>
             </tr>
             </tbody>
@@ -263,12 +283,6 @@
                 <label for="TipoContentorCombo">Tipo de Contentor</label>
                 <select id="TipoContentorCombo" name="tipoContentor" required>
                     <option th:each="tipo : ${tiposContentor}" th:value="${tipo.id}" th:text="${tipo.descricao}"></option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="EstadoContentorCombo">Estado Contentor</label>
-                <select id="EstadoContentorCombo" name="estadoContentor" required>
-                    <option th:each="estado : ${estadosContentor}" th:value="${estado.id}" th:text="${estado.descricao}"></option>
                 </select>
             </div>
             <div class="form-group">
@@ -358,6 +372,7 @@
                     <th>Descrição</th>
                     <th>Peso</th>
                     <th>Volume</th>
+                    <th>Estado</th>
                 </tr>
                 </thead>
                 <tbody id="cargasContentor">
@@ -420,6 +435,22 @@
     </div>
 </div>
 
+<!-- Confirmar Estado Pronto Modal -->
+<div id="confirmEstadoProntoModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmEstadoProntoModal')">&times;</span>
+        <h1>Alterar Estado do Contentor</h1>
+        <p>Tem certeza que deseja alterar o estado deste contentor para Pronto?</p>
+        <form id="estadoProntoForm" action="/Contentores/AlterarEstado/Admin" method="post">
+            <input type="hidden" id="estadoProntoCin" name="cin">
+            <div class="buttons">
+                <button type="submit">Alterar</button>
+                <button type="button" onclick="closeModal('confirmEstadoProntoModal')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     function showInserirContentorModal() {
         document.getElementById('insertModal').style.display = "block";
@@ -458,6 +489,7 @@
                         <td>${carga.observacoes}</td>
                         <td>${carga.peso}</td>
                         <td>${carga.volume}</td>
+                        <td>${carga.estado}</td>
                     `;
                     cargasContentor.appendChild(row);
                 });
@@ -506,18 +538,9 @@
             });
     }
 
-    function confirmarSaidaContentor(cin) {
-        if (confirm("Tem certeza que deseja registrar a saída deste contentor?")) {
-            fetch(`/Contentores/RegistarSaida/Admin`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `cin=${cin}`
-            }).then(() => {
-                location.reload();
-            });
-        }
+    function confirmarEstadoProntoContentor(cin) {
+        document.getElementById('estadoProntoCin').value = cin;
+        document.getElementById('confirmEstadoProntoModal').style.display = "block";
     }
 
     window.onclick = function(event) {
@@ -531,6 +554,8 @@
             closeModal('verCargasModal');
         } else if (event.target === document.getElementById('adicionarCargaModal')) {
             closeModal('adicionarCargaModal');
+        } else if (event.target === document.getElementById('confirmEstadoProntoModal')) {
+            closeModal('confirmEstadoProntoModal');
         }
     }
 </script>
