@@ -13,6 +13,8 @@ import pt.ipvc.database.entity.*;
 import pt.ipvc.database.repository.*;
 
 import jakarta.servlet.http.HttpSession;
+
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,6 +28,7 @@ public class ContentorController {
     private final FuncionarioRepository repo_funcionario;
     private final CargaRepository repo_carga;
     private final ArmazemRepository repo_armazem;
+    private final EstadoCargaRepository repo_estadoCarga;
 
     public ContentorController(
             ContentorRepository repo_contentor,
@@ -33,13 +36,17 @@ public class ContentorController {
             EstadoContentorRepository repo_estadoContentor,
             FuncionarioRepository repo_funcionario,
             CargaRepository repo_carga,
-            ArmazemRepository repo_armazem) {
+            ArmazemRepository repo_armazem,
+            EstadoCargaRepository repo_estadoCarga
+    ) {
         this.repo_contentor = repo_contentor;
         this.repo_tipoContentor = repo_tipoContentor;
         this.repo_estadoContentor = repo_estadoContentor;
         this.repo_funcionario = repo_funcionario;
         this.repo_carga = repo_carga;
         this.repo_armazem = repo_armazem;
+        this.repo_estadoCarga = repo_estadoCarga;
+
     }
 
     // Admin
@@ -413,10 +420,12 @@ public class ContentorController {
 
         int funcionarioId = (int) session.getAttribute("userId");
         FuncionarioEntity funcionario = repo_funcionario.findById(funcionarioId).orElse(null);
+
         if (funcionario != null) {
-            List<ContentorEntity> contentores = repo_contentor.findByEstado();
+            List<ContentorEntity> contentores = repo_contentor.findByEstadoProntoAndFora();
             model.addAttribute("contentores", contentores);
         }
+
         List<TipoContentorEntity> tiposContentor = repo_tipoContentor.findAll();
         List<EstadoContentorEntity> estadosContentor = repo_estadoContentor.findAll();
         List<ArmazemEntity> armazens = repo_armazem.findAll();
@@ -431,13 +440,79 @@ public class ContentorController {
             @RequestParam("cin") Integer cin,
             @RequestParam("localAtual") String localAtual
     ) {
-        Optional<ContentorEntity> contentorOptional = repo_contentor.findById(cin);
-        if (contentorOptional.isPresent()) {
-            ContentorEntity contentor = contentorOptional.get();
+
+      ContentorEntity contentor = repo_contentor.findById(cin).orElse(null);
+        if (contentor != null) {
             contentor.setLocalAtual(localAtual);
             repo_contentor.save(contentor);
         }
 
         return "redirect:/Contentores/FuncionarioTransporte";
     }
+
+    @PostMapping("/Contentores/AlterarEstadoParaFora/FuncionarioTransporte")
+    @Transactional
+    public String alterarEstadoParaFora(@RequestParam("cin") int cin, HttpSession session) {
+        ContentorEntity contentor = repo_contentor.findById(cin).orElse(null);
+        if (contentor != null) {
+            EstadoContentorEntity estadoFora = repo_estadoContentor.findById(3).orElse(null);
+            if (estadoFora != null) {
+                contentor.setIdEstadoContentor(estadoFora.getId());
+                contentor.setEstadoContentorByIdEstadoContentor(estadoFora);
+                contentor.setIdArmazem(null);
+                contentor.setArmazemByIdArmazem(null);
+
+                List<CargaEntity> cargas = repo_carga.findByContentorCin(cin);
+
+                int funcionarioId = (int) session.getAttribute("userId");
+                FuncionarioEntity funcionario = repo_funcionario.findById(funcionarioId).orElse(null);
+
+                if(funcionario != null){
+                   Collection<TransportemaritimoEntity> transportemaritimo = funcionario.getTransportemaritimosById();
+
+                    for (TransportemaritimoEntity transporte : transportemaritimo) {
+                        contentor.setTransportemaritimoByIdTransporteMaritimo(transporte);
+                        contentor.setIdTransporteMaritimo(transporte.getId());
+                    }
+                }
+
+                repo_contentor.save(contentor);
+
+
+
+                EstadoCargaEntity estadoCarga = repo_estadoCarga.findById(3).orElse(null);
+                for (CargaEntity carga : cargas) {
+                    if (estadoCarga != null){
+                        carga.setIdArmazem(null);
+                        carga.setArmazemByIdArmazem(null);
+                        carga.setIdEstadoCarga(estadoCarga.getId());
+                        carga.setEstadoCargaByIdEstadoCarga(estadoCarga);
+                        repo_carga.save(carga);
+                    }
+
+                }
+            }
+        }
+        return "redirect:/Contentores/FuncionarioTransporte";
+    }
+
+    @PostMapping("/Contentores/SimularEntrega/FuncionarioTransporte")
+    @Transactional
+    public String simularEntregaContentor(@RequestParam("cin") int cin) {
+        ContentorEntity contentor = repo_contentor.findById(cin).orElse(null);
+        if (contentor != null) {
+            EstadoCargaEntity estadoEntregue = repo_estadoCarga.findById(1).orElse(null);
+                List<CargaEntity> cargas = repo_carga.findByContentorCin(cin);
+                for (CargaEntity carga : cargas) {
+                    if (estadoEntregue != null){
+                        carga.setIdEstadoCarga(estadoEntregue.getId());
+                        carga.setEstadoCargaByIdEstadoCarga(estadoEntregue);
+                        repo_carga.save(carga);
+                    }
+
+                }
+        }
+        return "redirect:/Contentores/FuncionarioTransporte";
+    }
+
 }
