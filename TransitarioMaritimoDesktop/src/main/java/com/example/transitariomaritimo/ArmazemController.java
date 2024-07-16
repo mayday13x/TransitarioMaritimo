@@ -17,15 +17,13 @@ import javafx.util.StringConverter;
 import org.springframework.boot.autoconfigure.data.cassandra.CassandraRepositoriesAutoConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import pt.ipvc.database.entity.ArmazemEntity;
-import pt.ipvc.database.entity.CargaEntity;
-import pt.ipvc.database.entity.ContentorEntity;
-import pt.ipvc.database.entity.FuncionarioEntity;
+import pt.ipvc.database.entity.*;
 import pt.ipvc.database.repository.ArmazemRepository;
 import pt.ipvc.database.repository.CargaRepository;
 
 import javafx.scene.layout.Pane;
 import pt.ipvc.database.repository.ContentorRepository;
+import pt.ipvc.database.repository.EstadoCargaRepository;
 
 import java.io.IOException;
 import java.net.URL;
@@ -38,6 +36,8 @@ public class ArmazemController implements Initializable {
 
     public AnnotationConfigApplicationContext context;
     private ArmazemRepository armazem_repo;
+
+    private EstadoCargaRepository estado_carga_repo;
 
     private ContentorRepository contentor_repo;
     private CargaRepository carga_repo;
@@ -164,6 +164,7 @@ public class ArmazemController implements Initializable {
         armazem_repo = context.getBean(ArmazemRepository.class);
         contentor_repo = context.getBean(ContentorRepository.class);
         carga_repo = context.getBean(CargaRepository.class);
+        estado_carga_repo = context.getBean(EstadoCargaRepository.class);
 
         ObservableList<ArmazemEntity> armazens = FXCollections.observableArrayList(armazem_repo.findAll());
 
@@ -337,6 +338,10 @@ public class ArmazemController implements Initializable {
                         carga.setIdArmazem(armazemSelecionado.getId());
                         carga.setArmazemByIdArmazem(armazemSelecionado);
                         carga.setLocalAtual(armazemSelecionado.getDescricao());
+
+                        carga.setIdEstadoCarga(2);
+                        carga.setEstadoCargaByIdEstadoCarga(estado_carga_repo.findByIdLike(2));
+
                         carga_repo.save(carga);
                     }
                 }
@@ -388,6 +393,10 @@ public class ArmazemController implements Initializable {
 
                         carga.setIdContentor(null);
                         carga.setContentorByIdContentor(null);
+
+                        //estado carga
+                        carga.setIdEstadoCarga(null);
+                        carga.setEstadoCargaByIdEstadoCarga(null);
 
                         carga_repo.save(carga);
                     }

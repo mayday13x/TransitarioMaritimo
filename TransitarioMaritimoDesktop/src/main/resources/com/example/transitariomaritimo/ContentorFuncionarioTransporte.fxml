@@ -58,14 +58,15 @@
                   <TableColumn fx:id="TipoCarga" minWidth="0.0" prefWidth="108.7999267578125" text="Tipo Carga" />
                </columns>
             </TableView>
-            <ComboBox fx:id="mudarEstadoCombo" disable="true" layoutX="603.0" layoutY="353.0" prefHeight="36.0" prefWidth="195.0" />
-            <Label fx:id="mudarEstadoLabel" disable="true" layoutX="554.0" layoutY="361.0" text="Estado:" />
-            <Button fx:id="mudarEstadoButton" defaultButton="true" disable="true" layoutX="798.0" layoutY="353.0" mnemonicParsing="false" onAction="#editarEstadoContentor" text="OK" />
+            <ComboBox fx:id="mudarEstadoCombo" disable="true" layoutX="470.0" layoutY="351.0" prefHeight="36.0" prefWidth="195.0" />
+            <Label fx:id="mudarEstadoLabel" disable="true" layoutX="421.0" layoutY="359.0" text="Estado:" />
+            <Button fx:id="mudarEstadoButton" defaultButton="true" disable="true" layoutX="665.0" layoutY="351.0" mnemonicParsing="false" onAction="#editarEstadoContentor" text="OK" />
             <Label layoutX="43.0" layoutY="368.0" text="Cargas do contenor:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
+            <Button fx:id="finalizarButton" defaultButton="true" disable="true" layoutX="723.0" layoutY="351.0" mnemonicParsing="false" onAction="#finalizarProcesso" prefHeight="35.0" prefWidth="117.0" text="Finalizar" />
          </children>
       </Pane>
    </children>

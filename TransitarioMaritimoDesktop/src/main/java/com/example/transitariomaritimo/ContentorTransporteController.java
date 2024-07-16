@@ -27,6 +27,8 @@ public class ContentorTransporteController implements Initializable {
     private ContentorRepository contentor_repo;
     private CargaRepository carga_repo;
 
+    private EstadoCargaRepository estado_carga_repo;
+
     private EstadoContentorRepository estado_contentor_repo;
 
     private TipoContentorRepository tipo_contentor_repo;
@@ -141,6 +143,11 @@ public class ContentorTransporteController implements Initializable {
     @FXML
     private Button addCargaButton;
 
+    //finalizar
+
+    @FXML
+    private Button finalizarButton;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -152,6 +159,7 @@ public class ContentorTransporteController implements Initializable {
         carga_repo = context.getBean(CargaRepository.class);
         tipo_contentor_repo = context.getBean(TipoContentorRepository .class);
         estado_contentor_repo = context.getBean(EstadoContentorRepository.class);
+        estado_carga_repo = context.getBean(EstadoCargaRepository.class);
 
         TCargaContentores.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -179,6 +187,13 @@ public class ContentorTransporteController implements Initializable {
             ContentorEntity selectedContentor = TContentores.getSelectionModel().getSelectedItem();
             if (selectedContentor != null && newSelection != null) {
                 mudarEstadoButton.setDisable(newSelection.equals(selectedContentor.getEstadoContentorByIdEstadoContentor()));
+
+                if(selectedContentor.getEstadoContentorByIdEstadoContentor().equals(estado_contentor_repo.findEstadoContentorById(3))) {
+                    finalizarButton.setDisable(false);
+                } else {
+                    finalizarButton.setDisable(true);
+                }
+
             }
         });
 
@@ -280,8 +295,31 @@ public class ContentorTransporteController implements Initializable {
 
             try {
 
-                contentorSelecionado.setIdEstadoContentor(estadoSelecionado.getId());
-                contentorSelecionado.setEstadoContentorByIdEstadoContentor(estadoSelecionado);
+                if (estadoSelecionado.getId() == 1) {
+                    //cont. pronto
+                    contentorSelecionado.setIdEstadoContentor(estadoSelecionado.getId());
+                    contentorSelecionado.setEstadoContentorByIdEstadoContentor(estadoSelecionado);
+                    List<CargaEntity> cargas = carga_repo.findByIdContentor(contentorSelecionado.getCin());
+
+                    for(CargaEntity carg : cargas) {
+                        carg.setIdEstadoCarga(2);
+                        carg.setEstadoCargaByIdEstadoCarga(estado_carga_repo.findByIdLike(2));
+                        carga_repo.save(carg);
+                    }
+
+                } else if(estadoSelecionado.getId() == 3) {
+                    //cont. fora
+                    contentorSelecionado.setIdEstadoContentor(estadoSelecionado.getId());
+                    contentorSelecionado.setEstadoContentorByIdEstadoContentor(estadoSelecionado);
+                    List<CargaEntity> cargas = carga_repo.findByIdContentor(contentorSelecionado.getCin());
+
+                    for(CargaEntity carg : cargas) {
+                        carg.setIdEstadoCarga(3);
+                        carg.setEstadoCargaByIdEstadoCarga(estado_carga_repo.findByIdLike(3));
+                        carga_repo.save(carg);
+                    }
+                }
+
                 contentor_repo.save(contentorSelecionado);
 
 
@@ -305,6 +343,53 @@ public class ContentorTransporteController implements Initializable {
         ObservableList<ContentorEntity> contentores = FXCollections.observableArrayList(contentor_repo.findByNotEmConsolidacao());
         TContentores.setItems(contentores);
         TContentores.getSelectionModel().select(contentorSelecionado);
+    }
+
+
+    @FXML
+    public void finalizarProcesso(){
+        // ArmazemEntity armazemSelecionado = ArmazemCombo.getSelectionModel().getSelectedItem();
+        ContentorEntity contentorSelecionado = TContentores.getSelectionModel().getSelectedItem();
+
+        if(contentorSelecionado == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Contentor não selecionado!");
+            alert.setHeaderText("Nenhum contentor foi selecionado!");
+            alert.setContentText("Por favor, selecione um contentor para finalizar o processo!");
+            alert.showAndWait();
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Finalizar processo");
+        alert.setHeaderText("Deseja finalizar o processo de viagem do contentor " + contentorSelecionado.getCin() + "?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent()  && result.get() == ButtonType.OK) {
+
+            List<CargaEntity> cargas = carga_repo.findByIdContentor(contentorSelecionado.getCin());
+            for(CargaEntity carg : cargas) {
+                carg.setIdEstadoCarga(1);
+                carg.setEstadoCargaByIdEstadoCarga(estado_carga_repo.findByIdLike(1));
+                carg.setIdArmazem(null);
+                carg.setArmazemByIdArmazem(armazem_repo.findByIdLike(null));
+                carg.setIdContentor(null);
+                carg.setContentorByIdContentor(contentor_repo.findByIdLike(null));
+                carga_repo.save(carg);
+            }
+
+            contentorSelecionado.setIdEstadoContentor(2);
+            contentorSelecionado.setEstadoContentorByIdEstadoContentor(estado_contentor_repo.findEstadoContentorById(2));
+            contentor_repo.save(contentorSelecionado);
+            atualizarInfoContentores();
+
+            Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+            alert2.setTitle("Processo Finalizado");
+            alert2.setHeaderText("Processo Finalizado com sucesso!");
+            alert2.setContentText("O processo foi finalizado. As cargas foram entregues!");
+            alert2.showAndWait();
+
+
+        }
     }
 
 
