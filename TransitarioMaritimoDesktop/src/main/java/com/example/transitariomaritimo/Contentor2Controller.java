@@ -9,11 +9,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.util.StringConverter;
+import org.springframework.boot.autoconfigure.data.cassandra.CassandraRepositoriesAutoConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pt.ipvc.database.entity.*;
 import pt.ipvc.database.repository.*;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -108,6 +110,36 @@ public class Contentor2Controller implements Initializable {
     @FXML
     private Button removerContentorButton;
 
+    @FXML
+    private Button adicionarCargaButton;
+
+    @FXML
+    private Button removerCargaButton;
+
+    //inserir carga
+
+    @FXML
+    private Pane PaneInserirCarga;
+    @FXML
+    private TableView<CargaEntity> TCargasAdd;
+    @FXML
+    private TableColumn<CargaEntity, String> IdCargaAdd;
+    @FXML
+    private TableColumn<CargaEntity, String> IdReservaCargaAdd;
+    @FXML
+    private TableColumn<CargaEntity, String> designacaoCargaAdd;
+    @FXML
+    private TableColumn<CargaEntity, String> qtdCargaAdd;
+    @FXML
+    private TableColumn<CargaEntity, String> volumeCargaAdd;
+    @FXML
+    private TableColumn<CargaEntity, String> pesoCargaAdd;
+    @FXML
+    private TableColumn<CargaEntity, String> tipoCargaAdd;
+
+    @FXML
+    private Button addCargaButton;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -119,6 +151,9 @@ public class Contentor2Controller implements Initializable {
         carga_repo = context.getBean(CargaRepository.class);
         tipo_contentor_repo = context.getBean(TipoContentorRepository .class);
         estado_contentor_repo = context.getBean(EstadoContentorRepository.class);
+
+        TCargasAdd.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        TCargaContentores.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         ObservableList<ArmazemEntity> armazens = FXCollections.observableArrayList(armazem_repo.findAll());
         ArmazemCombo.setConverter(new StringConverter<ArmazemEntity>() {
@@ -173,24 +208,58 @@ public class Contentor2Controller implements Initializable {
             TContentores.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
                 if (newSelection != null) {
                     atualizarInfoCargas();
+
                     removerContentorButton.setDisable(false);
+                    adicionarCargaButton.setDisable(false);
+                    //removerCargaButton.setDisable(false);
 
-                    double totalVolumes = contentor_repo.sumVolumes(TContentores.getSelectionModel().getSelectedItem().getCin());
-                    capacidadeLabel.setText(totalVolumes + " / " + TContentores.getSelectionModel().getSelectedItem().getCapacidade());
+                    Double totalVolumes = contentor_repo.sumVolumes(newSelection.getCin());
+                    Double totalPesos = contentor_repo.sumPesos(newSelection.getCin());
 
-                    double totalPesos = contentor_repo.sumPesos(TContentores.getSelectionModel().getSelectedItem().getCin());
-                    pesoLabel.setText(totalPesos + " / " + TContentores.getSelectionModel().getSelectedItem().getPesoMax());
-
+                    capacidadeLabel.setText((totalVolumes != null ? totalVolumes : 0.0) + " / " + newSelection.getCapacidade() + " m³");
+                    pesoLabel.setText((totalPesos != null ? totalPesos : 0.0) + " / " + newSelection.getPesoMax() + " Kg");
 
                 } else {
-                    capacidadeLabel.setText("0");
-                    pesoLabel.setText("0");
+                    capacidadeLabel.setText("0 m³");
+                    pesoLabel.setText("0 Kg");
                     removerContentorButton.setDisable(true);
+                    adicionarCargaButton.setDisable(true);
+                    //removerCargaButton.setDisable(true);
                 }
             });
 
             TipoContentorCombo.getSelectionModel().selectFirst();
 
+
+        // Adicionando listener na seleção da TableView TCargasAdd
+        TCargasAdd.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                addCargaButton.setDisable(false);
+            } else {
+                addCargaButton.setDisable(true);
+            }
+        });
+
+        // Adicionando listener na seleção da TableView TCargaContentores
+        TCargaContentores.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                removerCargaButton.setDisable(false);
+            } else {
+                removerCargaButton.setDisable(true);
+            }
+        });
+
+    }
+
+    public void atualizarLabelsCapacidade(){
+
+        ContentorEntity contentorSelecionado = TContentores.getSelectionModel().getSelectedItem();
+
+        Double totalVolumes = contentor_repo.sumVolumes(contentorSelecionado.getCin());
+        Double totalPesos = contentor_repo.sumPesos(contentorSelecionado.getCin());
+
+        capacidadeLabel.setText((totalVolumes != null ? totalVolumes : 0.0) + " / " + contentorSelecionado.getCapacidade() + " m³");
+        pesoLabel.setText((totalPesos != null ? totalPesos : 0.0) + " / " + contentorSelecionado.getPesoMax() + " Kg");
     }
 
     @FXML
@@ -239,6 +308,20 @@ public class Contentor2Controller implements Initializable {
 
         TCargaContentores.setItems(cargas);
 
+        // atualizar tabela de cargas do panel de adicionar carga ao contentor
+
+        ObservableList<CargaEntity> cargasArmazem = FXCollections.observableArrayList(carga_repo.findByIdArmazemAndContentorNull(ArmazemCombo.getSelectionModel().getSelectedItem().getId()));
+
+        IdCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+        IdReservaCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIdReserva().toString()));
+        designacaoCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
+        qtdCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getQuantidade().toString()));
+        volumeCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getVolume().toString()));
+        pesoCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPeso().toString()));
+        tipoCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTipoCargaByIdTipoCarga().getDescricao()));
+
+        TCargasAdd.setItems(cargasArmazem);
+
     }
 
     @FXML
@@ -248,6 +331,8 @@ public class Contentor2Controller implements Initializable {
         PaneInserir.setEffect(new javafx.scene.effect.DropShadow());
         PaneInserir.setVisible(true);
         mainPanel.setDisable(true);
+
+        TipoContentorCombo.getSelectionModel().selectFirst();
 
     }
 
@@ -356,9 +441,150 @@ public class Contentor2Controller implements Initializable {
 
     }
 
+
+    @FXML
+    public void showAdicionarCarga() {
+
+        mainPanel.setEffect(new javafx.scene.effect.GaussianBlur(4.0));
+        PaneInserirCarga.setEffect(new javafx.scene.effect.DropShadow());
+        PaneInserirCarga.setVisible(true);
+        mainPanel.setDisable(true);
+
+        ObservableList<CargaEntity> cargasArmazem = FXCollections.observableArrayList(carga_repo.findByIdArmazemAndContentorNull(ArmazemCombo.getSelectionModel().getSelectedItem().getId()));
+
+        IdCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getId().toString()));
+        IdReservaCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIdReserva().toString()));
+        designacaoCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
+        qtdCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getQuantidade().toString()));
+        volumeCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getVolume().toString()));
+        pesoCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPeso().toString()));
+        tipoCargaAdd.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTipoCargaByIdTipoCarga().getDescricao()));
+
+        TCargasAdd.setItems(cargasArmazem);
+
+    }
+
+    @FXML
+    public void closeAdicionarCarga() {
+        mainPanel.setEffect(null);
+        PaneInserirCarga.setVisible(false);
+        mainPanel.setDisable(false);
+        mainPanel.setVisible(true);
+    }
+
+    @FXML
+    public void AdicionarCarga(){
+
+        List<CargaEntity> cargasSeleccionadas = TCargasAdd.getSelectionModel().getSelectedItems();
+        //ArmazemEntity armazemSelecionado = TContentores.getSelectionModel().getSelectedItem();
+        ContentorEntity contentorSeleccionado = TContentores.getSelectionModel().getSelectedItem();
+
+        double totalVolume = 0.0;
+        double totalPeso = 0.0;
+
+        for (CargaEntity carga : cargasSeleccionadas) {
+            totalVolume = totalVolume + carga.getVolume();
+            totalPeso = totalPeso + carga.getPeso();
+        }
+
+        if (totalVolume > contentorSeleccionado.getCapacidade() || totalPeso > contentorSeleccionado.getPesoMax() ){
+
+            if (totalVolume > contentorSeleccionado.getCapacidade() && totalPeso > contentorSeleccionado.getPesoMax()){
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Capacidade e Peso Excedidos!");
+                alert.setHeaderText("O volume total das cargas excede a capacidade do contentor e o peso total das cargas excede o peso máximo do contentor!");
+                alert.setContentText("O volume total das cargas excede a capacidade do contentor e o peso total das cargas excede o peso máximo do contentor.");
+                alert.showAndWait();
+
+            } else if(totalVolume > contentorSeleccionado.getCapacidade()) {
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Capacidade Excedida!");
+                alert.setHeaderText("O volume total das cargas excede a capacidade do contentor");
+                alert.setContentText("O volume total das cargas excede a capacidade do contentor.");
+                alert.showAndWait();
+
+            } else if(totalPeso > contentorSeleccionado.getPesoMax()) {
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Peso Excedido!");
+                alert.setHeaderText("O peso total das cargas excede o peso máximo do contentor!");
+                alert.setContentText("O peso total das cargas excede o peso máximo do contentor.");
+                alert.showAndWait();
+            }
+
+
+        } else {
+            try {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Adicionar carga(s) selecionada(s)?");
+                alert.setHeaderText("Adicionar Carga ?");
+                alert.setContentText("A adicionar a(s) carga(s) selecionada(s)");
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    for (CargaEntity carga : cargasSeleccionadas) {
+
+                        carga.setIdContentor(contentorSeleccionado.getCin());
+                        carga.setContentorByIdContentor(contentorSeleccionado);
+                        carga.setLocalAtual("Contentor");
+                        carga_repo.save(carga);
+                    }
+                }
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Erro!");
+                alert.setHeaderText("Ocorreu um erro ao adicionar a carga!");
+                alert.setContentText("Ocorreu um erro ao adicionar a carga, tente novamente!");
+                alert.showAndWait();
+            }
+        }
+
+        atualizarInfoCargas();
+        atualizarLabelsCapacidade();
+
+    }
+
+    @FXML
+    public void RemoverCarga() {
+
+        List<CargaEntity> cargasSelecionadas = TCargaContentores.getSelectionModel().getSelectedItems();
+        ArmazemEntity armazemSelecionado = ArmazemCombo.getSelectionModel().getSelectedItem();
+
+        try {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Remover carga(s) selecionada(s)?");
+            alert.setHeaderText("Remover Carga ?");
+            alert.setContentText("A remover a(s) carga(s) selecionada(s)");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                for (CargaEntity carga : cargasSelecionadas) {
+
+                    carga.setIdContentor(null);
+                    carga.setContentorByIdContentor(null);
+                    carga.setLocalAtual(armazemSelecionado.getDescricao());
+                    carga_repo.save(carga);
+                }
+            }
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Erro!");
+            alert.setHeaderText("Ocorreu um erro ao remover a carga!");
+            alert.setContentText("Ocorreu um erro ao remover a carga, tente novamente!");
+            alert.showAndWait();
+        }
+
+        atualizarInfoCargas();
+        atualizarLabelsCapacidade();
+
+    }
+
     @FXML
     void RegistarSaida(ActionEvent event) {
 
     }
+
 
 }

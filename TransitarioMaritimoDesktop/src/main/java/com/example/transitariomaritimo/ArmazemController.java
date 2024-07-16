@@ -252,9 +252,9 @@ public class ArmazemController implements Initializable {
 
 
     try {
-        capacidadeLabel.setText(capacidadeOcupada.toString() + " / " + armazemSelecionado.getCapacidadeMax().toString());
+        capacidadeLabel.setText(capacidadeOcupada.toString() + " / " + armazemSelecionado.getCapacidadeMax().toString()+ " m³");
     } catch (Exception e) {
-        capacidadeLabel.setText("0 / " + armazemSelecionado.getCapacidadeMax().toString());
+        capacidadeLabel.setText("0 / " + armazemSelecionado.getCapacidadeMax().toString() + " m³");
     }
 
         ObservableList<CargaEntity> cargas = FXCollections.observableArrayList(carga_repo.findByArmazemID(armazemSelecionado.getId()));
@@ -362,20 +362,54 @@ public class ArmazemController implements Initializable {
         ArmazemEntity armazemSelecionado = ArmazemCombo.getSelectionModel().getSelectedItem();
 
         try {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Remover a carga selecionada do " + armazemSelecionado.getDescricao() + " ?");
-            alert.setHeaderText("Pretende remover a carga selecionada do " + armazemSelecionado.getDescricao() + "?");
-            //alert.setContentText("A adicionar a(s) carga(s) selecionada(s)");
-            Optional<ButtonType> result = alert.showAndWait();
 
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                for (CargaEntity carga : cargasSelecionadas) {
-                    carga.setIdArmazem(null);
-                    carga.setArmazemByIdArmazem(null);
-                    carga.setLocalAtual(null);
-                    carga_repo.save(carga);
+            boolean isInContainer = false;
+            for (CargaEntity carga : cargasSelecionadas) {
+                Integer id = carga.getIdContentor();
+
+                if(id != null) {
+                    isInContainer = true;
+                    break;
                 }
             }
+
+            if(isInContainer) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Remover a carga!");
+                alert.setHeaderText("Pretende remover a carga selecionada do armazém e consequentemente do(s) contentor(es) atual(is)?");
+                alert.setContentText("Carga(s) selecionada(s) está(ão) em Contentor, pretende proseguir e remove-las dos contentores atuais?");
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    for (CargaEntity carga : cargasSelecionadas) {
+                        carga.setIdArmazem(null);
+                        carga.setArmazemByIdArmazem(null);
+                        carga.setLocalAtual(null);
+
+                        carga.setIdContentor(null);
+                        carga.setContentorByIdContentor(null);
+
+                        carga_repo.save(carga);
+                    }
+                }
+
+            } else {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Remover a carga selecionada do " + armazemSelecionado.getDescricao() + " ?");
+                alert.setHeaderText("Pretende remover a carga selecionada do " + armazemSelecionado.getDescricao() + "?");
+                //alert.setContentText("A adicionar a(s) carga(s) selecionada(s)");
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    for (CargaEntity carga : cargasSelecionadas) {
+                        carga.setIdArmazem(null);
+                        carga.setArmazemByIdArmazem(null);
+                        carga.setLocalAtual(null);
+                        carga_repo.save(carga);
+                    }
+                }
+            }
+
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Erro!");

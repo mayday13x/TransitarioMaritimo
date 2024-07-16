@@ -17,6 +17,11 @@ public interface CargaRepository extends JpaRepository<CargaEntity, Integer> {
     @Query("SELECT c FROM CargaEntity c join ArmazemEntity a on c.idArmazem = a.id  where :armazemId = c.idArmazem order by c.id")
     List<CargaEntity> findByArmazemID(@Param("armazemId") int armazemId);
 
+    // listar cargas de um determinado armazem em que o id_contentor é null
+    @Query("SELECT c FROM CargaEntity c WHERE c.idArmazem = :armazemId AND c.idContentor IS NULL")
+    List<CargaEntity> findByIdArmazemAndContentorNull(@Param("armazemId") int armazemId);
+
+
     @Query("SELECT ca FROM CargaEntity ca join ContentorEntity c on c.cin = ca.idContentor  where :contentorCin = c.cin order by ca.id")
     List<CargaEntity> findByContentorCin(@Param("contentorCin") int contentorCin);
 

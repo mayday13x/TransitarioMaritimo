@@ -40,7 +40,7 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="capacidadeLabel" layoutX="694.0" layoutY="30.0" text="0">
+            <Label fx:id="capacidadeLabel" layoutX="694.0" layoutY="30.0" text="0 / 0  m³">
                <font>
                   <Font size="17.0" />
                </font></Label>
@@ -49,7 +49,7 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="pesoLabel" layoutX="694.0" layoutY="58.0" text="0">
+            <Label fx:id="pesoLabel" layoutX="694.0" layoutY="58.0" text="0 / 0 Kg">
                <font>
                   <Font size="17.0" />
                </font></Label>
@@ -67,12 +67,12 @@
                   <TableColumn fx:id="TipoCarga" minWidth="0.0" prefWidth="108.7999267578125" text="Tipo Carga" />
                </columns>
             </TableView>
-            <Button defaultButton="true" layoutX="43.0" layoutY="644.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="135.0" text="Adicionar Carga" />
-            <Button layoutX="188.0" layoutY="644.0" mnemonicParsing="false" onAction="#RegistarSaida" prefHeight="36.0" prefWidth="148.0" text="Remover Carga" />
+            <Button fx:id="adicionarCargaButton" defaultButton="true" layoutX="42.0" layoutY="650.0" mnemonicParsing="false" onAction="#showAdicionarCarga" prefHeight="36.0" prefWidth="135.0" text="Adicionar Carga" />
+            <Button fx:id="removerCargaButton" disable="true" layoutX="187.0" layoutY="650.0" mnemonicParsing="false" onAction="#RemoverCarga" prefHeight="36.0" prefWidth="148.0" text="Remover Carga" />
          </children>
       </Pane>
 
-                                                <Pane fx:id="PaneInserir" layoutX="296.0" layoutY="148.0" prefHeight="366.0" prefWidth="282.0" style="-fx-background-color: #FFFFFF;" visible="false">
+                                                <Pane fx:id="PaneInserir" layoutX="296.0" layoutY="148.0" prefHeight="350.0" prefWidth="282.0" style="-fx-background-color: #FFFFFF;" visible="false">
          <children>
              <Label layoutX="72.0" layoutY="14.0" text="Inserir Contentor">
                  <font>
@@ -83,7 +83,7 @@
              <TextField fx:id="PesoMaximoText" layoutX="40.0" layoutY="88.0" prefHeight="36.0" prefWidth="181.0" />
              <TextField fx:id="CapacidadeText" layoutX="42.0" layoutY="165.0" prefHeight="36.0" prefWidth="181.0" />
              <ComboBox fx:id="TipoContentorCombo" layoutX="42.0" layoutY="241.0" prefHeight="36.0" prefWidth="213.0" />
-             <Button defaultButton="true" layoutX="79.0" layoutY="314.0" mnemonicParsing="false" onAction="#RegistarContentor" text="Inserir Contentor" />
+             <Button defaultButton="true" layoutX="75.0" layoutY="296.0" mnemonicParsing="false" onAction="#RegistarContentor" text="Inserir Contentor" />
              <Label layoutX="42.0" layoutY="140.0" text="Capacidade" />
              <Label layoutX="40.0" layoutY="63.0" text="Peso Maxímo" />
              <Label layoutX="41.0" layoutY="215.0" text="Tipo de Contentor" />
@@ -97,6 +97,31 @@
                   <Font size="16.0" />
                </font>
             </Label>
+         </children>
+         <effect>
+            <DropShadow />
+         </effect>
+      </Pane>
+      <Pane fx:id="PaneInserirCarga" layoutX="7.0" layoutY="91.0" prefHeight="586.0" prefWidth="871.0" style="-fx-background-color: #FFFFFF;" visible="false">
+         <children>
+            <TableView fx:id="TCargasAdd" layoutX="15.0" layoutY="71.0" prefHeight="438.0" prefWidth="827.0" tableMenuButtonVisible="true">
+               <columns>
+                  <TableColumn fx:id="IdCargaAdd" prefWidth="54.4000244140625" text="ID" />
+                  <TableColumn fx:id="IdReservaCargaAdd" prefWidth="97.5999984741211" text="ID_Reserva" />
+                  <TableColumn fx:id="designacaoCargaAdd" prefWidth="152.0" text="Designacao" />
+                  <TableColumn fx:id="qtdCargaAdd" prefWidth="92.0" text="Qtd." />
+                  <TableColumn fx:id="volumeCargaAdd" prefWidth="86.40005493164062" text="Volume" />
+                  <TableColumn fx:id="pesoCargaAdd" prefWidth="82.4000244140625" text="Peso" />
+                  <TableColumn fx:id="tipoCargaAdd" prefWidth="152.0" text="Tipo Carga" />
+               </columns>
+            </TableView>
+            <Label layoutX="358.0" layoutY="19.0" text="Adicionar Carga">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Button layoutX="811.0" layoutY="15.0" mnemonicParsing="false" onAction="#closeAdicionarCarga" text="x" />
+            <Button fx:id="addCargaButton" defaultButton="true" disable="true" layoutX="348.0" layoutY="526.0" mnemonicParsing="false" onAction="#AdicionarCarga" prefHeight="36.0" prefWidth="129.0" text="Adicionar" />
          </children>
          <effect>
             <DropShadow />
